@@ -141,7 +141,7 @@ of an existing positional claim ID; avoid that during the migration.
 `scripts/build.py:1370–1383` currently places the full record inside a directory
 disclosure and produces a fragment permalink:
 
-```python
+```text
 f'<details><summary>Operating model, claims &amp; sources</summary><div class="entry-body">'
 f"<h4>Scoped operating models</h4>{model_html}{group_html}"
 f'<h4>Sources</h4><ol class="sources">{"".join(source_html)}</ol></div></details>'

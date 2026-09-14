@@ -14,8 +14,9 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def check(base: str, preview: bool, resolve_ip: str | None = None) -> None:
-    manifest = json.loads((ROOT / "site/assets/manifest.json").read_text())
+def check(base: str, preview: bool, resolve_ip: str | None = None, root: str = "site") -> None:
+    artifact = ROOT / root
+    manifest = json.loads((artifact / "assets/manifest.json").read_text())
     routes = json.loads((ROOT / "routing-manifest.json").read_text())
     cases = []
     for path, md in routes.items():
@@ -100,7 +101,7 @@ def check(base: str, preview: bool, resolve_ip: str | None = None) -> None:
                     b"",
                     received,
                 )
-            assert received == (ROOT / "site" / name).read_bytes(), (
+            assert received == (artifact / name).read_bytes(), (
                 f"{path} [{accept}]: body differs from {name}"
             )
             if mime:
@@ -133,5 +134,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--resolve-ip", help="Use a verified public DNS address while local DNS propagates."
     )
+    parser.add_argument(
+        "--root", default="site", help="Directory that holds the built artifact to compare with."
+    )
     args = parser.parse_args()
-    check(args.base, args.preview, args.resolve_ip)
+    check(args.base, args.preview, args.resolve_ip, args.root)

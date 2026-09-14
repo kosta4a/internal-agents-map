@@ -1878,13 +1878,23 @@ def publication_outputs(outputs: dict[Path, str | bytes], catalog: dict) -> dict
     return outputs
 
 
-def rendered_outputs(records: list[dict]) -> dict[Path, str | bytes]:
+NOTE_SLUGS = (
+    "stop-a-run",
+    "review-noise",
+    "split-the-work",
+    "work-can-continue",
+    "load-tools",
+    "steps-without-a-model",
+    "test-on-your-work",
+)
+
+
+def data_outputs(records: list[dict], catalog: dict) -> dict[Path, str | bytes]:
+    """Give the normalized catalog and the generated repository documents."""
     readme = README.read_text(encoding="utf-8")
     patterns = PATTERNS.read_text(encoding="utf-8")
     adoption_lessons = ADOPTION_LESSONS.read_text(encoding="utf-8")
-    catalog = normalize(records)
-    catalog_json = json.dumps(catalog, indent=2, ensure_ascii=False) + "\n"
-    outputs = {
+    return {
         README: replace_between_markers(
             readme, OVERVIEW_BEGIN, OVERVIEW_END, render_overview(records), "README.md"
         ),
@@ -1903,7 +1913,16 @@ def rendered_outputs(records: list[dict]) -> dict[Path, str | bytes]:
             "docs/adoption-lessons.md",
         ),
         LANDSCAPE: render_landscape(records),
-        DATA_JSON: catalog_json,
+        DATA_JSON: json.dumps(catalog, indent=2, ensure_ascii=False) + "\n",
+    }
+
+
+def rendered_outputs(records: list[dict]) -> dict[Path, str | bytes]:
+    catalog = normalize(records)
+    data = data_outputs(records, catalog)
+    catalog_json = data[DATA_JSON]
+    outputs = {
+        **data,
         ROOT / "site/index.html": render_site(catalog),
         ROOT / "site/definitions.html": render_definitions(catalog),
         **{
@@ -1912,13 +1931,7 @@ def rendered_outputs(records: list[dict]) -> dict[Path, str | bytes]:
                 "404.html",
                 "methodology.html",
                 "notes.html",
-                "notes/stop-a-run.html",
-                "notes/review-noise.html",
-                "notes/split-the-work.html",
-                "notes/work-can-continue.html",
-                "notes/load-tools.html",
-                "notes/steps-without-a-model.html",
-                "notes/test-on-your-work.html",
+                *(f"notes/{slug}.html" for slug in NOTE_SLUGS),
             )
         },
         ROOT / "site/agents.json": catalog_json,
@@ -1958,9 +1971,16 @@ def write_outputs(outputs: dict[Path, str | bytes]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Fail if generated files are stale.")
+    parser.add_argument(
+        "--data-only",
+        action="store_true",
+        help="Write the catalog data and the repository documents only, without the website.",
+    )
     args = parser.parse_args()
     records = load_agents()
-    outputs = rendered_outputs(records)
+    outputs = (
+        data_outputs(records, normalize(records)) if args.data_only else rendered_outputs(records)
+    )
     stale = [
         path
         for path, content in outputs.items()
@@ -1975,13 +1995,14 @@ def main() -> None:
             )
         print(f"Validated {len(records)} approaches. Generated files are current.")
         return
-    for pattern in ("assets/*.*.*", "assets/fonts/*.*.woff2", "agents/*.json", "agents/*.md"):
-        for old in (ROOT / "site").glob(pattern):
-            generated = old.parent.name == "agents" or re.fullmatch(
-                r"(?:site|Geist)\.[a-f0-9]{16}\.(?:css|js|woff2)", old.name
-            )
-            if generated and old not in outputs and old.is_file() and not old.is_symlink():
-                old.unlink()
+    if not args.data_only:
+        for pattern in ("assets/*.*.*", "assets/fonts/*.*.woff2", "agents/*.json", "agents/*.md"):
+            for old in (ROOT / "site").glob(pattern):
+                generated = old.parent.name == "agents" or re.fullmatch(
+                    r"(?:site|Geist)\.[a-f0-9]{16}\.(?:css|js|woff2)", old.name
+                )
+                if generated and old not in outputs and old.is_file() and not old.is_symlink():
+                    old.unlink()
     write_outputs(outputs)
     print(f"\n{len(records)} approaches. Build complete.")
 

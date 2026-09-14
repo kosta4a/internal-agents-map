@@ -16,6 +16,7 @@ from unittest import mock
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
 SPEC = importlib.util.spec_from_file_location("catalog_build", ROOT / "scripts" / "build.py")
 build = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader
@@ -424,6 +425,51 @@ class BuildTests(unittest.TestCase):
                 path.read_bytes(),
                 expected.encode("utf-8") if isinstance(expected, str) else expected,
             )
+
+    def test_data_only_outputs_match_the_full_build(self) -> None:
+        data = build.data_outputs(self.records, build.normalize(self.records))
+        full = build.rendered_outputs(self.records)
+        self.assertEqual(
+            set(data),
+            {
+                build.README,
+                build.PATTERNS,
+                build.ADOPTION_LESSONS,
+                build.LANDSCAPE,
+                build.DATA_JSON,
+            },
+        )
+        for path, content in data.items():
+            with self.subTest(path=path.name):
+                self.assertEqual(content, full[path])
+
+    def test_catalog_counts_match_the_recorded_baseline(self) -> None:
+        # These numbers are a baseline record of the catalog, not a source of truth.
+        # Change them together with the catalog.
+        catalog = build.normalize(self.records)
+        self.assertEqual(
+            {
+                "approaches": len(catalog["approaches"]),
+                "organizations": len({a["company"] for a in catalog["approaches"]}),
+                "claims": len(catalog["claims"]),
+                "sources": len(catalog["sources"]),
+            },
+            {"approaches": 39, "organizations": 35, "claims": 555, "sources": 88},
+        )
+
+    def test_route_inventory_fixture_matches_the_catalog(self) -> None:
+        fixture = json.loads((FIXTURES / "route-inventory.json").read_text(encoding="utf-8"))
+        self.assertEqual(fixture["guide_routes"], ["/", "/definitions", "/methodology", "/notes"])
+        expected = [
+            *fixture["guide_routes"],
+            *sorted(f"/notes/{slug}" for slug in build.NOTE_SLUGS),
+            *sorted(f"/agents/{record['id']}" for record in self.records),
+        ]
+        self.assertEqual(
+            fixture["routes"],
+            expected,
+            "Update tests/fixtures/route-inventory.json for the current catalog.",
+        )
 
     def test_catalog_contains_source_anchors(self) -> None:
         catalog = build.render_landscape(self.records)
