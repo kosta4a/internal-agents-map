@@ -1,0 +1,53 @@
+---
+// ABOUTME: The directory: one compact card per implementation, all in the initial HTML.
+// ABOUTME: Filtering is added in a later step; the links here never depend on it.
+import SiteLayout from '../layouts/SiteLayout.astro';
+import AgentCard from '../components/AgentCard.astro';
+import { loadCatalog } from '../lib/catalog';
+import { directoryCards } from '../lib/entry-view';
+import { canonicalUrl, homePath } from '../lib/routes';
+import { SITE_DESCRIPTION, SITE_NAME, structuredData, webPageNode } from '../lib/metadata';
+
+const catalog = loadCatalog();
+const cards = directoryCards(catalog);
+const organizations = new Set(catalog.approaches.map((approach) => approach.company)).size;
+const reviewed = catalog.approaches
+  .map((approach) => approach.last_reviewed_at)
+  .sort()
+  .at(-1);
+
+const title = `${SITE_NAME} · How companies build internal AI agents`;
+const description =
+  'A source-backed catalog of AI systems organizations build for their own teams. ' +
+  'Explore approaches, operating models, and reported evidence.';
+const url = canonicalUrl(homePath());
+const graph = structuredData([
+  webPageNode({ url, name: title, description, dateModified: reviewed }),
+]);
+---
+<SiteLayout title={title} description={description} path={homePath()} current="catalog" structuredData={graph}>
+  <header class="intro">
+    <p class="eyebrow">Agents at work</p>
+    <h1>{SITE_NAME}</h1>
+    <p class="lede">AI systems organizations build or adapt to do work for their own teams.</p>
+    <p>{SITE_DESCRIPTION} Explore how teams connect models to their knowledge, tools, and workflows, and where people stay involved.</p>
+    <div class="stats">
+      <div class="stat"><strong>{catalog.approaches.length}</strong><span>approaches</span></div>
+      <div class="stat"><strong>{organizations}</strong><span>organizations</span></div>
+      <div class="stat"><strong>{catalog.sources.length}</strong><span>sources</span></div>
+    </div>
+    {reviewed && (
+      <p class="review-date">Latest entry review: <time datetime={reviewed}>{reviewed}</time>. Individual source dates vary.</p>
+    )}
+  </header>
+  <section id="catalog" aria-labelledby="catalog-title">
+    <div class="section-heading">
+      <h2 id="catalog-title">Explore the catalog</h2>
+      <span class="eyebrow">Approaches, not rankings</span>
+    </div>
+    <p class="result-count">{cards.length} approaches</p>
+    <div class="entries">
+      {cards.map((card) => <AgentCard card={card} />)}
+    </div>
+  </section>
+</SiteLayout>

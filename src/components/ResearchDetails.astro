@@ -1,0 +1,48 @@
+---
+// ABOUTME: Holds the per-claim research ledger behind one native disclosure.
+// ABOUTME: It keeps provenance, confidence, and source locators available on the page.
+import type { ClaimView } from '../lib/entry-view';
+
+interface Props {
+  claims: readonly ClaimView[];
+}
+
+const { claims } = Astro.props;
+---
+<details class="claim-details">
+  <summary>Research details for every claim on this page</summary>
+  <ol class="ledger">
+    {claims.map((claim) => (
+      <li>
+        <a class="ledger-title" href={`#${claim.anchor}`}>{claim.label}</a>
+        <dl>
+          <dt>Statement type</dt>
+          <dd>{claim.kindLabel}</dd>
+          <dt>Provenance</dt>
+          <dd>{claim.provenanceLabel}</dd>
+          <dt>Confidence</dt>
+          <dd>{claim.confidenceLabel}</dd>
+          <dt>Confidence reason</dt>
+          <dd>{claim.confidenceReason}</dd>
+          {claim.validAt && (
+            <>
+              <dt>Observation date</dt>
+              <dd>{claim.validAt}</dd>
+            </>
+          )}
+        </dl>
+        {claim.citations.length > 0 && (
+          <ul class="evidence">
+            {claim.citations.map((citation) => (
+              <li>
+                <span class:list={['relation', `relation-${citation.relation}`]}>{citation.relationLabel}</span>
+                <a href={`#${citation.anchor}`}>{citation.title}</a>
+                {citation.locator && <span class="locator">{citation.locator}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))}
+  </ol>
+</details>

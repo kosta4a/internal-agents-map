@@ -1,0 +1,99 @@
+---
+// ABOUTME: The shared page frame: head metadata, sidebar navigation, and footer.
+// ABOUTME: Every page passes its own title, description, and structured data.
+import '../styles/site.css';
+import { canonicalUrl, guidePath, homePath, markdownPath, notesIndexPath } from '../lib/routes';
+import {
+  OG_IMAGE,
+  OG_IMAGE_ALT,
+  SITE_NAME,
+  jsonLdScript,
+  type JsonLdNode,
+} from '../lib/metadata';
+
+interface Props {
+  title: string;
+  description: string;
+  /** The canonical path of this page, such as `/agents/block-builderbot`. */
+  path: string;
+  /** The navigation entry to mark as current. */
+  current?: 'catalog' | 'definitions' | 'notes' | 'methodology' | null;
+  structuredData?: JsonLdNode | null;
+  /** Keep a page such as 404 out of search results. */
+  noindex?: boolean;
+}
+
+const { title, description, path, current = null, structuredData = null, noindex = false } = Astro.props;
+const url = canonicalUrl(path);
+const contribute =
+  'https://github.com/steel-experiments/internal-agents-map/issues/new?title=Catalog+suggestion';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <link rel="canonical" href={url} />
+  <link rel="alternate" type="text/markdown" href={canonicalUrl(markdownPath(path))} />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE_NAME} />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={url} />
+  <meta property="og:image" content={OG_IMAGE} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={OG_IMAGE_ALT} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@steeldotdev" />
+  {structuredData && (
+    <script is:inline type="application/ld+json" set:html={jsonLdScript(structuredData)} />
+  )}
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-shell">
+  <aside class="sidebar">
+    <nav aria-label="Main navigation">
+      <a class="brand" href={homePath()}><span class="brand-mark" aria-hidden="true">▧</span> Internal <br />Agents Map</a>
+      <div class="nav-links">
+        <a href={homePath()} aria-current={current === 'catalog' ? 'page' : undefined}>Catalog</a>
+        <a href={guidePath('definitions')} aria-current={current === 'definitions' ? 'page' : undefined}>Definitions</a>
+        <a href={notesIndexPath()} aria-current={current === 'notes' ? 'page' : undefined}>Notes</a>
+        <a href={guidePath('methodology')} aria-current={current === 'methodology' ? 'page' : undefined}>Methodology</a>
+        <a href="https://github.com/steel-experiments/internal-agents-map">Repository <span class="link-arrow">↗</span></a>
+        <a href="/agents.json" download>Download JSON ↓</a>
+        <a href="/data-guide.md">Data guide <span class="link-arrow">↗</span></a>
+        <a class="contribute-link" href={contribute}>Suggest a resource <span class="link-arrow">↗</span></a>
+      </div>
+      <p class="sidebar-note">An open catalog.<br />Built from public evidence.</p>
+    </nav>
+  </aside>
+  <main id="main">
+    <slot />
+  </main>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span>{SITE_NAME}</span>
+      <small>Compiled by <a href="https://steel.dev/?utm_source=internal-agents-map&utm_medium=website&utm_content=footer">Steel</a>, browser infrastructure for AI agents.</small>
+    </div>
+    <div class="contribution-invite">
+      <strong>Know an internal agent?</strong>
+      <p>Share a resource or public mention, suggest an addition, or correct an existing entry.</p>
+      <div class="contribution-links">
+        <a href={contribute}>Suggest a resource or update <span class="link-arrow">↗</span></a>
+        <a href="https://github.com/steel-experiments/internal-agents-map/compare">Open a pull request <span class="link-arrow">↗</span></a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,221 @@
+// ABOUTME: Loads the normalized catalog and checks the structure the website needs.
+// ABOUTME: A record, claim, or source reference that does not resolve stops the build.
+
+import catalogText from '../../data/agents.json?raw';
+
+/** The only catalog schema this website reads. */
+export const CATALOG_SCHEMA_VERSION = 4;
+
+const CATALOG_FILE = 'data/agents.json';
+
+export type ClaimKind = 'fact' | 'inference' | 'metric' | 'opinion';
+export type ClaimProvenance = 'reported' | 'catalog-judgment';
+export type EvidenceRelation = 'supports' | 'contextualizes' | 'contradicts';
+
+export interface Evidence {
+  readonly source_id: string;
+  readonly relation: EvidenceRelation;
+  readonly locator?: string;
+}
+
+export interface Claim {
+  readonly id: string;
+  readonly approach_id: string;
+  readonly field: string;
+  readonly text: string;
+  readonly kind: ClaimKind;
+  readonly provenance: ClaimProvenance;
+  readonly confidence: string;
+  readonly confidence_reason: string;
+  readonly valid_at: string | null;
+  readonly evidence: readonly Evidence[];
+  readonly reported_by?: string | null;
+  readonly metric_scope?: string | null;
+  readonly denominator?: string | null;
+  readonly measurement_method?: string | null;
+  readonly unit?: string | null;
+  readonly value?: string | number | null;
+}
+
+export interface SourceCapture {
+  readonly artifacts?: {
+    readonly markdown?: { readonly path?: string };
+  };
+}
+
+export interface Source {
+  readonly id: string;
+  readonly approach_id: string;
+  readonly title: string;
+  readonly url: string;
+  readonly canonical_url?: string;
+  readonly kind: string;
+  readonly provenance_class: string;
+  readonly role: string;
+  readonly publisher?: string | null;
+  readonly authors?: readonly string[] | null;
+  readonly published_at?: string | null;
+  readonly accessed_at?: string | null;
+  readonly last_verified_at?: string | null;
+  readonly archived_url?: string | null;
+  readonly duplicate_of?: string | null;
+  readonly capture?: SourceCapture | null;
+}
+
+export interface OperatingModel {
+  readonly scope: string;
+  readonly attention_boundary: string;
+  readonly level: number | null;
+}
+
+export interface Relationship {
+  readonly type: string;
+  readonly approach_id: string;
+}
+
+export interface Rubric {
+  readonly invocation: readonly string[];
+  readonly state: string;
+  readonly identity: string;
+  readonly evidence_strength: string;
+}
+
+export interface Approach {
+  readonly id: string;
+  readonly company: string;
+  readonly agent_name: string;
+  readonly approach_type: string;
+  readonly deployment_stage: string;
+  readonly year: number | null;
+  readonly last_reviewed_at: string;
+  readonly status: string;
+  readonly domains: readonly string[];
+  readonly autonomy: string;
+  readonly operating_models: readonly OperatingModel[];
+  readonly rubric: Rubric;
+  readonly claim_ids: readonly string[];
+  readonly source_ids: readonly string[];
+  readonly interfaces?: readonly string[];
+  readonly aliases?: readonly string[];
+  readonly relationships?: readonly Relationship[];
+}
+
+export interface Catalog {
+  readonly schema_version: number;
+  readonly approaches: readonly Approach[];
+  readonly claims: readonly Claim[];
+  readonly sources: readonly Source[];
+}
+
+function fail(message: string): never {
+  throw new Error(`${CATALOG_FILE}: ${message}`);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Check the structural contract the website depends on and return a typed catalog.
+ * An unresolved reference names the record and the claim path that holds it.
+ */
+export function validateCatalog(value: unknown): Catalog {
+  if (!isRecord(value)) fail('the catalog must be a JSON object.');
+  if (value.schema_version !== CATALOG_SCHEMA_VERSION) {
+    fail(
+      `schema_version must be ${CATALOG_SCHEMA_VERSION}, ` +
+        `found ${JSON.stringify(value.schema_version)}.`,
+    );
+  }
+  for (const key of ['approaches', 'claims', 'sources']) {
+    if (!Array.isArray(value[key])) fail(`${key} must be an array.`);
+  }
+  const catalog = value as unknown as Catalog;
+
+  const claims = new Map<string, Claim>();
+  for (const claim of catalog.claims) {
+    if (claims.has(claim.id)) fail(`claim "${claim.id}" is declared more than once.`);
+    claims.set(claim.id, claim);
+  }
+  const sources = new Map<string, Source>();
+  for (const source of catalog.sources) {
+    if (sources.has(source.id)) fail(`source "${source.id}" is declared more than once.`);
+    sources.set(source.id, source);
+  }
+  const approaches = new Set<string>();
+  for (const approach of catalog.approaches) {
+    if (approaches.has(approach.id)) fail(`approach "${approach.id}" is declared more than once.`);
+    approaches.add(approach.id);
+  }
+
+  for (const approach of catalog.approaches) {
+    for (const claimId of approach.claim_ids) {
+      const claim = claims.get(claimId);
+      if (!claim) fail(`approach "${approach.id}" lists unknown claim "${claimId}".`);
+      if (claim.approach_id !== approach.id) {
+        fail(
+          `claim "${claimId}" (approach "${claim.approach_id}") ` +
+            `is listed by approach "${approach.id}".`,
+        );
+      }
+    }
+    for (const sourceId of approach.source_ids) {
+      if (!sources.has(sourceId)) {
+        fail(`approach "${approach.id}" lists unknown source "${sourceId}".`);
+      }
+    }
+  }
+
+  for (const claim of catalog.claims) {
+    const where = `claim "${claim.id}" (approach "${claim.approach_id}", field "${claim.field}")`;
+    if (!approaches.has(claim.approach_id)) fail(`${where} belongs to an unknown approach.`);
+    for (const [index, evidence] of claim.evidence.entries()) {
+      if (!sources.has(evidence.source_id)) {
+        fail(`${where} cites unknown source "${evidence.source_id}" at evidence.${index}.`);
+      }
+    }
+  }
+
+  for (const source of catalog.sources) {
+    if (!approaches.has(source.approach_id)) {
+      fail(`source "${source.id}" belongs to unknown approach "${source.approach_id}".`);
+    }
+  }
+
+  return catalog;
+}
+
+let cached: Catalog | undefined;
+
+/** Return the validated catalog. The file is read and checked once per build. */
+export function loadCatalog(): Catalog {
+  cached ??= validateCatalog(JSON.parse(catalogText) as unknown);
+  return cached;
+}
+
+/** Index the claims of one approach by claim identifier. */
+export function claimsById(catalog: Catalog): Map<string, Claim> {
+  return new Map(catalog.claims.map((claim) => [claim.id, claim]));
+}
+
+/** Index the sources by source identifier. */
+export function sourcesById(catalog: Catalog): Map<string, Source> {
+  return new Map(catalog.sources.map((source) => [source.id, source]));
+}
+
+/** Return one approach. An unknown identifier is an error, never an empty page. */
+export function requireApproach(catalog: Catalog, id: string): Approach {
+  const approach = catalog.approaches.find((item) => item.id === id);
+  if (!approach) fail(`approach "${id}" is not in the catalog.`);
+  return approach;
+}
+
+/** Order the catalog the way the directory reads: company, then implementation. */
+export function sortedApproaches(catalog: Catalog): Approach[] {
+  return [...catalog.approaches].sort(
+    (a, b) =>
+      a.company.toLowerCase().localeCompare(b.company.toLowerCase()) ||
+      a.agent_name.toLowerCase().localeCompare(b.agent_name.toLowerCase()) ||
+      a.id.localeCompare(b.id),
+  );
+}
