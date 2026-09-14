@@ -13,6 +13,7 @@ const { card } = Astro.props;
   class="entry"
   id={card.id}
   data-approach-id={card.id}
+  data-search={card.search}
   data-work={card.domains.map((domain) => domain.id).join(' ')}
   data-type={card.approachType}
   data-supervision={card.boundaries.map((boundary) => boundary.id).join(' ')}

@@ -13,6 +13,7 @@ import {
   type Source,
 } from './catalog';
 import { fieldLabel, levelLabel, termLabel } from './labels';
+import { notesForApproach } from './notes';
 import { entryPath } from './routes';
 import { shorten } from './text';
 
@@ -51,8 +52,17 @@ export interface ClaimView {
   readonly confidenceReason: string;
   readonly validAt: string | null;
   readonly isMetric: boolean;
-  /** Qualifications that must stay beside the statement. */
+  /** Qualifications that must stay beside the statement. Empty fields stay out. */
   readonly caveats: readonly CaveatView[];
+  /** One line that says which qualification of a figure the sources do not report. */
+  readonly qualification: string | null;
+  /** Every research field of the claim, for the ledger. A metric shows its gaps. */
+  readonly metadata: readonly CaveatView[];
+  /**
+   * True when the role of a citation carries information.
+   * One supporting source under one statement needs only its number.
+   */
+  readonly showCitationRoles: boolean;
   readonly supporting: readonly CitationView[];
   readonly contextualizing: readonly CitationView[];
   readonly contradicting: readonly CitationView[];
@@ -170,26 +180,60 @@ function sourceView(source: Source, number: number): SourceView {
   };
 }
 
+/** The research fields that qualify a statement, in reading order. */
+const QUALIFIER_FIELDS: ReadonlyArray<readonly [keyof Claim, string]> = [
+  ['reported_by', 'Reported by'],
+  ['metric_scope', 'Scope'],
+  ['denominator', 'Denominator'],
+  ['measurement_method', 'Method'],
+  ['valid_at', 'Observation date'],
+];
+
+/** The qualifications a figure cannot stand without. */
+const REQUIRED_METRIC_FIELDS: ReadonlyArray<readonly [keyof Claim, string]> = [
+  ['metric_scope', 'Scope'],
+  ['denominator', 'Denominator'],
+];
+
+function fieldValue(claim: Claim, key: keyof Claim): string | null {
+  const value = claim[key];
+  return value === undefined || value === null ? null : String(value);
+}
+
 /**
  * List the qualifications that belong next to a statement.
- * A metric always shows them, so an unknown denominator stays visible.
+ * A field the sources do not report stays out of the reading flow.
  */
 function caveats(claim: Claim): CaveatView[] {
-  const fields: ReadonlyArray<readonly [keyof Claim, string]> = [
-    ['reported_by', 'Reported by'],
-    ['metric_scope', 'Scope'],
-    ['denominator', 'Denominator'],
-    ['measurement_method', 'Method'],
-    ['valid_at', 'Observation date'],
-  ];
   const result: CaveatView[] = [];
-  for (const [key, label] of fields) {
-    const value = claim[key];
-    if (value === undefined || value === null) {
-      if (claim.kind === 'metric') result.push({ label, value: 'Unknown' });
-      continue;
-    }
-    result.push({ label, value: String(value) });
+  for (const [key, label] of QUALIFIER_FIELDS) {
+    const value = fieldValue(claim, key);
+    if (value !== null) result.push({ label, value });
+  }
+  return result;
+}
+
+/**
+ * Say which qualification of a figure the sources do not report.
+ * Without this line a number with no denominator reads as a plain outcome.
+ */
+function qualification(claim: Claim): string | null {
+  if (claim.kind !== 'metric') return null;
+  const missing = REQUIRED_METRIC_FIELDS.filter(([key]) => fieldValue(claim, key) === null).map(
+    ([, label]) => label.toLowerCase(),
+  );
+  if (missing.length === 0) return null;
+  const names = missing.length === 1 ? missing[0] : `${missing[0]} and ${missing[1]}`;
+  return `The source does not report the ${names} of this figure.`;
+}
+
+/** List every research field of a claim. A metric names the fields it lacks. */
+function metadata(claim: Claim): CaveatView[] {
+  const result: CaveatView[] = [];
+  for (const [key, label] of QUALIFIER_FIELDS) {
+    const value = fieldValue(claim, key);
+    if (value !== null) result.push({ label, value });
+    else if (claim.kind === 'metric') result.push({ label, value: 'Not reported' });
   }
   return result;
 }
@@ -229,6 +273,10 @@ function claimView(claim: Claim, numbers: ReadonlyMap<string, number>, sources: 
     validAt: claim.valid_at,
     isMetric: claim.kind === 'metric',
     caveats: caveats(claim),
+    qualification: qualification(claim),
+    metadata: metadata(claim),
+    showCitationRoles:
+      citations.length > 1 || citations.some((item) => item.relation !== 'supports'),
     supporting: citations.filter((item) => item.relation === 'supports'),
     contextualizing: citations.filter((item) => item.relation === 'contextualizes'),
     contradicting: citations.filter((item) => item.relation === 'contradicts'),
@@ -350,7 +398,7 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     claims,
     sources,
     relatedEntries: relatedEntries(catalog, approach),
-    relatedNotes: [],
+    relatedNotes: notesForApproach(approach.id),
   };
 }
 
@@ -362,6 +410,8 @@ export interface DirectoryCard {
   readonly summary: string;
   /** The first sentences of the summary, for the directory card. */
   readonly excerpt: string;
+  /** The text the directory search reads, normalized to lower case. */
+  readonly search: string;
   readonly approachType: string;
   readonly approachTypeLabel: string;
   readonly domains: readonly TermView[];
@@ -371,6 +421,11 @@ export interface DirectoryCard {
 
 /** The length a directory card shows before it links to the whole entry. */
 export const CARD_SUMMARY_LIMIT = 200;
+
+/** Join the words a card is searchable by, in the form the browser compares. */
+function searchText(parts: readonly string[]): string {
+  return parts.join(' ').replace(/\s+/g, ' ').trim().toLowerCase();
+}
 
 /** Build the compact card of every implementation, ordered the way the directory reads. */
 export function directoryCards(catalog: Catalog): DirectoryCard[] {
@@ -382,6 +437,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
     const boundaries = [
       ...new Set(approach.operating_models.map((model) => model.attention_boundary)),
     ].sort();
+    const domains = approach.domains.map(termView);
     return {
       id: approach.id,
       path: entryPath(approach.id),
@@ -389,9 +445,17 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
       agentName: approach.agent_name,
       summary: summary?.text ?? 'Unknown',
       excerpt: shorten(summary?.text ?? 'Unknown', CARD_SUMMARY_LIMIT),
+      search: searchText([
+        approach.company,
+        approach.agent_name,
+        summary?.text ?? '',
+        approach.approach_type,
+        termLabel(approach.approach_type),
+        ...domains.flatMap((domain) => [domain.id, domain.label]),
+      ]),
       approachType: approach.approach_type,
       approachTypeLabel: termLabel(approach.approach_type),
-      domains: approach.domains.map(termView),
+      domains,
       boundaries: (boundaries.length > 0 ? boundaries : ['unknown']).map(termView),
       reviewedAt: approach.last_reviewed_at,
     };

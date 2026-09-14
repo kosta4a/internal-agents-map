@@ -37,14 +37,16 @@ const graph = structuredData([
   ]),
 ]);
 
-const hasHowItWorks =
-  entry.workflowClaims.length > 0 || entry.invocation.length > 0 || entry.interfaces.length > 0;
+// Invocation and interfaces are classifications, so they sit with the other facts.
+// Without a reported workflow the entry has no "How it works" material to show.
+const hasHowItWorks = entry.workflowClaims.length > 0;
+const invocation = entry.invocation.filter((item) => item.id !== 'unknown');
 const hasImplementation = entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
 const hasResults = entry.metricClaims.length > 0 || entry.lessonClaims.length > 0;
 const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length > 0;
 ---
 <SiteLayout title={title} description={description} path={entry.path} current="catalog" structuredData={graph}>
-  <article class="entry-page">
+  <article class="entry-page" data-approach-id={entry.id}>
     <a class="page-back" href="/">← All implementations</a>
     <header class="entry-header">
       <p class="eyebrow">{entry.company} · {entry.approachTypeLabel}</p>
@@ -59,7 +61,8 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
                   class:list={['citation', citation.relation === 'contradicts' && 'citation-contradicts']}
                   href={`#${citation.anchor}`}
                 >
-                  <strong>{citation.number}</strong> {citation.relationLabel}
+                  <strong>{citation.number}</strong>
+                  {entry.summary!.showCitationRoles && <span> {citation.relationLabel}</span>}
                 </a>
               ))}
             </p>
@@ -87,6 +90,18 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
           <dt>Human involvement</dt>
           <dd>{entry.autonomyLabel}</dd>
         </div>
+        {invocation.length > 0 && (
+          <div>
+            <dt>Invocation</dt>
+            <dd>{invocation.map((item) => item.label).join(', ')}</dd>
+          </div>
+        )}
+        {entry.interfaces.length > 0 && (
+          <div>
+            <dt>Interfaces</dt>
+            <dd>{entry.interfaces.map((item) => item.label).join(', ')}</dd>
+          </div>
+        )}
         <div>
           <dt>Deployment stage</dt>
           <dd>{entry.deploymentStageLabel}</dd>
@@ -105,28 +120,8 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
     {hasHowItWorks && (
       <section class="entry-section" id="how-it-works" aria-labelledby="how-it-works-title">
         <h2 id="how-it-works-title">How it works</h2>
-        {entry.invocation.length > 0 && (
-          <>
-            <h3>Invocation</h3>
-            <ul class="term-list">
-              {entry.invocation.map((item) => <li><span>{item.label}</span></li>)}
-            </ul>
-          </>
-        )}
-        {entry.interfaces.length > 0 && (
-          <>
-            <h3>Interfaces</h3>
-            <ul class="term-list">
-              {entry.interfaces.map((item) => <li><span>{item.label}</span></li>)}
-            </ul>
-          </>
-        )}
-        {entry.workflowClaims.length > 0 && (
-          <>
-            <h3>Reported workflow</h3>
-            {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
-          </>
-        )}
+        <p class="section-note">The workflow the sources report for this implementation.</p>
+        {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
       </section>
     )}
 

@@ -21,7 +21,8 @@ const { claim, showLabel = true } = Astro.props;
           class:list={['citation', citation.relation === 'contradicts' && 'citation-contradicts']}
           href={`#${citation.anchor}`}
         >
-          <strong>{citation.number}</strong> {citation.relationLabel}
+          <strong>{citation.number}</strong>
+          {claim.showCitationRoles && <span> {citation.relationLabel}</span>}
         </a>
       ))}
     </p>
@@ -38,6 +39,7 @@ const { claim, showLabel = true } = Astro.props;
       </p>
     </div>
   )}
+  {claim.qualification && <p class="qualification">{claim.qualification}</p>}
   {claim.caveats.length > 0 && (
     <dl class="caveats">
       {claim.caveats.map((caveat) => (

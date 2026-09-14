@@ -24,12 +24,12 @@ const { claims } = Astro.props;
           <dd>{claim.confidenceLabel}</dd>
           <dt>Confidence reason</dt>
           <dd>{claim.confidenceReason}</dd>
-          {claim.validAt && (
+          {claim.metadata.map((field) => (
             <>
-              <dt>Observation date</dt>
-              <dd>{claim.validAt}</dd>
+              <dt>{field.label}</dt>
+              <dd>{field.value}</dd>
             </>
-          )}
+          ))}
         </dl>
         {claim.citations.length > 0 && (
           <ul class="evidence">

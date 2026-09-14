@@ -72,13 +72,60 @@ describe('every entry', () => {
     }
   });
 
-  it('shows the scope and the denominator of every metric', () => {
+  it('keeps the research fields of every metric in the ledger', () => {
     for (const approach of catalog.approaches) {
       for (const claim of entryView(catalog, approach.id).metricClaims) {
         if (!claim.isMetric) continue;
-        expect(claim.caveats.map((item) => item.label)).toEqual(
-          expect.arrayContaining(['Reported by', 'Scope', 'Denominator', 'Method']),
-        );
+        expect(claim.metadata.map((item) => item.label)).toEqual([
+          'Reported by',
+          'Scope',
+          'Denominator',
+          'Method',
+          'Observation date',
+        ]);
+      }
+    }
+  });
+
+  it('leaves an empty research field out of the reading flow', () => {
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        for (const caveat of claim.caveats) {
+          expect(caveat.value).not.toBe('Unknown');
+          expect(caveat.value).not.toBe('Not reported');
+          expect(caveat.value.length).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+
+  it('qualifies a figure that has no denominator or no scope', () => {
+    const claims = new Map(catalog.claims.map((claim) => [claim.id, claim]));
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        const record = claims.get(claim.id)!;
+        const missing =
+          record.kind === 'metric' &&
+          (record.denominator === null ||
+            record.denominator === undefined ||
+            record.metric_scope === null ||
+            record.metric_scope === undefined);
+        expect(claim.qualification === null).toBe(!missing);
+        if (missing) expect(claim.qualification).toContain('does not report');
+      }
+    }
+  });
+
+  it('names the role of a citation only where the role carries information', () => {
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        if (claim.contradicting.length > 0 || claim.contextualizing.length > 0) {
+          expect(claim.showCitationRoles).toBe(true);
+        } else if (claim.supporting.length === 1) {
+          expect(claim.showCitationRoles).toBe(false);
+        } else if (claim.supporting.length > 1) {
+          expect(claim.showCitationRoles).toBe(true);
+        }
       }
     }
   });
@@ -179,6 +226,17 @@ describe('the directory model', () => {
     for (const card of cards) {
       expect(card.summary.length).toBeGreaterThan(0);
       expect(card.path).toBe(`/agents/${card.id}`);
+    }
+  });
+
+  it('makes a card searchable by company, name, work, and summary', () => {
+    for (const card of cards) {
+      expect(card.search).toBe(card.search.toLowerCase());
+      expect(card.search).not.toMatch(/\s{2,}/);
+      expect(card.search).toContain(card.company.toLowerCase());
+      expect(card.search).toContain(card.agentName.toLowerCase());
+      expect(card.search).toContain(card.approachType);
+      for (const domain of card.domains) expect(card.search).toContain(domain.id);
     }
   });
 });

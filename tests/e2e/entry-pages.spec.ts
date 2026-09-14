@@ -4,7 +4,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const SCREENSHOT_DIR =
-  '/private/tmp/claude-501/-Users-nikola-dev-steel-internal-agents-map/fcf8448a-58ec-485b-b372-ca66928c4997/scratchpad/wave1-astro';
+  '/private/tmp/claude-501/-Users-nikola-dev-steel-internal-agents-map/fcf8448a-58ec-485b-b372-ca66928c4997/scratchpad/wave2-directory';
 
 const ENTRIES = [
   {
@@ -119,6 +119,23 @@ for (const entry of ENTRIES) {
     });
   });
 }
+
+test.describe('supporting systems', () => {
+  test('omit an empty workflow section and keep the invocation fact', async ({ page }) => {
+    await page.goto('/agents/plaid-internal-mcp-server');
+    await expect(page.locator('#how-it-works')).toHaveCount(0);
+    const facts = page.locator('.entry-facts');
+    await expect(facts).toContainText('Invocation');
+    await expect(facts).toContainText('Interactive');
+    await expect(page.getByText('supporting infrastructure').first()).toBeVisible();
+  });
+
+  test('keep the workflow section where the sources report a workflow', async ({ page }) => {
+    await page.goto('/agents/block-builderbot');
+    await expect(page.locator('#how-it-works')).toBeVisible();
+    expect(await page.locator('#how-it-works .claim').count()).toBeGreaterThan(0);
+  });
+});
 
 test.describe('page previews', () => {
   test('captures the directory and the three entries', async ({ page }, testInfo) => {
