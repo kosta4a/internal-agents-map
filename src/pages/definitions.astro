@@ -2,19 +2,30 @@
 // ABOUTME: The Definitions guide: the scope of the map, the chart, and the terms.
 // ABOUTME: Chart placements come from the catalog, so lost evidence removes a marker.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Inline from '../components/Inline.astro';
 import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell } from '../lib/definitions';
 import {
   ASSISTANT_REFERENCES,
+  DEFINITIONS_CHART,
   DEFINITIONS_DESCRIPTION,
+  DEFINITIONS_EYEBROW,
   DEFINITIONS_HEADING,
+  DEFINITIONS_INTRO,
+  DEFINITIONS_JUMP_LINKS,
+  DEFINITIONS_LEDE,
+  DEFINITIONS_QUESTIONS,
+  DEFINITIONS_SCOPE,
+  DEFINITIONS_TERMS,
   DEFINITIONS_TITLE,
+  DEFINITIONS_WORKFLOW,
   READY_REFERENCES,
   REFERENCE_PLACEMENTS,
+  inlineHref,
 } from '../lib/guide-content';
 import { structuredData, webPageNode } from '../lib/metadata';
-import { canonicalUrl, entryPath, guidePath } from '../lib/routes';
+import { canonicalUrl, guidePath } from '../lib/routes';
 
 const catalog = loadCatalog();
 const cells = placementsByCell(catalog);
@@ -34,7 +45,15 @@ const graph = structuredData([
     dateModified: reviewed,
   }),
 ]);
-const minions = entryPath('stripe-minions');
+const scope = DEFINITIONS_SCOPE;
+const workflow = DEFINITIONS_WORKFLOW;
+const chart = DEFINITIONS_CHART;
+const terms = DEFINITIONS_TERMS;
+const questions = DEFINITIONS_QUESTIONS;
+const [task, work, result] = workflow.steps;
+const [breadth, adaptation] = chart.dimensions;
+const [localFigure, cloudFigure] = terms.place.figures;
+const [foregroundFigure, backgroundFigure] = terms.participation.figures;
 ---
 <ArticleLayout
   title={DEFINITIONS_TITLE}
@@ -45,63 +64,59 @@ const minions = entryPath('stripe-minions');
 >
   <header class="guide-header">
     <Topography />
-    <p class="eyebrow">Understanding the map</p>
+    <p class="eyebrow">{DEFINITIONS_EYEBROW}</p>
     <h1>{DEFINITIONS_HEADING}</h1>
-    <p class="lede">How organizations turn general-purpose models into agents for their own work.</p>
-    <p>A model alone doesn’t know a company’s codebase, follow its processes, or have access to its tools. Organizations supply that context and access, and shape how the agent carries out work.</p>
-    <p>Internal Agents Map documents these systems: what they do, how teams build or adapt them, and what public evidence tells us about their use.</p>
-    <div class="resource-links"><a href="#terms">Internal agents ↓</a><a href="#quadrant">How agents fit ↓</a><a href="#terminology">Other terms ↓</a></div>
+    <p class="lede">{DEFINITIONS_LEDE}</p>
+    {DEFINITIONS_INTRO.map((block) => <p><Inline parts={block} /></p>)}
+    <div class="resource-links">{DEFINITIONS_JUMP_LINKS.map((link) => <a href={`#${link.fragment}`}>{link.label}</a>)}</div>
   </header>
   <section id="terms">
-    <p class="eyebrow">01 / The scope of the map</p>
-    <h2>What is an internal agent?</h2>
+    <p class="eyebrow">{scope.eyebrow}</p>
+    <h2>{scope.heading}</h2>
     <div class="core-definition">
-      <div><span class="definition-label">Working definition</span><p>An <strong>internal agent</strong> works with company context and tools to carry out the organization’s own work.</p></div>
-      <svg viewBox="0 0 300 210" role="img" aria-label="An agent connected to knowledge, tools, and workflows within an organization"><rect x="12" y="12" width="276" height="186" rx="2"/><text x="30" y="38">Organization</text><path class="agent-links" pathLength="1" d="M150 94 L60 149 M150 94 L150 149 M150 94 L240 149"/><circle class="agent-dot" cx="150" cy="94" r="9"/><text x="150" y="72" text-anchor="middle">Agent</text><circle cx="60" cy="149" r="5"/><circle cx="150" cy="149" r="5"/><circle cx="240" cy="149" r="5"/><text x="60" y="177" text-anchor="middle">Knowledge</text><text x="150" y="177" text-anchor="middle">Tools</text><text x="240" y="177" text-anchor="middle">Workflows</text></svg>
+      <div><span class="definition-label">{scope.definitionLabel}</span><p><Inline parts={scope.definition} /></p></div>
+      <svg viewBox="0 0 300 210" role="img" aria-label={scope.diagramLabel}><rect x="12" y="12" width="276" height="186" rx="2"/><text x="30" y="38">Organization</text><path class="agent-links" pathLength="1" d="M150 94 L60 149 M150 94 L150 149 M150 94 L240 149"/><circle class="agent-dot" cx="150" cy="94" r="9"/><text x="150" y="72" text-anchor="middle">Agent</text><circle cx="60" cy="149" r="5"/><circle cx="150" cy="149" r="5"/><circle cx="240" cy="149" r="5"/><text x="60" y="177" text-anchor="middle">Knowledge</text><text x="150" y="177" text-anchor="middle">Tools</text><text x="240" y="177" text-anchor="middle">Workflows</text></svg>
     </div>
-    <p>It might investigate a failed deployment, prepare a code change, or help an employee resolve an IT issue. “Internal” describes the work it serves. The organization can build the system itself or adapt an existing product.</p>
-    <p>An agent answering customers directly serves a customer-facing role. One system can support both kinds of work.</p>
-    <h3>What makes it an agent?</h3>
-    <p>For this guide, an <strong>agent</strong> uses a model to choose and carry out steps toward a task, using tools and feedback as it works.</p>
-    <p>Real systems often combine model-directed steps with programmed automation. A coding agent might decide how to fix a problem while a fixed pipeline runs tests and prepares the result for review.</p>
-    <p>The map includes these agents alongside the platforms and supporting systems that enable them.</p>
+    {scope.body.map((block) => <p><Inline parts={block} /></p>)}
+    <h3>{scope.agentHeading}</h3>
+    {scope.agentBody.map((block) => <p><Inline parts={block} /></p>)}
   </section>
   <section id="overlap">
-    <p class="eyebrow">02 / From a model to a workflow</p>
-    <h2>From a model to an internal workflow</h2>
-    <p>Consider <a href={minions}>Stripe’s Minions</a>. An engineer can ask a Minion to fix a flaky test. It works with Stripe’s code and development tools, makes a change, runs checks, and prepares a pull request for human review.</p>
+    <p class="eyebrow">{workflow.eyebrow}</p>
+    <h2>{workflow.heading}</h2>
+    <p><Inline parts={workflow.intro} /></p>
     <figure class="workflow-figure">
-      <div class="workflow-node"><span class="eyebrow">Company task</span><strong>Fix a flaky test</strong></div>
+      <div class="workflow-node"><span class="eyebrow">{task.label}</span><strong>{task.value}</strong></div>
       <div class="workflow-connector" aria-hidden="true">↓</div>
-      <div class="workflow-node workflow-context"><span class="eyebrow">Agent working with company context and tools</span><strong>Stripe’s code · development environment · checks</strong></div>
+      <div class="workflow-node workflow-context"><span class="eyebrow">{work.label}</span><strong>{work.value}</strong></div>
       <div class="workflow-connector" aria-hidden="true">↓</div>
-      <div class="workflow-node"><span class="eyebrow">Result in the company’s workflow</span><strong>A pull request for human review</strong></div>
-      <figcaption>Sources: <a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents">Stripe’s workflow description</a> and <a href="https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2">execution environment</a>.</figcaption>
+      <div class="workflow-node"><span class="eyebrow">{result.label}</span><strong>{result.value}</strong></div>
+      <figcaption><Inline parts={workflow.caption} /></figcaption>
     </figure>
-    <p>What makes this internal is its role in Stripe’s engineering work. Its cloud execution and unattended operation describe other aspects of the same system.</p>
-    <div class="resource-links"><a href={minions}>Explore Minions in the catalog →</a></div>
+    <p><Inline parts={workflow.closing} /></p>
+    <div class="resource-links"><a href={inlineHref(workflow.catalogLink)}>{workflow.catalogLink.text}</a></div>
   </section>
   <section id="quadrant">
-    <p class="eyebrow">03 / Different approaches</p>
-    <h2>How agents fit the organization</h2>
-    <p>Two questions help explain the different approaches in the map:</p>
+    <p class="eyebrow">{chart.eyebrow}</p>
+    <h2>{chart.heading}</h2>
+    <p><Inline parts={chart.intro} /></p>
     <div class="dimension-intro">
-      <div><span class="dimension-axis-label">Horizontal axis · work breadth</span><h3>How broad is the work?</h3>
-        <div class="dimension-scale"><span>One workflow</span><span aria-hidden="true">→</span><span>Many workflows</span></div>
-        <p>Focused agents follow one defined workflow. Broader agents support many kinds of work or provide a shared platform.</p></div>
-      <div><span class="dimension-axis-label">Vertical axis · adaptation</span><h3>How specific is it to the organization?</h3>
-        <div class="dimension-scale"><span>Standard</span><span aria-hidden="true">→</span><span>Company-specific</span></div>
-        <p>Standard products arrive with common capabilities. Internal systems add company knowledge, tools, conventions, and processes.</p></div>
+      <div><span class="dimension-axis-label">{breadth.axisLabel}</span><h3>{breadth.heading}</h3>
+        <div class="dimension-scale"><span>{breadth.scale.from}</span><span aria-hidden="true">→</span><span>{breadth.scale.to}</span></div>
+        <p><Inline parts={breadth.description} /></p></div>
+      <div><span class="dimension-axis-label">{adaptation.axisLabel}</span><h3>{adaptation.heading}</h3>
+        <div class="dimension-scale"><span>{adaptation.scale.from}</span><span aria-hidden="true">→</span><span>{adaptation.scale.to}</span></div>
+        <p><Inline parts={adaptation.description} /></p></div>
     </div>
     <figure class="quadrant-figure">
-      <div class="quadrant-legend" aria-label="Marker legend"><span><i class="catalog-marker" aria-hidden="true"></i>Catalog entry</span><span><i class="reference-marker-key" aria-hidden="true"></i>Reference example</span></div>
+      <div class="quadrant-legend" aria-label="Marker legend"><span><i class="catalog-marker" aria-hidden="true"></i>{chart.legend.catalog}</span><span><i class="reference-marker-key" aria-hidden="true"></i>{chart.legend.reference}</span></div>
       <div class="quadrant-chart">
-        <div class="quadrant-y-axis">Standard → Company-specific capabilities</div>
+        <div class="quadrant-y-axis">{chart.verticalAxis}</div>
         <div class="quadrant-plot">
           <div class="quadrant-cell">
-            <h3><span>Company-specific · focused</span>Specialized internal agents</h3>
+            <h3><span>{chart.cells.specialized.scope}</span>{chart.cells.specialized.title}</h3>
             <ul>
-              {cells.specialized.length === 0 && <li>No selected example currently fits.</li>}
+              {cells.specialized.length === 0 && <li>{chart.emptyCell}</li>}
               {cells.specialized.map((item) => (
                 <li data-chart-approach-id={item.id}>
                   <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
@@ -110,9 +125,9 @@ const minions = entryPath('stripe-minions');
             </ul>
           </div>
           <div class="quadrant-cell">
-            <h3><span>Company-specific · broad</span>General internal agents &amp; shared platforms</h3>
+            <h3><span>{chart.cells.shared.scope}</span>{chart.cells.shared.title}</h3>
             <ul>
-              {cells.shared.length === 0 && <li>No selected example currently fits.</li>}
+              {cells.shared.length === 0 && <li>{chart.emptyCell}</li>}
               {cells.shared.map((item) => (
                 <li data-chart-approach-id={item.id}>
                   <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
@@ -121,9 +136,9 @@ const minions = entryPath('stripe-minions');
             </ul>
           </div>
           <div class="quadrant-cell">
-            <h3><span>Standard · focused</span>Ready-made task agents</h3>
+            <h3><span>{chart.cells.ready.scope}</span>{chart.cells.ready.title}</h3>
             <ul>
-              {cells.ready.length === 0 && <li>No selected example currently fits.</li>}
+              {cells.ready.length === 0 && <li>{chart.emptyCell}</li>}
               {cells.ready.map((item) => (
                 <li data-chart-approach-id={item.id}>
                   <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
@@ -135,7 +150,7 @@ const minions = entryPath('stripe-minions');
             </ul>
           </div>
           <div class="quadrant-cell">
-            <h3><span>Standard · broad</span>General-purpose assistants</h3>
+            <h3><span>{chart.cells.assistants.scope}</span>{chart.cells.assistants.title}</h3>
             <ul>
               {ASSISTANT_REFERENCES.map((item) => (
                 <li class="reference-marker" data-chart-reference={item.id}><strong>{item.name}</strong><span>{item.category}</span></li>
@@ -143,14 +158,13 @@ const minions = entryPath('stripe-minions');
             </ul>
           </div>
         </div>
-        <div class="quadrant-x-axis"><span>One workflow</span><span>Many workflows →</span></div>
+        <div class="quadrant-x-axis"><span>{chart.horizontalAxis.from}</span><span>{chart.horizontalAxis.to}</span></div>
       </div>
-      <figcaption>Illustrative placements based on public descriptions. Blue markers are catalog entries; hollow markers are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.</figcaption>
+      <figcaption><Inline parts={chart.caption} /></figcaption>
     </figure>
-    <p>The markers represent named systems and their documented scope. A company may operate several systems in different regions.</p>
-    <p>Broader scope and greater adaptation are not measures of quality. A focused agent may be exactly what a workflow needs.</p>
+    {chart.body.map((block) => <p><Inline parts={block} /></p>)}
     <details class="placement-notes">
-      <summary>Why these systems are placed here</summary>
+      <summary>{chart.notesSummary}</summary>
       <ul>
         {placed.map((item) => (
           <li>
@@ -176,47 +190,36 @@ const minions = entryPath('stripe-minions');
         ))}
       </ul>
     </details>
-    <h3>What the team built or adapted</h3>
-    <p>An organization can adapt an existing product deeply, or build a small custom agent for a narrow task. Building software in-house does not by itself tell us how broadly the system works or how closely it fits the organization.</p>
-    <p>Each catalog entry looks at the concrete choices: context, tools, execution environment, workflow, and the parts the team built or configured.</p>
+    <h3>{chart.builtHeading}</h3>
+    {chart.builtBody.map((block) => <p><Inline parts={block} /></p>)}
   </section>
   <section id="terminology">
-    <p class="eyebrow">04 / Other terms you’ll encounter</p>
-    <h2>Different questions about the same system</h2>
-    <p>These terms answer different questions about a system. They can apply together.</p>
-    <h3>Cloud and local: where does the work run?</h3>
-    <p class="concept-definition">Local and cloud describe <strong>where the agent runs.</strong></p>
+    <p class="eyebrow">{terms.eyebrow}</p>
+    <h2>{terms.heading}</h2>
+    <p><Inline parts={terms.intro} /></p>
+    <h3>{terms.place.heading}</h3>
+    <p class="concept-definition"><Inline parts={terms.place.definition} /></p>
     <div class="concept-pair">
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label="Local execution: the agent runs inside your device"><rect x="70" y="25" width="160" height="92" rx="3"/><path d="M55 128 H245 M120 117 V128 M180 117 V128"/><circle class="agent-dot" cx="150" cy="65" r="9"/><text x="150" y="98" text-anchor="middle">Agent runs here</text></svg><figcaption><strong>Local</strong><span>Execution on your device</span></figcaption></figure>
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label="Cloud execution: your device connects to an agent running on a remote computer"><rect x="20" y="60" width="70" height="45" rx="2"/><path d="M12 114 H98 M90 82 H175"/><rect x="175" y="25" width="105" height="90" rx="3"/><circle class="agent-dot" cx="227" cy="55" r="9"/><text x="227" y="83" text-anchor="middle">Agent runs</text><text x="227" y="99" text-anchor="middle">here</text><text x="55" y="139" text-anchor="middle">Your device</text><text x="227" y="139" text-anchor="middle">Remote computer</text></svg><figcaption><strong>Cloud</strong><span>Execution on hosted infrastructure</span></figcaption></figure>
+      <figure><svg viewBox="0 0 300 150" role="img" aria-label={localFigure.label}><rect x="70" y="25" width="160" height="92" rx="3"/><path d="M55 128 H245 M120 117 V128 M180 117 V128"/><circle class="agent-dot" cx="150" cy="65" r="9"/><text x="150" y="98" text-anchor="middle">Agent runs here</text></svg><figcaption><strong>{localFigure.term}</strong><span>{localFigure.caption}</span></figcaption></figure>
+      <figure><svg viewBox="0 0 300 150" role="img" aria-label={cloudFigure.label}><rect x="20" y="60" width="70" height="45" rx="2"/><path d="M12 114 H98 M90 82 H175"/><rect x="175" y="25" width="105" height="90" rx="3"/><circle class="agent-dot" cx="227" cy="55" r="9"/><text x="227" y="83" text-anchor="middle">Agent runs</text><text x="227" y="99" text-anchor="middle">here</text><text x="55" y="139" text-anchor="middle">Your device</text><text x="227" y="139" text-anchor="middle">Remote computer</text></svg><figcaption><strong>{cloudFigure.term}</strong><span>{cloudFigure.caption}</span></figcaption></figure>
     </div>
-    <p>A <strong>cloud agent</strong> executes on hosted infrastructure, independently of the user’s device.</p>
-    <p>A <strong>local agent</strong> executes on the user’s device. It may still call a model hosted in the cloud: model hosting and agent execution can happen in different places.</p>
-    <p>Stripe’s Minions run on AWS EC2 development machines, making them an example of cloud execution.</p>
-    <h3>Foreground and background: how do people interact with it?</h3>
-    <p class="concept-definition">Foreground and background describe <strong>how you participate while it works.</strong></p>
+    {terms.place.body.map((block) => <p><Inline parts={block} /></p>)}
+    <h3>{terms.participation.heading}</h3>
+    <p class="concept-definition"><Inline parts={terms.participation.definition} /></p>
     <div class="concept-pair">
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label="Foreground work: repeated exchanges between you and the agent"><circle cx="55" cy="32" r="8"/><path d="M40 57 Q55 37 70 57 M55 65 V125 M245 65 V125 M75 72 H225 L219 68 M225 91 H75 L81 87 M75 110 H225 L219 106"/><circle class="agent-dot" cx="245" cy="40" r="9"/><text x="55" y="145" text-anchor="middle">You</text><text x="245" y="145" text-anchor="middle">Agent</text></svg><figcaption><strong>Foreground</strong><span>Discuss, steer, and iterate as it works</span></figcaption></figure>
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label="Background work: a trigger starts the agent, which works independently and returns a result"><path d="M65 65 H110 L104 61 M190 65 H235 L229 61"/><circle cx="40" cy="65" r="6"/><rect x="110" y="30" width="80" height="70" stroke-dasharray="3 4"/><circle class="agent-dot" cx="150" cy="65" r="9"/><rect x="235" y="50" width="28" height="30"/><path d="M241 65 L247 71 L257 59"/><text x="40" y="129" text-anchor="middle">Trigger</text><text x="150" y="129" text-anchor="middle">Agent works</text><text x="249" y="129" text-anchor="middle">Result</text></svg><figcaption><strong>Background</strong><span>Work proceeds without continuous interaction</span></figcaption></figure>
+      <figure><svg viewBox="0 0 300 150" role="img" aria-label={foregroundFigure.label}><circle cx="55" cy="32" r="8"/><path d="M40 57 Q55 37 70 57 M55 65 V125 M245 65 V125 M75 72 H225 L219 68 M225 91 H75 L81 87 M75 110 H225 L219 106"/><circle class="agent-dot" cx="245" cy="40" r="9"/><text x="55" y="145" text-anchor="middle">You</text><text x="245" y="145" text-anchor="middle">Agent</text></svg><figcaption><strong>{foregroundFigure.term}</strong><span>{foregroundFigure.caption}</span></figcaption></figure>
+      <figure><svg viewBox="0 0 300 150" role="img" aria-label={backgroundFigure.label}><path d="M65 65 H110 L104 61 M190 65 H235 L229 61"/><circle cx="40" cy="65" r="6"/><rect x="110" y="30" width="80" height="70" stroke-dasharray="3 4"/><circle class="agent-dot" cx="150" cy="65" r="9"/><rect x="235" y="50" width="28" height="30"/><path d="M241 65 L247 71 L257 59"/><text x="40" y="129" text-anchor="middle">Trigger</text><text x="150" y="129" text-anchor="middle">Agent works</text><text x="249" y="129" text-anchor="middle">Result</text></svg><figcaption><strong>{backgroundFigure.term}</strong><span>{backgroundFigure.caption}</span></figcaption></figure>
     </div>
-    <p><strong>Foreground work</strong> involves active interaction with a person: discussing the task, giving instructions, or steering the next steps.</p>
-    <p><strong>Background work</strong> proceeds without continuous interaction. A person can start it and return later, or a schedule or event can trigger it.</p>
-    <p>These are modes of work. The same agent can move between them. An engineer might give a Minion instructions, leave it to work, then return to discuss the result.</p>
-    <aside class="concept-combination"><span class="definition-label">These descriptions work together</span><p>One agent can be <strong>internal, cloud-hosted, and background.</strong></p><dl><div><dt>Whose work?</dt><dd>Internal</dd></div><div><dt>Where does it run?</dt><dd>Cloud</dd></div><div><dt>How do you participate?</dt><dd>Background</dd></div></dl><p class="combination-note">A local agent can also work in the background. A cloud agent can work with you in the foreground.</p></aside>
-    <h3 id="autonomy">Autonomy: what can it do without approval?</h3>
-    <p><strong>Autonomy</strong> describes the decisions and actions an agent can take without human approval.</p>
-    <p>Describe that authority concretely:</p>
-    <blockquote>A Minion can write code and run checks on its own. Production pull requests require human review.</blockquote>
-    <p>Working without someone’s continuous attention does not imply permission to take every action.</p>
+    {terms.participation.body.map((block) => <p><Inline parts={block} /></p>)}
+    <aside class="concept-combination"><span class="definition-label">{terms.combination.label}</span><p><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
+    <h3 id={terms.autonomy.id}>{terms.autonomy.heading}</h3>
+    {terms.autonomy.body.map((block) => <p><Inline parts={block} /></p>)}
+    <blockquote>{terms.autonomy.quote}</blockquote>
+    <p><Inline parts={terms.autonomy.closing} /></p>
   </section>
   <section id="faq" class="guide-faq">
-    <p class="eyebrow">05 / Common questions</p>
-    <h2>Common questions</h2>
-    <details><summary>Does “internal” mean built in-house?</summary><p>No. A company can configure an existing product around its own workflows. The relevant question is what work the system serves and how it uses company context and tools.</p></details>
-    <details><summary>Does “internal” mean private or self-hosted?</summary><p>No. An internal agent can use hosted services. Hosting, data handling, and access controls need to be described separately.</p></details>
-    <details><summary>Is a shared agent platform itself an agent?</summary><p>A platform can provide the context, tools, execution environments, and controls used by multiple agents. The map includes platforms because they help explain how organizations make agents available across teams.</p></details>
-    <details><summary>Is every automated workflow an agent?</summary><p>For this guide, the distinction is whether a model chooses steps or actions as the task unfolds. A fixed sequence of programmed steps is automation; a system can combine both.</p></details>
-    <details><summary>Why are some details unknown?</summary><p>Public descriptions vary in depth. An article may explain a workflow without documenting its permissions or execution environment. The map leaves those details unknown rather than inferring them from a product name.</p></details>
-    <details><summary>Are these official definitions?</summary><p>These are working definitions for reading the map. Product terminology varies. Concrete descriptions of the work, context, tools, and behavior are more useful than a label alone.</p></details>
+    <p class="eyebrow">{questions.eyebrow}</p>
+    <h2>{questions.heading}</h2>
+    {questions.items.map((item) => <details><summary>{item.question}</summary><p><Inline parts={item.answer} /></p></details>)}
   </section>
 </ArticleLayout>

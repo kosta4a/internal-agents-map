@@ -1,43 +1,30 @@
 // ABOUTME: Serves the Methodology guide as Markdown, section by section.
-// ABOUTME: It carries the same sections, links, and qualifications as the page.
+// ABOUTME: It renders the same text, links, and qualifications as the page.
 import type { APIRoute } from 'astro';
-import { METHODOLOGY_HEADING, REPOSITORY_LINKS } from '../lib/guide-content';
-import { canonicalUrl, guidePath, notesIndexPath } from '../lib/routes';
-
-const CONTRIBUTING =
-  'https://github.com/steel-experiments/internal-agents-map/blob/main/CONTRIBUTING.md';
+import {
+  METHODOLOGY_EYEBROW,
+  METHODOLOGY_HEADING,
+  METHODOLOGY_LEDE,
+  METHODOLOGY_SECTIONS,
+  inlineMarkdown,
+} from '../lib/guide-content';
+import { canonicalUrl, guidePath } from '../lib/routes';
 
 function document(): string {
-  const definitions = canonicalUrl(guidePath('definitions'));
-  const notes = canonicalUrl(notesIndexPath());
-  const links = REPOSITORY_LINKS.map((link) => `[${link.label}](${link.url})`).join(' ');
-  return [
+  const blocks: string[] = [
     `Source: ${canonicalUrl(guidePath('methodology'))}`,
-    'Reading the map',
+    METHODOLOGY_EYEBROW,
     `# ${METHODOLOGY_HEADING}`,
-    'How we record evidence and explain its limits.',
-    '## What we include',
-    'Each case describes a system that a named organization built or adapted for its own teams. Public sources must describe its implementation or use.',
-    'We also include platforms and supporting tools that help teams build internal agents. A product name is optional. Commercial systems can qualify when sources describe the internal build or adaptation. General adoption claims are insufficient.',
-    '## How we add cases',
-    `We use an agent skill to assess sources against our [inclusion rules](${CONTRIBUTING}#inclusion-rules) and prepare catalog changes. Automated checks validate record structure, source files, and links; they cannot confirm reported results or our interpretations.`,
-    '## How we use sources',
-    'Claims link to public sources. We record who published each source and separate reported claims from our own judgments. We keep conflicting reports visible.',
-    'We capture a copy of each source page with [Steel, the open-source browser infrastructure for AI agents](https://steel.dev/). Each capture records the time, the final URL, and the HTTP status. A capture shows what a page said when we read it. It does not confirm the claims on that page.',
-    'Company results remain self-reported unless an independent source verifies them. Confidence describes the support for a claim. Evidence strength describes source type and detail. Neither label proves that a claim is true.',
-    'For metrics, we keep the reported dates, scope, measurement method, and what the numbers count, when available. A report date does not establish the measurement period.',
-    'Unknown means that the sources do not provide an answer. It does not establish that a feature is absent.',
-    '## How we assign levels',
-    'We assess specific tasks and when a person must review the work. Each level is our judgment, linked to evidence and a date. One system can have several levels for different tasks.',
-    `The levels do not rank companies or measure quality. See [Definitions](${definitions}) for the terms and framework.`,
-    '## How we write notes',
-    `We compare design choices across cases. Each [note](${notes}) links to its sources and separates what teams report from our observations.`,
-    'We state the limits of each comparison. A repeated choice does not prove that it works better. Our illustrations explain the ideas and identify simplifications.',
-    '## What the map cannot tell you',
-    'The map covers cases with public evidence. Many concern coding and code review. Failed projects and unpublished systems may be missing.',
-    'Case counts cannot tell us how common a practice is across the industry. Results from different tasks or measurement methods may not be comparable.',
-    links,
-  ].join('\n\n');
+    METHODOLOGY_LEDE,
+  ];
+  for (const section of METHODOLOGY_SECTIONS) {
+    blocks.push(`## ${section.heading}`);
+    for (const block of section.body) blocks.push(inlineMarkdown(block));
+    if (section.links) {
+      blocks.push(section.links.map((link) => `[${link.label}](${link.url})`).join(' '));
+    }
+  }
+  return blocks.join('\n\n');
 }
 
 export const GET: APIRoute = () =>
