@@ -2,6 +2,7 @@
 // ABOUTME: The notes index: one preview for every note, in reading order.
 // ABOUTME: The previews link to the notes and name the companies each note reads.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import {
   NOTES_CLOSING,
@@ -40,6 +41,7 @@ const graph = structuredData([
   variant="notes"
 >
   <header class="guide-header">
+    <Topography />
     <p class="eyebrow">{NOTES_EYEBROW}</p>
     <h1>{NOTES_HEADING}</h1>
     <p class="lede">{NOTES_LEDE}</p>

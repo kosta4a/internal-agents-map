@@ -2,6 +2,7 @@
 // ABOUTME: The Definitions guide: the scope of the map, the chart, and the terms.
 // ABOUTME: Chart placements come from the catalog, so lost evidence removes a marker.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell } from '../lib/definitions';
 import {
@@ -43,6 +44,7 @@ const minions = entryPath('stripe-minions');
   structuredData={graph}
 >
   <header class="guide-header">
+    <Topography />
     <p class="eyebrow">Understanding the map</p>
     <h1>{DEFINITIONS_HEADING}</h1>
     <p class="lede">How organizations turn general-purpose models into agents for their own work.</p>

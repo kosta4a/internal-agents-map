@@ -2,6 +2,7 @@
 // ABOUTME: The Methodology guide: how the catalog records evidence and its limits.
 // ABOUTME: The Markdown export in methodology.md.ts carries the same sections.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Topography from '../components/Topography.astro';
 import { guidePath, canonicalUrl, notesIndexPath } from '../lib/routes';
 import { structuredData, webPageNode } from '../lib/metadata';
 import {
@@ -24,6 +25,7 @@ const graph = structuredData([
   structuredData={graph}
 >
   <header class="guide-header">
+    <Topography />
     <p class="eyebrow">Reading the map</p>
     <h1>Methodology</h1>
     <p class="lede">How we record evidence and explain its limits.</p>
