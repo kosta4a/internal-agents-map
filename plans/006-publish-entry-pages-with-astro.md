@@ -745,17 +745,17 @@ submission and technical eligibility cannot guarantee indexing or ranking.
 
 ## Done criteria
 
-- [ ] `npm run verify` passes in a fresh checkout with documented pinned runtimes.
-- [ ] Every current approach has an indexable HTTP-200 HTML page with its own
+- [x] `npm run verify` passes in a fresh checkout with documented pinned runtimes.
+- [x] Every current approach has an indexable HTTP-200 HTML page with its own
   canonical URL and a crawlable link from the directory.
-- [ ] The current dataset produces 39 entry pages and 50 canonical sitemap URLs.
+- [x] The current dataset produces 39 entry pages and 50 canonical sitemap URLs.
 - [ ] Claim/source coverage, full export fidelity, and the three difficult sample
   cases pass automated checks and an editorial review.
 - [ ] All published URL and format contracts above pass deployed verification.
-- [ ] No public HTML entry inherits noindex; JSON exclusions remain narrow.
-- [ ] New entries/notes do not require manual route, sitemap, or hosting edits.
-- [ ] The static build publishes only approved content and bundled assets.
-- [ ] Retired HTML rendering and committed frontend outputs are removed after
+- [x] No public HTML entry inherits noindex; JSON exclusions remain narrow.
+- [x] New entries/notes do not require manual route, sitemap, or hosting edits.
+- [x] The static build publishes only approved content and bundled assets.
+- [x] Retired HTML rendering and committed frontend outputs are removed after
   parity; there is one maintained frontend rendering system.
 - [ ] Design/browser acceptance, release revision, and rollback details are
   recorded. Search measurement is completed or assigned to the site owner.

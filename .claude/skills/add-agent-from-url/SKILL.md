@@ -62,10 +62,11 @@ For operating models, record the task scope and documented human review boundary
 needs dated claim metadata with `catalog-judgment` provenance. Levels are derived by the build.
 Do not derive them from autonomy labels or average different workflows.
 
-Regenerate outputs with `uv run python scripts/build.py`. Run the verification commands in
-[the pull request template](../../../.github/pull_request_template.md), including archive, site,
-privacy, build, and local-link checks. Read the source against the claims as well: passing checks
-cannot establish that an interpretation is correct.
+Regenerate the data and the repository documents with `uv run python scripts/build.py`. Then run
+`npm run verify`, which holds the archive, generated-output, website build, artifact, privacy,
+test, lint, link, and browser checks listed in
+[the pull request template](../../../.github/pull_request_template.md). Read the source against
+the claims as well: passing checks cannot establish that an interpretation is correct.
 
 If a check fails, fix the change within scope or report the blocker. Preserve unrelated work;
 do not use a broad `git restore` to clean up. Do not commit or publish a failing change.

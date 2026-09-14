@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "buildCommand": "uv run --locked python scripts/build.py && uv run --locked python scripts/check_site.py --root site",
+  "buildCommand": "uv run --locked python scripts/build.py --check && npm run build && uv run --locked python scripts/check_site.py --root dist",
   "installCommand": "npm ci",
-  "outputDirectory": "site",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [

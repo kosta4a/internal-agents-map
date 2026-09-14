@@ -20,7 +20,7 @@ Claims link to public sources. Company reports stay separate from catalog interp
 undocumented details stay unknown.
 
 [Browse the catalog](docs/landscape.md) ·
-[Website and local preview](docs/site.md) ·
+[Website and delivery](docs/site.md) ·
 [Architecture patterns](docs/patterns.md) ·
 [Adoption observations](docs/adoption-lessons.md) ·
 [Use the data](data/agents.json) ·

@@ -59,12 +59,15 @@ Agreement between reviewing agents is not independent evidence.
 ## Set up the project
 
 1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/).
-2. Run `uv sync --locked`.
-3. Run `uv run python scripts/build.py --check`.
-4. Run `uv run python -m unittest discover -s tests`.
+2. Install the Node.js version in [.node-version](.node-version).
+3. Run `uv sync --locked`.
+4. Run `npm ci`.
+5. Run `uv run python scripts/build.py --check`.
+6. Run `uv run python -m unittest discover -s tests`.
 
 uv installs the required Python version and manages the project environment. You do not need to
-create or activate a virtual environment yourself.
+create or activate a virtual environment yourself. Python validates the research data and writes
+the repository documents. Node builds the website.
 
 ## Add an approach
 
@@ -150,28 +153,29 @@ Run:
 
 ```bash
 uv run python scripts/build.py
-uv run python scripts/archive_sources.py --check
-uv run python scripts/build.py --check
-uv run ruff check .
-uv run ruff format --check .
-uv run python -m unittest discover -s tests
-uv run python scripts/check_links.py --local
-git diff --check
+npm run verify
 ```
+
+The first command regenerates the data and the repository documents. `npm run verify` then runs
+every gate in one sequence: the generated-output and archive checks, the type and unit checks,
+the website build, the artifact check, the Python tests, lint, format, privacy, local links,
+the browser tests, and the whitespace check. Run a single gate directly when you repair a failure.
 
 The scheduled link check tests external URLs. A confirmed 404 or 410 passes with an `archived`
 warning when a verified fallback exists and fails otherwise. Blocked and temporarily unreachable
 URLs are reported separately as warnings. A pull request does not depend on remote sites being
 available.
 
-## Generated website
+## Website
 
-The mini page is generated from the same validated catalog as the Markdown and JSON.
-Edit `data/agents/*.yaml` for evidence and `templates/site.html`, `templates/site.css`,
-or `templates/site.js` for the page. Run `uv run --locked python scripts/build.py`
-and commit the regenerated `site/` outputs with the change. Do not hand-edit generated files.
+The website is an Astro project in `src/`. It reads the same validated catalog as the Markdown
+and JSON. Edit `data/agents/*.yaml` for evidence, `src/content/notes/*.md` for notes, and the
+pages, layouts, components, and styles in `src/` for the presentation.
 
-Run `uv run --locked python scripts/check_site.py --root site` along with the existing
-checks. Pull requests validate only; accepted updates on `main` can publish the validated
-`site/` artifact through GitHub Pages. See [website maintenance and preview](docs/site.md)
-for local serving, browser checks, initial Pages setup, and rollback.
+Run `npm run dev` for a local preview. It regenerates the normalized data and reloads the page
+when you edit a record or a note. Run `npm run verify` before you open a pull request.
+
+The build writes the website to `dist/`, which Git ignores. Do not commit website output.
+Vercel builds and checks the same artifact for every push, and a merge to `main` deploys it to
+`https://internal-agents.com/`. See [website maintenance and delivery](docs/site.md) for the
+hosting rules, preview deployments, delivery checks, and rollback.
