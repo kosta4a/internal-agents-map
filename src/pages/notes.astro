@@ -1,0 +1,59 @@
+---
+// ABOUTME: The notes index: one preview for every note, in reading order.
+// ABOUTME: The previews link to the notes and name the companies each note reads.
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import { loadCatalog } from '../lib/catalog';
+import {
+  NOTES_CLOSING,
+  NOTES_DESCRIPTION,
+  NOTES_EYEBROW,
+  NOTES_HEADING,
+  NOTES_INTRO_AFTER,
+  NOTES_INTRO_BEFORE,
+  NOTES_LEDE,
+  NOTES_TITLE,
+} from '../lib/guide-content';
+import { structuredData, webPageNode } from '../lib/metadata';
+import { noteCompanies, noteViews } from '../lib/notes';
+import { canonicalUrl, homePath, notesIndexPath } from '../lib/routes';
+
+const catalog = loadCatalog();
+const notes = noteViews();
+const companies = new Map(notes.map((note) => [note.slug, noteCompanies(catalog, note)]));
+const modified = notes
+  .map((note) => note.displayDate)
+  .sort()
+  .at(-1);
+
+const path = notesIndexPath();
+const url = canonicalUrl(path);
+const graph = structuredData([
+  webPageNode({ url, name: NOTES_TITLE, description: NOTES_DESCRIPTION, dateModified: modified }),
+]);
+---
+<ArticleLayout
+  title={NOTES_TITLE}
+  description={NOTES_DESCRIPTION}
+  path={path}
+  current="notes"
+  structuredData={graph}
+  variant="notes"
+>
+  <header class="guide-header">
+    <p class="eyebrow">{NOTES_EYEBROW}</p>
+    <h1>{NOTES_HEADING}</h1>
+    <p class="lede">{NOTES_LEDE}</p>
+    <p>{NOTES_INTRO_BEFORE}<a href={`${homePath()}#catalog`}>catalog</a>{NOTES_INTRO_AFTER}</p>
+  </header>
+  <div class="note-list">
+    {notes.map((note) => (
+      <article class="note-preview">
+        <p class="eyebrow">{note.eyebrow}</p>
+        <h2><a href={note.path}>{note.title}</a></h2>
+        <p>{note.summary}</p>
+        <p class="note-meta">{companies.get(note.slug)?.join(' · ')} <span>{note.readingTime}</span></p>
+      </article>
+    ))}
+  </div>
+  <p class="notes-editorial">{NOTES_CLOSING}</p>
+</ArticleLayout>
