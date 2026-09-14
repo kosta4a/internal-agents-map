@@ -3,7 +3,7 @@
 
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { loadCatalog, type Claim } from '../../src/lib/catalog';
+import { loadCatalog, type Catalog, type Claim } from '../../src/lib/catalog';
 import {
   catalogMarkdown,
   compactIndexJson,
@@ -16,17 +16,25 @@ import { canonicalUrl, entryPath } from '../../src/lib/routes';
 
 const catalog = loadCatalog();
 
-/** The published files of the previous build. They are the comparison baseline. */
+/** A committed file of the repository, read as the comparison baseline. */
 function published(path: string): string {
   return readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 }
 
 describe('record JSON', () => {
-  it('reproduces every published record byte for byte', () => {
+  it('holds the whole catalog slice of every record, in the catalog format', () => {
     for (const approach of catalog.approaches) {
-      expect(recordJson(catalog, approach.id), approach.id).toBe(
-        published(`site/agents/${approach.id}.json`),
+      const text = recordJson(catalog, approach.id);
+      const record = JSON.parse(text) as Catalog;
+      expect(record.schema_version, approach.id).toBe(catalog.schema_version);
+      expect(record.approaches, approach.id).toEqual([approach]);
+      expect(record.claims, approach.id).toEqual(
+        approach.claim_ids.map((id) => catalog.claims.find((claim) => claim.id === id)),
       );
+      expect(record.sources, approach.id).toEqual(
+        approach.source_ids.map((id) => catalog.sources.find((source) => source.id === id)),
+      );
+      expect(text, approach.id).toBe(`${JSON.stringify(record, null, 2)}\n`);
     }
   });
 
@@ -50,27 +58,32 @@ describe('record JSON', () => {
 });
 
 describe('compact index', () => {
-  const published_index = JSON.parse(published('site/agents/index.json')) as {
+  const current = JSON.parse(compactIndexJson(catalog)) as {
     schema_version: number;
     approaches: Array<Record<string, unknown>>;
   };
-  const current = JSON.parse(compactIndexJson(catalog)) as typeof published_index;
 
-  it('differs from the published index only in the page URL', () => {
-    expect(current.schema_version).toBe(published_index.schema_version);
-    expect(current.approaches).toHaveLength(published_index.approaches.length);
+  it('describes every implementation of the catalog, in catalog order', () => {
+    expect(current.schema_version).toBe(1);
+    expect(current.approaches.map((entry) => entry.id)).toEqual(
+      catalog.approaches.map((approach) => approach.id),
+    );
     for (const [index, entry] of current.approaches.entries()) {
-      const before = published_index.approaches[index]!;
-      expect({ ...entry, url: null }).toEqual({ ...before, url: null });
+      const approach = catalog.approaches[index]!;
+      expect(entry.company).toBe(approach.company);
+      expect(entry.agent_name).toBe(approach.agent_name);
+      expect(entry.approach_type).toBe(approach.approach_type);
+      expect(entry.domains).toEqual(approach.domains);
+      expect(entry.last_reviewed_at).toBe(approach.last_reviewed_at);
     }
   });
 
-  it('points the page URL at the entry page and leaves the export URLs alone', () => {
-    for (const [index, entry] of current.approaches.entries()) {
-      const before = published_index.approaches[index]!;
-      expect(entry.url).toBe(canonicalUrl(entryPath(entry.id as string)));
-      expect(entry.json_url).toBe(before.json_url);
-      expect(entry.markdown_url).toBe(before.markdown_url);
+  it('points the page URL at the entry page and keeps the export URLs', () => {
+    for (const entry of current.approaches) {
+      const id = entry.id as string;
+      expect(entry.url).toBe(canonicalUrl(entryPath(id)));
+      expect(entry.json_url).toBe(canonicalUrl(`${entryPath(id)}.json`));
+      expect(entry.markdown_url).toBe(canonicalUrl(`${entryPath(id)}.md`));
     }
   });
 });

@@ -1,9 +1,10 @@
-"""Validate the generated site artifact without fetching external citations."""
+# ABOUTME: Checks the built site artifact against the routes, exports, and assets it may publish.
+# ABOUTME: Rejects extra files, unsafe links, missing evidence, and private contact data.
+"""Validate the built site artifact without fetching external citations."""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.util
 import json
 import re
@@ -15,22 +16,9 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# The pages both artifact layouts publish, by their file name in the root.
-PAGE_FILES = {
-    "404.html",
-    "index.html",
-    "definitions.html",
-    "methodology.html",
-    "notes.html",
-    "notes/stop-a-run.html",
-    "notes/review-noise.html",
-    "notes/split-the-work.html",
-    "notes/work-can-continue.html",
-    "notes/load-tools.html",
-    "notes/steps-without-a-model.html",
-    "notes/test-on-your-work.html",
-}
-STATIC_FILES = {"favicon.ico", "og.png"}
+# Files that public/ publishes exactly as they are authored.
+PUBLIC_FILES = {"favicon.ico", "og.png", "fonts/Geist.woff2", "fonts/OFL.txt"}
+# Exports and discovery files that no page route serves.
 EXPORT_FILES = {
     "agents.json",
     "agents/index.json",
@@ -39,20 +27,14 @@ EXPORT_FILES = {
     "robots.txt",
     "sitemap.xml",
 }
-# The hand-hashed assets of the Python renderer.
-LEGACY_FILES = {
-    "assets/site.css",
-    "assets/site.js",
-    "assets/fonts/Geist.woff2",
-    "assets/fonts/OFL.txt",
-    "assets/manifest.json",
-}
-LEGACY_DIRECTORIES = {"assets", "assets/fonts", "notes", "agents"}
-# The bundled assets of the Astro build.
-ASTRO_FILES = {"fonts/Geist.woff2", "fonts/OFL.txt"}
-ASTRO_DIRECTORIES = {"_astro", "fonts", "notes", "agents"}
-# Astro names a bundled asset `<name>.<hash>.<extension>`.
-ASTRO_ASSET = re.compile(r"_astro/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
+# The document the host returns for an unknown path. No route points to it.
+ERROR_PAGE = "404.html"
+DIRECTORIES = {"_astro", "fonts", "notes", "agents"}
+# A bundled asset is named `<name>.<content hash>.<extension>`.
+BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
+CSS_URL = re.compile(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)")
+# The research fields that qualify a statement and must stay beside it.
+QUALIFIER_FIELDS = ("reported_by", "metric_scope", "denominator", "measurement_method", "valid_at")
 
 
 class SiteParser(HTMLParser):
@@ -72,6 +54,12 @@ class SiteParser(HTMLParser):
         for key in ("href", "src"):
             if attributes.get(key):
                 self.urls.append(attributes[key])
+        if attributes.get("srcset"):
+            # Each candidate is a URL and an optional width or density descriptor.
+            for candidate in attributes["srcset"].split(","):
+                parts = candidate.split()
+                if parts:
+                    self.urls.append(parts[0])
         for key in self.coverage:
             if attributes.get(f"data-{key}-id"):
                 self.coverage[key].append(attributes[f"data-{key}-id"])
@@ -84,30 +72,32 @@ def visible_text(page: SiteParser) -> str:
     return " ".join(" ".join(page.text).split())
 
 
-def hashed_assets(root: Path, errors: list[str]) -> set[str]:
-    """Read the asset manifest of the Python renderer and check every content hash."""
+def route_files(routes: dict, errors: list[str]) -> set[str]:
+    """Name the HTML and Markdown file that each published route is served from."""
     names: set[str] = set()
-    try:
-        manifest = json.loads((root / "assets/manifest.json").read_text())
-        if set(manifest) != {"site.css", "site.js", "fonts/Geist.woff2"}:
-            errors.append("Invalid hashed asset manifest.")
-        for original, hashed in manifest.items():
-            original_path = Path(original)
-            pattern = (
-                re.escape(str(original_path.with_suffix("")))
-                + r"\.[a-f0-9]{16}"
-                + re.escape(original_path.suffix)
-            )
-            if not re.fullmatch(pattern, hashed):
-                errors.append(f"Invalid hashed asset path: {hashed}")
+    for path, artifacts in sorted(routes.items()):
+        if not path.startswith("/"):
+            errors.append(f"Route path must start at the root: {path}")
+            continue
+        if not isinstance(artifacts, dict) or set(artifacts) != {"html", "markdown"}:
+            errors.append(f"Route {path} must name one HTML and one Markdown artifact.")
+            continue
+        for name in artifacts.values():
+            if not isinstance(name, str) or not name.startswith("/"):
+                errors.append(f"Route {path} names an artifact outside the root: {name}")
                 continue
-            names.add("assets/" + hashed)
-            content = (root / "assets" / hashed).read_bytes()
-            if hashlib.sha256(content).hexdigest()[:16] != Path(hashed).name.split(".")[-2]:
-                errors.append(f"Asset content hash mismatch: {hashed}")
-    except (OSError, ValueError, TypeError):
-        errors.append("Missing or invalid hashed assets.")
+            names.add(name.lstrip("/"))
     return names
+
+
+def check_entry_routes(routes: dict, approaches: list[dict], errors: list[str]) -> None:
+    """The entry routes and the catalog hold the same implementations."""
+    listed = {path for path in routes if path.startswith("/agents/")}
+    wanted = {f"/agents/{approach['id']}" for approach in approaches}
+    for path in sorted(wanted - listed):
+        errors.append(f"The route manifest omits {path}.")
+    for path in sorted(listed - wanted):
+        errors.append(f"The route manifest holds an entry the catalog does not hold: {path}.")
 
 
 def check_directory_coverage(page: SiteParser, approaches: list[dict], errors: list[str]) -> None:
@@ -138,11 +128,20 @@ def check_entry_coverage(
         claim = claims.get(claim_id)
         if claim is None:
             errors.append(f"Unknown claim {claim_id} in {name}.")
-        elif " ".join(str(claim["text"]).split()) not in text:
+            continue
+        if " ".join(str(claim["text"]).split()) not in text:
             errors.append(f"Missing claim text: {claim_id} in {name}")
+        for field in QUALIFIER_FIELDS:
+            value = claim.get(field)
+            if value and " ".join(str(value).split()) not in text:
+                errors.append(f"Missing caveat {field}: {claim_id} in {name}")
 
 
-def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list[str]:
+def validate(
+    root: Path,
+    catalog_path: Path = ROOT / "data/agents.json",
+    routes_path: Path = ROOT / "routing-manifest.json",
+) -> list[str]:
     errors: list[str] = []
     if root.is_symlink() or not root.is_dir():
         return ["Site root must be a real directory, not a symlink."]
@@ -150,18 +149,15 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
     catalog = json.loads(catalog_bytes)
     approaches = list(catalog["approaches"])
     claims = {claim["id"]: claim for claim in catalog["claims"]}
-    # The Python renderer hashes its own assets; the Astro build bundles them.
-    legacy = (root / "assets/manifest.json").is_file()
-    expected = set(PAGE_FILES) | STATIC_FILES | EXPORT_FILES
-    expected |= {name.replace(".html", ".md") for name in PAGE_FILES if name != "404.html"}
-    expected |= {f"agents/{a['id']}.{ext}" for a in approaches for ext in ("json", "md")}
-    if legacy:
-        expected |= LEGACY_FILES | hashed_assets(root, errors)
-        directories = LEGACY_DIRECTORIES
-    else:
-        expected |= ASTRO_FILES
-        expected |= {f"agents/{a['id']}.html" for a in approaches}
-        directories = ASTRO_DIRECTORIES
+    manifest = json.loads(routes_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != 1:
+        errors.append("Unsupported route manifest schema version.")
+    routes = manifest.get("routes") or {}
+    check_entry_routes(routes, approaches, errors)
+    expected = route_files(routes, errors) | PUBLIC_FILES | EXPORT_FILES | {ERROR_PAGE}
+    expected |= {f"agents/{approach['id']}.json" for approach in approaches}
+    if errors:
+        return errors
 
     root = root.resolve()
     actual = set()
@@ -172,7 +168,7 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
             actual.add(path.relative_to(root).as_posix())
             if path.stat().st_size == 0:
                 errors.append(f"Empty output: {path.relative_to(root)}")
-        elif path.is_dir() and path.relative_to(root).as_posix() not in directories:
+        elif path.is_dir() and path.relative_to(root).as_posix() not in DIRECTORIES:
             errors.append(f"Unexpected directory: {path.relative_to(root)}")
     missing = sorted(expected - actual)
     if missing:
@@ -194,45 +190,22 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
                 errors.append(f"Duplicate IDs: {duplicates} in {name}")
 
         # A bundled asset is publishable only where a published document asks for it.
-        allowed = set(expected)
-        if not legacy:
-            referenced = {
-                url.lstrip("/").split("#")[0] for page in pages.values() for url in page.urls
-            }
-            for css_path in (root / "_astro").glob("*.css"):
-                css = css_path.read_text(encoding="utf-8")
-                referenced |= {
-                    match[1].lstrip("/")
-                    for match in re.finditer(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)", css)
-                }
-            allowed |= {name for name in referenced if ASTRO_ASSET.fullmatch(name)}
+        referenced = {url.lstrip("/").split("#")[0] for page in pages.values() for url in page.urls}
+        for css_path in (root / "_astro").glob("*.css"):
+            css = css_path.read_text(encoding="utf-8")
+            referenced |= {match[1].lstrip("/") for match in CSS_URL.finditer(css)}
+        allowed = expected | {name for name in referenced if BUNDLED_ASSET.fullmatch(name)}
         extra = sorted(actual - allowed)
         if extra:
             errors.append(f"Output boundary mismatch: extra {extra}")
 
         if (root / "agents.json").read_bytes() != catalog_bytes:
             errors.append("Site JSON differs from the source catalog.")
-        if legacy:
-            # The Python renderer keeps the whole catalog on the directory page.
-            directory = pages[root / "index.html"]
-            for kind, collection in (
-                ("approach", "approaches"),
-                ("claim", "claims"),
-                ("source", "sources"),
-            ):
-                expected_ids = Counter(item["id"] for item in catalog[collection])
-                if Counter(directory.coverage[kind]) != expected_ids:
-                    errors.append(f"Incomplete or duplicate {kind} coverage.")
-            text = visible_text(directory)
-            for claim in catalog["claims"]:
-                if " ".join(str(claim["text"]).split()) not in text:
-                    errors.append(f"Missing claim text: {claim['id']}")
-        else:
-            check_directory_coverage(pages[root / "index.html"], approaches, errors)
-            for approach in approaches:
-                page = pages.get(root / f"agents/{approach['id']}.html")
-                if page is not None:
-                    check_entry_coverage(page, approach, claims, errors)
+        check_directory_coverage(pages[root / "index.html"], approaches, errors)
+        for approach in approaches:
+            page = pages.get(root / f"agents/{approach['id']}.html")
+            if page is not None:
+                check_entry_coverage(page, approach, claims, errors)
 
         def check_url(url: str, document: Path) -> None:
             url = url.strip()
@@ -245,13 +218,6 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
                 errors.append(f"Asset/link must be relative: {url}")
                 return
             rooted = url.startswith("/")
-            if legacy and (rooted or url.startswith("\\")):
-                # The Pages artifact is relocatable, so only the 404 page uses root paths.
-                if document.name == "404.html" and rooted:
-                    check_url(url[1:], root / "index.html")
-                    return
-                errors.append(f"Asset/link must be relative: {url}")
-                return
             decoded = unquote(parts.path)
             if "\\" in decoded:
                 errors.append(f"Invalid path separator: {url}")
@@ -263,7 +229,7 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
                 return
             # A clean URL such as /agents/<id> or /notes is served from <id>.html.
             clean = None if target == root else target.with_name(target.name + ".html")
-            if not legacy and clean is not None and clean.is_file():
+            if clean is not None and clean.is_file():
                 target = clean
             elif target.is_dir():
                 target = target / "index.html"
@@ -277,9 +243,9 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
         for document, page in pages.items():
             for url in page.urls:
                 check_url(url, document)
-        for css_path in (root / ("assets" if legacy else "_astro")).glob("*.css"):
+        for css_path in (root / "_astro").glob("*.css"):
             css = css_path.read_text(encoding="utf-8")
-            for match in re.finditer(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)", css):
+            for match in CSS_URL.finditer(css):
                 check_url(match[1], css_path)
             if "@import" in css.lower():
                 errors.append("CSS imports are outside the self-contained artifact contract.")
@@ -299,7 +265,7 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
 
 def main() -> int:
     cli = argparse.ArgumentParser(description=__doc__)
-    cli.add_argument("--root", type=Path, default=ROOT / "site")
+    cli.add_argument("--root", type=Path, default=ROOT / "dist")
     args = cli.parse_args()
     errors = validate(args.root)
     if errors:

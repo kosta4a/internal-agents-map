@@ -1,5 +1,5 @@
 {
-  "note": "Canonical HTML routes for the catalog. The guide routes are the fixed pages. The other routes come from the note slugs in scripts/build.py and the approach IDs in data/agents/*.yaml. tests/test_build.py rebuilds this list and compares it.",
+  "note": "Canonical HTML routes for the catalog. The guide routes are the fixed pages. The other routes come from the note files in src/content/notes and the approach IDs in data/agents/*.yaml. tests/test_build.py rebuilds this list and compares it.",
   "guide_routes": [
     "/",
     "/definitions",

@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /** The authored evidence. A change here needs a new normalized catalog. */
 const WATCHED = path.join(ROOT, 'data', 'agents');
-const DATA_BUILD = ['run', '--locked', 'python', 'scripts/build.py', '--data-only'];
+const DATA_BUILD = ['run', '--locked', 'python', 'scripts/build.py'];
 /** Wait for the editor to finish writing before the build starts. */
 const SETTLE_MS = 150;
 

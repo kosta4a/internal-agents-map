@@ -80,8 +80,9 @@ describe('robots.txt', () => {
     expect(ROBOTS_TXT).toContain(`Sitemap: ${ORIGIN}/sitemap.xml`);
   });
 
-  it('reproduces the published file exactly', () => {
-    expect(ROBOTS_TXT).toBe(readFileSync(new URL('../../site/robots.txt', import.meta.url), 'utf8'));
+  it('names the sitemap once and ends with a newline', () => {
+    expect(ROBOTS_TXT.match(/^Sitemap: /gm)).toHaveLength(1);
+    expect(ROBOTS_TXT.endsWith('\n')).toBe(true);
   });
 });
 

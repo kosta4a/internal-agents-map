@@ -1,7 +1,10 @@
-"""Per-entry coverage and publication boundary rules of the Astro artifact checker."""
+# ABOUTME: Fixture tests for the publication boundary and evidence rules of check_site.py.
+# ABOUTME: Each case breaks one rule in a small complete artifact and expects a named error.
+"""Per-entry coverage and publication boundary rules of the site artifact checker."""
 
 import importlib.util
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def load_script(name):
     spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -19,6 +23,8 @@ def load_script(name):
 checker = load_script("check_site")
 
 STYLESHEET = "_astro/site.abcd1234.css"
+# The guide routes that the fixture publishes beside the two entry pages.
+GUIDE_ROUTES = ("/", "/definitions", "/notes", "/notes/a-note")
 
 CATALOG = {
     "schema_version": 4,
@@ -43,6 +49,7 @@ CATALOG = {
             "id": "first-agent--summary",
             "approach_id": "first-agent",
             "text": "The first agent opens pull requests from tickets.",
+            "metric_scope": "Pilot teams only",
         },
         {
             "id": "second-agent--summary",
@@ -90,6 +97,11 @@ def card(approach, claim):
 
 
 def entry(approach, claim, source):
+    caveat = (
+        '<p class="caveat">Scope: ' + claim["metric_scope"] + "</p>"
+        if claim.get("metric_scope")
+        else ""
+    )
     return (
         '<article class="entry-page" data-approach-id="'
         + approach["id"]
@@ -99,12 +111,35 @@ def entry(approach, claim, source):
         + claim["id"]
         + '"><p>'
         + claim["text"]
-        + '</p></article><ol class="sources"><li id="source-'
+        + "</p>"
+        + caveat
+        + '</article><ol class="sources"><li id="source-'
         + source["id"]
         + '" data-source-id="'
         + source["id"]
-        + '"><a href="https://example.invalid/report">Report</a></li></ol></article>'
+        + '"><a href="https://example.invalid/report">Report</a>'
+        + '<a href="/agents/'
+        + approach["id"]
+        + "#claim-"
+        + claim["id"]
+        + '">The claim</a>'
+        + "</li></ol></article>"
     )
+
+
+def routing_manifest():
+    """Name the artifacts of every route the fixture publishes."""
+    routes = {
+        path: {
+            "html": ("/index.html" if path == "/" else path + ".html"),
+            "markdown": ("/index.md" if path == "/" else path + ".md"),
+        }
+        for path in GUIDE_ROUTES
+    }
+    for approach in CATALOG["approaches"]:
+        path = "/agents/" + approach["id"]
+        routes[path] = {"html": path + ".html", "markdown": path + ".md"}
+    return {"schema_version": 1, "routes": routes}
 
 
 def build_artifact(root):
@@ -136,10 +171,12 @@ def build_artifact(root):
         )
         files[f"agents/{approach['id']}.json"] = "{}"
         files[f"agents/{approach['id']}.md"] = "# " + approach["agent_name"]
-    for name in checker.PAGE_FILES:
-        files.setdefault(name, document(Path(name).stem, "<p>A page.</p>"))
-        if name != "404.html":
-            files[name.replace(".html", ".md")] = "# Page"
+    files["404.html"] = document("Not found", "<p>No such page.</p>")
+    for path in GUIDE_ROUTES[1:]:
+        name = path.lstrip("/")
+        files.setdefault(name + ".html", document(Path(name).name, "<p>A page.</p>"))
+        files[name + ".md"] = "# Page"
+    files["index.md"] = "# Catalog"
     for name, text in files.items():
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -155,9 +192,11 @@ class AstroArtifactTests(unittest.TestCase):
         build_artifact(self.root)
         self.catalog = Path(self.temp.name) / "agents.json"
         self.catalog.write_text(json.dumps(CATALOG), encoding="utf-8")
+        self.routes = Path(self.temp.name) / "routing-manifest.json"
+        self.routes.write_text(json.dumps(routing_manifest()), encoding="utf-8")
 
     def validate(self):
-        return checker.validate(self.root, self.catalog)
+        return checker.validate(self.root, self.catalog, self.routes)
 
     def rewrite(self, name, old, new):
         path = self.root / name
@@ -249,6 +288,74 @@ class AstroArtifactTests(unittest.TestCase):
     def test_private_contact_data_is_refused(self):
         self.rewrite("index.html", "</footer>", "<p>" + "fixture" + "@" + "example.invalid</p>")
         self.assertTrue(any("Private contact data" in error for error in self.validate()))
+
+    def test_missing_caveat_fails(self):
+        self.rewrite("agents/first-agent.html", "Scope: Pilot teams only", "Scope: everywhere")
+        errors = self.validate()
+        self.assertTrue(
+            any("Missing caveat metric_scope: first-agent--summary" in e for e in errors), errors
+        )
+
+    def test_broken_fragment_on_the_same_page_fails(self):
+        self.rewrite(
+            "agents/first-agent.html",
+            "#claim-first-agent--summary",
+            "#claim-first-agent--missing",
+        )
+        self.assertTrue(any("Invalid fragment" in e for e in self.validate()), self.validate())
+
+    def test_broken_fragment_across_pages_fails(self):
+        self.rewrite("index.html", 'href="/agents/first-agent"', 'href="/agents/first-agent#gone"')
+        self.assertTrue(any("Invalid fragment" in e for e in self.validate()), self.validate())
+
+    def test_escaping_path_fails(self):
+        self.rewrite("index.html", 'href="/' + STYLESHEET + '"', 'href="../outside.css"')
+        self.assertTrue(any("escapes" in e for e in self.validate()), self.validate())
+
+    def test_link_to_another_host_fails(self):
+        self.rewrite("index.html", 'href="/agents/first-agent"', 'href="//example.invalid/x"')
+        self.assertTrue(any("must be relative" in e for e in self.validate()), self.validate())
+
+    def test_missing_bundled_asset_fails(self):
+        (self.root / STYLESHEET).unlink()
+        errors = self.validate()
+        self.assertTrue(any("Missing local target: /" + STYLESHEET in e for e in errors), errors)
+
+    def test_css_asset_reference_is_checked(self):
+        self.rewrite(STYLESHEET, "/fonts/Geist.woff2", "/fonts/missing.woff2")
+        self.assertTrue(any("Missing local target" in e for e in self.validate()), self.validate())
+
+    def test_srcset_candidate_is_checked(self):
+        self.rewrite(
+            "index.html",
+            "<footer>",
+            '<img src="/og.png" srcset="/og.png 1x, /missing.png 2x" alt="Preview"><footer>',
+        )
+        self.assertTrue(
+            any("Missing local target: /missing.png" in e for e in self.validate()), self.validate()
+        )
+
+    def test_exported_json_must_match_the_catalog(self):
+        (self.root / "agents.json").write_text("{}", encoding="utf-8")
+        self.assertTrue(any("JSON differs" in e for e in self.validate()), self.validate())
+
+    def test_route_manifest_and_catalog_must_agree(self):
+        manifest = json.loads(self.routes.read_text(encoding="utf-8"))
+        del manifest["routes"]["/agents/second-agent"]
+        manifest["routes"]["/agents/third-agent"] = {
+            "html": "/agents/third-agent.html",
+            "markdown": "/agents/third-agent.md",
+        }
+        self.routes.write_text(json.dumps(manifest), encoding="utf-8")
+        errors = self.validate()
+        self.assertTrue(any("omits /agents/second-agent" in e for e in errors), errors)
+        self.assertTrue(any("/agents/third-agent" in e for e in errors), errors)
+
+    def test_unsupported_manifest_version_fails(self):
+        manifest = json.loads(self.routes.read_text(encoding="utf-8"))
+        manifest["schema_version"] = 2
+        self.routes.write_text(json.dumps(manifest), encoding="utf-8")
+        self.assertTrue(any("schema version" in e for e in self.validate()), self.validate())
 
 
 if __name__ == "__main__":
