@@ -1715,7 +1715,6 @@ def publication_outputs(outputs: dict[Path, str | bytes], catalog: dict) -> dict
     outputs[site / "assets/manifest.json"] = json.dumps(assets, indent=2) + "\n"
     outputs[site / "favicon.ico"] = (ROOT / "templates/favicon.ico").read_bytes()
     outputs[site / "og.png"] = (ROOT / "templates/og.png").read_bytes()
-    routes = {}
     lastmods = {}
     catalog_reviewed = max((a["last_reviewed_at"] for a in catalog["approaches"]), default=None)
     parsed_pages = {
@@ -1749,7 +1748,6 @@ def publication_outputs(outputs: dict[Path, str | bytes], catalog: dict) -> dict
                 + social_metadata(name, soup, url, lastmod)
                 + f'  <script type="application/ld+json">{json_ld}</script>\n'
             )
-            routes["/" if name == "index.html" else "/" + name] = "/" + md_name
             document = document.replace("</head>", "  " + metadata + "</head>")
         # The stylesheet moves external-link arrows on hover; Markdown keeps plain text.
         document = document.replace(" ↗</a>", ' <span class="link-arrow">↗</span></a>')
@@ -1759,8 +1757,6 @@ def publication_outputs(outputs: dict[Path, str | bytes], catalog: dict) -> dict
             # Missing nested URLs must still load navigation and assets from the root.
             document = re.sub(r'(href|src)="(?!https?://|#)([^"]+)"', r'\1="/\2"', document)
         outputs[site / name] = document
-    routes["/index.html"] = "/index.md"
-    outputs[ROOT / "routing-manifest.json"] = json.dumps(routes, indent=2) + "\n"
     outputs[site / "sitemap.xml"] = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -1839,42 +1835,6 @@ def publication_outputs(outputs: dict[Path, str | bytes], catalog: dict) -> dict
             if name != "404.html"
         )
     )
-    config = json.loads((ROOT / "templates/vercel.json").read_text())
-    common_links = f'<{ORIGIN}/data-guide.md>; rel="describedby"; type="text/markdown", <{ORIGIN}/agents/index.json>; rel="collection"; type="application/json"'
-    for hashed in assets.values():
-        config["headers"].append(
-            {
-                "source": "/assets/" + hashed,
-                "headers": [
-                    {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
-                ],
-            }
-        )
-    for name in pages:
-        if name != "404.html":
-            config["headers"].append(
-                {
-                    "source": "/" + name.removesuffix(".html") + ".md",
-                    "headers": [
-                        {"key": "Link", "value": f'<{canonical_url(name)}>; rel="canonical"'}
-                    ],
-                }
-            )
-    for path, md in routes.items():
-        config["headers"].append(
-            {
-                "source": path,
-                "headers": [
-                    {"key": "Vary", "value": "Accept"},
-                    {
-                        "key": "Link",
-                        "value": f'<{ORIGIN}{md}>; rel="alternate"; type="text/markdown", '
-                        + common_links,
-                    },
-                ],
-            }
-        )
-    outputs[ROOT / "vercel.json"] = json.dumps(config, indent=2) + "\n"
     return outputs
 
 

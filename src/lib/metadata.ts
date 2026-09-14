@@ -58,6 +58,70 @@ export function webPageNode(options: {
   return node;
 }
 
+/**
+ * Describe the whole catalog as one dataset with its two downloads.
+ * Only the directory page carries this node: there is one dataset.
+ */
+export function datasetNode(options: { description: string; dateModified?: string | null }): JsonLdNode {
+  const node: JsonLdNode = {
+    '@type': 'Dataset',
+    '@id': `${ORIGIN}/#dataset`,
+    name: SITE_NAME,
+    description: options.description,
+    url: `${ORIGIN}/`,
+    license: CONTENT_LICENSE,
+    isAccessibleForFree: true,
+    creator: { '@id': PUBLISHER['@id'] },
+    publisher: { '@id': PUBLISHER['@id'] },
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        name: 'Complete dataset',
+        encodingFormat: 'application/json',
+        contentUrl: `${ORIGIN}/agents.json`,
+      },
+      {
+        '@type': 'DataDownload',
+        name: 'Compact catalog index',
+        encodingFormat: 'application/json',
+        contentUrl: `${ORIGIN}/agents/index.json`,
+      },
+      {
+        '@type': 'DataDownload',
+        name: 'Data and evidence guide',
+        encodingFormat: 'text/markdown',
+        contentUrl: `${ORIGIN}/data-guide.md`,
+      },
+    ],
+  };
+  if (options.dateModified) node.dateModified = options.dateModified;
+  return node;
+}
+
+/** Describe one note as an article of this website. */
+export function articleNode(options: {
+  url: string;
+  name: string;
+  headline: string;
+  description: string;
+  datePublished?: string | null;
+  dateModified?: string | null;
+}): JsonLdNode {
+  const node = webPageNode({
+    url: options.url,
+    name: options.name,
+    description: options.description,
+    dateModified: options.dateModified,
+  });
+  node['@type'] = 'Article';
+  node.headline = options.headline;
+  node.mainEntityOfPage = options.url;
+  node.author = { '@id': PUBLISHER['@id'] };
+  node.inLanguage = 'en';
+  if (options.datePublished) node.datePublished = options.datePublished;
+  return node;
+}
+
 /** Describe the path a reader follows from the directory to this page. */
 export function breadcrumbNode(url: string, items: ReadonlyArray<{ name: string; path: string }>): JsonLdNode {
   return {

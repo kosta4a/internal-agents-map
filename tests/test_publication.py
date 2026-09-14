@@ -99,16 +99,35 @@ class PublicationTests(unittest.TestCase):
             self.assertIsNotNone(soup.footer.select_one('a[href^="https://steel.dev/"]'))
 
     def test_alias_hosts_redirect_and_record_files_stay_out_of_search(self):
-        config = json.loads(self.outputs[ROOT / "vercel.json"])
+        # The hosting policy is authored at the repository root. Vercel reads it
+        # before the build command, so no build step may write it.
+        config = json.loads((ROOT / "vercel.json").read_text())
+        self.assertNotIn(ROOT / "vercel.json", self.outputs)
         alias_hosts = {
             r["has"][0]["value"]
             for r in config["redirects"]
             if r["destination"] == "https://internal-agents.com/:path*" and r["permanent"]
         }
         self.assertEqual(alias_hosts, {"www.internal-agents.com", "internal-agents-map.vercel.app"})
-        records = next(r for r in config["headers"] if r["source"] == "/agents/:path*")
-        self.assertEqual(records["headers"], [{"key": "X-Robots-Tag", "value": "noindex"}])
+        noindex = {
+            r["source"]
+            for r in config["headers"]
+            if {"key": "X-Robots-Tag", "value": "noindex"} in r["headers"]
+        }
+        # Raw records stay out of search; the HTML entry pages must not inherit it.
+        self.assertEqual(noindex, {"/agents/:path*.json", "/agents/index.json", "/404.html"})
+        immutable = next(r for r in config["headers"] if r["source"] == "/_astro/:path*")
+        self.assertIn("immutable", immutable["headers"][0]["value"])
         self.assertIn(self.site / "og.png", self.outputs)
+
+    def test_the_routing_manifest_is_not_written_by_the_data_build(self):
+        # The Astro build writes it from the publication inventory instead.
+        self.assertNotIn(ROOT / "routing-manifest.json", self.outputs)
+        manifest = json.loads((ROOT / "routing-manifest.json").read_text())
+        self.assertEqual(manifest["schema_version"], 1)
+        for path, artifacts in manifest["routes"].items():
+            self.assertEqual(set(artifacts), {"html", "markdown"})
+            self.assertTrue(path.startswith("/"))
 
     def test_individual_records_preserve_claims_sources_and_qualifications(self):
         index = json.loads(self.outputs[self.site / "agents/index.json"])["approaches"]
@@ -147,18 +166,14 @@ class PublicationTests(unittest.TestCase):
         self.assertNotIn("Search controls", md)
         self.assertNotIn("Hidden UI", md)
 
-    def test_served_assets_have_matching_hashes_and_immutable_headers(self):
+    def test_served_assets_have_matching_hashes(self):
         manifest = json.loads(self.outputs[self.site / "assets/manifest.json"])
-        config = json.loads(self.outputs[ROOT / "vercel.json"])
-        for original, hashed in manifest.items():
+        for hashed in manifest.values():
             data = self.outputs[self.site / "assets" / hashed]
             digest = hashlib.sha256(data.encode() if isinstance(data, str) else data).hexdigest()[
                 :16
             ]
             self.assertIn(digest, hashed)
-            rule = next(r for r in config["headers"] if r["source"] == "/assets/" + hashed)
-            self.assertIn("immutable", rule["headers"][0]["value"])
-            self.assertNotIn('"/assets/' + original + '"', json.dumps(config))
         self.assertIn(
             manifest["fonts/Geist.woff2"], self.outputs[self.site / "assets" / manifest["site.css"]]
         )
