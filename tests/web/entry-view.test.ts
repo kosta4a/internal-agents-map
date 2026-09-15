@@ -28,6 +28,7 @@ describe('every entry', () => {
         ...entry.supervisionClaims.map((claim) => claim.id),
         ...entry.architectureClaims.map((claim) => claim.id),
         ...entry.metricClaims.map((claim) => claim.id),
+        ...entry.resultStatementClaims.map((claim) => claim.id),
         ...entry.lessonClaims.map((claim) => claim.id),
         ...entry.otherClaims.map((claim) => claim.id),
       ]);
@@ -254,5 +255,79 @@ describe('directory card summaries', () => {
     for (const card of directoryCards(catalog)) {
       if (card.summary.length <= CARD_SUMMARY_LIMIT) expect(card.excerpt).toBe(card.summary);
     }
+  });
+});
+
+describe('a supporting system', () => {
+  /** The entries the catalog classifies as shared infrastructure. */
+  const supporting = catalog.approaches
+    .map((approach) => entryView(catalog, approach.id))
+    .filter((entry) => entry.isSupportingSystem);
+
+  it('says a workflow is missing only where the record reports none', () => {
+    expect(supporting.length).toBeGreaterThan(0);
+    for (const entry of supporting) {
+      expect(entry.supportingSystemNote, entry.id).toContain('supporting infrastructure');
+      expect(entry.supportingSystemNote, entry.id).toContain(entry.approachTypeLabel.toLowerCase());
+      if (entry.workflowClaims.length === 0) {
+        expect(entry.supportingSystemNote, entry.id).toContain('no execution workflow');
+      } else {
+        expect(entry.supportingSystemNote, entry.id).not.toContain('no execution workflow');
+      }
+    }
+  });
+
+  it('does not deny the workflow that workos-project-horizon reports', () => {
+    const entry = entryView(catalog, 'workos-project-horizon');
+    expect(entry.isSupportingSystem).toBe(true);
+    expect(entry.workflowClaims.length).toBeGreaterThan(0);
+    expect(entry.supportingSystemNote).not.toMatch(/not an agent|no execution workflow/);
+    expect(entry.supportingSystemNote).toContain('workflow');
+  });
+
+  it('keeps the notice on plaid-internal-mcp-server, which reports no workflow', () => {
+    const entry = entryView(catalog, 'plaid-internal-mcp-server');
+    expect(entry.workflowClaims.length).toBe(0);
+    expect(entry.supportingSystemNote).toContain('no execution workflow');
+  });
+});
+
+describe('the results of an entry', () => {
+  /** Claims of a metric field whose normalized kind is not a metric. */
+  const statements = catalog.claims.filter(
+    (claim) =>
+      (claim.field === 'headline_metric' || claim.field.startsWith('key_metrics.')) &&
+      claim.kind !== 'metric',
+  );
+  const grouped = catalog.approaches.map((approach) => entryView(catalog, approach.id));
+
+  it('finds the metric fields that hold a statement of another kind', () => {
+    expect(statements.length).toBe(7);
+  });
+
+  it('leaves only metrics under the reported metrics', () => {
+    for (const entry of grouped) {
+      for (const claim of entry.metricClaims) expect(claim.kind, claim.id).toBe('metric');
+    }
+  });
+
+  it('keeps every statement of a metric field in the results, under its kind', () => {
+    const placed = grouped.flatMap((entry) => entry.resultStatementClaims);
+    expect(placed.map((claim) => claim.id).sort()).toEqual(
+      statements.map((claim) => claim.id).sort(),
+    );
+    for (const claim of placed) {
+      expect(claim.kind, claim.id).not.toBe('metric');
+      expect(claim.kindLabel.length, claim.id).toBeGreaterThan(0);
+    }
+  });
+
+  it('reads the months-to-days opinion of block-builderbot as an opinion', () => {
+    const entry = entryView(catalog, 'block-builderbot');
+    const claim = entry.resultStatementClaims.find((item) => item.text.includes('now takes days'));
+    expect(claim).toBeDefined();
+    expect(claim!.kind).toBe('opinion');
+    expect(claim!.kindLabel).toBe('Opinion');
+    expect(entry.metricClaims.map((item) => item.id)).not.toContain(claim!.id);
   });
 });

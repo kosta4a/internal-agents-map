@@ -5,9 +5,6 @@ import { expect, test, type Page } from '@playwright/test';
 import { PREVIEW_URL } from './preview';
 
 const PREVIEW_HOST = new URL(PREVIEW_URL).host;
-const SCREENSHOT_DIR =
-  '/private/tmp/claude-501/-Users-nikola-dev-steel-internal-agents-map/fcf8448a-58ec-485b-b372-ca66928c4997/scratchpad/wave2-directory';
-
 /** The whole catalog, as the directory publishes it today. */
 const TOTAL = 39;
 /** A work filter value and the number of cards that carry it. */
@@ -197,13 +194,13 @@ test.describe('the directory with javascript', () => {
   test('captures the filtered and the empty directory', async ({ page }, testInfo) => {
     await page.goto(`/?work=${WORK.value}`);
     await page.screenshot({
-      path: `${SCREENSHOT_DIR}/directory-filtered-${testInfo.project.name}.png`,
+      path: testInfo.outputPath('directory-filtered.png'),
       fullPage: true,
     });
     await page.fill('#q', 'nothing matches this text');
     await expect(page.locator('#empty')).toBeVisible();
     await page.screenshot({
-      path: `${SCREENSHOT_DIR}/directory-empty-${testInfo.project.name}.png`,
+      path: testInfo.outputPath('directory-empty.png'),
       fullPage: true,
     });
   });

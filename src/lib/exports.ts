@@ -119,8 +119,10 @@ function claimBlock(claim: ClaimView, sources: SourceIndex, level: number): stri
   if (claim.confidenceReason) {
     lines.push(`Confidence reason: ${claim.confidenceReason}`, '');
   }
-  if (claim.caveats.length > 0) {
+  if (claim.qualification || claim.caveats.length > 0) {
     lines.push('Qualifications:', '');
+    // The line about a figure the sources do not qualify opens the list.
+    if (claim.qualification) lines.push(`- ${claim.qualification}`);
     for (const caveat of claim.caveats) lines.push(`- ${caveat.label}: ${caveat.value}`);
     lines.push('');
   }
@@ -211,7 +213,8 @@ export function entryMarkdown(entry: EntryView, level = 1): string[] {
     ['How it works', entry.workflowClaims],
     ['Supervision evidence', entry.supervisionClaims],
     ['Implementation details', entry.architectureClaims],
-    ['Reported results', entry.metricClaims],
+    ['Reported metrics', entry.metricClaims],
+    ['Reported outcomes and statements', entry.resultStatementClaims],
     ['Lessons and interpretation', entry.lessonClaims],
     ['Other reported details', entry.otherClaims],
   ];

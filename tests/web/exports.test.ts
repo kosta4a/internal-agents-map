@@ -171,3 +171,84 @@ describe('Markdown links', () => {
     );
   });
 });
+
+describe('the qualification of a figure', () => {
+  /** Metrics whose record does not report the scope or the denominator. */
+  const unqualified = catalog.claims.filter(
+    (claim) =>
+      claim.kind === 'metric' &&
+      (claim.metric_scope === null ||
+        claim.metric_scope === undefined ||
+        claim.denominator === null ||
+        claim.denominator === undefined),
+  );
+
+  it('stays with the figure in the entry Markdown', () => {
+    let written = 0;
+    for (const approach of catalog.approaches) {
+      const markdown = recordMarkdown(catalog, approach.id);
+      for (const claim of entryView(catalog, approach.id).claims) {
+        if (!claim.qualification) continue;
+        written += 1;
+        expect(markdown, `${approach.id}: ${claim.id}`).toContain(claim.qualification);
+      }
+    }
+    expect(written).toBeGreaterThan(0);
+    expect(written).toBe(unqualified.length);
+  });
+
+  it('stays with the figure in the catalog Markdown', () => {
+    const markdown = catalogMarkdown(catalog);
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        if (!claim.qualification) continue;
+        expect(markdown, claim.id).toContain(claim.qualification);
+      }
+    }
+  });
+
+  it('keeps the missing denominator of the Brex accuracy figure', () => {
+    const markdown = recordMarkdown(catalog, 'brex-agent-platform');
+    const claim = entryView(catalog, 'brex-agent-platform').claims.find((item) =>
+      item.text.includes('85%'),
+    );
+    expect(claim!.qualification).toContain('denominator');
+    const position = markdown.indexOf(claim!.text.trim());
+    const block = markdown.slice(position, markdown.indexOf('\n### ', position + 1));
+    expect(block).toContain(claim!.qualification);
+  });
+});
+
+describe('the results of an entry in Markdown', () => {
+  it('separates the metrics from the statements of the other kinds', () => {
+    const markdown = recordMarkdown(catalog, 'block-builderbot');
+    const entry = entryView(catalog, 'block-builderbot');
+    expect(markdown).toContain('## Reported metrics');
+    expect(markdown).toContain('## Reported outcomes and statements');
+    const opinion = entry.resultStatementClaims.find((item) =>
+      item.text.includes('now takes days'),
+    )!;
+    expect(markdown.indexOf(opinion.text.trim())).toBeGreaterThan(
+      markdown.indexOf('## Reported outcomes and statements'),
+    );
+    for (const claim of entry.metricClaims) {
+      expect(markdown.indexOf(claim.text.trim()), claim.id).toBeLessThan(
+        markdown.indexOf('## Reported outcomes and statements'),
+      );
+    }
+  });
+
+  it('names the kind of every statement it groups outside the metrics', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      if (entry.resultStatementClaims.length === 0) continue;
+      const markdown = recordMarkdown(catalog, approach.id);
+      expect(markdown, approach.id).toContain('## Reported outcomes and statements');
+      for (const claim of entry.resultStatementClaims) {
+        const position = markdown.indexOf(claim.text.trim());
+        const block = markdown.slice(position, markdown.indexOf('\n### ', position + 1));
+        expect(block, claim.id).toContain(claim.kindLabel);
+      }
+    }
+  });
+});

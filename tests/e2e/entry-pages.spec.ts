@@ -3,9 +3,6 @@
 
 import { expect, test, type Page } from '@playwright/test';
 
-const SCREENSHOT_DIR =
-  '/private/tmp/claude-501/-Users-nikola-dev-steel-internal-agents-map/fcf8448a-58ec-485b-b372-ca66928c4997/scratchpad/wave2-directory';
-
 const ENTRIES = [
   {
     id: 'block-builderbot',
@@ -120,6 +117,19 @@ for (const entry of ENTRIES) {
   });
 }
 
+test.describe('reported results', () => {
+  test('separates the metrics from the statements of the other kinds', async ({ page }) => {
+    await page.goto('/agents/block-builderbot');
+    const results = page.locator('#results');
+    await expect(results.getByRole('heading', { name: 'Reported metrics' })).toBeVisible();
+    const statements = results.getByRole('heading', { name: 'Reported outcomes and statements' });
+    await expect(statements).toBeVisible();
+    const opinion = results.locator('.claim', { hasText: 'now takes days' });
+    await expect(opinion).toHaveCount(1);
+    await expect(opinion.locator('.claim-kind')).toHaveText('Opinion');
+  });
+});
+
 test.describe('supporting systems', () => {
   test('omit an empty workflow section and keep the invocation fact', async ({ page }) => {
     await page.goto('/agents/plaid-internal-mcp-server');
@@ -128,6 +138,13 @@ test.describe('supporting systems', () => {
     await expect(facts).toContainText('Invocation');
     await expect(facts).toContainText('Interactive');
     await expect(page.getByText('supporting infrastructure').first()).toBeVisible();
+  });
+
+  test('do not deny the workflow of a platform that reports one', async ({ page }) => {
+    await page.goto('/agents/workos-project-horizon');
+    await expect(page.locator('#how-it-works')).toBeVisible();
+    await expect(page.getByText('supporting infrastructure').first()).toBeVisible();
+    await expect(page.getByText('no execution workflow')).toHaveCount(0);
   });
 
   test('keep the workflow section where the sources report a workflow', async ({ page }) => {
@@ -142,9 +159,9 @@ test.describe('page previews', () => {
     test.skip(testInfo.project.name === 'no-javascript', 'One capture per layout is enough.');
     for (const path of ['/', ...ENTRIES.map((entry) => `/agents/${entry.id}`)]) {
       await page.goto(path);
-      const name = path === '/' ? 'directory' : path.split('/').pop();
+      const name = path === '/' ? 'directory' : path.slice('/agents/'.length);
       await page.screenshot({
-        path: `${SCREENSHOT_DIR}/${name}-${testInfo.project.name}.png`,
+        path: testInfo.outputPath(`${name}.png`),
         fullPage: true,
       });
     }

@@ -7,12 +7,18 @@ interface Props {
   claim: ClaimView;
   /** Hide the field label when a section heading already names the claim group. */
   showLabel?: boolean;
+  /** Name the kind of the statement where a group holds more than one kind. */
+  showKind?: boolean;
 }
 
-const { claim, showLabel = true } = Astro.props;
+const { claim, showLabel = true, showKind = false } = Astro.props;
 ---
 <article class="claim" id={claim.anchor} data-claim-id={claim.id}>
-  {showLabel && <span class="claim-label">{claim.label}</span>}
+  {showLabel && (
+    <span class="claim-label">
+      {claim.label}{showKind && <span class="claim-kind">{claim.kindLabel}</span>}
+    </span>
+  )}
   <p>{claim.text}</p>
   {claim.citations.length > 0 && (
     <p class="citations">

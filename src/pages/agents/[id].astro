@@ -42,7 +42,10 @@ const graph = structuredData([
 const hasHowItWorks = entry.workflowClaims.length > 0;
 const invocation = entry.invocation.filter((item) => item.id !== 'unknown');
 const hasImplementation = entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
-const hasResults = entry.metricClaims.length > 0 || entry.lessonClaims.length > 0;
+const hasResults =
+  entry.metricClaims.length > 0 ||
+  entry.resultStatementClaims.length > 0 ||
+  entry.lessonClaims.length > 0;
 const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length > 0;
 ---
 <SiteLayout title={title} description={description} path={entry.path} current="catalog" structuredData={graph}>
@@ -127,7 +130,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
 
     <section class="entry-section" id="human-involvement" aria-labelledby="human-involvement-title">
       <h2 id="human-involvement-title">Where people stay involved</h2>
-      {entry.isSupportingSystem && (
+      {entry.isSupportingSystem && !hasHowItWorks && (
         <p class="section-note">
           The catalog records no execution workflow for this entry, so the scopes below describe
           access to the system rather than work it completes on its own.
@@ -170,6 +173,12 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
           <>
             <h3>Reported metrics</h3>
             {entry.metricClaims.map((claim) => <Claim claim={claim} />)}
+          </>
+        )}
+        {entry.resultStatementClaims.length > 0 && (
+          <>
+            <h3>Reported outcomes and statements</h3>
+            {entry.resultStatementClaims.map((claim) => <Claim claim={claim} showKind={true} />)}
           </>
         )}
         {entry.lessonClaims.length > 0 && (

@@ -141,7 +141,10 @@ export interface EntryView {
   readonly workflowClaims: readonly ClaimView[];
   readonly supervisionClaims: readonly ClaimView[];
   readonly architectureClaims: readonly ClaimView[];
+  /** Claims of a metric field whose kind is a metric. */
   readonly metricClaims: readonly ClaimView[];
+  /** Claims of a metric field that state a fact, an inference, or an opinion. */
+  readonly resultStatementClaims: readonly ClaimView[];
   readonly lessonClaims: readonly ClaimView[];
   /** Claims that no section above classifies. They keep every claim reachable. */
   readonly otherClaims: readonly ClaimView[];
@@ -284,13 +287,20 @@ function claimView(claim: Claim, numbers: ReadonlyMap<string, number>, sources: 
   };
 }
 
-function supportingSystemNote(approach: Approach): string | null {
+/**
+ * Say what the catalog classifies this entry as.
+ * The record, not the classification, says whether a workflow is reported.
+ */
+function supportingSystemNote(approach: Approach, workflowClaims: number): string | null {
   if (!SUPPORTING_TYPES.has(approach.approach_type)) return null;
-  return (
+  const classification =
     `This entry describes supporting infrastructure that other work builds on. ` +
-    `The catalog classifies it as a ${termLabel(approach.approach_type).toLowerCase()}, ` +
-    `not as an agent with a reported execution workflow.`
-  );
+    `The catalog classifies it as a ${termLabel(approach.approach_type).toLowerCase()}.`;
+  const workflow =
+    workflowClaims > 0
+      ? `The record also reports a workflow.`
+      : `The record reports no execution workflow.`;
+  return `${classification} ${workflow}`;
 }
 
 function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[] {
@@ -351,12 +361,14 @@ export function entryView(catalog: Catalog, id: string): EntryView {
   const workflowClaims = of((claim) => claim.field.startsWith('primitives.'));
   const supervisionClaims = of((claim) => claim.field.startsWith('operating_models.'));
   const architectureClaims = of((claim) => claim.field.startsWith('architecture.'));
-  const metricClaims = of(
+  const resultClaims = of(
     (claim) => claim.field === 'headline_metric' || claim.field.startsWith('key_metrics.'),
   );
+  const metricClaims = resultClaims.filter((claim) => claim.isMetric);
+  const resultStatementClaims = resultClaims.filter((claim) => !claim.isMetric);
   const lessonClaims = of((claim) => claim.field.startsWith('lessons_learned.'));
   const placed = new Set(
-    [summary, ...workflowClaims, ...supervisionClaims, ...architectureClaims, ...metricClaims, ...lessonClaims]
+    [summary, ...workflowClaims, ...supervisionClaims, ...architectureClaims, ...resultClaims, ...lessonClaims]
       .filter((claim): claim is ClaimView => claim !== null)
       .map((claim) => claim.id),
   );
@@ -370,7 +382,7 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     approachType: approach.approach_type,
     approachTypeLabel: termLabel(approach.approach_type),
     isSupportingSystem: SUPPORTING_TYPES.has(approach.approach_type),
-    supportingSystemNote: supportingSystemNote(approach),
+    supportingSystemNote: supportingSystemNote(approach, workflowClaims.length),
     summary,
     summaryText: summary?.text ?? '',
     reviewedAt: approach.last_reviewed_at,
@@ -393,6 +405,7 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     supervisionClaims,
     architectureClaims,
     metricClaims,
+    resultStatementClaims,
     lessonClaims,
     otherClaims: claims.filter((claim) => !placed.has(claim.id)),
     claims,
