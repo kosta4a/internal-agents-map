@@ -24,12 +24,20 @@ const MONOGRAM_CARDS = CATALOG.approaches
 const LOGO_CARDS = CATALOG.approaches
   .filter((approach) => LOGO_BY_COMPANY.get(approach.company_id) !== null)
   .slice(0, 3);
-/** A work filter value. The cards that carry it are counted from the page. */
-const WORK = { value: 'security' };
+/** A work filter value, and the label the search box suggests for it. */
+const WORK = { value: 'security', label: 'Security' };
+/** A supervision value, the label of its chip, and the level a person can type to reach it. */
+const SUPERVISION = { value: 'outcome-review', label: 'Outcome review (level 4)', typed: 'level 4' };
 /** A search term. The cards whose text carries it are counted from the page. */
 const SEARCH = { term: 'uber' };
 
 const visibleCards = (page: Page) => page.locator('article.entry:not([hidden])');
+/** The chips of the selected facet terms, in selection order. */
+const chips = (page: Page) => page.locator('#chips .chip');
+const chip = (page: Page, key: string, value: string) =>
+  page.locator(`#chips .chip[data-key="${key}"][data-id="${value}"]`);
+const suggestion = (page: Page, key: string, value: string) =>
+  page.locator(`#suggestions [role="option"][data-key="${key}"][data-id="${value}"]`);
 /** How many cards carry the work value, hidden or not. */
 const workCount = (page: Page) => page.locator(`article.entry[data-work~="${WORK.value}"]`).count();
 /** How many cards carry the search term in their searchable text, hidden or not. */
@@ -111,22 +119,81 @@ test.describe('the directory with javascript', () => {
     await expect(page.locator('article.entry#uber-ureview')).toBeVisible();
   });
 
-  test('filters by work and records the filter in the URL', async ({ page }) => {
+  test('turns a suggested work area into a chip and records it in the URL', async ({ page }) => {
     await page.goto('/');
-    await page.selectOption('#work', WORK.value);
+    await page.fill('#q', 'secu');
+    await expect(page.locator('#q')).toHaveAttribute('aria-expanded', 'true');
+    await expect(suggestion(page, 'work', WORK.value)).toHaveText(`Work${WORK.label}`);
+    await suggestion(page, 'work', WORK.value).click();
+
+    await expect(chip(page, 'work', WORK.value)).toContainText(WORK.label);
+    await expect(page.locator('#q')).toHaveValue('');
+    await expect(page.locator('#suggestions')).toBeHidden();
     await expect(visibleCards(page)).toHaveCount(await workCount(page));
     await expect(page).toHaveURL(new RegExp(`\\?work=${WORK.value}$`));
   });
 
+  test('turns an exact facet word into a chip on Enter', async ({ page }) => {
+    await page.goto('/');
+    await page.fill('#q', WORK.label);
+    await page.keyboard.press('Enter');
+    await expect(chip(page, 'work', WORK.value)).toBeVisible();
+    await expect(page.locator('#q')).toHaveValue('');
+    await expect(page).toHaveURL(new RegExp(`\\?work=${WORK.value}$`));
+  });
+
+  test('reaches a supervision level by its number', async ({ page }) => {
+    await page.goto('/');
+    await page.fill('#q', SUPERVISION.typed);
+    await page.keyboard.press('Enter');
+    await expect(chip(page, 'supervision', SUPERVISION.value)).toContainText(SUPERVISION.label);
+    await expect(page).toHaveURL(new RegExp(`\\?supervision=${SUPERVISION.value}$`));
+    await expect(visibleCards(page)).toHaveCount(
+      await page.locator(`article.entry[data-supervision~="${SUPERVISION.value}"]`).count(),
+    );
+  });
+
+  test('keeps other words as free text that must all match', async ({ page }) => {
+    await page.goto('/');
+    await page.fill('#q', 'coding assistant');
+    await page.keyboard.press('Enter');
+    await expect(chips(page)).toHaveCount(0);
+    await expect(page.locator('#q')).toHaveValue('coding assistant');
+    await expect(page).toHaveURL(/\?q=coding(\+|%20)assistant$/);
+    const count = await visibleCards(page).count();
+    expect(count).toBeGreaterThan(0);
+    expect(count).toBeLessThan(TOTAL);
+    for (const text of await visibleCards(page).evaluateAll((nodes) =>
+      nodes.map((node) => (node as HTMLElement).dataset.search ?? ''),
+    )) {
+      expect(text).toContain('coding');
+      expect(text).toContain('assistant');
+    }
+  });
+
+  test('combines two values of one facet with OR', async ({ page }) => {
+    await page.goto('/');
+    await page.fill('#q', 'security');
+    await page.keyboard.press('Enter');
+    await page.fill('#q', 'coding');
+    await page.keyboard.press('Enter');
+    await expect(chips(page)).toHaveCount(2);
+    await expect(page).toHaveURL(/\?work=security&work=coding$/);
+    const either = await page
+      .locator('article.entry[data-work~="security"], article.entry[data-work~="coding"]')
+      .count();
+    await expect(visibleCards(page)).toHaveCount(either);
+  });
+
   test('restores the state of a shared filtered address', async ({ page }) => {
     await page.goto(`/?work=${WORK.value}`);
-    await expect(page.locator('#work')).toHaveValue(WORK.value);
+    await expect(chip(page, 'work', WORK.value)).toBeVisible();
     await expect(visibleCards(page)).toHaveCount(await workCount(page));
   });
 
   test('ignores a filter value that the catalog does not use', async ({ page }) => {
     await page.goto('/?work=not-a-real-value');
-    await expect(page.locator('#work')).toHaveValue('');
+    await expect(chips(page)).toHaveCount(0);
     await expect(visibleCards(page)).toHaveCount(TOTAL);
   });
 
@@ -140,26 +207,42 @@ test.describe('the directory with javascript', () => {
 
   test('walks back and forward through the filter history', async ({ page }) => {
     await page.goto('/');
-    await page.selectOption('#work', WORK.value);
+    await page.fill('#q', WORK.label);
+    await page.keyboard.press('Enter');
     await expect(page).toHaveURL(new RegExp(`work=${WORK.value}`));
-    await page.selectOption('#supervision', 'outcome-review');
+    await page.fill('#q', SUPERVISION.typed);
+    await page.keyboard.press('Enter');
     await expect(visibleCards(page)).toHaveCount(1);
 
     await page.goBack();
-    await expect(page.locator('#supervision')).toHaveValue('');
+    await expect(chip(page, 'supervision', SUPERVISION.value)).toHaveCount(0);
     await expect(visibleCards(page)).toHaveCount(await workCount(page));
 
     await page.goBack();
-    await expect(page.locator('#work')).toHaveValue('');
+    await expect(chips(page)).toHaveCount(0);
     await expect(visibleCards(page)).toHaveCount(TOTAL);
 
     await page.goForward();
-    await expect(page.locator('#work')).toHaveValue(WORK.value);
+    await expect(chip(page, 'work', WORK.value)).toBeVisible();
     await expect(visibleCards(page)).toHaveCount(await workCount(page));
   });
 
-  test('explains an empty result and resets the filters', async ({ page }) => {
-    await page.goto('/');
+  test('removes a chip from its button and from Backspace', async ({ page }) => {
+    await page.goto(`/?work=${WORK.value}&supervision=${SUPERVISION.value}`);
+    await expect(chips(page)).toHaveCount(2);
+    await chip(page, 'work', WORK.value).getByRole('button').click();
+    await expect(chips(page)).toHaveCount(1);
+    await expect(page).toHaveURL(new RegExp(`\\?supervision=${SUPERVISION.value}$`));
+
+    await page.locator('#q').focus();
+    await page.keyboard.press('Backspace');
+    await expect(chips(page)).toHaveCount(0);
+    await expect(page).toHaveURL(/\/$/);
+    await expect(visibleCards(page)).toHaveCount(TOTAL);
+  });
+
+  test('explains an empty result and resets the search', async ({ page }) => {
+    await page.goto(`/?work=${WORK.value}`);
     await page.fill('#q', 'nothing matches this text');
     await expect(visibleCards(page)).toHaveCount(0);
     await expect(page.locator('#empty')).toBeVisible();
@@ -168,8 +251,10 @@ test.describe('the directory with javascript', () => {
     await expect(visibleCards(page)).toHaveCount(TOTAL);
     await expect(page.locator('#empty')).toBeHidden();
     await expect(page.locator('#q')).toHaveValue('');
+    await expect(chips(page)).toHaveCount(0);
     await expect(page).toHaveURL(/\/(\?.*)?$/);
     expect(new URL(page.url()).searchParams.get('q')).toBeNull();
+    expect(new URL(page.url()).searchParams.get('work')).toBeNull();
   });
 
   test('works from the keyboard alone', async ({ page }) => {
@@ -180,10 +265,19 @@ test.describe('the directory with javascript', () => {
     await expect(visibleCards(page)).toHaveCount(await searchCount(page));
     await expect(page).toHaveURL(new RegExp(`\\?q=${SEARCH.term}$`));
 
-    await page.keyboard.press('Tab');
-    await expect(page.locator('#work')).toBeFocused();
-    await page.locator('#work').selectOption(WORK.value);
-    await expect(page).toHaveURL(new RegExp(`work=${WORK.value}`));
+    await page.fill('#q', 'secu');
+    await page.keyboard.press('ArrowDown');
+    await expect(suggestion(page, 'work', WORK.value)).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('#q')).toHaveAttribute('aria-activedescendant', /suggestion-/);
+    await page.keyboard.press('Enter');
+    await expect(chip(page, 'work', WORK.value)).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`\\?work=${WORK.value}$`));
+
+    // Security is a chip now, so it leaves the list. Another prefix opens it again.
+    await page.fill('#q', 'cod');
+    await expect(page.locator('#suggestions')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#suggestions')).toBeHidden();
   });
 
   test.describe('old fragment links', () => {

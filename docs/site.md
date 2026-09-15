@@ -125,13 +125,22 @@ reason in `logo_note`.
 ## Reading and sharing
 
 The directory holds one compact card for each implementation. Every card is in the initial HTML
-and links to the entry page, so the entries stay crawlable and work without JavaScript. Search
-matches company, agent name, summary, work tags, and approach type. Filters combine with AND;
-any matching scoped attention boundary qualifies for supervision. Levels describe workflows, not
-company rankings. Select options come from the catalog, including Unknown when present.
+and links to the entry page, so the entries stay crawlable and work without JavaScript. One search
+box carries the whole query. A word that names a work area, an approach type, or a supervision
+level becomes a chip, either from the suggestion list under the box or on Enter when the word is
+an exact match. The chip label of a supervision level shows the boundary and its derived level,
+and the level alone, such as `level 4`, also names it. Every other word searches the text of the
+cards, which holds the company, agent name, summary, work tags, approach type, attention
+boundaries with their levels, and autonomy. All words of the free text must match.
 
-The URL uses `q`, `work`, `type`, and `supervision` query parameters. Browser back and forward
-restore that state. Filter states keep the homepage canonical and stay out of the sitemap.
+Chips of one facet combine with OR, facets combine with AND, and the free text applies on top.
+Any matching scoped attention boundary qualifies for supervision. Levels describe workflows, not
+company rankings. The suggestion vocabulary comes from the catalog, including Unknown when present,
+and the page carries it as JSON so the script and the cards agree.
+
+The URL uses `q`, `work`, `type`, and `supervision` query parameters, and repeats a facet
+parameter for each selected value. Browser back and forward restore that state. Filter states keep
+the homepage canonical and stay out of the sitemap.
 
 An old homepage fragment still reaches its content. A known approach, claim, or source fragment
 sends the browser to the entry page and the same anchor there. The script rebuilds the target

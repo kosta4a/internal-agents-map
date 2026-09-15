@@ -30,8 +30,8 @@ EXPORT_FILES = {
 # The document the host returns for an unknown path. No route points to it.
 ERROR_PAGE = "404.html"
 DIRECTORIES = {"_astro", "fonts", "notes", "agents", "logos"}
-# A bundled asset is named `<name>.<content hash>.<extension>`.
-BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
+# A bundled stylesheet or script: a stem, which can hold dots, a content hash, and its type.
+BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_.-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
 CSS_URL = re.compile(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)")
 # The research fields that qualify a statement and must stay beside it.
 QUALIFIER_FIELDS = ("reported_by", "metric_scope", "denominator", "measurement_method", "valid_at")

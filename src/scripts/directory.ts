@@ -2,13 +2,20 @@
 // ABOUTME: Every card and every entry link is already in the HTML; this only hides cards.
 
 import { entryPath } from '../lib/routes';
+import {
+  FACET_KEYS,
+  FACET_LABELS,
+  type FacetTerm,
+  findTerm,
+  matchesFacets,
+  matchesText,
+  resolveTerm,
+  suggest,
+  toSelection,
+} from '../lib/search';
 
 /** The query parameters the directory reads and writes. They are part of the URL contract. */
-const FILTER_KEYS = ['work', 'type', 'supervision'] as const;
-const CONTROL_KEYS = ['q', ...FILTER_KEYS] as const;
-
-type FilterKey = (typeof FILTER_KEYS)[number];
-type ControlKey = (typeof CONTROL_KEYS)[number];
+const CONTROL_KEYS = ['q', ...FACET_KEYS] as const;
 
 /** A claim anchor: `claim-<approach-id>--<field-path>`. */
 const CLAIM_FRAGMENT = /^claim-([a-z0-9-]+)--([a-z0-9-]+)$/;
@@ -19,10 +26,6 @@ const APPROACH_FRAGMENT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 /** How long the search field waits before it writes a history entry. */
 const SEARCH_DELAY = 250;
-
-function normalize(value: string): string {
-  return value.toLowerCase().replace(/\s+/g, ' ').trim();
-}
 
 /** The identifiers of the implementations this page carries, one per card. */
 function approachIds(cards: readonly HTMLElement[]): ReadonlySet<string> {
@@ -69,15 +72,23 @@ export function legacyTarget(
   return null;
 }
 
-function control(form: HTMLFormElement, key: ControlKey): HTMLInputElement | HTMLSelectElement {
-  const element = form.elements.namedItem(key);
-  if (!(element instanceof HTMLInputElement) && !(element instanceof HTMLSelectElement)) {
-    throw new Error(`The filter form has no "${key}" control.`);
-  }
-  return element;
+function element<T extends Element>(id: string, type: new () => T): T {
+  const node = document.getElementById(id);
+  if (!(node instanceof type)) throw new Error(`The directory has no "${id}" element.`);
+  return node;
 }
 
-/** Start the directory: legacy links first, then search and filters. */
+/** The facet vocabulary the page carries as JSON, so the script and the cards agree. */
+function readVocabulary(): FacetTerm[] {
+  const node = document.getElementById('facet-vocabulary');
+  return node ? (JSON.parse(node.textContent ?? '[]') as FacetTerm[]) : [];
+}
+
+function sameTerm(a: FacetTerm, b: FacetTerm): boolean {
+  return a.key === b.key && a.id === b.id;
+}
+
+/** Start the directory: legacy links first, then the search box. */
 export function startDirectory(): void {
   const cards = [...document.querySelectorAll<HTMLElement>('.entry[data-approach-id]')];
   const ids = approachIds(cards);
@@ -98,21 +109,27 @@ export function startDirectory(): void {
   const empty = document.getElementById('empty');
   if (!(form instanceof HTMLFormElement) || !results || !empty || cards.length === 0) return;
 
-  const controls = {
-    q: control(form, 'q'),
-    work: control(form, 'work'),
-    type: control(form, 'type'),
-    supervision: control(form, 'supervision'),
-  };
+  const input = element('q', HTMLInputElement);
+  const chips = element('chips', HTMLUListElement);
+  const listbox = element('suggestions', HTMLUListElement);
+  const vocabulary = readVocabulary();
+
+  /** The selected facet terms, in the order they were chosen. */
+  let selected: FacetTerm[] = [];
+  /** The suggestions on show and the one the arrow keys point at. */
+  let shown: FacetTerm[] = [];
+  let active = -1;
   let searchTimer: ReturnType<typeof setTimeout> | undefined;
 
-  const matches = (card: HTMLElement): boolean => {
-    if (!(card.dataset.search ?? '').includes(normalize(controls.q.value))) return false;
-    return FILTER_KEYS.every((key: FilterKey) => {
-      const wanted = controls[key].value;
-      return wanted === '' || (card.dataset[key] ?? '').split(' ').includes(wanted);
-    });
-  };
+  const cardFacets = (card: HTMLElement) => ({
+    work: (card.dataset.work ?? '').split(' '),
+    type: (card.dataset.type ?? '').split(' '),
+    supervision: (card.dataset.supervision ?? '').split(' '),
+  });
+
+  const matches = (card: HTMLElement): boolean =>
+    matchesText(card.dataset.search ?? '', input.value) &&
+    matchesFacets(cardFacets(card), toSelection(selected));
 
   const apply = (): void => {
     let count = 0;
@@ -125,62 +142,167 @@ export function startDirectory(): void {
     empty.hidden = count !== 0;
   };
 
+  const renderChips = (): void => {
+    chips.replaceChildren(
+      ...selected.map((term) => {
+        const chip = document.createElement('li');
+        chip.className = 'chip';
+        chip.dataset.key = term.key;
+        chip.dataset.id = term.id;
+        const key = document.createElement('span');
+        key.className = 'chip-key';
+        key.textContent = FACET_LABELS[term.key];
+        const label = document.createElement('span');
+        label.textContent = term.label;
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'chip-remove';
+        remove.setAttribute('aria-label', `Remove ${FACET_LABELS[term.key]}: ${term.label}`);
+        remove.textContent = '×';
+        remove.addEventListener('click', () => {
+          selected = selected.filter((item) => !sameTerm(item, term));
+          commit();
+          input.focus();
+        });
+        chip.append(key, label, remove);
+        return chip;
+      }),
+    );
+  };
+
+  const closeSuggestions = (): void => {
+    shown = [];
+    active = -1;
+    listbox.replaceChildren();
+    listbox.hidden = true;
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+  };
+
+  const markActive = (): void => {
+    [...listbox.children].forEach((item, index) => {
+      item.setAttribute('aria-selected', String(index === active));
+    });
+    if (active >= 0) input.setAttribute('aria-activedescendant', `suggestion-${active}`);
+    else input.removeAttribute('aria-activedescendant');
+  };
+
+  const renderSuggestions = (): void => {
+    shown = suggest(input.value, vocabulary, selected);
+    active = -1;
+    if (shown.length === 0) {
+      closeSuggestions();
+      return;
+    }
+    listbox.replaceChildren(
+      ...shown.map((term, index) => {
+        const item = document.createElement('li');
+        item.id = `suggestion-${index}`;
+        item.className = 'suggestion';
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', 'false');
+        item.dataset.key = term.key;
+        item.dataset.id = term.id;
+        const key = document.createElement('span');
+        key.className = 'chip-key';
+        key.textContent = FACET_LABELS[term.key];
+        const label = document.createElement('span');
+        label.textContent = term.label;
+        item.append(key, label);
+        // Mouse down would move focus off the input and close the list before the click lands.
+        item.addEventListener('mousedown', (event) => event.preventDefault());
+        item.addEventListener('click', () => choose(term));
+        return item;
+      }),
+    );
+    listbox.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+  };
+
   const writeUrl = (): void => {
     const url = new URL(location.href);
-    for (const key of CONTROL_KEYS) {
-      const value = controls[key].value;
-      if (value) url.searchParams.set(key, value);
-      else url.searchParams.delete(key);
-    }
+    for (const key of CONTROL_KEYS) url.searchParams.delete(key);
+    if (input.value) url.searchParams.set('q', input.value);
+    for (const term of selected) url.searchParams.append(term.key, term.id);
     if (url.href !== location.href) history.pushState(null, '', url);
   };
 
   /** Read the state a shared or restored URL carries. Unknown values are dropped. */
   const readUrl = (): void => {
     const params = new URLSearchParams(location.search);
-    for (const key of CONTROL_KEYS) {
-      const value = params.get(key) ?? '';
-      const element = controls[key];
-      element.value =
-        element instanceof HTMLInputElement ||
-        [...element.options].some((option) => option.value === value)
-          ? value
-          : '';
+    input.value = params.get('q') ?? '';
+    selected = [];
+    for (const key of FACET_KEYS) {
+      for (const id of params.getAll(key)) {
+        const term = findTerm(key, id, vocabulary);
+        if (term && !selected.some((item) => sameTerm(item, term))) selected.push(term);
+      }
     }
+  };
+
+  /** Record the current state in the address and on the page. */
+  const commit = (): void => {
+    clearTimeout(searchTimer);
+    closeSuggestions();
+    renderChips();
+    writeUrl();
+    apply();
+  };
+
+  const choose = (term: FacetTerm): void => {
+    if (!selected.some((item) => sameTerm(item, term))) selected = [...selected, term];
+    input.value = '';
+    commit();
+    input.focus();
   };
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    clearTimeout(searchTimer);
-    writeUrl();
-    apply();
+    const term = shown[active] ?? resolveTerm(input.value, vocabulary);
+    if (term) choose(term);
+    else commit();
   });
-  controls.q.addEventListener('input', () => {
+  input.addEventListener('input', () => {
     clearTimeout(searchTimer);
     apply();
+    renderSuggestions();
     searchTimer = setTimeout(() => writeUrl(), SEARCH_DELAY);
   });
-  for (const key of FILTER_KEYS) {
-    controls[key].addEventListener('change', () => {
-      clearTimeout(searchTimer);
-      writeUrl();
-      apply();
-    });
-  }
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown' && shown.length > 0) {
+      event.preventDefault();
+      active = (active + 1) % shown.length;
+      markActive();
+    } else if (event.key === 'ArrowUp' && shown.length > 0) {
+      event.preventDefault();
+      active = (active - 1 + shown.length) % shown.length;
+      markActive();
+    } else if (event.key === 'Escape' && shown.length > 0) {
+      event.preventDefault();
+      closeSuggestions();
+    } else if (event.key === 'Backspace' && input.value === '' && selected.length > 0) {
+      event.preventDefault();
+      selected = selected.slice(0, -1);
+      commit();
+    }
+  });
+  input.addEventListener('blur', () => closeSuggestions());
   form.addEventListener('reset', (event) => {
     event.preventDefault();
-    clearTimeout(searchTimer);
-    for (const key of CONTROL_KEYS) controls[key].value = '';
-    writeUrl();
-    apply();
+    input.value = '';
+    selected = [];
+    commit();
   });
   window.addEventListener('popstate', () => {
     clearTimeout(searchTimer);
+    closeSuggestions();
     readUrl();
+    renderChips();
     apply();
   });
 
   form.hidden = false;
   readUrl();
+  renderChips();
   apply();
 }
