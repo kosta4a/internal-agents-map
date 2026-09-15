@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "coinbase-forge-mux-source-5",
+  "original_url": "https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase",
+  "final_url": "https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase",
+  "captured_at": "2026-09-15T10:30:22Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/coinbase-forge-mux-source-5/content.md",
+      "sha256": "sha256:97b91d955d61ec886150c5fac0b369df476673c95f67f82391d4b51565b4927b",
+      "bytes": 17550
+    }
+  }
+}

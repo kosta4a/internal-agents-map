@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "strongdm-factory-overview",
+  "original_url": "https://factory.strongdm.ai/",
+  "final_url": "https://factory.strongdm.ai/",
+  "captured_at": "2026-09-15T10:25:58Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/strongdm-factory-overview/content.md",
+      "sha256": "sha256:1d25e26cab5046f0bd0fe6038e775474a5710e0da7910d74778dfd65aa7bff6e",
+      "bytes": 7369
+    }
+  }
+}

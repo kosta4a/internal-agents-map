@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "coinbase-forge-mux-source-4",
+  "original_url": "https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers",
+  "final_url": "https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers",
+  "captured_at": "2026-09-15T10:31:04Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/coinbase-forge-mux-source-4/content.md",
+      "sha256": "sha256:40796cba0810549cfe1b94b6bb73938a57eab8a977eaa1498a426959fa6c8dcc",
+      "bytes": 5558
+    }
+  }
+}

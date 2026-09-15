@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "strongdm-attractor-spec",
+  "original_url": "https://factory.strongdm.ai/products/attractor",
+  "final_url": "https://factory.strongdm.ai/products/attractor",
+  "captured_at": "2026-09-15T10:26:17Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/strongdm-attractor-spec/content.md",
+      "sha256": "sha256:5de446fa742ca11ad0938f8b45a3b44a3d754ad438679aa79b892553d4bd7873",
+      "bytes": 8557
+    }
+  }
+}

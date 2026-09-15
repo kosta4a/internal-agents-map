@@ -28,7 +28,7 @@ undocumented details stay unknown.
 
 <!-- BEGIN OVERVIEW -->
 
-**Current map: 39 approaches across 35 organizations, backed by 88 sources and 555 evidence-linked claims.**
+**Current map: 40 approaches across 36 organizations, backed by 98 sources and 578 evidence-linked claims.**
 
 ## Overview
 
@@ -68,6 +68,7 @@ undocumented details stay unknown.
 | Slack | [Multi-agent context system](docs/landscape.md#slack-context-system) | supporting-pattern | research |
 | Spotify | [Honk / Xirp](docs/landscape.md#spotify-honk-xirp) | agent-system | coding, migrations, code-review |
 | Stripe | [Minions](docs/landscape.md#stripe-minions) | background-agent | coding, code-review |
+| StrongDM | [Software Factory](docs/landscape.md#strongdm-software-factory) | agent-system | coding |
 | Uber | [Internal coding agent (unnamed)](docs/landscape.md#uber-coding-agent) | task-agent | coding |
 | Uber | [uReview](docs/landscape.md#uber-ureview) | background-agent | code-review |
 | WorkOS | [Project Horizon](docs/landscape.md#workos-project-horizon) | platform | coding, code-review, security |
@@ -84,8 +85,8 @@ exception-only supervision. Levels describe a specific workflow, not company mat
 
 ## What the current map shows
 
-Human review is still the norm. 23 of the 39 approaches produce a draft or implementation for
-review. 8 keep a person involved throughout the work. 3 report autonomous action within a
+Human review is still the norm. 23 of the 40 approaches produce a draft or implementation for
+review. 8 keep a person involved throughout the work. 4 report autonomous action within a
 scoped workflow; 2 are assistive and 3 remain unknown.
 
 Different systems keep solving similar infrastructure problems: company context, scoped tools,

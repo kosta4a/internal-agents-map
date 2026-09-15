@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "strongdm-factory-weather-report",
+  "original_url": "https://factory.strongdm.ai/weather-report",
+  "final_url": "https://factory.strongdm.ai/weather-report",
+  "captured_at": "2026-09-15T10:26:22Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/strongdm-factory-weather-report/content.md",
+      "sha256": "sha256:1ad09c3f6cb6e6c58f2bf92c26a228e53c9eafdd83ac6f6620cedecde1795d08",
+      "bytes": 6296
+    }
+  }
+}

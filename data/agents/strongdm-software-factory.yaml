@@ -1,0 +1,287 @@
+id: strongdm-software-factory
+company: StrongDM
+agent_name: Software Factory
+aliases:
+- StrongDM AI Software Factory
+approach_type: agent-system
+deployment_stage: deployed
+year: 2026
+first_public_evidence:
+  date: "2026-02-06"
+  source_id: strongdm-factory-overview
+last_reviewed_at: "2026-09-15"
+status: mixed
+domains:
+- coding
+autonomy: autonomous
+operating_models:
+- scope: "natural-language seed -> agents implement and validate against scenario harness -> converged software"
+  attention_boundary: exception-only
+rubric:
+  invocation:
+  - background
+  state: cross-session-memory
+  identity: dedicated-agent
+  evidence_strength: detailed-primary
+summary: An internal agent system in which natural-language seeds and end-to-end scenario
+  harnesses drive agents that write, validate, and iterate on code under standing rules
+  that humans neither write nor review code.
+architecture:
+  sandbox: unknown
+  harness: End-to-end scenario harness with user-story-style scenarios kept outside the
+    codebase as a holdout set and checked by an LLM; satisfaction measured as the fraction
+    of observed scenario trajectories that likely satisfy the user; Digital Twin Universe
+    clones of Okta, Jira, Slack, Google Docs, Google Drive, and Google Sheets absorb scenario
+    load
+  model: Multi-provider routing by task as of 2026-06 (gpt-5.5 for everyday and DevOps
+    tasks, QA orchestration, and security review; consensus of opus-4.8 and gpt-5.5
+    for sprint planning; opus-4.8 for frontend aesthetics and writing; gemini-3-flash-preview
+    for image comprehension and agentic dialogues; gpt-image-2 and gpt-realtime-2 for
+    UX ideation and voice)
+  tool_access: Filesystem that agents read and write to self-manage context; Digital
+    Twin Universe as a stand-in for third-party services
+  knowledge: CXDB, a self-hosted context store for AI agents with turn DAG, blob deduplication,
+    dynamic types, and visual debugging
+  credentials: StrongDM ID, an identity system for humans, workloads, and AI agents
+    with federated authentication and path-scoped sharing
+  context_mgmt: Pyramid Summaries with reversible summarization at multiple zoom levels;
+    on-disk state as the memory substrate
+primitives:
+- name: Scenarios
+  desc: End-to-end user-story validations, often stored outside the codebase like a
+    training holdout set, flexibly checked by an LLM to resist reward hacking and lazy
+    test rewriting
+- name: Satisfaction
+  desc: Probabilistic success measure replacing boolean test-green; the fraction of
+    all observed scenario trajectories that likely satisfy the user
+- name: Digital Twin Universe
+  desc: Behavioral clones of third-party services that replicate APIs, edge cases,
+    and observable behaviors, so thousands of scenarios can run per hour without rate
+    limits, abuse detection, or live-API cost
+- name: Shift Work
+  desc: Splitting work into interactive and fully specified classes; when specs, tests,
+    and the existing app fully express intent, an agent runs end-to-end without back-and-forth
+- name: Attractor
+  desc: Non-interactive coding agent structured as a graph of work phases with natural-language
+    edges evaluated by the LLM; execution traverses the graph until convergence or
+    termination, and the spec is open source
+key_metrics: []
+lessons_learned:
+- Treat generated code like an ML model snapshot; judge it only by externally observable
+  behavior and never by semantic inspection of the source
+- The seed, validation harness, and feedback loop run until the holdout scenarios pass
+  and stay passing
+- Tokens are the fuel; if the factory has not spent at least $1,000 on tokens per human
+  engineer in a day, it has room for improvement
+sources:
+- id: strongdm-factory-overview
+  title: "Software Factories And The Agentic Moment"
+  url: https://factory.strongdm.ai/
+  canonical_url: https://factory.strongdm.ai/
+  kind: engineering-blog
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  authors:
+  - Justin McCarthy
+  published_at: "2026-02-06"
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-factory-overview/metadata.json
+- id: strongdm-factory-principles
+  title: "Principles"
+  url: https://factory.strongdm.ai/principles
+  canonical_url: https://factory.strongdm.ai/principles
+  kind: engineering-blog
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-factory-principles/metadata.json
+- id: strongdm-factory-techniques
+  title: "Techniques"
+  url: https://factory.strongdm.ai/techniques
+  canonical_url: https://factory.strongdm.ai/techniques
+  kind: engineering-blog
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-factory-techniques/metadata.json
+- id: strongdm-factory-products
+  title: "Products"
+  url: https://factory.strongdm.ai/products
+  canonical_url: https://factory.strongdm.ai/products
+  kind: documentation
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-factory-products/metadata.json
+- id: strongdm-attractor-spec
+  title: "Attractor"
+  url: https://factory.strongdm.ai/products/attractor
+  canonical_url: https://factory.strongdm.ai/products/attractor
+  kind: documentation
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-attractor-spec/metadata.json
+- id: strongdm-factory-weather-report
+  title: "Weather Report"
+  url: https://factory.strongdm.ai/weather-report
+  canonical_url: https://factory.strongdm.ai/weather-report
+  kind: documentation
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-factory-weather-report/metadata.json
+- id: strongdm-attractor-repo
+  title: "strongdm/attractor"
+  url: https://github.com/strongdm/attractor
+  canonical_url: https://github.com/strongdm/attractor
+  kind: repository
+  provenance_class: first-party
+  role: evidence
+  publisher: StrongDM
+  accessed_at: "2026-09-15"
+  last_verified_at: "2026-09-15"
+  capture:
+    manifest_path: archive/sources/strongdm-attractor-repo/metadata.json
+evidence:
+  summary:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Definition: non-interactive development where specs + scenarios drive agents that write code, run harnesses, and converge without human review"
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Rules: Code must not be written by humans; Code must not be reviewed by humans"
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Validation constraint: zero hand-written code and zero traditional review"
+  operating_models.0:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Agents that write code, run harnesses, and converge without human review"
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Grow from cascades of natural-language specifications; be validated automatically without semantic inspection of source"
+  - source_id: strongdm-factory-principles
+    relation: supports
+    locator: "Termination: the loop runs until the holdout scenarios pass (and stay passing)"
+  architecture.sandbox:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "The overview describes the workflow end to end without documenting an execution sandbox"
+  architecture.harness:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Scenarios, Satisfaction, and Digital Twin Universe sections"
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Digital Twin Universe: validate at volumes and rates far exceeding production limits"
+  architecture.model:
+  - source_id: strongdm-factory-weather-report
+    relation: supports
+    locator: "Current configuration table, 2026-06-04"
+  architecture.tool_access:
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "The Filesystem; Digital Twin Universe"
+  architecture.knowledge:
+  - source_id: strongdm-factory-products
+    relation: supports
+    locator: "CXDB entry"
+  architecture.credentials:
+  - source_id: strongdm-factory-products
+    relation: supports
+    locator: "StrongDM ID entry"
+  architecture.context_mgmt:
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Pyramid Summaries; The Filesystem"
+  primitives.0:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Scenarios section"
+  primitives.1:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Satisfaction section"
+  primitives.2:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Digital Twin Universe section"
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Digital Twin Universe technique"
+  primitives.3:
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Shift Work technique"
+  primitives.4:
+  - source_id: strongdm-attractor-spec
+    relation: supports
+    locator: "Graph structure and key properties"
+  - source_id: strongdm-attractor-repo
+    relation: supports
+    locator: "Repository description"
+  lessons_learned.0:
+  - source_id: strongdm-factory-techniques
+    relation: supports
+    locator: "Code treated like an ML model snapshot, opaque and judged by externally observable behavior"
+  lessons_learned.1:
+  - source_id: strongdm-factory-principles
+    relation: supports
+    locator: "Termination condition"
+  lessons_learned.2:
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: "Token spend benchmark"
+claim_metadata:
+  operating_models.0:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: "The site documents zero human code-writing and review with automatic scenario validation, but not what happens when scenarios fail to converge; human authorship of seeds and scenarios sits before the run itself."
+    valid_at: "2026-09"
+  architecture.sandbox:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: "The preserved sources do not document an execution sandbox; unknown does not mean absent."
+  architecture.model:
+    kind: fact
+    provenance: reported
+    confidence: high
+    confidence_reason: "First-party configuration log current as of 2026-06-04."
+    valid_at: "2026-06"
+  lessons_learned.0:
+    kind: opinion
+    provenance: reported
+    confidence: high
+    confidence_reason: "The team states this stance directly on the Techniques page."
+  lessons_learned.1:
+    kind: opinion
+    provenance: reported
+    confidence: high
+    confidence_reason: "The team states the termination condition directly on the Principles page."
+  lessons_learned.2:
+    kind: opinion
+    provenance: reported
+    confidence: high
+    confidence_reason: "A stated benchmark for factory operation, not a measured result."
+    valid_at: "2026-02"

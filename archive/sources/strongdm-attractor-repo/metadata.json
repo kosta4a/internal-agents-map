@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "strongdm-attractor-repo",
+  "original_url": "https://github.com/strongdm/attractor",
+  "final_url": "https://github.com/strongdm/attractor",
+  "captured_at": "2026-09-15T10:26:28Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/strongdm-attractor-repo/content.md",
+      "sha256": "sha256:fcdbcb143af1948caefb158bf8938db70e64598daa269a37749221bd7675618c",
+      "bytes": 1402
+    }
+  }
+}

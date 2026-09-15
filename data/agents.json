@@ -379,6 +379,10 @@
       "id": "coinbase-forge-mux",
       "company": "Coinbase",
       "agent_name": "Forge / Mux",
+      "aliases": [
+        "Claudebot",
+        "Claude bot"
+      ],
       "approach_type": "agent-system",
       "deployment_stage": "scaled",
       "year": 2026,
@@ -386,7 +390,7 @@
         "date": "2026",
         "source_id": "coinbase-forge-mux-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding",
@@ -421,14 +425,23 @@
         "coinbase-forge-mux--primitives-0",
         "coinbase-forge-mux--primitives-1",
         "coinbase-forge-mux--key-metrics-0",
+        "coinbase-forge-mux--key-metrics-1",
+        "coinbase-forge-mux--key-metrics-2",
+        "coinbase-forge-mux--key-metrics-3",
         "coinbase-forge-mux--lessons-learned-0",
         "coinbase-forge-mux--lessons-learned-1",
         "coinbase-forge-mux--lessons-learned-2",
+        "coinbase-forge-mux--lessons-learned-3",
+        "coinbase-forge-mux--lessons-learned-4",
+        "coinbase-forge-mux--lessons-learned-5",
         "coinbase-forge-mux--operating-models-0"
       ],
       "source_ids": [
         "coinbase-forge-mux-source-1",
-        "coinbase-forge-mux-source-2"
+        "coinbase-forge-mux-source-2",
+        "coinbase-forge-mux-source-3",
+        "coinbase-forge-mux-source-4",
+        "coinbase-forge-mux-source-5"
       ],
       "interfaces": [
         "slack",
@@ -2047,6 +2060,71 @@
         "web",
         "internal-ui"
       ]
+    },
+    {
+      "id": "strongdm-software-factory",
+      "company": "StrongDM",
+      "agent_name": "Software Factory",
+      "aliases": [
+        "StrongDM AI Software Factory"
+      ],
+      "approach_type": "agent-system",
+      "deployment_stage": "deployed",
+      "year": 2026,
+      "first_public_evidence": {
+        "date": "2026-02-06",
+        "source_id": "strongdm-factory-overview"
+      },
+      "last_reviewed_at": "2026-09-15",
+      "status": "mixed",
+      "domains": [
+        "coding"
+      ],
+      "autonomy": "autonomous",
+      "operating_models": [
+        {
+          "scope": "natural-language seed -> agents implement and validate against scenario harness -> converged software",
+          "attention_boundary": "exception-only",
+          "level": 5
+        }
+      ],
+      "rubric": {
+        "invocation": [
+          "background"
+        ],
+        "state": "cross-session-memory",
+        "identity": "dedicated-agent",
+        "evidence_strength": "detailed-primary"
+      },
+      "claim_ids": [
+        "strongdm-software-factory--summary",
+        "strongdm-software-factory--architecture-sandbox",
+        "strongdm-software-factory--architecture-harness",
+        "strongdm-software-factory--architecture-model",
+        "strongdm-software-factory--architecture-tool-access",
+        "strongdm-software-factory--architecture-knowledge",
+        "strongdm-software-factory--architecture-credentials",
+        "strongdm-software-factory--architecture-context-mgmt",
+        "strongdm-software-factory--primitives-0",
+        "strongdm-software-factory--primitives-1",
+        "strongdm-software-factory--primitives-2",
+        "strongdm-software-factory--primitives-3",
+        "strongdm-software-factory--primitives-4",
+        "strongdm-software-factory--lessons-learned-0",
+        "strongdm-software-factory--lessons-learned-1",
+        "strongdm-software-factory--lessons-learned-2",
+        "strongdm-software-factory--operating-models-0"
+      ],
+      "source_ids": [
+        "strongdm-factory-overview",
+        "strongdm-factory-principles",
+        "strongdm-factory-techniques",
+        "strongdm-factory-products",
+        "strongdm-attractor-spec",
+        "strongdm-factory-weather-report",
+        "strongdm-attractor-repo"
+      ],
+      "interfaces": []
     },
     {
       "id": "uber-coding-agent",
@@ -4060,7 +4138,7 @@
       "id": "coinbase-forge-mux--summary",
       "approach_id": "coinbase-forge-mux",
       "field": "summary",
-      "text": "Forge turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and one-off build; Mux lets employees run many coding agents concurrently.",
+      "text": "Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and one-off build; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs merged company-wide come from these background agents.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4074,6 +4152,16 @@
         {
           "source_id": "coinbase-forge-mux-source-2",
           "relation": "supports"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 11"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 114–126"
         }
       ]
     },
@@ -4081,21 +4169,22 @@
       "id": "coinbase-forge-mux--headline-metric",
       "approach_id": "coinbase-forge-mux",
       "field": "headline_metric",
-      "text": "Mux: 600+ users including engineers, PMs, and designers (335 active, 197 power users)",
+      "text": "5% of all PRs merged come from in-house background agents (Feb 2026)",
       "kind": "metric",
       "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
+      "confidence": "medium",
+      "confidence_reason": "Self-reported share stated by the engineering leader who built the harness; measurement method and period not documented. A thread reply says the share covers the whole company.",
+      "valid_at": "2026-02",
       "evidence": [
         {
-          "source_id": "coinbase-forge-mux-source-1",
+          "source_id": "coinbase-forge-mux-source-3",
           "relation": "supports",
-          "locator": "Preserved content.md, lines 24–34"
+          "locator": "Preserved content.md, line 11"
         }
       ],
       "reported_by": "Coinbase",
-      "metric_scope": "Registered Mux users including engineers, PMs, and designers; 335 active and 197 power users"
+      "metric_scope": "PRs merged by in-house background agents",
+      "denominator": "All PRs merged company-wide"
     },
     {
       "id": "coinbase-forge-mux--architecture-sandbox",
@@ -4118,7 +4207,7 @@
       "id": "coinbase-forge-mux--architecture-harness",
       "approach_id": "coinbase-forge-mux",
       "field": "architecture.harness",
-      "text": "Portfolio approach; Claude Code, OpenCode, Cursor, and Copilot rather than one harness; Forge is a custom harness invokable from Slack, GitHub, and Linear",
+      "text": "Portfolio approach; Claude Code, OpenCode, Cursor, and Copilot rather than one harness; Forge is a custom Slack-native harness with the same tools and context as engineers, invokable from Slack, GitHub, and Linear; built in-house because security requirements blocked cloud background agents",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4132,6 +4221,16 @@
         {
           "source_id": "coinbase-forge-mux-source-2",
           "relation": "supports"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 11"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 120"
         }
       ]
     },
@@ -4139,7 +4238,7 @@
       "id": "coinbase-forge-mux--architecture-model",
       "approach_id": "coinbase-forge-mux",
       "field": "architecture.model",
-      "text": "Portfolio across multiple providers",
+      "text": "Portfolio across multiple providers; the Slack agent Claude bot can use multiple underlying models despite its name",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4149,6 +4248,11 @@
         {
           "source_id": "coinbase-forge-mux-source-1",
           "relation": "supports"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 114"
         }
       ]
     },
@@ -4183,6 +4287,11 @@
         {
           "source_id": "coinbase-forge-mux-source-2",
           "relation": "supports"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 120"
         }
       ]
     },
@@ -4217,6 +4326,11 @@
         {
           "source_id": "coinbase-forge-mux-source-2",
           "relation": "supports"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 104–118"
         }
       ]
     },
@@ -4256,6 +4370,72 @@
       ],
       "reported_by": "Coinbase",
       "metric_scope": "Registered Mux users including engineers, PMs, and designers; 335 active and 197 power users"
+    },
+    {
+      "id": "coinbase-forge-mux--key-metrics-1",
+      "approach_id": "coinbase-forge-mux",
+      "field": "key_metrics.1",
+      "text": "5% of all PRs merged come from in-house background agents (Feb 2026)",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Self-reported share stated by the engineering leader who built the harness; measurement method and period not documented. A thread reply says the share covers the whole company.",
+      "valid_at": "2026-02",
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 11"
+        }
+      ],
+      "reported_by": "Coinbase",
+      "metric_scope": "PRs merged by in-house background agents",
+      "denominator": "All PRs merged company-wide"
+    },
+    {
+      "id": "coinbase-forge-mux--key-metrics-2",
+      "approach_id": "coinbase-forge-mux",
+      "field": "key_metrics.2",
+      "text": "Wallet rewrite PR review times reduced from 150 hours to 15 hours (self-reported; period and method not documented)",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "low",
+      "confidence_reason": "The episode description states the reduction without a date, denominator, or measurement method.",
+      "valid_at": "2026-03",
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-4",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 16"
+        }
+      ],
+      "reported_by": "Coinbase",
+      "metric_scope": "PR review times for the wallet rewrite effort"
+    },
+    {
+      "id": "coinbase-forge-mux--key-metrics-3",
+      "approach_id": "coinbase-forge-mux",
+      "field": "key_metrics.3",
+      "text": "Speed run: about 100 participants opened about 70 PRs in 15 minutes (opened, not merged; single event)",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Described by the organizer as a single event; explicitly pull requests opened, not merged.",
+      "valid_at": "2026-03",
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-4",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 23"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 170"
+        }
+      ],
+      "reported_by": "Coinbase",
+      "metric_scope": "Pull requests opened during one speed-run session"
     },
     {
       "id": "coinbase-forge-mux--lessons-learned-0",
@@ -4309,6 +4489,65 @@
       ]
     },
     {
+      "id": "coinbase-forge-mux--lessons-learned-3",
+      "approach_id": "coinbase-forge-mux",
+      "field": "lessons_learned.3",
+      "text": "Security requirements that blocked cloud background agents motivated the in-house, Slack-native harness build",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "The episode writeup states the security requirement as the reason for the in-house build.",
+      "valid_at": "2026-03",
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 120"
+        }
+      ]
+    },
+    {
+      "id": "coinbase-forge-mux--lessons-learned-4",
+      "approach_id": "coinbase-forge-mux",
+      "field": "lessons_learned.4",
+      "text": "Give background agents the same tools and context as engineers through a Slack-native interface",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The catalog derives this design guidance from the builder's description of the harness.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 11"
+        }
+      ]
+    },
+    {
+      "id": "coinbase-forge-mux--lessons-learned-5",
+      "approach_id": "coinbase-forge-mux",
+      "field": "lessons_learned.5",
+      "text": "Spread adoption through visible team experiments, such as PR speed runs and shared Slack channels, rather than mandates",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The catalog derives this adoption guidance from the episode accounts of speed runs and shared channels.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-4",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 25"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 170–172"
+        }
+      ]
+    },
+    {
       "id": "coinbase-forge-mux--operating-models-0",
       "approach_id": "coinbase-forge-mux",
       "field": "operating_models.0",
@@ -4322,6 +4561,11 @@
         {
           "source_id": "coinbase-forge-mux-source-1",
           "relation": "supports"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 11"
         }
       ]
     },
@@ -11433,6 +11677,347 @@
       ]
     },
     {
+      "id": "strongdm-software-factory--summary",
+      "approach_id": "strongdm-software-factory",
+      "field": "summary",
+      "text": "An internal agent system in which natural-language seeds and end-to-end scenario harnesses drive agents that write, validate, and iterate on code under standing rules that humans neither write nor review code.",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Definition: non-interactive development where specs + scenarios drive agents that write code, run harnesses, and converge without human review"
+        },
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Rules: Code must not be written by humans; Code must not be reviewed by humans"
+        },
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Validation constraint: zero hand-written code and zero traditional review"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-sandbox",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.sandbox",
+      "text": "unknown",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The preserved sources do not document an execution sandbox; unknown does not mean absent.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "The overview describes the workflow end to end without documenting an execution sandbox"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-harness",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.harness",
+      "text": "End-to-end scenario harness with user-story-style scenarios kept outside the codebase as a holdout set and checked by an LLM; satisfaction measured as the fraction of observed scenario trajectories that likely satisfy the user; Digital Twin Universe clones of Okta, Jira, Slack, Google Docs, Google Drive, and Google Sheets absorb scenario load",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Scenarios, Satisfaction, and Digital Twin Universe sections"
+        },
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Digital Twin Universe: validate at volumes and rates far exceeding production limits"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-model",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.model",
+      "text": "Multi-provider routing by task as of 2026-06 (gpt-5.5 for everyday and DevOps tasks, QA orchestration, and security review; consensus of opus-4.8 and gpt-5.5 for sprint planning; opus-4.8 for frontend aesthetics and writing; gemini-3-flash-preview for image comprehension and agentic dialogues; gpt-image-2 and gpt-realtime-2 for UX ideation and voice)",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "First-party configuration log current as of 2026-06-04.",
+      "valid_at": "2026-06",
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-weather-report",
+          "relation": "supports",
+          "locator": "Current configuration table, 2026-06-04"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-tool-access",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.tool_access",
+      "text": "Filesystem that agents read and write to self-manage context; Digital Twin Universe as a stand-in for third-party services",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "The Filesystem; Digital Twin Universe"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-knowledge",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.knowledge",
+      "text": "CXDB, a self-hosted context store for AI agents with turn DAG, blob deduplication, dynamic types, and visual debugging",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-products",
+          "relation": "supports",
+          "locator": "CXDB entry"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-credentials",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.credentials",
+      "text": "StrongDM ID, an identity system for humans, workloads, and AI agents with federated authentication and path-scoped sharing",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-products",
+          "relation": "supports",
+          "locator": "StrongDM ID entry"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--architecture-context-mgmt",
+      "approach_id": "strongdm-software-factory",
+      "field": "architecture.context_mgmt",
+      "text": "Pyramid Summaries with reversible summarization at multiple zoom levels; on-disk state as the memory substrate",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Pyramid Summaries; The Filesystem"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--primitives-0",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.0",
+      "text": "End-to-end user-story validations, often stored outside the codebase like a training holdout set, flexibly checked by an LLM to resist reward hacking and lazy test rewriting",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Scenarios section"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--primitives-1",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.1",
+      "text": "Probabilistic success measure replacing boolean test-green; the fraction of all observed scenario trajectories that likely satisfy the user",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Satisfaction section"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--primitives-2",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.2",
+      "text": "Behavioral clones of third-party services that replicate APIs, edge cases, and observable behaviors, so thousands of scenarios can run per hour without rate limits, abuse detection, or live-API cost",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Digital Twin Universe section"
+        },
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Digital Twin Universe technique"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--primitives-3",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.3",
+      "text": "Splitting work into interactive and fully specified classes; when specs, tests, and the existing app fully express intent, an agent runs end-to-end without back-and-forth",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Shift Work technique"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--primitives-4",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.4",
+      "text": "Non-interactive coding agent structured as a graph of work phases with natural-language edges evaluated by the LLM; execution traverses the graph until convergence or termination, and the spec is open source",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-attractor-spec",
+          "relation": "supports",
+          "locator": "Graph structure and key properties"
+        },
+        {
+          "source_id": "strongdm-attractor-repo",
+          "relation": "supports",
+          "locator": "Repository description"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--lessons-learned-0",
+      "approach_id": "strongdm-software-factory",
+      "field": "lessons_learned.0",
+      "text": "Treat generated code like an ML model snapshot; judge it only by externally observable behavior and never by semantic inspection of the source",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "The team states this stance directly on the Techniques page.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Code treated like an ML model snapshot, opaque and judged by externally observable behavior"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--lessons-learned-1",
+      "approach_id": "strongdm-software-factory",
+      "field": "lessons_learned.1",
+      "text": "The seed, validation harness, and feedback loop run until the holdout scenarios pass and stay passing",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "The team states the termination condition directly on the Principles page.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-principles",
+          "relation": "supports",
+          "locator": "Termination condition"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--lessons-learned-2",
+      "approach_id": "strongdm-software-factory",
+      "field": "lessons_learned.2",
+      "text": "Tokens are the fuel; if the factory has not spent at least $1,000 on tokens per human engineer in a day, it has room for improvement",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A stated benchmark for factory operation, not a measured result.",
+      "valid_at": "2026-02",
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Token spend benchmark"
+        }
+      ]
+    },
+    {
+      "id": "strongdm-software-factory--operating-models-0",
+      "approach_id": "strongdm-software-factory",
+      "field": "operating_models.0",
+      "text": "Level 5 for natural-language seed -> agents implement and validate against scenario harness -> converged software; human attention boundary: exception-only.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The site documents zero human code-writing and review with automatic scenario validation, but not what happens when scenarios fail to converge; human authorship of seeds and scenarios sits before the run itself.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Agents that write code, run harnesses, and converge without human review"
+        },
+        {
+          "source_id": "strongdm-factory-techniques",
+          "relation": "supports",
+          "locator": "Grow from cascades of natural-language specifications; be validated automatically without semantic inspection of source"
+        },
+        {
+          "source_id": "strongdm-factory-principles",
+          "relation": "supports",
+          "locator": "Termination: the loop runs until the holdout scenarios pass (and stay passing)"
+        }
+      ]
+    },
+    {
       "id": "uber-coding-agent--summary",
       "approach_id": "uber-coding-agent",
       "field": "summary",
@@ -13110,6 +13695,104 @@
             "path": "archive/sources/coinbase-forge-mux-source-2/content.md",
             "sha256": "sha256:b1b946c51a9f2ba6967b8d9a0ebd11f303714242714f4c22f8c09909f0f97f89",
             "bytes": 4437
+          }
+        }
+      },
+      "role": "evidence",
+      "approach_id": "coinbase-forge-mux"
+    },
+    {
+      "id": "coinbase-forge-mux-source-3",
+      "title": "Chintan Turakhia: 5% of all PRs merged now come from our in-house background agents",
+      "url": "https://x.com/chintanturakhia/status/2019921786834411728",
+      "canonical_url": "https://x.com/chintanturakhia/status/2019921786834411728",
+      "kind": "social-post",
+      "provenance_class": "direct-participant",
+      "published_at": "2026-02-06",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "coinbase-forge-mux-source-3",
+        "original_url": "https://x.com/chintanturakhia/status/2019921786834411728",
+        "final_url": "https://x.com/chintanturakhia/status/2019921786834411728",
+        "captured_at": "2026-09-15T10:30:46Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/coinbase-forge-mux-source-3/content.md",
+            "sha256": "sha256:ac50340fd38b8fff546bffdd6f1ad62d21310eb44c1e3c6edddae5a2ab8769ef",
+            "bytes": 1704
+          }
+        }
+      },
+      "role": "evidence",
+      "approach_id": "coinbase-forge-mux"
+    },
+    {
+      "id": "coinbase-forge-mux-source-4",
+      "title": "How Coinbase scaled AI to 1,000+ engineers (How I AI, with Chintan Turakhia)",
+      "url": "https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers",
+      "canonical_url": "https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers",
+      "kind": "podcast",
+      "provenance_class": "direct-participant",
+      "publisher": "Lenny's Newsletter",
+      "published_at": "2026-03-02",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "coinbase-forge-mux-source-4",
+        "original_url": "https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers",
+        "final_url": "https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers",
+        "captured_at": "2026-09-15T10:31:04Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/coinbase-forge-mux-source-4/content.md",
+            "sha256": "sha256:40796cba0810549cfe1b94b6bb73938a57eab8a977eaa1498a426959fa6c8dcc",
+            "bytes": 5558
+          }
+        }
+      },
+      "role": "evidence",
+      "approach_id": "coinbase-forge-mux"
+    },
+    {
+      "id": "coinbase-forge-mux-source-5",
+      "title": "How I AI: Chintan Turakhia's playbook for AI adoption at Coinbase",
+      "url": "https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase",
+      "canonical_url": "https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase",
+      "kind": "podcast",
+      "provenance_class": "direct-participant",
+      "publisher": "ChatPRD",
+      "published_at": "2026-03-02",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "coinbase-forge-mux-source-5",
+        "original_url": "https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase",
+        "final_url": "https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase",
+        "captured_at": "2026-09-15T10:30:22Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/coinbase-forge-mux-source-5/content.md",
+            "sha256": "sha256:97b91d955d61ec886150c5fac0b369df476673c95f67f82391d4b51565b4927b",
+            "bytes": 17550
           }
         }
       },
@@ -15126,6 +15809,234 @@
         }
       },
       "approach_id": "stripe-minions"
+    },
+    {
+      "id": "strongdm-factory-overview",
+      "title": "Software Factories And The Agentic Moment",
+      "url": "https://factory.strongdm.ai/",
+      "canonical_url": "https://factory.strongdm.ai/",
+      "kind": "engineering-blog",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "authors": [
+        "Justin McCarthy"
+      ],
+      "published_at": "2026-02-06",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-factory-overview",
+        "original_url": "https://factory.strongdm.ai/",
+        "final_url": "https://factory.strongdm.ai/",
+        "captured_at": "2026-09-15T10:25:58Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-factory-overview/content.md",
+            "sha256": "sha256:1d25e26cab5046f0bd0fe6038e775474a5710e0da7910d74778dfd65aa7bff6e",
+            "bytes": 7369
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
+    },
+    {
+      "id": "strongdm-factory-principles",
+      "title": "Principles",
+      "url": "https://factory.strongdm.ai/principles",
+      "canonical_url": "https://factory.strongdm.ai/principles",
+      "kind": "engineering-blog",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-factory-principles",
+        "original_url": "https://factory.strongdm.ai/principles",
+        "final_url": "https://factory.strongdm.ai/principles",
+        "captured_at": "2026-09-15T10:26:02Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-factory-principles/content.md",
+            "sha256": "sha256:d7333cb055e9704e4fc53e6b69dad1d02f6496b82915cab244026733cee68bd8",
+            "bytes": 948
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
+    },
+    {
+      "id": "strongdm-factory-techniques",
+      "title": "Techniques",
+      "url": "https://factory.strongdm.ai/techniques",
+      "canonical_url": "https://factory.strongdm.ai/techniques",
+      "kind": "engineering-blog",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-factory-techniques",
+        "original_url": "https://factory.strongdm.ai/techniques",
+        "final_url": "https://factory.strongdm.ai/techniques",
+        "captured_at": "2026-09-15T10:26:07Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-factory-techniques/content.md",
+            "sha256": "sha256:231a68783b1ff03213fb0579a8f2a086f35185edfa4863047bb015f73e8f92ef",
+            "bytes": 2196
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
+    },
+    {
+      "id": "strongdm-factory-products",
+      "title": "Products",
+      "url": "https://factory.strongdm.ai/products",
+      "canonical_url": "https://factory.strongdm.ai/products",
+      "kind": "documentation",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-factory-products",
+        "original_url": "https://factory.strongdm.ai/products",
+        "final_url": "https://factory.strongdm.ai/products",
+        "captured_at": "2026-09-15T10:26:12Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-factory-products/content.md",
+            "sha256": "sha256:b9a6e3b27a1de9f1e1c29d812c51c021dc771384e3fda802ef4b7871d85a117c",
+            "bytes": 848
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
+    },
+    {
+      "id": "strongdm-attractor-spec",
+      "title": "Attractor",
+      "url": "https://factory.strongdm.ai/products/attractor",
+      "canonical_url": "https://factory.strongdm.ai/products/attractor",
+      "kind": "documentation",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-attractor-spec",
+        "original_url": "https://factory.strongdm.ai/products/attractor",
+        "final_url": "https://factory.strongdm.ai/products/attractor",
+        "captured_at": "2026-09-15T10:26:17Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-attractor-spec/content.md",
+            "sha256": "sha256:5de446fa742ca11ad0938f8b45a3b44a3d754ad438679aa79b892553d4bd7873",
+            "bytes": 8557
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
+    },
+    {
+      "id": "strongdm-factory-weather-report",
+      "title": "Weather Report",
+      "url": "https://factory.strongdm.ai/weather-report",
+      "canonical_url": "https://factory.strongdm.ai/weather-report",
+      "kind": "documentation",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-factory-weather-report",
+        "original_url": "https://factory.strongdm.ai/weather-report",
+        "final_url": "https://factory.strongdm.ai/weather-report",
+        "captured_at": "2026-09-15T10:26:22Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-factory-weather-report/content.md",
+            "sha256": "sha256:1ad09c3f6cb6e6c58f2bf92c26a228e53c9eafdd83ac6f6620cedecde1795d08",
+            "bytes": 6296
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
+    },
+    {
+      "id": "strongdm-attractor-repo",
+      "title": "strongdm/attractor",
+      "url": "https://github.com/strongdm/attractor",
+      "canonical_url": "https://github.com/strongdm/attractor",
+      "kind": "repository",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "StrongDM",
+      "accessed_at": "2026-09-15",
+      "last_verified_at": "2026-09-15",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "strongdm-attractor-repo",
+        "original_url": "https://github.com/strongdm/attractor",
+        "final_url": "https://github.com/strongdm/attractor",
+        "captured_at": "2026-09-15T10:26:28Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/strongdm-attractor-repo/content.md",
+            "sha256": "sha256:fcdbcb143af1948caefb158bf8938db70e64598daa269a37749221bd7675618c",
+            "bytes": 1402
+          }
+        }
+      },
+      "approach_id": "strongdm-software-factory"
     },
     {
       "id": "uber-coding-agent-source-1",

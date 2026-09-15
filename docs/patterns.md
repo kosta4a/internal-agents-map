@@ -8,21 +8,21 @@ Most evidence comes from organizations that describe their own systems. Architec
 
 ## Catalog snapshot
 
-The catalog currently contains 39 approaches:
+The catalog currently contains 40 approaches:
 
 | Type | Count |
 | --- | ---: |
 | Task agent | 15 |
 | Platform | 10 |
 | Background agent | 6 |
-| Agent system | 4 |
+| Agent system | 5 |
 | Orchestration system | 2 |
 | Supporting pattern | 2 |
 
 - 16 approaches document a concrete execution environment.
 - 20 approaches list Slack as an interface.
-- State duration is unknown for 34, durable-session for 4, cross-session-memory for 0, mixed for 0, and run-only for 1 approaches.
-- Autonomy is classified as drafts-reviewed for 23, human-in-loop for 8, autonomous for 3, assistive for 2, and unknown for 3 approaches.
+- State duration is unknown for 34, durable-session for 4, cross-session-memory for 1, mixed for 0, and run-only for 1 approaches.
+- Autonomy is classified as drafts-reviewed for 23, human-in-loop for 8, autonomous for 4, assistive for 2, and unknown for 3 approaches.
 
 <!-- END PATTERNS SNAPSHOT -->
 

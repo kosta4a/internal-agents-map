@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "strongdm-factory-principles",
+  "original_url": "https://factory.strongdm.ai/principles",
+  "final_url": "https://factory.strongdm.ai/principles",
+  "captured_at": "2026-09-15T10:26:02Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/strongdm-factory-principles/content.md",
+      "sha256": "sha256:d7333cb055e9704e4fc53e6b69dad1d02f6496b82915cab244026733cee68bd8",
+      "bytes": 948
+    }
+  }
+}

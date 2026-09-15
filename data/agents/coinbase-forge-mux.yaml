@@ -1,13 +1,16 @@
 id: coinbase-forge-mux
 company: Coinbase
 agent_name: Forge / Mux
+aliases:
+- Claudebot
+- Claude bot
 approach_type: agent-system
 deployment_stage: scaled
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: coinbase-forge-mux-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-15'
 status: internal
 domains:
 - coding
@@ -23,14 +26,17 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: Forge turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and one-off build; Mux lets
-  employees run many coding agents concurrently.
-headline_metric: 'Mux: 600+ users including engineers, PMs, and designers (335 active, 197 power users)'
+summary: Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and
+  one-off build; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs
+  merged company-wide come from these background agents.
+headline_metric: '5% of all PRs merged come from in-house background agents (Feb 2026)'
 architecture:
   sandbox: Mux gives each concurrent agent its own git worktree, branch, and terminal
   harness: Portfolio approach; Claude Code, OpenCode, Cursor, and Copilot rather than one harness; Forge is a custom
-    harness invokable from Slack, GitHub, and Linear
-  model: Portfolio across multiple providers
+    Slack-native harness with the same tools and context as engineers, invokable from Slack, GitHub, and Linear;
+    built in-house because security requirements blocked cloud background agents
+  model: Portfolio across multiple providers; the Slack agent Claude bot can use multiple underlying models despite
+    its name
   interfaces:
   - slack
   - github
@@ -44,12 +50,19 @@ primitives:
   desc: Concurrency layer; one human coordinates many isolated coding agents, each in its own worktree/branch/terminal
 key_metrics:
 - 'Mux: 600+ users including engineers, PMs, and designers (335 active, 197 power users)'
+- 5% of all PRs merged come from in-house background agents (Feb 2026)
+- Wallet rewrite PR review times reduced from 150 hours to 15 hours (self-reported; period and method not documented)
+- 'Speed run: about 100 participants opened about 70 PRs in 15 minutes (opened, not merged; single event)'
 lessons_learned:
 - Support a portfolio of harnesses (Claude Code, OpenCode, Cursor, Copilot) rather than standardizing on one
 - Keep the system of record (Linear) as the agent's structured context; conversation can be the input, Linear stays
   durable
 - Simple per-agent worktree/branch/terminal isolation is a pragmatic alternative to full sandboxing for concurrent
   coding
+- Security requirements that blocked cloud background agents motivated the in-house, Slack-native harness build
+- Give background agents the same tools and context as engineers through a Slack-native interface
+- Spread adoption through visible team experiments, such as PR speed runs and shared Slack channels, rather than
+  mandates
 sources:
 - id: coinbase-forge-mux-source-1
   title: 'Coding had a concurrency problem: how Mux helped solve it'
@@ -71,19 +84,63 @@ sources:
   last_verified_at: '2026-08-31'
   capture:
     manifest_path: archive/sources/coinbase-forge-mux-source-2/metadata.json
+- id: coinbase-forge-mux-source-3
+  title: 'Chintan Turakhia: 5% of all PRs merged now come from our in-house background agents'
+  url: https://x.com/chintanturakhia/status/2019921786834411728
+  canonical_url: https://x.com/chintanturakhia/status/2019921786834411728
+  kind: social-post
+  provenance_class: direct-participant
+  published_at: '2026-02-06'
+  accessed_at: '2026-09-15'
+  last_verified_at: '2026-09-15'
+  capture:
+    manifest_path: archive/sources/coinbase-forge-mux-source-3/metadata.json
+- id: coinbase-forge-mux-source-4
+  title: 'How Coinbase scaled AI to 1,000+ engineers (How I AI, with Chintan Turakhia)'
+  url: https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers
+  canonical_url: https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers
+  kind: podcast
+  provenance_class: direct-participant
+  publisher: Lenny's Newsletter
+  published_at: '2026-03-02'
+  accessed_at: '2026-09-15'
+  last_verified_at: '2026-09-15'
+  capture:
+    manifest_path: archive/sources/coinbase-forge-mux-source-4/metadata.json
+- id: coinbase-forge-mux-source-5
+  title: 'How I AI: Chintan Turakhia''s playbook for AI adoption at Coinbase'
+  url: https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase
+  canonical_url: https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase
+  kind: podcast
+  provenance_class: direct-participant
+  publisher: ChatPRD
+  published_at: '2026-03-02'
+  accessed_at: '2026-09-15'
+  last_verified_at: '2026-09-15'
+  capture:
+    manifest_path: archive/sources/coinbase-forge-mux-source-5/metadata.json
 evidence:
   operating_models.0:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+  - source_id: coinbase-forge-mux-source-3
+    relation: supports
+    locator: Preserved content.md, line 11
   summary:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
   - source_id: coinbase-forge-mux-source-2
     relation: supports
-  headline_metric:
-  - source_id: coinbase-forge-mux-source-1
+  - source_id: coinbase-forge-mux-source-3
     relation: supports
-    locator: Preserved content.md, lines 24–34
+    locator: Preserved content.md, line 11
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, lines 114–126
+  headline_metric:
+  - source_id: coinbase-forge-mux-source-3
+    relation: supports
+    locator: Preserved content.md, line 11
   architecture.sandbox:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -92,18 +149,33 @@ evidence:
     relation: supports
   - source_id: coinbase-forge-mux-source-2
     relation: supports
+  - source_id: coinbase-forge-mux-source-3
+    relation: supports
+    locator: Preserved content.md, line 11
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, line 120
   architecture.model:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, line 114
   architecture.tool_access:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, line 120
   architecture.knowledge:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
   primitives.0:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, lines 104–118
   primitives.1:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -111,6 +183,21 @@ evidence:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
     locator: Preserved content.md, lines 24–34
+  key_metrics.1:
+  - source_id: coinbase-forge-mux-source-3
+    relation: supports
+    locator: Preserved content.md, line 11
+  key_metrics.2:
+  - source_id: coinbase-forge-mux-source-4
+    relation: supports
+    locator: Preserved content.md, line 16
+  key_metrics.3:
+  - source_id: coinbase-forge-mux-source-4
+    relation: supports
+    locator: Preserved content.md, line 23
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, line 170
   lessons_learned.0:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -120,6 +207,21 @@ evidence:
   lessons_learned.2:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+  lessons_learned.3:
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, line 120
+  lessons_learned.4:
+  - source_id: coinbase-forge-mux-source-3
+    relation: supports
+    locator: Preserved content.md, line 11
+  lessons_learned.5:
+  - source_id: coinbase-forge-mux-source-4
+    relation: supports
+    locator: Preserved content.md, line 25
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, lines 170–172
   architecture.interfaces:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -146,7 +248,57 @@ claim_metadata:
     provenance: catalog-judgment
     confidence: medium
     confidence_reason: The catalog derives this observation from the linked sources.
+  lessons_learned.3:
+    kind: fact
+    provenance: reported
+    confidence: high
+    confidence_reason: The episode writeup states the security requirement as the reason for the in-house build.
+    valid_at: '2026-03'
+  lessons_learned.4:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: The catalog derives this design guidance from the builder's description of the harness.
+    valid_at: '2026'
+  lessons_learned.5:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: The catalog derives this adoption guidance from the episode accounts of speed runs and shared
+      channels.
+    valid_at: '2026'
   headline_metric:
-    metric_scope: Registered Mux users including engineers, PMs, and designers; 335 active and 197 power users
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Self-reported share stated by the engineering leader who built the harness; measurement
+      method and period not documented. A thread reply says the share covers the whole company.
+    valid_at: '2026-02'
+    metric_scope: PRs merged by in-house background agents
+    denominator: All PRs merged company-wide
   key_metrics.0:
     metric_scope: Registered Mux users including engineers, PMs, and designers; 335 active and 197 power users
+  key_metrics.1:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Self-reported share stated by the engineering leader who built the harness; measurement
+      method and period not documented. A thread reply says the share covers the whole company.
+    valid_at: '2026-02'
+    metric_scope: PRs merged by in-house background agents
+    denominator: All PRs merged company-wide
+  key_metrics.2:
+    kind: metric
+    provenance: reported
+    confidence: low
+    confidence_reason: The episode description states the reduction without a date, denominator, or measurement
+      method.
+    valid_at: '2026-03'
+    metric_scope: PR review times for the wallet rewrite effort
+  key_metrics.3:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Described by the organizer as a single event; explicitly pull requests opened, not merged.
+    valid_at: '2026-03'
+    metric_scope: Pull requests opened during one speed-run session

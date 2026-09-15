@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "strongdm-factory-techniques",
+  "original_url": "https://factory.strongdm.ai/techniques",
+  "final_url": "https://factory.strongdm.ai/techniques",
+  "captured_at": "2026-09-15T10:26:07Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/strongdm-factory-techniques/content.md",
+      "sha256": "sha256:231a68783b1ff03213fb0579a8f2a086f35185edfa4863047bb015f73e8f92ef",
+      "bytes": 2196
+    }
+  }
+}

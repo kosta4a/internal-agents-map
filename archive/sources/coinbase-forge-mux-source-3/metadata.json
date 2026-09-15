@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "coinbase-forge-mux-source-3",
+  "original_url": "https://x.com/chintanturakhia/status/2019921786834411728",
+  "final_url": "https://x.com/chintanturakhia/status/2019921786834411728",
+  "captured_at": "2026-09-15T10:30:46Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/coinbase-forge-mux-source-3/content.md",
+      "sha256": "sha256:ac50340fd38b8fff546bffdd6f1ad62d21310eb44c1e3c6edddae5a2ab8769ef",
+      "bytes": 1704
+    }
+  }
+}
