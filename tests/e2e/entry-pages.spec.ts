@@ -117,6 +117,30 @@ for (const entry of ENTRIES) {
   });
 }
 
+test.describe('narrow entry pages', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  for (const id of ['doordash-flux', 'posthog-stamphog', 'salesforce-slackbot', 'sentry-junior']) {
+    test(`keeps ${id} within the viewport, including its research details`, async ({ page }) => {
+      const response = await page.goto(`/agents/${id}`);
+      expect(response?.status()).toBe(200);
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+      });
+
+      const expectNoHorizontalOverflow = async () => {
+        const contentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+        expect(contentWidth).toBeLessThanOrEqual(page.viewportSize()!.width);
+      };
+
+      await expectNoHorizontalOverflow();
+      await page.locator('details.claim-details > summary').click();
+      await expect(page.locator('.ledger')).toBeVisible();
+      await expectNoHorizontalOverflow();
+    });
+  }
+});
+
 test.describe('reported results', () => {
   test('separates the metrics from the statements of the other kinds', async ({ page }) => {
     await page.goto('/agents/block-builderbot');

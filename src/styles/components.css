@@ -463,14 +463,9 @@
   font-size: 13px;
 }
 
-.entry-summary, .source-url, dd, .locator, .claim-kind {
-  margin-left: 8px;
-  padding: 1px 6px;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  letter-spacing: .03em;
+.entry-summary, .source-url, dd, .locator, .claim > p {
+  overflow-wrap: anywhere;
 }
-.claim > p { overflow-wrap: anywhere; }
 
 @media (max-width: 800px) {
   .intro h1 { font-size: 32px; }
@@ -504,14 +499,7 @@
     height: 5px;
   }
   .claim { padding: 14px 0; }
-  .claim-kind {
-  margin-left: 8px;
-  padding: 1px 6px;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  letter-spacing: .03em;
-}
-.claim > p { font-size: 14px; }
+  .claim > p { font-size: 14px; }
   .sources li { padding: 8px 0; }
 }
 @media (max-width: 420px) {
