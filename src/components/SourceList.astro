@@ -1,0 +1,32 @@
+---
+// ABOUTME: Lists the sources of one entry as numbered citations to the publishers.
+// ABOUTME: Each item keeps its source anchor and links to the preserved copy.
+import type { SourceView } from '../lib/entry-view';
+
+interface Props {
+  sources: readonly SourceView[];
+}
+
+const { sources } = Astro.props;
+---
+<ol class="sources">
+  {sources.map((source) => (
+    <li id={source.anchor} data-source-id={source.id} value={source.number}>
+      <span class="source-title"><a href={source.url}>{source.title}</a></span>
+      <a class="source-url" href={source.url}>{source.url}</a>
+      <span class="source-meta">
+        {source.kindLabel} · {source.provenanceClassLabel} · Last source verification: {source.lastVerifiedAt ?? 'Unknown'}
+      </span>
+      {(source.preservedUrl || source.archivedUrl) && (
+        <div class="source-archives">
+          {source.preservedUrl && (
+            <a href={source.preservedUrl}>Preserved copy <span class="link-arrow">↗</span></a>
+          )}
+          {source.archivedUrl && (
+            <a href={source.archivedUrl}>Wayback snapshot <span class="link-arrow">↗</span></a>
+          )}
+        </div>
+      )}
+    </li>
+  ))}
+</ol>

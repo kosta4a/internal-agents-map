@@ -1,168 +1,244 @@
-"""Contracts for agent discovery, evidence exports, and deploy-safe asset caching."""
+# ABOUTME: Publication contracts of the built artifact, the hosting policy, and the CI workflow.
+# ABOUTME: Covers the sitemap, page metadata, exports, route manifest, and indexing rules.
+"""Contracts for agent discovery, evidence exports, and deploy-safe hosting rules."""
 
-import hashlib
-import html
 import importlib.util
 import json
+import sys
 import unittest
 import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
 from pathlib import Path
 
-from bs4 import BeautifulSoup
-from markdownify import markdownify
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location("publication_build", ROOT / "scripts/build.py")
-build = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(build)
+DIST = ROOT / "dist"
+ORIGIN = "https://internal-agents.com"
+SITEMAP_NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+
+
+def load_script(name):
+    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+build = load_script("build")
+
+
+class DocumentParser(HTMLParser):
+    """Collect the head elements and the structured data that a page declares."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.links = []
+        self.metas = []
+        self.title = ""
+        self.structured_data = []
+        self._collect = None
+
+    def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        if tag == "link":
+            self.links.append(attributes)
+        elif tag == "meta":
+            self.metas.append(attributes)
+        elif tag == "title":
+            self._collect = "title"
+        elif tag == "script" and attributes.get("type") == "application/ld+json":
+            self._collect = "ld+json"
+
+    def handle_endtag(self, tag):
+        self._collect = None
+
+    def handle_data(self, data):
+        if self._collect == "title":
+            self.title += data
+        elif self._collect == "ld+json":
+            self.structured_data.append(data)
+
+    def link(self, rel):
+        return next((item.get("href") for item in self.links if item.get("rel") == rel), None)
+
+    def meta(self, **match):
+        key, value = next(iter(match.items()))
+        return next(
+            (item.get("content") for item in self.metas if item.get(key) == value),
+            None,
+        )
+
+
+def canonical_path(name):
+    """The clean public path that one built HTML file is served from."""
+    if name == "index.html":
+        return "/"
+    return "/" + name.removesuffix(".html")
+
+
+def read_document(name):
+    page = DocumentParser()
+    page.feed((DIST / name).read_text(encoding="utf-8"))
+    return page
 
 
 class PublicationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.outputs = build.rendered_outputs(build.load_agents())
-        cls.site = ROOT / "site"
-        cls.catalog = json.loads(cls.outputs[cls.site / "agents.json"])
+        if not (DIST / "sitemap.xml").is_file():
+            raise AssertionError(f"{DIST} holds no build. Run 'npm run build' first.")
+        cls.catalog = json.loads((DIST / "agents.json").read_text(encoding="utf-8"))
+        cls.pages = sorted(path.relative_to(DIST).as_posix() for path in DIST.rglob("*.html"))
+        cls.sitemap = ET.fromstring((DIST / "sitemap.xml").read_text(encoding="utf-8"))
 
-    def test_sitemap_and_canonicals_cover_pages_except_404(self):
-        urls = [
-            e.text
-            for e in ET.fromstring(self.outputs[self.site / "sitemap.xml"]).iter()
-            if e.tag.endswith("}loc")
-        ]
-        pages = [p for p in self.outputs if p.is_relative_to(self.site) and p.suffix == ".html"]
-        expected = []
-        for path in pages:
-            soup = BeautifulSoup(self.outputs[path], "html.parser")
-            if path.name == "404.html":
-                self.assertEqual(soup.find("meta", attrs={"name": "robots"})["content"], "noindex")
-                self.assertIn('href="/index.html#catalog"', self.outputs[path])
+    def test_the_sitemap_lists_every_canonical_page_and_nothing_else(self):
+        listed = [element.text for element in self.sitemap.iter(SITEMAP_NS + "loc")]
+        expected = [ORIGIN + canonical_path(name) for name in self.pages if name != "404.html"]
+        self.assertCountEqual(listed, expected)
+        self.assertEqual(len(listed), len(set(listed)))
+
+    def test_every_page_is_self_canonical_and_has_a_markdown_representation(self):
+        for name in self.pages:
+            if name == "404.html":
                 continue
-            canonical = build.canonical_url(path.relative_to(self.site).as_posix())
-            expected.append(canonical)
-            self.assertEqual(soup.find("link", rel="canonical")["href"], canonical)
-            self.assertIn(path.with_suffix(".md"), self.outputs)
-        self.assertCountEqual(urls, expected)
-        robots = self.outputs[self.site / "robots.txt"]
+            with self.subTest(page=name):
+                page = read_document(name)
+                self.assertEqual(page.link("canonical"), ORIGIN + canonical_path(name))
+                self.assertTrue((DIST / name.replace(".html", ".md")).is_file())
+
+    def test_the_error_page_stays_out_of_search_and_returns_to_the_directory(self):
+        page = read_document("404.html")
+        self.assertEqual(page.meta(name="robots"), "noindex")
+        self.assertEqual(page.structured_data, [])
+        self.assertIn('href="/"', (DIST / "404.html").read_text(encoding="utf-8"))
+
+    def test_every_page_declares_its_preview_and_its_publisher(self):
+        for name in self.pages:
+            if name == "404.html":
+                continue
+            with self.subTest(page=name):
+                page = read_document(name)
+                url = ORIGIN + canonical_path(name)
+                self.assertEqual(page.meta(property="og:url"), url)
+                self.assertEqual(page.meta(property="og:title"), page.title)
+                self.assertEqual(page.meta(property="og:image"), ORIGIN + "/og.png")
+                self.assertEqual(page.meta(name="twitter:card"), "summary_large_image")
+                graph = json.loads(page.structured_data[0])["@graph"]
+                types = {node["@type"]: node for node in graph}
+                self.assertEqual(types["Organization"]["url"], "https://steel.dev/")
+                self.assertEqual(types["WebSite"]["publisher"]["@id"], types["Organization"]["@id"])
+
+    def test_the_robots_file_allows_crawling_and_keeps_the_content_signals(self):
+        robots = (DIST / "robots.txt").read_text(encoding="utf-8")
         self.assertIn("User-agent: *\nAllow: /", robots)
-        self.assertIn("Sitemap: https://internal-agents.com/sitemap.xml", robots)
+        self.assertIn(f"Sitemap: {ORIGIN}/sitemap.xml", robots)
         self.assertEqual(robots.count("Content-Signal: search=yes, ai-input=yes, ai-train=yes"), 2)
 
-    def test_pages_declare_publisher_previews_and_change_dates(self):
-        sitemap = {
-            u.find("{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text: u.find(
-                "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod"
-            )
-            for u in ET.fromstring(self.outputs[self.site / "sitemap.xml"])
-        }
-        latest_review = max(a["last_reviewed_at"] for a in self.catalog["approaches"])
-        for path, content in self.outputs.items():
-            if not (path.is_relative_to(self.site) and path.suffix == ".html"):
-                continue
-            name = path.relative_to(self.site).as_posix()
-            soup = BeautifulSoup(content, "html.parser")
-            if name == "404.html":
-                self.assertIsNone(soup.find("script", type="application/ld+json"))
-                continue
-            url = build.canonical_url(name)
-            graph = json.loads(soup.find("script", type="application/ld+json").string)["@graph"]
-            types = {node["@type"]: node for node in graph}
-            self.assertEqual(types["Organization"]["url"], "https://steel.dev/")
-            self.assertEqual(types["WebSite"]["publisher"]["@id"], types["Organization"]["@id"])
-            self.assertEqual(soup.find("meta", property="og:url")["content"], url)
-            self.assertEqual(soup.find("meta", property="og:title")["content"], soup.title.string)
-            self.assertEqual(
-                soup.find("meta", attrs={"name": "twitter:card"})["content"],
-                "summary_large_image",
-            )
-            self.assertEqual(
-                soup.find("meta", property="og:image")["content"], build.ORIGIN + "/og.png"
-            )
-            lastmod = sitemap[url]
-            if name.startswith("notes/"):
-                published = soup.select_one(".note-meta time")["datetime"]
-                self.assertEqual(types["Article"]["datePublished"], published)
-                self.assertEqual(types["Article"]["publisher"]["@id"], types["Organization"]["@id"])
-                self.assertEqual(soup.find("meta", property="og:type")["content"], "article")
-                self.assertEqual(lastmod.text, published)
-            elif name == "index.html":
-                self.assertEqual(types["Dataset"]["dateModified"], latest_review)
-                self.assertIn(
-                    build.ORIGIN + "/agents.json",
-                    [d["contentUrl"] for d in types["Dataset"]["distribution"]],
+    def test_record_exports_preserve_claims_sources_and_qualifications(self):
+        claims = {claim["id"]: claim for claim in self.catalog["claims"]}
+        sources = {source["id"]: source for source in self.catalog["sources"]}
+        for approach in self.catalog["approaches"]:
+            with self.subTest(approach=approach["id"]):
+                record = json.loads(
+                    (DIST / f"agents/{approach['id']}.json").read_text(encoding="utf-8")
                 )
-                self.assertEqual(lastmod.text, latest_review)
-            elif name == "methodology.html":
-                self.assertIsNone(lastmod)
-                self.assertIsNotNone(soup.select_one('main a[href="https://steel.dev/"]'))
-            self.assertIn("Compiled by", soup.footer.get_text())
-            self.assertIsNotNone(soup.footer.select_one('a[href^="https://steel.dev/"]'))
+                self.assertEqual(record["approaches"], [approach])
+                self.assertEqual(record["claims"], [claims[key] for key in approach["claim_ids"]])
+                self.assertEqual(
+                    record["sources"], [sources[key] for key in approach["source_ids"]]
+                )
+                markdown = " ".join(
+                    (DIST / f"agents/{approach['id']}.md").read_text(encoding="utf-8").split()
+                )
+                for claim in record["claims"]:
+                    self.assertIn(" ".join(str(claim["text"]).split()), markdown)
+                    for field in ("metric_scope", "denominator", "measurement_method"):
+                        if claim.get(field):
+                            self.assertIn(" ".join(str(claim[field]).split()), markdown)
+                for source in record["sources"]:
+                    self.assertIn(source["url"], markdown)
+
+    def test_the_compact_index_points_at_the_entry_pages(self):
+        index = json.loads((DIST / "agents/index.json").read_text(encoding="utf-8"))["approaches"]
+        self.assertCountEqual(
+            [entry["id"] for entry in index],
+            [approach["id"] for approach in self.catalog["approaches"]],
+        )
+        for entry in index:
+            self.assertEqual(entry["url"], f"{ORIGIN}/agents/{entry['id']}")
+
+    def test_the_published_catalog_matches_the_committed_data(self):
+        self.assertEqual(
+            (DIST / "agents.json").read_bytes(), (ROOT / "data/agents.json").read_bytes()
+        )
 
     def test_alias_hosts_redirect_and_record_files_stay_out_of_search(self):
-        config = json.loads(self.outputs[ROOT / "vercel.json"])
+        # The hosting policy is authored at the repository root. Vercel reads it
+        # before the build command, so no build step may write it.
+        config = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
         alias_hosts = {
-            r["has"][0]["value"]
-            for r in config["redirects"]
-            if r["destination"] == "https://internal-agents.com/:path*" and r["permanent"]
+            rule["has"][0]["value"]
+            for rule in config["redirects"]
+            if rule["destination"] == f"{ORIGIN}/:path*" and rule["permanent"]
         }
         self.assertEqual(alias_hosts, {"www.internal-agents.com", "internal-agents-map.vercel.app"})
-        records = next(r for r in config["headers"] if r["source"] == "/agents/:path*")
-        self.assertEqual(records["headers"], [{"key": "X-Robots-Tag", "value": "noindex"}])
-        self.assertIn(self.site / "og.png", self.outputs)
+        noindex = {
+            rule["source"]
+            for rule in config["headers"]
+            if {"key": "X-Robots-Tag", "value": "noindex"} in rule["headers"]
+        }
+        # Raw records stay out of search; the HTML entry pages must not inherit it.
+        self.assertEqual(noindex, {"/agents/:path*.json", "/agents/index.json", "/404.html"})
+        immutable = next(rule for rule in config["headers"] if rule["source"] == "/_astro/:path*")
+        self.assertIn("immutable", immutable["headers"][0]["value"])
 
-    def test_individual_records_preserve_claims_sources_and_qualifications(self):
-        index = json.loads(self.outputs[self.site / "agents/index.json"])["approaches"]
-        self.assertCountEqual(
-            [a["id"] for a in index], [a["id"] for a in self.catalog["approaches"]]
+    def test_the_data_build_writes_no_hosting_or_routing_configuration(self):
+        records = build.load_agents()
+        outputs = build.data_outputs(records, build.normalize(records))
+        for path in (ROOT / "vercel.json", ROOT / "routing-manifest.json"):
+            self.assertNotIn(path, outputs)
+        manifest = json.loads((ROOT / "routing-manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["schema_version"], 1)
+        for path, artifacts in manifest["routes"].items():
+            self.assertEqual(set(artifacts), {"html", "markdown"})
+            self.assertTrue(path.startswith("/"))
+            for name in artifacts.values():
+                self.assertTrue((DIST / name.lstrip("/")).is_file(), name)
+
+
+class WorkflowTests(unittest.TestCase):
+    def test_workflow_validates_without_deploying(self):
+        workflow = yaml.load(
+            (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
         )
-        for approach in self.catalog["approaches"]:
-            record = json.loads(self.outputs[self.site / f"agents/{approach['id']}.json"])
-            self.assertEqual(record["approaches"], [approach])
-            self.assertEqual(
-                record["claims"],
-                [c for c in self.catalog["claims"] if c["id"] in approach["claim_ids"]],
-            )
-            self.assertEqual(
-                record["sources"],
-                [s for s in self.catalog["sources"] if s["id"] in approach["source_ids"]],
-            )
-            md = self.outputs[self.site / f"agents/{approach['id']}.md"]
-            for claim in record["claims"]:
-                rendered_text = markdownify(html.escape(str(claim["text"])))
-                self.assertIn(" ".join(rendered_text.split()), " ".join(md.split()))
-            for source in record["sources"]:
-                self.assertIn(source["url"], md)
+        self.assertIn("on", workflow)
+        self.assertIn("github.ref", workflow["concurrency"]["group"])
+        self.assertEqual(workflow["concurrency"]["cancel-in-progress"], "true")
+        steps = workflow["jobs"]["validate"]["steps"]
+        commands = "\n".join(step.get("run", "") for step in steps)
+        self.assertIn("npm run verify", commands)
+        # One public host only: GitHub Pages would duplicate every page.
+        self.assertNotIn("pages", str(workflow).lower())
+        for step in steps:
+            if "uses" in step:
+                self.assertRegex(step["uses"], r"@[0-9a-f]{40}$")
 
-    def test_markdown_keeps_reading_content_links_and_diagram_descriptions(self):
-        doc = '<main><h1>Title</h1><p>A <strong>qualified</strong> claim.</p><details><summary>Evidence</summary><p>Contradicts <a href="../index.html#claim">source</a></p></details><svg aria-label="Local and cloud execution"></svg><form>Search controls</form><p hidden>Hidden UI</p></main>'
-        md = build.page_markdown(doc, build.ORIGIN + "/notes/test.html")
-        for value in (
-            "# Title",
-            "**qualified**",
-            "Contradicts",
-            "https://internal-agents.com/index.html#claim",
-            "Local and cloud execution",
-        ):
-            self.assertIn(value, md)
-        self.assertNotIn("Search controls", md)
-        self.assertNotIn("Hidden UI", md)
+    def test_the_verify_gate_builds_the_site_before_it_reads_the_artifact(self):
+        verify = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["scripts"][
+            "verify"
+        ]
+        self.assertIn("scripts/build.py --check", verify)
+        self.assertNotIn("--data-only", verify)
+        artifact_checks = [
+            verify.index("scripts/check_site.py --root dist"),
+            verify.index("unittest discover -s tests"),
+        ]
+        for position in artifact_checks:
+            self.assertLess(verify.index("npm run build"), position)
 
-    def test_served_assets_have_matching_hashes_and_immutable_headers(self):
-        manifest = json.loads(self.outputs[self.site / "assets/manifest.json"])
-        config = json.loads(self.outputs[ROOT / "vercel.json"])
-        for original, hashed in manifest.items():
-            data = self.outputs[self.site / "assets" / hashed]
-            digest = hashlib.sha256(data.encode() if isinstance(data, str) else data).hexdigest()[
-                :16
-            ]
-            self.assertIn(digest, hashed)
-            rule = next(r for r in config["headers"] if r["source"] == "/assets/" + hashed)
-            self.assertIn("immutable", rule["headers"][0]["value"])
-            self.assertNotIn('"/assets/' + original + '"', json.dumps(config))
-        self.assertIn(
-            manifest["fonts/Geist.woff2"], self.outputs[self.site / "assets" / manifest["site.css"]]
-        )
-        for path, content in self.outputs.items():
-            if path.is_relative_to(self.site) and path.suffix == ".html":
-                self.assertIn("assets/" + manifest["site.css"], content)
-                self.assertNotIn('href="assets/site.css"', content)
+
+if __name__ == "__main__":
+    unittest.main()

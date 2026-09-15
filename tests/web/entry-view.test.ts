@@ -1,0 +1,333 @@
+// ABOUTME: Checks that the reading model keeps evidence roles, caveats, and anchors.
+// ABOUTME: The three difficult entries of the plan are covered case by case.
+
+import { describe, expect, it } from 'vitest';
+import { loadCatalog } from '../../src/lib/catalog';
+import {
+  CARD_SUMMARY_LIMIT,
+  directoryCards,
+  entryView,
+  type ClaimView,
+} from '../../src/lib/entry-view';
+
+const catalog = loadCatalog();
+
+function caveat(claim: ClaimView, label: string): string {
+  const found = claim.caveats.find((item) => item.label === label);
+  if (!found) throw new Error(`claim "${claim.id}" has no ${label} caveat.`);
+  return found.value;
+}
+
+describe('every entry', () => {
+  it('places every claim of the record in a section', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      const placed = new Set([
+        ...(entry.summary ? [entry.summary.id] : []),
+        ...entry.workflowClaims.map((claim) => claim.id),
+        ...entry.supervisionClaims.map((claim) => claim.id),
+        ...entry.architectureClaims.map((claim) => claim.id),
+        ...entry.metricClaims.map((claim) => claim.id),
+        ...entry.resultStatementClaims.map((claim) => claim.id),
+        ...entry.lessonClaims.map((claim) => claim.id),
+        ...entry.otherClaims.map((claim) => claim.id),
+      ]);
+      expect(placed.size).toBe(approach.claim_ids.length);
+      expect([...placed].sort()).toEqual([...approach.claim_ids].sort());
+    }
+  });
+
+  it('keeps claim and source anchors', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      for (const claim of entry.claims) expect(claim.anchor).toBe(`claim-${claim.id}`);
+      for (const source of entry.sources) expect(source.anchor).toBe(`source-${source.id}`);
+    }
+  });
+
+  it('numbers citations from the source list of the record', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      expect(entry.sources.map((source) => source.number)).toEqual(
+        entry.sources.map((_, index) => index + 1),
+      );
+      const numbers = new Map(entry.sources.map((source) => [source.id, source.number]));
+      for (const claim of entry.claims) {
+        for (const citation of claim.citations) {
+          expect(citation.number).toBe(numbers.get(citation.sourceId));
+        }
+      }
+    }
+  });
+
+  it('keeps the three evidence roles apart', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      for (const claim of entry.claims) {
+        expect(claim.supporting.length + claim.contextualizing.length + claim.contradicting.length)
+          .toBe(claim.citations.length);
+        for (const citation of claim.supporting) expect(citation.relation).toBe('supports');
+        for (const citation of claim.contextualizing) expect(citation.relation).toBe('contextualizes');
+        for (const citation of claim.contradicting) expect(citation.relation).toBe('contradicts');
+      }
+    }
+  });
+
+  it('keeps the research fields of every metric in the ledger', () => {
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).metricClaims) {
+        if (!claim.isMetric) continue;
+        expect(claim.metadata.map((item) => item.label)).toEqual([
+          'Reported by',
+          'Scope',
+          'Denominator',
+          'Method',
+          'Observation date',
+        ]);
+      }
+    }
+  });
+
+  it('leaves an empty research field out of the reading flow', () => {
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        for (const caveat of claim.caveats) {
+          expect(caveat.value).not.toBe('Unknown');
+          expect(caveat.value).not.toBe('Not reported');
+          expect(caveat.value.length).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+
+  it('qualifies a figure that has no denominator or no scope', () => {
+    const claims = new Map(catalog.claims.map((claim) => [claim.id, claim]));
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        const record = claims.get(claim.id)!;
+        const missing =
+          record.kind === 'metric' &&
+          (record.denominator === null ||
+            record.denominator === undefined ||
+            record.metric_scope === null ||
+            record.metric_scope === undefined);
+        expect(claim.qualification === null).toBe(!missing);
+        if (missing) expect(claim.qualification).toContain('does not report');
+      }
+    }
+  });
+
+  it('names the role of a citation only where the role carries information', () => {
+    for (const approach of catalog.approaches) {
+      for (const claim of entryView(catalog, approach.id).claims) {
+        if (claim.contradicting.length > 0 || claim.contextualizing.length > 0) {
+          expect(claim.showCitationRoles).toBe(true);
+        } else if (claim.supporting.length === 1) {
+          expect(claim.showCitationRoles).toBe(false);
+        } else if (claim.supporting.length > 1) {
+          expect(claim.showCitationRoles).toBe(true);
+        }
+      }
+    }
+  });
+});
+
+describe('block-builderbot', () => {
+  const entry = entryView(catalog, 'block-builderbot');
+
+  it('describes a ticket-to-code workflow', () => {
+    expect(entry.workflowClaims.length).toBeGreaterThan(0);
+    const workflow = entry.workflowClaims.map((claim) => claim.text).join(' ');
+    expect(workflow).toContain('ticket');
+    expect(workflow).toContain('PR');
+    expect(entry.invocation.map((item) => item.id)).toContain('event-driven');
+  });
+
+  it('attributes the metrics to the company that reported them', () => {
+    const headline = entry.metricClaims.find((claim) => claim.field === 'headline_metric');
+    expect(headline).toBeDefined();
+    expect(caveat(headline!, 'Reported by')).toBe('Block');
+    expect(caveat(headline!, 'Denominator')).toContain('All production code changes across Block');
+  });
+
+  it('keeps the undefined meaning of an operation beside the operations figure', () => {
+    const operations = entry.metricClaims.find((claim) => claim.text.includes('operations per day'));
+    expect(operations).toBeDefined();
+    expect(caveat(operations!, 'Scope')).toContain('does not define an operation');
+  });
+
+  it('is not labelled as supporting infrastructure', () => {
+    expect(entry.isSupportingSystem).toBe(false);
+    expect(entry.supportingSystemNote).toBeNull();
+  });
+});
+
+describe('uber-ureview', () => {
+  const entry = entryView(catalog, 'uber-ureview');
+
+  it('keeps the weekly and monthly conflict beside the metric', () => {
+    const metrics = entry.metricClaims.filter((claim) => claim.text.includes('65,000'));
+    expect(metrics.length).toBeGreaterThan(0);
+    for (const metric of metrics) {
+      expect(metric.text).toMatch(/month/);
+      expect(caveat(metric, 'Scope')).toMatch(/conflicts and remains unresolved/);
+      expect(caveat(metric, 'Denominator')).toMatch(/monthly|month/);
+    }
+  });
+
+  it('marks the conflicting source as contradicting, not supporting', () => {
+    const headline = entry.metricClaims.find((claim) => claim.field === 'headline_metric');
+    expect(headline!.contradicting.length).toBeGreaterThan(0);
+    for (const citation of headline!.contradicting) {
+      expect(citation.relationLabel).toBe('Contradicts');
+      expect(headline!.supporting.map((item) => item.relation)).not.toContain('contradicts');
+    }
+  });
+
+  it('links the related Uber implementation', () => {
+    expect(entry.relatedEntries.map((related) => related.id)).toContain('uber-coding-agent');
+  });
+});
+
+describe('plaid-internal-mcp-server', () => {
+  const entry = entryView(catalog, 'plaid-internal-mcp-server');
+
+  it('is labelled as supporting infrastructure', () => {
+    expect(entry.isSupportingSystem).toBe(true);
+    expect(entry.approachTypeLabel).toBe('Supporting pattern');
+    expect(entry.supportingSystemNote).toContain('supporting infrastructure');
+  });
+
+  it('keeps coding-tool adoption apart from server adoption', () => {
+    const adoption = entry.metricClaims.filter((claim) => claim.text.includes('80%'));
+    expect(adoption.length).toBeGreaterThan(0);
+    for (const claim of adoption) {
+      expect(caveat(claim, 'Scope')).toContain('separate from internal MCP server adoption');
+    }
+    const detailed = adoption.find((claim) => claim.field.startsWith('key_metrics.'));
+    expect(detailed!.text).toContain('the source does not report internal MCP server adoption');
+  });
+
+  it('records no supervision level for the scope it serves', () => {
+    expect(entry.operatingModels[0]!.levelLabel).toBe('Level unknown');
+    expect(entry.operatingModels[0]!.boundaryLabel).toBe('Unknown');
+  });
+});
+
+describe('the directory model', () => {
+  const cards = directoryCards(catalog);
+
+  it('has one card per approach, ordered by company', () => {
+    expect(cards.length).toBe(catalog.approaches.length);
+    const companies = cards.map((card) => card.company.toLowerCase());
+    expect([...companies]).toEqual([...companies].sort());
+  });
+
+  it('carries a summary and a link for every card', () => {
+    for (const card of cards) {
+      expect(card.summary.length).toBeGreaterThan(0);
+      expect(card.path).toBe(`/agents/${card.id}`);
+    }
+  });
+
+  it('makes a card searchable by company, name, work, and summary', () => {
+    for (const card of cards) {
+      expect(card.search).toBe(card.search.toLowerCase());
+      expect(card.search).not.toMatch(/\s{2,}/);
+      expect(card.search).toContain(card.company.toLowerCase());
+      expect(card.search).toContain(card.agentName.toLowerCase());
+      expect(card.search).toContain(card.approachType);
+      for (const domain of card.domains) expect(card.search).toContain(domain.id);
+    }
+  });
+});
+
+describe('directory card summaries', () => {
+  it('shortens a long summary and keeps the whole text for the entry page', () => {
+    const card = directoryCards(catalog).find((item) => item.id === 'plaid-internal-mcp-server')!;
+    expect(card.summary.length).toBeGreaterThan(CARD_SUMMARY_LIMIT);
+    expect(card.excerpt.length).toBeLessThanOrEqual(CARD_SUMMARY_LIMIT + 1);
+    expect(card.excerpt.endsWith('…')).toBe(true);
+    expect(card.summary.startsWith(card.excerpt.slice(0, 60))).toBe(true);
+  });
+
+  it('leaves a short summary unchanged', () => {
+    for (const card of directoryCards(catalog)) {
+      if (card.summary.length <= CARD_SUMMARY_LIMIT) expect(card.excerpt).toBe(card.summary);
+    }
+  });
+});
+
+describe('a supporting system', () => {
+  /** The entries the catalog classifies as shared infrastructure. */
+  const supporting = catalog.approaches
+    .map((approach) => entryView(catalog, approach.id))
+    .filter((entry) => entry.isSupportingSystem);
+
+  it('says a workflow is missing only where the record reports none', () => {
+    expect(supporting.length).toBeGreaterThan(0);
+    for (const entry of supporting) {
+      expect(entry.supportingSystemNote, entry.id).toContain('supporting infrastructure');
+      expect(entry.supportingSystemNote, entry.id).toContain(entry.approachTypeLabel.toLowerCase());
+      if (entry.workflowClaims.length === 0) {
+        expect(entry.supportingSystemNote, entry.id).toContain('no execution workflow');
+      } else {
+        expect(entry.supportingSystemNote, entry.id).not.toContain('no execution workflow');
+      }
+    }
+  });
+
+  it('does not deny the workflow that workos-project-horizon reports', () => {
+    const entry = entryView(catalog, 'workos-project-horizon');
+    expect(entry.isSupportingSystem).toBe(true);
+    expect(entry.workflowClaims.length).toBeGreaterThan(0);
+    expect(entry.supportingSystemNote).not.toMatch(/not an agent|no execution workflow/);
+    expect(entry.supportingSystemNote).toContain('workflow');
+  });
+
+  it('keeps the notice on plaid-internal-mcp-server, which reports no workflow', () => {
+    const entry = entryView(catalog, 'plaid-internal-mcp-server');
+    expect(entry.workflowClaims.length).toBe(0);
+    expect(entry.supportingSystemNote).toContain('no execution workflow');
+  });
+});
+
+describe('the results of an entry', () => {
+  /** Claims of a metric field whose normalized kind is not a metric. */
+  const statements = catalog.claims.filter(
+    (claim) =>
+      (claim.field === 'headline_metric' || claim.field.startsWith('key_metrics.')) &&
+      claim.kind !== 'metric',
+  );
+  const grouped = catalog.approaches.map((approach) => entryView(catalog, approach.id));
+
+  it('finds the metric fields that hold a statement of another kind', () => {
+    expect(statements.length).toBe(7);
+  });
+
+  it('leaves only metrics under the reported metrics', () => {
+    for (const entry of grouped) {
+      for (const claim of entry.metricClaims) expect(claim.kind, claim.id).toBe('metric');
+    }
+  });
+
+  it('keeps every statement of a metric field in the results, under its kind', () => {
+    const placed = grouped.flatMap((entry) => entry.resultStatementClaims);
+    expect(placed.map((claim) => claim.id).sort()).toEqual(
+      statements.map((claim) => claim.id).sort(),
+    );
+    for (const claim of placed) {
+      expect(claim.kind, claim.id).not.toBe('metric');
+      expect(claim.kindLabel.length, claim.id).toBeGreaterThan(0);
+    }
+  });
+
+  it('reads the months-to-days opinion of block-builderbot as an opinion', () => {
+    const entry = entryView(catalog, 'block-builderbot');
+    const claim = entry.resultStatementClaims.find((item) => item.text.includes('now takes days'));
+    expect(claim).toBeDefined();
+    expect(claim!.kind).toBe('opinion');
+    expect(claim!.kindLabel).toBe('Opinion');
+    expect(entry.metricClaims.map((item) => item.id)).not.toContain(claim!.id);
+  });
+});

@@ -1,0 +1,48 @@
+---
+// ABOUTME: The Methodology guide: how the catalog records evidence and its limits.
+// ABOUTME: Its text comes from guide-content, which the Markdown export also reads.
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Inline from '../components/Inline.astro';
+import Topography from '../components/Topography.astro';
+import { guidePath, canonicalUrl } from '../lib/routes';
+import { structuredData, webPageNode } from '../lib/metadata';
+import {
+  METHODOLOGY_DESCRIPTION,
+  METHODOLOGY_EYEBROW,
+  METHODOLOGY_HEADING,
+  METHODOLOGY_LEDE,
+  METHODOLOGY_SECTIONS,
+  METHODOLOGY_TITLE,
+} from '../lib/guide-content';
+
+const path = guidePath('methodology');
+const url = canonicalUrl(path);
+const graph = structuredData([
+  webPageNode({ url, name: METHODOLOGY_TITLE, description: METHODOLOGY_DESCRIPTION }),
+]);
+---
+<ArticleLayout
+  title={METHODOLOGY_TITLE}
+  description={METHODOLOGY_DESCRIPTION}
+  path={path}
+  current="methodology"
+  structuredData={graph}
+>
+  <header class="guide-header">
+    <Topography />
+    <p class="eyebrow">{METHODOLOGY_EYEBROW}</p>
+    <h1>{METHODOLOGY_HEADING}</h1>
+    <p class="lede">{METHODOLOGY_LEDE}</p>
+  </header>
+  {METHODOLOGY_SECTIONS.map((section) => (
+    <section id={section.id} aria-labelledby={section.titleId}>
+      <h2 id={section.titleId}>{section.heading}</h2>
+      {section.body.map((block) => <p><Inline parts={block} /></p>)}
+      {section.links && (
+        <div class="resource-links">
+          {section.links.map((link) => <a href={link.url}>{link.label}</a>)}
+        </div>
+      )}
+    </section>
+  ))}
+</ArticleLayout>

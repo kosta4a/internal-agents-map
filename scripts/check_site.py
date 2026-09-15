@@ -1,9 +1,10 @@
-"""Validate the generated Pages artifact without fetching external citations."""
+# ABOUTME: Checks the built site artifact against the routes, exports, and assets it may publish.
+# ABOUTME: Rejects extra files, unsafe links, missing evidence, and private contact data.
+"""Validate the built site artifact without fetching external citations."""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import importlib.util
 import json
 import re
@@ -14,27 +15,26 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
-ALLOWED_FILES = {
-    "favicon.ico",
-    "og.png",
-    "404.html",
-    "index.html",
-    "definitions.html",
-    "methodology.html",
-    "notes.html",
-    "notes/stop-a-run.html",
-    "notes/review-noise.html",
-    "notes/split-the-work.html",
-    "notes/work-can-continue.html",
-    "notes/load-tools.html",
-    "notes/steps-without-a-model.html",
-    "notes/test-on-your-work.html",
+
+# Files that public/ publishes exactly as they are authored.
+PUBLIC_FILES = {"favicon.ico", "og.png", "fonts/Geist.woff2", "fonts/OFL.txt"}
+# Exports and discovery files that no page route serves.
+EXPORT_FILES = {
     "agents.json",
-    "assets/site.css",
-    "assets/site.js",
-    "assets/fonts/Geist.woff2",
-    "assets/fonts/OFL.txt",
+    "agents/index.json",
+    "data-guide.md",
+    "llms.txt",
+    "robots.txt",
+    "sitemap.xml",
 }
+# The document the host returns for an unknown path. No route points to it.
+ERROR_PAGE = "404.html"
+DIRECTORIES = {"_astro", "fonts", "notes", "agents"}
+# A bundled asset is named `<name>.<content hash>.<extension>`.
+BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
+CSS_URL = re.compile(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)")
+# The research fields that qualify a statement and must stay beside it.
+QUALIFIER_FIELDS = ("reported_by", "metric_scope", "denominator", "measurement_method", "valid_at")
 
 
 class SiteParser(HTMLParser):
@@ -54,6 +54,12 @@ class SiteParser(HTMLParser):
         for key in ("href", "src"):
             if attributes.get(key):
                 self.urls.append(attributes[key])
+        if attributes.get("srcset"):
+            # Each candidate is a URL and an optional width or density descriptor.
+            for candidate in attributes["srcset"].split(","):
+                parts = candidate.split()
+                if parts:
+                    self.urls.append(parts[0])
         for key in self.coverage:
             if attributes.get(f"data-{key}-id"):
                 self.coverage[key].append(attributes[f"data-{key}-id"])
@@ -62,45 +68,97 @@ class SiteParser(HTMLParser):
         self.text.append(data)
 
 
-def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list[str]:
-    errors = []
-    catalog = json.loads(catalog_path.read_bytes())
-    allowed = ALLOWED_FILES | {
-        "robots.txt",
-        "sitemap.xml",
-        "llms.txt",
-        "data-guide.md",
-        "agents/index.json",
-        "assets/manifest.json",
-    }
-    allowed |= {
-        name.replace(".html", ".md")
-        for name in ALLOWED_FILES
-        if name.endswith(".html") and name != "404.html"
-    }
-    allowed |= {f"agents/{a['id']}.{ext}" for a in catalog["approaches"] for ext in ("json", "md")}
-    try:
-        manifest = json.loads((root / "assets/manifest.json").read_text())
-        if set(manifest) != {"site.css", "site.js", "fonts/Geist.woff2"}:
-            errors.append("Invalid hashed asset manifest.")
-        for original, hashed in manifest.items():
-            original_path = Path(original)
-            pattern = (
-                re.escape(str(original_path.with_suffix("")))
-                + r"\.[a-f0-9]{16}"
-                + re.escape(original_path.suffix)
-            )
-            if not re.fullmatch(pattern, hashed):
-                errors.append(f"Invalid hashed asset path: {hashed}")
+def visible_text(page: SiteParser) -> str:
+    return " ".join(" ".join(page.text).split())
+
+
+def route_files(routes: dict, errors: list[str]) -> set[str]:
+    """Name the HTML and Markdown file that each published route is served from."""
+    names: set[str] = set()
+    for path, artifacts in sorted(routes.items()):
+        if not path.startswith("/"):
+            errors.append(f"Route path must start at the root: {path}")
+            continue
+        if not isinstance(artifacts, dict) or set(artifacts) != {"html", "markdown"}:
+            errors.append(f"Route {path} must name one HTML and one Markdown artifact.")
+            continue
+        for name in artifacts.values():
+            if not isinstance(name, str) or not name.startswith("/"):
+                errors.append(f"Route {path} names an artifact outside the root: {name}")
                 continue
-            allowed.add("assets/" + hashed)
-            content = (root / "assets" / hashed).read_bytes()
-            if hashlib.sha256(content).hexdigest()[:16] != Path(hashed).name.split(".")[-2]:
-                errors.append(f"Asset content hash mismatch: {hashed}")
-    except (OSError, ValueError, TypeError):
-        errors.append("Missing or invalid hashed assets.")
+            names.add(name.lstrip("/"))
+    return names
+
+
+def check_entry_routes(routes: dict, approaches: list[dict], errors: list[str]) -> None:
+    """The entry routes and the catalog hold the same implementations."""
+    listed = {path for path in routes if path.startswith("/agents/")}
+    wanted = {f"/agents/{approach['id']}" for approach in approaches}
+    for path in sorted(wanted - listed):
+        errors.append(f"The route manifest omits {path}.")
+    for path in sorted(listed - wanted):
+        errors.append(f"The route manifest holds an entry the catalog does not hold: {path}.")
+
+
+def check_directory_coverage(page: SiteParser, approaches: list[dict], errors: list[str]) -> None:
+    """Every implementation has one card in the directory, and that card links to its page."""
+    expected = Counter(approach["id"] for approach in approaches)
+    if Counter(page.coverage["approach"]) != expected:
+        errors.append("Incomplete or duplicate approach coverage in the directory.")
+    linked = {url.split("#")[0] for url in page.urls if url.startswith("/agents/")}
+    wanted = {f"/agents/{approach['id']}" for approach in approaches}
+    for path in sorted(wanted - linked):
+        errors.append(f"The directory does not link to {path}.")
+    for path in sorted(linked - wanted):
+        errors.append(f"The directory links to an entry that the catalog does not hold: {path}.")
+
+
+def check_entry_coverage(
+    page: SiteParser, approach: dict, claims: dict[str, dict], errors: list[str]
+) -> None:
+    """One entry page carries its own record, its own claims, and its own sources."""
+    name = f"agents/{approach['id']}.html"
+    if Counter(page.coverage["approach"]) != Counter([approach["id"]]):
+        errors.append(f"Incomplete or duplicate approach coverage in {name}.")
+    for kind, ids in (("claim", approach["claim_ids"]), ("source", approach["source_ids"])):
+        if Counter(page.coverage[kind]) != Counter(ids):
+            errors.append(f"Incomplete or duplicate {kind} coverage in {name}.")
+    text = visible_text(page)
+    for claim_id in approach["claim_ids"]:
+        claim = claims.get(claim_id)
+        if claim is None:
+            errors.append(f"Unknown claim {claim_id} in {name}.")
+            continue
+        if " ".join(str(claim["text"]).split()) not in text:
+            errors.append(f"Missing claim text: {claim_id} in {name}")
+        for field in QUALIFIER_FIELDS:
+            value = claim.get(field)
+            if value and " ".join(str(value).split()) not in text:
+                errors.append(f"Missing caveat {field}: {claim_id} in {name}")
+
+
+def validate(
+    root: Path,
+    catalog_path: Path = ROOT / "data/agents.json",
+    routes_path: Path = ROOT / "routing-manifest.json",
+) -> list[str]:
+    errors: list[str] = []
     if root.is_symlink() or not root.is_dir():
         return ["Site root must be a real directory, not a symlink."]
+    catalog_bytes = catalog_path.read_bytes()
+    catalog = json.loads(catalog_bytes)
+    approaches = list(catalog["approaches"])
+    claims = {claim["id"]: claim for claim in catalog["claims"]}
+    manifest = json.loads(routes_path.read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != 1:
+        errors.append("Unsupported route manifest schema version.")
+    routes = manifest.get("routes") or {}
+    check_entry_routes(routes, approaches, errors)
+    expected = route_files(routes, errors) | PUBLIC_FILES | EXPORT_FILES | {ERROR_PAGE}
+    expected |= {f"agents/{approach['id']}.json" for approach in approaches}
+    if errors:
+        return errors
+
     root = root.resolve()
     actual = set()
     for path in root.rglob("*"):
@@ -110,24 +168,17 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
             actual.add(path.relative_to(root).as_posix())
             if path.stat().st_size == 0:
                 errors.append(f"Empty output: {path.relative_to(root)}")
-        elif path.is_dir() and path.relative_to(root).as_posix() not in {
-            "assets",
-            "assets/fonts",
-            "notes",
-            "agents",
-        }:
+        elif path.is_dir() and path.relative_to(root).as_posix() not in DIRECTORIES:
             errors.append(f"Unexpected directory: {path.relative_to(root)}")
-    if actual != allowed:
-        errors.append(
-            f"Output boundary mismatch: missing {sorted(allowed - actual)}, extra {sorted(actual - allowed)}"
-        )
+    missing = sorted(expected - actual)
+    if missing:
+        errors.append(f"Output boundary mismatch: missing {missing}")
     if errors:
         return errors
+
     try:
         pages = {}
-        for name in sorted(allowed):
-            if not name.endswith(".html"):
-                continue
+        for name in sorted(name for name in expected if name.endswith(".html")):
             page = SiteParser()
             page.feed((root / name).read_text(encoding="utf-8"))
             pages[root / name] = page
@@ -137,23 +188,24 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
             duplicates = sorted(key for key, count in Counter(page.ids).items() if count > 1)
             if duplicates:
                 errors.append(f"Duplicate IDs: {duplicates} in {name}")
-        parser = pages[root / "index.html"]
-        catalog_bytes = catalog_path.read_bytes()
-        catalog = json.loads(catalog_bytes)
+
+        # A bundled asset is publishable only where a published document asks for it.
+        referenced = {url.lstrip("/").split("#")[0] for page in pages.values() for url in page.urls}
+        for css_path in (root / "_astro").glob("*.css"):
+            css = css_path.read_text(encoding="utf-8")
+            referenced |= {match[1].lstrip("/") for match in CSS_URL.finditer(css)}
+        allowed = expected | {name for name in referenced if BUNDLED_ASSET.fullmatch(name)}
+        extra = sorted(actual - allowed)
+        if extra:
+            errors.append(f"Output boundary mismatch: extra {extra}")
+
         if (root / "agents.json").read_bytes() != catalog_bytes:
             errors.append("Site JSON differs from the source catalog.")
-        for kind, collection in (
-            ("approach", "approaches"),
-            ("claim", "claims"),
-            ("source", "sources"),
-        ):
-            expected = Counter(item["id"] for item in catalog[collection])
-            if Counter(parser.coverage[kind]) != expected:
-                errors.append(f"Incomplete or duplicate {kind} coverage.")
-        visible_text = " ".join(" ".join(parser.text).split())
-        for claim in catalog["claims"]:
-            if " ".join(str(claim["text"]).split()) not in visible_text:
-                errors.append(f"Missing claim text: {claim['id']}")
+        check_directory_coverage(pages[root / "index.html"], approaches, errors)
+        for approach in approaches:
+            page = pages.get(root / f"agents/{approach['id']}.html")
+            if page is not None:
+                check_entry_coverage(page, approach, claims, errors)
 
         def check_url(url: str, document: Path) -> None:
             url = url.strip()
@@ -162,20 +214,26 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
                 if parts.scheme.lower() not in {"http", "https"}:
                     errors.append(f"Unsafe URL scheme: {url}")
                 return
-            if document.name == "404.html" and url.startswith("/") and not url.startswith("//"):
-                check_url(url[1:], root / "index.html")
-                return
-            if parts.netloc or url.startswith(("/", "\\")):
+            if parts.netloc:
                 errors.append(f"Asset/link must be relative: {url}")
                 return
+            rooted = url.startswith("/")
             decoded = unquote(parts.path)
             if "\\" in decoded:
                 errors.append(f"Invalid path separator: {url}")
                 return
-            target = (document.parent / decoded).resolve() if decoded else document
+            base = root if rooted else document.parent
+            target = (base / decoded.lstrip("/")).resolve() if decoded else document
             if not target.is_relative_to(root):
                 errors.append(f"Path escapes site: {url}")
-            elif not target.is_file():
+                return
+            # A clean URL such as /agents/<id> or /notes is served from <id>.html.
+            clean = None if target == root else target.with_name(target.name + ".html")
+            if clean is not None and clean.is_file():
+                target = clean
+            elif target.is_dir():
+                target = target / "index.html"
+            if not target.is_file():
                 errors.append(f"Missing local target: {url}")
             elif parts.fragment and (
                 target not in pages or unquote(parts.fragment) not in pages[target].ids
@@ -185,9 +243,9 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
         for document, page in pages.items():
             for url in page.urls:
                 check_url(url, document)
-        for css_path in (root / "assets").glob("*.css"):
+        for css_path in (root / "_astro").glob("*.css"):
             css = css_path.read_text(encoding="utf-8")
-            for match in re.finditer(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)", css):
+            for match in CSS_URL.finditer(css):
                 check_url(match[1], css_path)
             if "@import" in css.lower():
                 errors.append("CSS imports are outside the self-contained artifact contract.")
@@ -197,7 +255,7 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
         )
         privacy = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(privacy)
-        for name in allowed:
+        for name in sorted(actual):
             if privacy.find_emails(root / name):
                 errors.append(f"Private contact data in artifact: {name}")
     except (OSError, ValueError, KeyError) as error:
@@ -207,7 +265,7 @@ def validate(root: Path, catalog_path: Path = ROOT / "data/agents.json") -> list
 
 def main() -> int:
     cli = argparse.ArgumentParser(description=__doc__)
-    cli.add_argument("--root", type=Path, default=ROOT / "site")
+    cli.add_argument("--root", type=Path, default=ROOT / "dist")
     args = cli.parse_args()
     errors = validate(args.root)
     if errors:

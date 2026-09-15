@@ -50,7 +50,9 @@ named axes and a clear statement that positions are illustrative.
 
 ## Adding a note
 
-Add its template under `templates/notes/`, link it from `templates/notes.html`, and add
-the output path to `rendered_outputs` in `scripts/build.py` and the explicit allowlist
-in `scripts/check_site.py`. Then rebuild and run the documented site checks. Commit
-the authored templates and generated output together.
+Add one Markdown file under `src/content/notes/`. Its front matter declares the title,
+description, eyebrow, lede, summary, reading time, reading order, publication date,
+`relatedAgentIds`, and the numbered sources. The collection schema in
+`src/content.config.ts` stops the build when a field is missing, and the build adds the
+note to the index, the routes, the sitemap, and the Markdown exports. No route list,
+allowlist, or page template needs an edit. Then run `npm run verify`.

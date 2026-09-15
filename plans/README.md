@@ -12,6 +12,8 @@ verification gate, and update the status row when finished.
 | 002 | Repair catalog verification and archival failure handling | P1 | M | — | DONE |
 | 003 | Reconcile catalog evidence and record research limitations | P2 | M | 002 (final validation) | DONE |
 | [004](004-publish-generated-mini-page.md) | Generate and publish a searchable mini page | P2 | M | 002, 003 | DONE |
+| [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
+| [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | IN PROGRESS (Steps 1–6 on `feat/entry-pages-astro`; Step 7 deployment awaits authorization) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -20,6 +22,14 @@ Plans 002–003 were added on 2026-09-09 after the project review and explicitly
 Plan 004 was requested on 2026-09-09 as a plan, using the local Steel minimal
 starter template as visual direction. Execution was authorized afterward, with Geist replacing serif typography.
 
+Plan 005 published the site on Vercel with discovery and delivery contracts.
+
+Plan 006 was requested on 2026-09-14 as a proposal for individual entry pages and
+a more maintainable website stack. It recommends Astro for static presentation,
+retains Python evidence validation, and preserves existing URLs and export
+interfaces. The proposed clean URL policy permanently redirects existing `.html`
+pages. Implementation and release have not been requested in this planning turn.
+
 ## Dependency notes
 
 - Plan 003 research can run alongside Plan 002; final generation and validation use both changes.
@@ -27,6 +37,9 @@ starter template as visual direction. Execution was authorized afterward, with G
   Generate the static page first, then connect publication to the existing validation job.
 - Plan 001 is self-contained. Implement the capture and validation foundation before
   attempting the bulk source backfill described near the end of the plan.
+- Plan 006 builds on the published site and the delivery contracts from Plan 005.
+  Implement its data boundary and three representative entry pages before migrating
+  all pages; verify the replacement before retiring the current renderer or cutting over.
 
 ## Findings considered and rejected
 
@@ -41,6 +54,27 @@ starter template as visual direction. Execution was authorized afterward, with G
   opt-in artifact when layout or visual evidence matters.
 - Waiting for the scheduled checker before capturing: rejected because a confirmed 404/410
   may already be unrecoverable by then.
+- Rewriting evidence validation and preservation during the entry-page migration:
+  rejected for Plan 006 because the current contracts pass and can feed a new frontend.
+- Generating a company hub for every organization in the initial entry-page release:
+  deferred because most of the 35 organizations have a single implementation; useful
+  company hubs need additional editorial value.
+
+## Entry-page planning baseline
+
+2026-09-14, commit `48269f7`: generated data and site checks passed, together with
+125 Python tests and 3 Node negotiation tests. Plan 006 covers presentation,
+discovery, data/export compatibility, verification, and rollout. This planning
+pass did not modify application code or deploy a site.
+
+## Entry-page implementation baseline
+
+2026-09-14, branch `feat/entry-pages-astro`: Steps 1–6 of Plan 006 are implemented.
+`npm run verify` passes from the worktree: 104 TypeScript tests, 14 negotiation
+tests, 174 Python tests, 133 browser tests, 51 built pages, 50 sitemap URLs, and
+the artifact checker on `dist/`. Not yet done: a Vercel preview deployment, the
+delivery checks against a real host, the rollback record, and the editorial pass
+on entry summaries.
 
 ## Latest verification
 

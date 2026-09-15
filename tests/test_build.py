@@ -7,6 +7,7 @@ import importlib.util
 import io
 import json
 import shutil
+import sys
 import tempfile
 import unittest
 from collections import Counter
@@ -16,6 +17,8 @@ from unittest import mock
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+NOTES = ROOT / "src" / "content" / "notes"
 SPEC = importlib.util.spec_from_file_location("catalog_build", ROOT / "scripts" / "build.py")
 build = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader
@@ -417,13 +420,93 @@ class BuildTests(unittest.TestCase):
                     "[PDF](../archive/sources/fixture-source/page.pdf), captured 2026-08-31)",
                 )
 
-    def test_generated_files_are_current(self) -> None:
-        outputs = build.rendered_outputs(self.records)
+    def test_the_default_build_writes_the_data_and_the_repository_documents(self) -> None:
+        outputs = build.data_outputs(self.records, build.normalize(self.records))
+        self.assertEqual(
+            set(outputs),
+            {
+                build.README,
+                build.PATTERNS,
+                build.ADOPTION_LESSONS,
+                build.LANDSCAPE,
+                build.DATA_JSON,
+            },
+        )
         for path, expected in outputs.items():
-            self.assertEqual(
-                path.read_bytes(),
-                expected.encode("utf-8") if isinstance(expected, str) else expected,
-            )
+            with self.subTest(path=path.name):
+                self.assertEqual(
+                    path.read_bytes(),
+                    expected.encode("utf-8") if isinstance(expected, str) else expected,
+                )
+
+    def test_two_builds_of_the_same_records_agree(self) -> None:
+        first = build.data_outputs(self.records, build.normalize(self.records))
+        second = build.data_outputs(self.records, build.normalize(self.records))
+        self.assertEqual(first, second)
+
+    def test_outputs_are_staged_and_a_stale_file_fails_the_check(self) -> None:
+        catalog = build.normalize(self.records)
+        outputs = build.data_outputs(self.records, catalog)
+        with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
+            root = Path(directory)
+            relocated = {
+                root / path.relative_to(ROOT): content for path, content in outputs.items()
+            }
+            with mock.patch.object(build, "ROOT", root):
+                build.write_outputs(relocated)
+                for path, content in relocated.items():
+                    self.assertEqual(
+                        path.read_bytes(),
+                        content.encode("utf-8") if isinstance(content, str) else content,
+                    )
+                with (
+                    mock.patch.object(build, "load_agents", return_value=self.records),
+                    mock.patch.object(build, "normalize", return_value=catalog),
+                    mock.patch.object(build, "data_outputs", return_value=relocated),
+                    mock.patch.object(sys, "argv", ["build.py", "--check"]),
+                ):
+                    build.main()
+                    for path in relocated:
+                        original = path.read_bytes()
+                        for replacement in (b"stale", None):
+                            if replacement is None:
+                                path.unlink()
+                            else:
+                                path.write_bytes(replacement)
+                            with (
+                                contextlib.redirect_stderr(io.StringIO()),
+                                self.assertRaises(SystemExit),
+                            ):
+                                build.main()
+                            path.write_bytes(original)
+
+    def test_catalog_counts_match_the_recorded_baseline(self) -> None:
+        # These numbers are a baseline record of the catalog, not a source of truth.
+        # Change them together with the catalog.
+        catalog = build.normalize(self.records)
+        self.assertEqual(
+            {
+                "approaches": len(catalog["approaches"]),
+                "organizations": len({a["company"] for a in catalog["approaches"]}),
+                "claims": len(catalog["claims"]),
+                "sources": len(catalog["sources"]),
+            },
+            {"approaches": 39, "organizations": 35, "claims": 555, "sources": 88},
+        )
+
+    def test_route_inventory_fixture_matches_the_catalog(self) -> None:
+        fixture = json.loads((FIXTURES / "route-inventory.json").read_text(encoding="utf-8"))
+        self.assertEqual(fixture["guide_routes"], ["/", "/definitions", "/methodology", "/notes"])
+        expected = [
+            *fixture["guide_routes"],
+            *sorted(f"/notes/{path.stem}" for path in NOTES.glob("*.md")),
+            *sorted(f"/agents/{record['id']}" for record in self.records),
+        ]
+        self.assertEqual(
+            fixture["routes"],
+            expected,
+            "Update tests/fixtures/route-inventory.json for the current catalog.",
+        )
 
     def test_catalog_contains_source_anchors(self) -> None:
         catalog = build.render_landscape(self.records)

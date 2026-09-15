@@ -1,0 +1,12 @@
+---
+// ABOUTME: Renders one text block of a guide: plain words, bold words, and links.
+// ABOUTME: The page and the Markdown export read the same parts from guide-content.
+import { inlineHref, type TextBlock } from '../lib/guide-content';
+
+interface Props {
+  parts: TextBlock;
+}
+
+const { parts } = Astro.props;
+---
+{parts.map((part) => (typeof part === 'string' ? part : 'strong' in part ? <strong>{part.strong}</strong> : <a href={inlineHref(part)}>{part.text}</a>))}

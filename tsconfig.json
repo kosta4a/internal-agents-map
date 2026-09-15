@@ -1,0 +1,20 @@
+{
+  // ABOUTME: TypeScript settings for the website source, its tests, and its config.
+  // ABOUTME: Astro generates the extra type declarations under .astro/.
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": [
+    ".astro/types.d.ts",
+    "src/**/*",
+    "tests/web/**/*",
+    "tests/e2e/**/*",
+    "astro.config.mjs",
+    "vitest.config.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
+}

@@ -25,17 +25,10 @@ Describe the approach, source, correction, analysis, or tooling change.
 
 ## Verification
 
-- [ ] `uv run python scripts/build.py`
-- [ ] `uv run python scripts/archive_sources.py --check`
-- [ ] `uv run python scripts/build.py --check`
-- [ ] `uv run python scripts/check_site.py --root site`
-- [ ] `uv run python scripts/check_private_data.py`
+- [ ] `uv run python scripts/build.py` regenerated the data and the repository documents.
+- [ ] `npm run verify` passed. It runs the generated-output, archive, type, unit, build, artifact,
+      Python test, lint, format, privacy, local-link, browser, and whitespace gates in that order.
 - [ ] Website changes were checked on desktop, mobile, with keyboard input, and without JavaScript.
-- [ ] `uv run ruff check .`
-- [ ] `uv run ruff format --check .`
-- [ ] `uv run python -m unittest discover -s tests`
-- [ ] `uv run python scripts/check_links.py --local`
-- [ ] `git diff --check`
 
 ## Sources
 

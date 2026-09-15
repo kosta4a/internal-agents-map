@@ -20,3 +20,9 @@ research.md
 .vercel
 
 node_modules/
+
+# Astro build output and local browser reports
+dist/
+.astro/
+playwright-report/
+test-results/

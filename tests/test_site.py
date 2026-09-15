@@ -1,379 +1,145 @@
-"""Behavioral contracts for the generated static site and its publication boundary."""
+# ABOUTME: Artifact contracts of the built site in dist/, read with the publication checker.
+# ABOUTME: Covers evidence coverage, escaping, qualifications, source links, and guide links.
+"""Behavioral contracts of the built site artifact. Run 'npm run build' first."""
 
-import copy
 import importlib.util
 import json
-import shutil
 import sys
-import tempfile
 import unittest
+from collections import Counter
 from pathlib import Path
-from unittest import mock
-
-import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+DIST = ROOT / "dist"
 
 
 def load_script(name):
     spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
 
-build = load_script("build")
 checker = load_script("check_site")
 
 
-class SiteTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.catalog = json.loads((ROOT / "data/agents.json").read_text())
-        cls.html = build.render_site(cls.catalog)
-
-    def test_complete_catalog_and_all_evidence_relations(self):
-        parsed = checker.SiteParser()
-        parsed.feed(self.html)
-        for key, collection in [
-            ("approach", "approaches"),
-            ("claim", "claims"),
-            ("source", "sources"),
-        ]:
-            self.assertCountEqual(
-                parsed.coverage[key], [item["id"] for item in self.catalog[collection]]
-            )
-        self.assertEqual(len(parsed.ids), len(set(parsed.ids)))
-        self.assertIn("relation-contradicts", self.html)
-        self.assertIn("relation-contextualizes", self.html)
-        for claim in self.catalog["claims"]:
-            self.assertIn(build.site_text(claim["text"]), self.html)
-            for evidence in claim["evidence"]:
-                if evidence.get("locator"):
-                    self.assertIn(build.site_text(evidence["locator"]), self.html)
-        expected_order = sorted(
-            self.catalog["approaches"],
-            key=lambda a: (a["company"].casefold(), a["agent_name"].casefold(), a["id"]),
-        )
-        self.assertEqual(parsed.coverage["approach"], [a["id"] for a in expected_order])
-
-    def test_definitions_placements_require_their_documented_basis(self):
-        html = build.render_definitions(self.catalog)
-        self.assertEqual(html.count("data-chart-approach-id="), 8)
-        self.assertEqual(html.count("data-chart-reference="), 3)
-        self.assertIn('href="index.html#brex-agent-platform"', html)
-        self.assertIn('href="index.html#posthog-stamphog"', html)
-        self.assertIn('href="index.html#ramp-inspect"', html)
-        self.assertIn('href="index.html#retool-retoolgpt"', html)
-        self.assertIn('href="index.html#sentry-junior"', html)
-        self.assertIn('href="index.html#shopify-internal-agents"', html)
-        self.assertIn("Codex / Claude Code / Devin", html)
-        self.assertIn("Deep research agent", html)
-        self.assertIn("ChatGPT / Claude", html)
-        self.assertIn("Horizontal axis · work breadth", html)
-        self.assertIn("Company-specific · focused", html)
-        self.assertIn("Reference example", html)
-        self.assertNotIn("@@", html)
-        changed = copy.deepcopy(self.catalog)
-        for claim in changed["claims"]:
-            if (
-                claim["id"]
-                in next(
-                    a["claim_ids"] for a in changed["approaches"] if a["id"] == "stripe-minions"
-                )
-                and claim["field"] == "architecture.knowledge"
-            ):
-                claim["text"] = "Unknown"
-            if (
-                claim["id"]
-                in next(
-                    a["claim_ids"]
-                    for a in changed["approaches"]
-                    if a["id"] == "brex-agent-platform"
-                )
-                and claim["field"] == "summary"
-            ):
-                claim["evidence"] = []
-            if (
-                claim["id"]
-                in next(
-                    a["claim_ids"] for a in changed["approaches"] if a["id"] == "retool-retoolgpt"
-                )
-                and claim["field"] == "architecture.model"
-            ):
-                claim["evidence"] = []
-        html = build.render_definitions(changed)
-        self.assertEqual(html.count("data-chart-approach-id="), 5)
-        self.assertNotIn('data-chart-approach-id="brex-agent-platform"', html)
-        self.assertNotIn('data-chart-approach-id="retool-retoolgpt"', html)
-        self.assertNotIn('data-chart-approach-id="stripe-minions"', html)
-
-    def fixture(self):
-        source = copy.deepcopy(self.catalog["sources"][0])
-        approach = copy.deepcopy(self.catalog["approaches"][0])
-        claim = copy.deepcopy(self.catalog["claims"][0])
-        approach["claim_ids"] = [claim["id"]]
-        approach["source_ids"] = [source["id"]]
-        claim["evidence"] = [{"source_id": source["id"], "relation": "supports"}]
-        return {
-            "schema_version": 4,
-            "approaches": [approach],
-            "claims": [claim],
-            "sources": [source],
-        }
-
-    def test_kind_overrides_unknowns_scopes_and_metric_qualifications(self):
-        fixture = self.fixture()
-        claim = fixture["claims"][0]
-        claim.update(
-            field="key_metrics.0",
-            kind="opinion",
-            provenance="inferred",
-            text="A target, not a measured result.",
-        )
-        page = build.render_site(fixture)
-        self.assertNotIn("<h4>Reported metrics</h4>", page)
-        self.assertIn("<h4>Other reported details and interpretation</h4>", page)
-        claim.update(
-            kind="metric",
-            confidence="low",
-            valid_at=None,
-            reported_by="Fixture company",
-            metric_scope="Pilot only",
-            denominator="Unknown",
-        )
-        fixture["approaches"][0]["operating_models"] = [
-            {"scope": "Draft code", "attention_boundary": "work-product-review", "level": 3},
-            {"scope": "Investigate alerts", "attention_boundary": "exception-only", "level": 5},
-        ]
-        fixture["approaches"][0]["domains"] = []
-        page = build.render_site(fixture)
-        self.assertIn("<h4>Reported metrics</h4>", page)
-        self.assertIn("Low confidence", page)
-        self.assertIn("<dt>Observation date</dt><dd>Unknown</dd>", page)
-        self.assertIn("<dt>Method</dt><dd>Unknown</dd>", page)
-        self.assertIn("Pilot only", page)
-        self.assertIn("Draft code", page)
-        self.assertIn("Investigate alerts", page)
-        self.assertIn('data-supervision="exception-only work-product-review"', page)
-        self.assertIn('<option value="unknown">Unknown</option>', page)
-
-    def test_uber_conflict_is_preserved(self):
-        uber = [
-            c
-            for c in self.catalog["claims"]
-            if c["approach_id"] == "uber-ureview"
-            and any(e.get("relation") == "contradicts" for e in c["evidence"])
-        ]
-        self.assertTrue(uber)
-        for claim in uber:
-            self.assertIn(build.site_text(claim["text"]), self.html)
-            self.assertEqual(claim["confidence"], "low")
-            for field in ["metric_scope", "denominator", "measurement_method"]:
-                if claim.get(field):
-                    self.assertIn(build.site_text(claim[field]), self.html)
-
-    def test_prose_is_text_and_attributes_are_escaped(self):
-        fixture = self.fixture()
-        dangerous = '<img src=x onerror="alert(1)"> Héllo & "quotes"'
-        fixture["claims"][0]["text"] = dangerous
-        fixture["approaches"][0]["company"] = dangerous
-        fixture["sources"][0]["title"] = dangerous
-        fixture["sources"][0]["url"] = "javascript:alert(1)"
-        page = build.render_site(fixture)
-        self.assertIn(build.site_text(dangerous), page)
-        self.assertNotIn("<img", page)
-        parser = checker.SiteParser()
-        parser.feed(page)
-        self.assertFalse(any(url.startswith("javascript:") for url in parser.urls))
-        self.assertIn(dangerous, "".join(parser.text))
-
-    def test_original_and_preserved_links_are_distinct_without_fabrication(self):
-        fixture = self.fixture()
-        source = fixture["sources"][0]
-        source.pop("archived_url", None)
-        page = build.render_site(fixture)
-        self.assertIn('href="' + source["url"] + '"', page)
-        self.assertIn("blob/main/" + source["capture"]["artifacts"]["markdown"]["path"], page)
-        self.assertNotIn("Wayback snapshot", page)
-        self.assertNotIn("page.pdf", page)
-        source.pop("capture")
-        self.assertNotIn("Preserved Markdown", build.render_site(fixture))
-
-    def test_work_tags_are_filter_shortcuts_and_arrows_stay_plain_in_markdown(self):
-        approach = self.catalog["approaches"][0]
-        for domain in approach["domains"]:
-            self.assertIn(f'<button type="button" class="tag" data-work="{domain}"', self.html)
-        self.assertIn('<button type="reset" form="filters"', self.html)
-        outputs = build.rendered_outputs(build.load_agents())
-        index_html = outputs[ROOT / "site/index.html"]
-        self.assertIn('<span class="link-arrow">↗</span></a>', index_html)
-        self.assertNotIn(" ↗</a>", index_html)
-        for name in ("site/index.md", f"site/agents/{approach['id']}.md"):
-            markdown = outputs[ROOT / name]
-            self.assertNotIn("link-arrow", markdown)
-            self.assertIn("[Permalink ↗](", markdown)
-        summary_tags = outputs[ROOT / f"site/agents/{approach['id']}.md"]
-        # Tags are buttons in HTML; the Markdown mirror keeps them as separated words.
-        labels = [build.site_label(item) for item in approach["domains"]]
-        self.assertIn(" ".join(labels), summary_tags)
-
-    def test_empty_catalog_and_determinism(self):
-        empty = {"approaches": [], "claims": [], "sources": []}
-        page = build.render_site(empty)
-        self.assertIn("0 approaches", page)
-        self.assertIn("<time>Unknown</time>", page)
-        self.assertEqual(build.render_site(self.catalog), self.html)
-
-    def test_output_map_and_binary_staging_and_stale_checks(self):
-        records = build.load_agents()
-        outputs = build.rendered_outputs(records)
-        self.assertEqual(outputs[ROOT / "site/agents.json"], outputs[build.DATA_JSON])
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            relocated = {
-                root / path.relative_to(ROOT): content for path, content in outputs.items()
-            }
-            with mock.patch.object(build, "ROOT", root):
-                build.write_outputs(relocated)
-                for path, content in relocated.items():
-                    self.assertEqual(
-                        path.read_bytes(), content.encode() if isinstance(content, str) else content
-                    )
-                with (
-                    mock.patch.object(build, "load_agents", return_value=records),
-                    mock.patch.object(build, "rendered_outputs", return_value=relocated),
-                    mock.patch.object(sys, "argv", ["build.py", "--check"]),
-                ):
-                    build.main()
-                    for name in [
-                        "index.html",
-                        "definitions.html",
-                        "agents.json",
-                        "assets/site.css",
-                        "assets/site.js",
-                        "assets/fonts/Geist.woff2",
-                    ]:
-                        path = root / "site" / name
-                        original = path.read_bytes()
-                        for replacement in [b"stale", None]:
-                            if replacement is None:
-                                path.unlink()
-                            else:
-                                path.write_bytes(replacement)
-                            with self.assertRaises(SystemExit):
-                                build.main()
-                            path.write_bytes(original)
+def read_page(name):
+    page = checker.SiteParser()
+    page.feed((DIST / name).read_text(encoding="utf-8"))
+    return page
 
 
 class ArtifactTests(unittest.TestCase):
-    def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
-        self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name) / "internal-agents-map"
-        shutil.copytree(ROOT / "site", self.root)
+    @classmethod
+    def setUpClass(cls):
+        if not (DIST / "index.html").is_file():
+            raise AssertionError(f"{DIST} holds no build. Run 'npm run build' first.")
+        cls.catalog = json.loads((ROOT / "data/agents.json").read_text(encoding="utf-8"))
+        cls.claims = {claim["id"]: claim for claim in cls.catalog["claims"]}
+        cls.sources = {source["id"]: source for source in cls.catalog["sources"]}
+        cls.entries = {
+            approach["id"]: read_page(f"agents/{approach['id']}.html")
+            for approach in cls.catalog["approaches"]
+        }
 
-    def change_html(self, old, new):
-        path = self.root / "index.html"
-        path.write_text(path.read_text().replace(old, new, 1))
+    def test_the_built_artifact_passes_every_publication_rule(self):
+        self.assertEqual(checker.validate(DIST), [])
 
-    def test_root_and_project_subdirectory(self):
-        self.assertEqual(checker.validate(ROOT / "site"), [])
-        self.assertEqual(checker.validate(self.root), [])
+    def test_every_claim_and_source_reaches_its_own_entry_page(self):
+        for kind, field in (("claim", "claim_ids"), ("source", "source_ids")):
+            published = Counter(
+                identifier for page in self.entries.values() for identifier in page.coverage[kind]
+            )
+            expected = Counter(
+                identifier
+                for approach in self.catalog["approaches"]
+                for identifier in approach[field]
+            )
+            self.assertEqual(published, expected)
+        for approach in self.catalog["approaches"]:
+            text = checker.visible_text(self.entries[approach["id"]])
+            for claim_id in approach["claim_ids"]:
+                claim = self.claims[claim_id]
+                self.assertIn(" ".join(str(claim["text"]).split()), text, claim_id)
 
-    def test_missing_asset(self):
-        (self.root / "assets/site.css").unlink()
-        self.assertTrue(checker.validate(self.root))
-
-    def test_cross_page_fragments_and_document_local_ids(self):
-        path = self.root / "definitions.html"
-        original = path.read_text()
-        self.assertEqual(checker.validate(self.root), [])
-        path.write_text(original.replace('href="#terms"', 'href="index.html#terms"'))
-        self.assertTrue(any("Invalid fragment" in e for e in checker.validate(self.root)))
-        path.write_text(
-            original.replace('href="index.html#brex-agent-platform"', 'href="#brex-agent-platform"')
+    def test_the_directory_holds_one_card_and_a_crawlable_link_per_entry(self):
+        directory = read_page("index.html")
+        self.assertEqual(
+            Counter(directory.coverage["approach"]),
+            Counter(approach["id"] for approach in self.catalog["approaches"]),
         )
-        self.assertTrue(any("Invalid fragment" in e for e in checker.validate(self.root)))
-        path.unlink()
-        self.assertTrue(any("definitions.html" in e for e in checker.validate(self.root)))
+        linked = {url.split("#")[0] for url in directory.urls if url.startswith("/agents/")}
+        for approach in self.catalog["approaches"]:
+            self.assertIn(f"/agents/{approach['id']}", linked)
 
-    def test_bad_fragment(self):
-        self.change_html('href="#main"', 'href="#missing"')
-        self.assertTrue(any("fragment" in e for e in checker.validate(self.root)))
+    def test_contradicting_and_contextualizing_evidence_keeps_its_role(self):
+        pages = {
+            identifier: (DIST / f"agents/{identifier}.html").read_text(encoding="utf-8")
+            for identifier in self.entries
+        }
+        for relation in ("contradicts", "contextualizes"):
+            wanted = {
+                claim["approach_id"]
+                for claim in self.catalog["claims"]
+                if any(link["relation"] == relation for link in claim["evidence"])
+            }
+            self.assertTrue(wanted, relation)
+            for identifier in wanted:
+                self.assertIn(f"relation-{relation}", pages[identifier])
 
-    def test_duplicate_id(self):
-        self.change_html("<body>", '<body id="main">')
-        self.assertTrue(any("Duplicate IDs" in e for e in checker.validate(self.root)))
+    def test_the_uber_volume_conflict_stays_beside_its_metric(self):
+        conflicting = [
+            claim
+            for claim in self.catalog["claims"]
+            if claim["approach_id"] == "uber-ureview"
+            and any(link["relation"] == "contradicts" for link in claim["evidence"])
+        ]
+        self.assertTrue(conflicting)
+        text = checker.visible_text(self.entries["uber-ureview"])
+        for claim in conflicting:
+            self.assertEqual(claim["confidence"], "low")
+            self.assertIn(" ".join(str(claim["text"]).split()), text)
+            for field in checker.QUALIFIER_FIELDS:
+                if claim.get(field):
+                    self.assertIn(" ".join(str(claim[field]).split()), text)
 
-    def test_escaping_path(self):
-        self.change_html(
-            'href="assets/'
-            + json.loads((self.root / "assets/manifest.json").read_text())["site.css"]
-            + '"',
-            'href="../outside.css"',
-        )
-        self.assertTrue(any("escapes" in e for e in checker.validate(self.root)))
+    def test_catalog_prose_reaches_the_page_as_text(self):
+        # These claims hold characters that would open a tag or an attribute if
+        # they were written to the page unescaped.
+        for claim_id in ("doordash-flux--architecture-sandbox", "browserbase-bb--key-metrics-1"):
+            claim = self.claims[claim_id]
+            self.assertRegex(str(claim["text"]), r"[<>&\"]")
+            text = checker.visible_text(self.entries[claim["approach_id"]])
+            self.assertIn(" ".join(str(claim["text"]).split()), text)
 
-    def test_absolute_asset(self):
-        self.change_html(
-            'href="assets/'
-            + json.loads((self.root / "assets/manifest.json").read_text())["site.css"]
-            + '"',
-            'href="/assets/site.css"',
-        )
-        self.assertTrue(any("relative" in e for e in checker.validate(self.root)))
+    def test_source_links_keep_the_original_and_the_preserved_copy_apart(self):
+        blob = "https://github.com/steel-experiments/internal-agents-map/blob/main/"
+        for approach in self.catalog["approaches"]:
+            page = (DIST / f"agents/{approach['id']}.html").read_text(encoding="utf-8")
+            for source_id in approach["source_ids"]:
+                source = self.sources[source_id]
+                self.assertIn(f'href="{source["url"]}"', page, source_id)
+                capture = source.get("capture")
+                if capture:
+                    preserved = blob + capture["artifacts"]["markdown"]["path"]
+                    self.assertIn(preserved, page, source_id)
+                    self.assertNotEqual(preserved, source["url"])
+                else:
+                    self.assertNotIn("Preserved copy", page, source_id)
 
-    def test_executable_scheme(self):
-        self.change_html('href="#main"', 'href="javascript:alert(1)"')
-        self.assertTrue(any("Unsafe URL" in e for e in checker.validate(self.root)))
-
-    def test_symlink_and_extra_files(self):
-        target = self.root / "assets/site.css"
-        target.unlink()
-        target.symlink_to(ROOT / "site/assets/site.css")
-        self.assertTrue(any("Symlink" in e for e in checker.validate(self.root)))
-        target.unlink()
-        shutil.copy(ROOT / "site/assets/site.css", target)
-        (self.root / "unexpected.txt").write_text("unexpected")
-        self.assertTrue(any("extra" in e for e in checker.validate(self.root)))
-
-    def test_css_font_path_is_checked(self):
-        path = self.root / "assets/site.css"
-        path.write_text(path.read_text().replace("fonts/Geist.woff2", "../missing.woff2"))
-        self.assertTrue(any("Missing local target" in e for e in checker.validate(self.root)))
-
-    def test_missing_claim_and_json_drift(self):
-        self.change_html("data-claim-id=", "data-removed-claim-id=")
-        self.assertTrue(any("claim coverage" in e for e in checker.validate(self.root)))
-        (self.root / "agents.json").write_text("{}")
-        self.assertTrue(any("JSON differs" in e for e in checker.validate(self.root)))
-
-    def test_untracked_artifact_privacy(self):
-        self.change_html("</footer>", "<p>" + "fixture" + "@" + "example.invalid" + "</p></footer>")
-        self.assertTrue(any("Private contact data" in e for e in checker.validate(self.root)))
-
-
-class WorkflowTests(unittest.TestCase):
-    def test_workflow_validates_without_deploying(self):
-        workflow = yaml.load(
-            (ROOT / ".github/workflows/validate.yml").read_text(), Loader=yaml.BaseLoader
-        )
-        self.assertIn("on", workflow)
-        self.assertIn("github.ref", workflow["concurrency"]["group"])
-        self.assertEqual(workflow["concurrency"]["cancel-in-progress"], "true")
-        jobs = workflow["jobs"]
-        self.assertEqual(list(jobs), ["validate"])
-        steps = jobs["validate"]["steps"]
-        commands = [step.get("run", "") for step in steps]
-        self.assertIn("uv run --locked python scripts/build.py --check", commands)
-        self.assertIn("uv run --locked python scripts/check_site.py --root site", commands)
-        self.assertNotIn("uv run --locked python scripts/build.py", commands)
-        # One public host only: GitHub Pages would duplicate every page.
-        self.assertNotIn("pages", str(workflow).lower())
-        for step in steps:
-            if "uses" in step:
-                self.assertRegex(step["uses"], r"@[0-9a-f]{40}$")
+    def test_the_guides_send_the_reader_to_the_entry_pages(self):
+        definitions = (DIST / "definitions.html").read_text(encoding="utf-8")
+        self.assertEqual(definitions.count("data-chart-approach-id="), 8)
+        self.assertEqual(definitions.count("data-chart-reference="), 3)
+        placed = {
+            url.split("#")[0]
+            for url in read_page("definitions.html").urls
+            if url.startswith("/agents/")
+        }
+        self.assertTrue(placed)
+        known = {f"/agents/{a['id']}" for a in self.catalog["approaches"]}
+        self.assertEqual(placed - known, set())
 
 
 if __name__ == "__main__":

@@ -1,0 +1,100 @@
+---
+// ABOUTME: The directory: one compact card per implementation, all in the initial HTML.
+// ABOUTME: The filter form only hides cards, so every entry link stays crawlable.
+import SiteLayout from '../layouts/SiteLayout.astro';
+import AgentCard from '../components/AgentCard.astro';
+import Topography from '../components/Topography.astro';
+import { loadCatalog } from '../lib/catalog';
+import { directoryCards, type DirectoryCard, type TermView } from '../lib/entry-view';
+import { canonicalUrl, homePath } from '../lib/routes';
+import { SITE_DESCRIPTION, SITE_NAME, datasetNode, structuredData, webPageNode } from '../lib/metadata';
+
+const catalog = loadCatalog();
+const cards = directoryCards(catalog);
+const organizations = new Set(catalog.approaches.map((approach) => approach.company)).size;
+const reviewed = catalog.approaches
+  .map((approach) => approach.last_reviewed_at)
+  .sort()
+  .at(-1);
+
+/** Collect the values of one card field as sorted, labelled filter options. */
+function options(read: (card: DirectoryCard) => readonly TermView[]): TermView[] {
+  const terms = new Map<string, TermView>();
+  for (const card of cards) for (const term of read(card)) terms.set(term.id, term);
+  return [...terms.values()].sort((a, b) => a.label.localeCompare(b.label));
+}
+
+const filters = [
+  { name: 'work', label: 'Work', options: options((card) => card.domains) },
+  {
+    name: 'type',
+    label: 'Approach type',
+    options: options((card) => [{ id: card.approachType, label: card.approachTypeLabel }]),
+  },
+  { name: 'supervision', label: 'Human supervision', options: options((card) => card.boundaries) },
+];
+
+const title = `${SITE_NAME} · How companies build internal AI agents`;
+const description =
+  'A source-backed catalog of AI systems organizations build for their own teams. ' +
+  'Explore approaches, operating models, and reported evidence.';
+const url = canonicalUrl(homePath());
+const graph = structuredData([
+  webPageNode({ url, name: title, description, dateModified: reviewed }),
+  datasetNode({ description, dateModified: reviewed }),
+]);
+---
+<SiteLayout title={title} description={description} path={homePath()} current="catalog" structuredData={graph}>
+  <header class="intro">
+    <Topography />
+    <p class="eyebrow">Agents at work</p>
+    <h1>{SITE_NAME}</h1>
+    <p class="lede">AI systems organizations build or adapt to do work for their own teams.</p>
+    <p>{SITE_DESCRIPTION} Explore how teams connect models to their knowledge, tools, and workflows, and where people stay involved.</p>
+    <div class="stats">
+      <div class="stat"><strong>{catalog.approaches.length}</strong><span>approaches</span></div>
+      <div class="stat"><strong>{organizations}</strong><span>organizations</span></div>
+      <div class="stat"><strong>{catalog.sources.length}</strong><span>sources</span></div>
+    </div>
+    {reviewed && (
+      <p class="review-date">Latest entry review: <time datetime={reviewed}>{reviewed}</time>. Individual source dates vary.</p>
+    )}
+  </header>
+  <section id="catalog" aria-labelledby="catalog-title">
+    <div class="section-heading">
+      <h2 id="catalog-title">Explore the catalog</h2>
+      <span class="eyebrow">Approaches, not rankings</span>
+    </div>
+    <form id="filters" hidden role="search" aria-label="Filter catalog">
+      <label class="search-label" for="q">
+        Search the map
+        <input id="q" name="q" type="search" placeholder="Company, agent, or kind of work…" autocomplete="off" />
+      </label>
+      <div class="filter-row">
+        {filters.map((filter) => (
+          <label for={filter.name}>
+            {filter.label}
+            <select id={filter.name} name={filter.name}>
+              <option value="">All</option>
+              {filter.options.map((option) => <option value={option.id}>{option.label}</option>)}
+            </select>
+          </label>
+        ))}
+        <button type="reset">Reset</button>
+      </div>
+    </form>
+    <p id="results" class="result-count" role="status" aria-live="polite" aria-atomic="true">{cards.length} approaches</p>
+    <p id="empty" class="empty-state" hidden>
+      No approaches match these filters. Try a broader search or{' '}
+      <button type="reset" form="filters" class="text-button">reset the filters</button>.
+    </p>
+    <div class="entries">
+      {cards.map((card) => <AgentCard card={card} />)}
+    </div>
+  </section>
+</SiteLayout>
+<script>
+  import { startDirectory } from '../scripts/directory';
+
+  startDirectory();
+</script>

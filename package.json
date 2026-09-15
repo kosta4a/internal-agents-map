@@ -2,6 +2,28 @@
   "name": "internal-agents-map-delivery",
   "private": true,
   "type": "module",
-  "scripts": {"test": "node --test tests/negotiation.test.mjs"},
-  "dependencies": {"@vercel/functions": "3.9.7"}
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "node scripts/dev-catalog.ts",
+    "check": "astro check && tsc --noEmit",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test tests/negotiation.test.mjs",
+    "test:unit": "vitest run && node --test tests/negotiation.test.mjs",
+    "test:e2e": "playwright test",
+    "verify": "uv run --locked python scripts/build.py --check && uv run --locked python scripts/archive_sources.py --check && npm run check && npm run test:unit && npm run build && uv run --locked python scripts/check_site.py --root dist && uv run --locked python -m unittest discover -s tests && uv run --locked ruff check . && uv run --locked ruff format --check . && uv run --locked python scripts/check_private_data.py && uv run --locked python scripts/check_links.py --local && npm run test:e2e && git diff --check"
+  },
+  "dependencies": {
+    "@vercel/functions": "3.9.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.13.4",
+    "astro": "7.3.2",
+    "typescript": "6.0.3",
+    "vitest": "5.0.0"
+  }
 }

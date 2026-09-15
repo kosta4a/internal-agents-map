@@ -1,0 +1,92 @@
+---
+// ABOUTME: One note: the authored Markdown body, its sources, and its catalog links.
+// ABOUTME: The body comes from the notes collection, so the prose has one home.
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { loadCatalog } from '../../lib/catalog';
+import {
+  SITE_NAME,
+  articleNode,
+  breadcrumbNode,
+  structuredData,
+} from '../../lib/metadata';
+import { longDate, nextNote, noteCatalogLinks, noteViewBySlug } from '../../lib/notes';
+import { canonicalUrl, homePath, notesIndexPath } from '../../lib/routes';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('notes');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const note = noteViewBySlug(entry.id);
+const { Content } = await render(entry);
+const catalog = loadCatalog();
+const catalogLinks = noteCatalogLinks(catalog, note);
+const next = nextNote(note.slug);
+
+const title = `${note.title} · Notes · ${SITE_NAME}`;
+const url = canonicalUrl(note.path);
+const graph = structuredData([
+  articleNode({
+    url,
+    name: title,
+    headline: note.title,
+    description: note.description,
+    datePublished: note.publishedAt,
+    // Only a real content change carries a modification date.
+    dateModified: note.updatedAt,
+  }),
+  breadcrumbNode(url, [
+    { name: 'Catalog', path: homePath() },
+    { name: 'Notes', path: notesIndexPath() },
+    { name: note.title, path: note.path },
+  ]),
+]);
+---
+<ArticleLayout
+  title={title}
+  description={note.description}
+  path={note.path}
+  current="notes"
+  structuredData={graph}
+  variant="notes"
+  ogType="article"
+  articlePublishedTime={note.publishedAt}
+>
+  <div class="note-detail">
+    <article>
+      <header class="guide-header">
+        <a class="note-back" href={notesIndexPath()}>← Notes</a>
+        <p class="eyebrow">{note.eyebrow}</p>
+        <h1>{note.title}</h1>
+        <p class="lede">{note.lede}</p>
+        <p class="note-meta">
+          <time datetime={note.publishedAt}>{longDate(note.publishedAt)}</time>
+          {note.updatedAt && (
+            <> · Updated <time datetime={note.updatedAt}>{longDate(note.updatedAt)}</time></>
+          )}
+          {' · '}{note.readingTime}
+        </p>
+      </header>
+      <Content />
+      <section class="note-sources">
+        <h2>{note.sources.length === 1 ? 'Source' : 'Sources'}</h2>
+        <ol>
+          {note.sources.map((source) => (
+            <li id={source.anchor}>
+              <a href={source.url}>{source.title}</a><span>{source.note}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="resource-links">
+          {catalogLinks.map((link) => <a href={link.path}>{link.label}</a>)}
+        </div>
+      </section>
+      <nav class="note-next" aria-label="More notes">
+        <a href={notesIndexPath()}>All notes</a>
+        <a href={next.note.path}>{next.isFirst ? 'Read' : 'Next'}: {next.note.title} →</a>
+      </nav>
+    </article>
+  </div>
+</ArticleLayout>

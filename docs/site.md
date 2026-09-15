@@ -1,93 +1,178 @@
-# Generated website
+# Website
 
-The mini page provides search, work/type/supervision filters, and expandable evidence
-for the catalog. It is generated offline from the same normalized object as
-[data/agents.json](../data/agents.json). Every claim remains reachable, with its
+The website is an [Astro](https://astro.build/) project in `src/`. It builds static HTML,
+Markdown, and JSON files from the same normalized catalog as
+[data/agents.json](../data/agents.json). Python validates the research data and writes that
+catalog; the website build does not change evidence. Every claim stays reachable with its
 provenance, confidence, qualifications, evidence relations, and source locators.
+
+Vercel serves the result at `https://internal-agents.com/`.
 
 ## Editing and preview
 
-- Edit `data/agents/*.yaml` for catalog content. Do not edit normalized JSON or generated HTML.
-- Edit [the HTML shell](../templates/site.html), [CSS](../templates/site.css), and
-  [JavaScript](../templates/site.js) for the website.
-- Edit [the Definitions page](../templates/definitions.html) for the guide. Its quadrant
-  compares workflow breadth and organizational adaptation. Three editorial placements
-  link to scope, context, and tool claims; missing or unsupported claims remove a marker.
-  Review placements when those claims change. Coordinates are illustrative, not scores.
-  The guide shares navigation, footer, CSS, and Geist with the catalog.
-- Edit [the Methodology page](../templates/methodology.html) for the evidence guide.
-  It shares navigation, footer, CSS, and Geist with the catalog.
-- Edit [the Notes index](../templates/notes.html) and the articles in `templates/notes/`
-  for short observations. The build shares the catalog navigation and footer with these
-  pages. Nested article links stay relative, so the site works from any base path.
-  Follow [the notes writing guide](notes-writing.md) for language, quotes, and diagrams.
-- Run `uv run --locked python scripts/build.py` to regenerate Markdown, JSON, and `site/`.
-- Run `uv run --locked python scripts/check_site.py --root site` and the existing catalog checks.
-- Serve the page locally with:
+- Edit `data/agents/*.yaml` for catalog content. Do not edit the normalized JSON.
+- Edit `src/content/notes/*.md` for the notes. Each note declares its title, description,
+  publication date, reading order, sources, and `relatedAgentIds`. The entry pages read that
+  metadata for their related reading. Follow [the notes writing guide](notes-writing.md) for
+  language, quotes, and diagrams.
+- Edit `src/lib/guide-content.ts` for the text of the Definitions and Methodology guides. The
+  page and its Markdown export read the same values, so the two stay together.
+- Edit the pages in `src/pages/`, the shared layouts in `src/layouts/`, the components in
+  `src/components/`, and the styles in `src/styles/` for the presentation.
+- The Definitions quadrant compares workflow breadth and organizational adaptation. Its catalog
+  markers come from claims in `src/lib/definitions.ts`; a missing or unsupported claim removes a
+  marker. Review the placements when those claims change. Coordinates are illustrative, not scores.
+
+Run the local preview with:
 
 ```sh
-uv run --locked python -m http.server 8000 --bind 127.0.0.1 --directory site
+npm run dev
 ```
 
-Open `http://127.0.0.1:8000/`; stop the server with Ctrl-C when finished. Opening
-`site/index.html` directly also provides the static catalog, but use HTTP for URL/history testing.
-Commit all generated output with its authored changes. CI checks committed output without
-rebuilding first, so stale HTML, CSS, JavaScript, JSON, or fonts fail validation.
+The command first regenerates `data/agents.json` with the Python data build, then starts Astro.
+It watches `data/agents/`, so a record edit produces a new catalog and the page reloads. A
+validation failure stays visible in the terminal; the server does not serve older data silently.
 
-`site/agents.json` is byte-identical to `data/agents.json`. Archive paths inside that
-JSON remain repository-relative; resolve them against the repository checkout or
-`https://github.com/steel-experiments/internal-agents-map/blob/main/`, not the website.
-The page links preserved Markdown to GitHub; only website assets are deployed.
+Run `npm run build` for the complete static build and `npm run preview -- --host 127.0.0.1
+--port 4173` to serve the built files. The build writes `dist/`, which Git ignores. Do not commit
+website output. Astro caches in `.astro/`, and the browser tests write `playwright-report/` and
+`test-results/`; Git ignores these too.
+
+Run `npm run verify` before a pull request. It checks the committed data and archives first, then
+runs the type, unit, build, artifact, Python test, lint, format, privacy, local-link, browser,
+and whitespace gates in one sequence.
+
+## Routes and formats
+
+Astro uses `output: 'static'`, `build.format: 'file'`, and `trailingSlash: 'never'`. Each page
+becomes one file, such as `dist/agents/stripe-minions.html`, and Vercel `cleanUrls` serves it at
+`/agents/stripe-minions`. A request for the `.html` name or a trailing slash gets a permanent
+redirect to the clean path.
+
+The build generates the directory, one page for each implementation, the two guides, the notes
+index, the notes, and the 404 page. It also generates `robots.txt`, `sitemap.xml`, `llms.txt`,
+Markdown for every published page, `agents/index.json`, `agents/<id>.json`, `agents/<id>.md`, and
+`agents.json`. `agents.json` remains byte-identical to the normalized source catalog.
+`data-guide.md` combines reading instructions with the repository schema reference. The sitemap
+holds the canonical HTML pages only. It excludes the 404 page, redirects, exports, and filter
+states, and it does not invent modification dates.
+
+Archive paths inside the JSON remain repository-relative; resolve them against the repository
+checkout or `https://github.com/steel-experiments/internal-agents-map/blob/main/`, not the
+website. The pages link preserved Markdown to GitHub; only website assets are deployed.
+
+Robots allows public crawling, including the search and retrieval bot groups. The owner selected
+`search=yes, ai-input=yes, ai-train=yes`; Content Signals declare these preferences in the
+wildcard group and in those groups. These preferences do not change the rights of cited
+publishers.
+
+`routing-manifest.json` is generated. The publication integration writes it during `npm run
+build` from the declared routes, and it records the physical HTML and Markdown file behind each
+clean path. `middleware.ts` imports the manifest and answers a request for Markdown with the
+static `.md` file. Browser requests and wildcard `Accept` headers stay HTML. Quality preferences
+and `q=0` are respected, and HTML wins an explicit equal-quality tie. Both representations send
+`Vary: Accept`. The middleware also redirects the alias hosts itself, because it answers HTML
+requests before the `vercel.json` redirects run. Direct Markdown URLs work without the
+middleware, and an unknown route reaches the real 404 page.
 
 ## Design and fonts
 
 The visual direction comes from the local `steel-web-minimal/templates/starter.html`
 reference: a quiet sidebar, bounded content column, fine dividers, white background,
-dark ink, and restrained blue accents. The user requested Geist in place of serif
+dark ink, and restrained accents. The user requested Geist in place of serif
 headings. All text uses self-hosted Geist Sans, with system sans-serif fallbacks and
 `font-display: swap`. No runtime font CDN or build-time network access is required.
 
 The variable font is the official [Geist 1.5.1](https://github.com/vercel/geist-font/releases/tag/1.5.1)
 asset from commit `3c80bfcc1ba4988ece0eda46a282e15d29e61bbf`, path
 `fonts/Geist/webfonts/Geist[wght].woff2`, copied without modification to
-[templates/fonts/Geist.woff2](../templates/fonts/Geist.woff2).
-The accompanying [SIL Open Font License](../templates/fonts/OFL.txt) is retained
-and copied with the font to `site/assets/fonts/`. The font's license applies to that
-asset; repository licenses continue to govern other content.
+[public/fonts/Geist.woff2](../public/fonts/Geist.woff2). The accompanying
+[SIL Open Font License](../public/fonts/OFL.txt) stays with the font and is published beside it.
+The font's license applies to that asset; repository licenses continue to govern other content.
 
 ## Reading and sharing
 
-Search matches company, agent name, summary, work tags, and approach type. Filters
-combine with AND; any matching scoped attention boundary qualifies for supervision.
-Levels describe workflows, not company rankings. Select options come from the catalog,
-including Unknown when present. Missing claim metadata stays unknown.
+The directory holds one compact card for each implementation. Every card is in the initial HTML
+and links to the entry page, so the entries stay crawlable and work without JavaScript. Search
+matches company, agent name, summary, work tags, and approach type. Filters combine with AND;
+any matching scoped attention boundary qualifies for supervision. Levels describe workflows, not
+company rankings. Select options come from the catalog, including Unknown when present.
 
-The URL uses `q`, `work`, `type`, and `supervision` query parameters. Permalinks use
-approach IDs as fragments, open the requested entry, and clear conflicting filters
-with a brief announcement. Deliberately changing filters clears a prior approach
-fragment so reload restores the visible search. Browser back/forward restores URL
-state. Without JavaScript, the complete catalog, native disclosures, sources, and
-navigation remain available; inactive filter controls stay hidden.
+The URL uses `q`, `work`, `type`, and `supervision` query parameters. Browser back and forward
+restore that state. Filter states keep the homepage canonical and stay out of the sitemap.
+
+An old homepage fragment still reaches its content. A known approach, claim, or source fragment
+sends the browser to the entry page and the same anchor there. The script rebuilds the target
+path from the route helper and the matched identifier, so an unknown fragment keeps ordinary
+homepage behavior and cannot become a redirect target. Without JavaScript, the card links remain
+the path to each entry.
 
 ## Validation and publication
 
-`scripts/check_site.py` validates the explicit artifact allowlist, required landmarks,
-unique IDs, local asset and fragment links, CSS font references, source/claim/approach
-coverage, JSON parity, and privacy. It rejects extra files, symlinks, escaping paths,
-and executable URL schemes. External source URLs are not fetched by this checker;
-the existing external-link scheduler handles those checks.
+`scripts/check_site.py --root dist` validates the built artifact: the expected route inventory,
+required landmarks, unique identifiers, local asset and fragment links, CSS font references,
+per-entry claim and source coverage, JSON parity, and privacy. It rejects extra files, symlinks,
+escaping paths, and executable URL schemes. External source URLs are not fetched by this checker;
+the scheduled external-link workflow handles those.
 
-The `validate` workflow runs archive, build, site, privacy, lint, format, test, and
-local-link gates on pull requests and on pushes to `main`. It does not deploy. Workflow
+The `validate` workflow installs uv, Node, and the pinned Chromium browser, then runs
+`npm run verify` on pull requests and on pushes to `main`. It does not deploy. Workflow
 concurrency is scoped to workflow and Git ref; a newer `main` run cancels an older run.
 
-GitHub Pages is disabled for this repository. The site has one public host,
-`https://internal-agents.com/`, served by Vercel (see below). A second host would split
-search authority and duplicate every page.
+GitHub Pages is disabled for this repository. The site has one public host. A second host would
+split search authority and duplicate every page.
 
-Rollback: revert the faulty change on `main` to restore a previously validated website
-revision, including its templates and generated outputs, then redeploy to Vercel.
-Do not upload an unchecked folder manually.
+## Vercel delivery
+
+The canonical site is **https://internal-agents.com/** on Vercel, in the Steel team
+(`nen-labs/internal-agents-map`). The project is connected to the GitHub repository; every push
+to `main` deploys to production.
+
+`vercel.json` is authored, not generated. Vercel reads it before the build command runs, so it
+must not depend on the build. It holds fixed rules only, and a new entry or note needs no change
+to it:
+
+- `installCommand` is `npm ci`. `buildCommand` checks the committed research outputs, builds the
+  website, and checks `dist/`. `outputDirectory` is `dist`.
+- `cleanUrls` is true and `trailingSlash` is false.
+- `www.internal-agents.com` and the bare `internal-agents-map.vercel.app` alias redirect
+  permanently to the apex origin, with the path and query string.
+- Headers set `nosniff`, revalidation for pages and exports, one-year immutable caching for the
+  hashed assets under `/_astro/`, the Markdown and JSON content types, CORS for the exports, and
+  the `describedby` link to `data-guide.md`.
+- `X-Robots-Tag: noindex` covers the raw JSON records, the compact JSON index, and the 404 page
+  only. No HTML entry page carries it. The Markdown representations use an HTTP canonical link to
+  their HTML page instead of a noindex directive.
+
+Before you publish, verify locally and then deploy a preview:
+
+```sh
+uv sync --locked
+npm ci
+npm run verify
+vercel deploy --yes --scope nen-labs
+```
+
+Check the preview with the delivery checker, then promote the same revision:
+
+```sh
+uv run --locked python scripts/check_delivery.py <preview-url> --preview --root dist
+uv run --locked python scripts/check_delivery.py https://internal-agents.com --root dist
+```
+
+The checker compares response bytes with the built files in `--root`, and it checks content
+types, discovery headers, immutable asset caching, quality-weighted negotiation, clean and legacy
+paths, missing nested URLs, and alternating HTML and Markdown requests that would show cache
+contamination. It removes only Vercel's appended feedback-toolbar script when it compares
+protected preview HTML. A protected preview can also be read with
+`vercel curl --deployment <preview-url>`. Production must stay publicly readable without bypass
+credentials. A local Astro preview cannot prove the middleware, the redirects, or the headers.
+
+Rollback: deploy or promote an earlier Vercel deployment that already contains the entry pages,
+their assets, and the clean-URL policy. A deployment from before those pages existed would turn
+published entry URLs into 404s, so it is not a rollback target. Record the chosen deployment
+identifier before a release. For a faulty content change, revert the commit on `main` and let the
+connected project deploy the corrected revision. Do not upload an unchecked folder by hand.
 
 ## Browser acceptance record
 
@@ -121,80 +206,6 @@ among existing generated documentation.
 Live publication acceptance on 2026-09-09 also passed in Chromium: all 39 entries
 were visible, Geist loaded, and search, evidence disclosures, permalinks, and reload
 worked without page errors.
-
-## Vercel delivery and agent-readable formats
-
-The canonical site is now **https://internal-agents.com/** on Vercel, in the Steel
-team (`nen-labs/internal-agents-map`). `www` permanently redirects to the apex while
-retaining paths and query strings, and so does the bare `internal-agents-map.vercel.app`
-alias. Middleware answers HTML requests before `vercel.json` redirects run, so it
-redirects alias hosts itself. Per-agent record files under `/agents/` carry
-`X-Robots-Tag: noindex` until they have HTML pages to point at. The project is
-connected to the GitHub repository; every push to `main` deploys to production.
-
-The build generates `robots.txt`, `sitemap.xml`, `llms.txt`, Markdown for every
-published content page, `agents/index.json`, and `agents/<id>.json` and `.md`.
-The sitemap excludes the custom 404 and does not invent modification dates. The
-compact index links to individual records containing all associated claims and
-sources. `agents.json` remains byte-identical to the normalized source catalog.
-`data-guide.md` combines reading instructions with the repository schema reference.
-Robots allows public crawling, including explicit search/retrieval bot groups.
-The owner selected `search=yes, ai-input=yes, ai-train=yes`; Content Signals
-declare these preferences in both the wildcard and search/retrieval groups.
-These preferences do not change the rights of cited publishers.
-
-Edit `templates/vercel.json` for delivery configuration; the build produces root
-`vercel.json` with per-page discovery headers and exact hashed asset cache rules.
-Edit `templates/data-guide.md` for reading instructions and `templates/404.html`
-for the missing-page experience. The error page is excluded from indexing, uses
-root-relative navigation/assets to work for missing nested URLs, and is served
-with HTTP 404 by Vercel. Its root-relative links target Vercel hosting.
-
-The Python build creates content-hashed CSS, JavaScript, and font files and updates
-HTML/preload/CSS references together. Vercel gives only these exact hashed paths
-one-year immutable browser caching. Unhashed compatibility copies remain available
-with revalidation; HTML, JSON, Markdown, and discovery files also revalidate.
-Obsolete generated hashes and individual records are removed on rebuild.
-
-`middleware.ts` uses the generated `routing-manifest.json` to rewrite explicit
-Markdown requests to static `.md` files. Browser requests and wildcard Accept
-headers stay HTML. Quality preferences and `q=0` are respected; HTML wins an
-explicit equal-quality tie. Both representations use `Vary: Accept`. The CDN sees
-distinct rewrite targets; direct Markdown URLs also work without middleware.
-Filters do not change exported content. There is no
-runtime HTML conversion, model call, authenticated API, or registration service.
-
-Before publishing, regenerate and validate locally, then deploy a preview:
-
-```sh
-uv sync --locked
-npm ci
-uv run --locked python scripts/build.py
-uv run --locked python scripts/check_site.py --root site
-uv run --locked python -m unittest discover -s tests
-npm test
-vercel deploy --yes --scope nen-labs
-```
-
-Vercel also builds and checks the artifact on every deployment. Generate locally
-first because Vercel reads routing configuration before executing the build.
-Check the preview's content types, negotiated representations, cache headers, and
-missing nested URL before `vercel deploy --prod --yes --scope nen-labs`. Protected
-previews can be checked with `vercel curl --deployment <preview-url>`. Production
-must remain publicly readable without bypass credentials.
-
-Repeatable deployed verification:
-
-```sh
-uv run --locked python scripts/check_delivery.py https://your-preview.vercel.app --preview
-uv run --locked python scripts/check_delivery.py https://internal-agents.com
-```
-
-The verifier checks response bytes against generated files, content types, discovery
-headers, immutable asset caching, quality-weighted negotiation, missing nested URLs,
-and alternating HTML/Markdown requests to detect cache contamination. It removes
-only Vercel's appended feedback-toolbar script when comparing protected preview HTML.
-
 Delivery acceptance on 2026-09-11: 122 Python tests and 2 Node tests passed;
 47 preview and 47 production HTTP checks passed. Vercel serves Brotli-compressed
 HTML with CDN cache hits. `www` returns 308 and preserves path/query. Both Vercel
