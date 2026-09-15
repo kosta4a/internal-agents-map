@@ -230,7 +230,7 @@ describe('the directory model', () => {
     }
   });
 
-  it('makes a card searchable by company, name, work, and summary', () => {
+  it('makes a card searchable by company, name, work, type, supervision, and summary', () => {
     for (const card of cards) {
       expect(card.search).toBe(card.search.toLowerCase());
       expect(card.search).not.toMatch(/\s{2,}/);
@@ -238,6 +238,21 @@ describe('the directory model', () => {
       expect(card.search).toContain(card.agentName.toLowerCase());
       expect(card.search).toContain(card.approachType);
       for (const domain of card.domains) expect(card.search).toContain(domain.id);
+      for (const boundary of card.boundaries) {
+        expect(card.search).toContain(boundary.id);
+        if (boundary.level !== null) expect(card.search).toContain(`level ${boundary.level}`);
+      }
+    }
+  });
+
+  it('carries the derived level next to every attention boundary', () => {
+    const ureview = cards.find((card) => card.id === 'uber-ureview')!;
+    expect(ureview.boundaries).toEqual([{ id: 'work-product-review', label: 'Work product review', level: 3 }]);
+    for (const card of cards) {
+      expect(card.boundaries.length).toBeGreaterThan(0);
+      for (const boundary of card.boundaries) {
+        expect(boundary.level === null).toBe(boundary.id === 'unknown');
+      }
     }
   });
 });

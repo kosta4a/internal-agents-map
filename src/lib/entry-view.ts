@@ -436,10 +436,16 @@ export interface DirectoryCard {
   readonly approachType: string;
   readonly approachTypeLabel: string;
   readonly domains: readonly TermView[];
-  readonly boundaries: readonly TermView[];
+  /** The attention boundaries of the scoped operating models, with their derived levels. */
+  readonly boundaries: readonly BoundaryView[];
   readonly reviewedAt: string;
   /** The source identifiers of the entry, so an old source fragment can find its page. */
   readonly sourceIds: readonly string[];
+}
+
+/** An attention boundary as a filter term. The level is null when the boundary is unknown. */
+export interface BoundaryView extends TermView {
+  readonly level: number | null;
 }
 
 /** The length a directory card shows before it links to the whole entry. */
@@ -457,9 +463,13 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
     const summary = approach.claim_ids
       .map((claimId) => claims.get(claimId))
       .find((claim) => claim?.field === 'summary');
-    const boundaries = [
-      ...new Set(approach.operating_models.map((model) => model.attention_boundary)),
-    ].sort();
+    const levels = new Map(
+      approach.operating_models.map((model) => [model.attention_boundary, model.level]),
+    );
+    if (levels.size === 0) levels.set('unknown', null);
+    const boundaries: BoundaryView[] = [...levels.keys()]
+      .sort()
+      .map((id) => ({ ...termView(id), level: levels.get(id) ?? null }));
     const domains = approach.domains.map(termView);
     return {
       id: approach.id,
@@ -476,12 +486,15 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
         approach.approach_type,
         termLabel(approach.approach_type),
         ...domains.flatMap((domain) => [domain.id, domain.label]),
+        ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
+        approach.autonomy,
+        termLabel(approach.autonomy),
       ]),
       approachType: approach.approach_type,
       approachTypeLabel: termLabel(approach.approach_type),
       sourceIds: approach.source_ids,
       domains,
-      boundaries: (boundaries.length > 0 ? boundaries : ['unknown']).map(termView),
+      boundaries,
       reviewedAt: approach.last_reviewed_at,
     };
   });

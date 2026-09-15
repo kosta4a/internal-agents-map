@@ -274,6 +274,15 @@ class AstroArtifactTests(unittest.TestCase):
         errors = self.validate()
         self.assertTrue(any("orphan.abcd1234.js" in error for error in errors), errors)
 
+    def test_referenced_script_bundle_with_dots_in_its_stem_passes(self):
+        # Astro names a page script `index.astro_astro_type_script_index_0_lang.<hash>.js`.
+        bundle = "_astro/index.astro_astro_type_script_index_0_lang.BFryYQra.js"
+        (self.root / bundle).write_text("console.log(1)", encoding="utf-8")
+        self.rewrite(
+            "index.html", "</main>", '<script type="module" src="/' + bundle + '"></script></main>'
+        )
+        self.assertEqual(self.validate(), [])
+
     def test_entry_page_must_carry_its_own_sources(self):
         self.rewrite("agents/first-agent.html", "data-source-id=", "data-removed-source-id=")
         errors = self.validate()

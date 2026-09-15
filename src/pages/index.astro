@@ -5,8 +5,9 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import AgentCard from '../components/AgentCard.astro';
 import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
-import { directoryCards, type DirectoryCard, type TermView } from '../lib/entry-view';
+import { directoryCards } from '../lib/entry-view';
 import { canonicalUrl, homePath } from '../lib/routes';
+import { facetVocabulary } from '../lib/search';
 import { SITE_DESCRIPTION, SITE_NAME, datasetNode, structuredData, webPageNode } from '../lib/metadata';
 
 const catalog = loadCatalog();
@@ -17,22 +18,8 @@ const reviewed = catalog.approaches
   .sort()
   .at(-1);
 
-/** Collect the values of one card field as sorted, labelled filter options. */
-function options(read: (card: DirectoryCard) => readonly TermView[]): TermView[] {
-  const terms = new Map<string, TermView>();
-  for (const card of cards) for (const term of read(card)) terms.set(term.id, term);
-  return [...terms.values()].sort((a, b) => a.label.localeCompare(b.label));
-}
-
-const filters = [
-  { name: 'work', label: 'Work', options: options((card) => card.domains) },
-  {
-    name: 'type',
-    label: 'Approach type',
-    options: options((card) => [{ id: card.approachType, label: card.approachTypeLabel }]),
-  },
-  { name: 'supervision', label: 'Human supervision', options: options((card) => card.boundaries) },
-];
+/** The facet terms the search box suggests. Escaped so the JSON cannot close its script tag. */
+const vocabulary = JSON.stringify(facetVocabulary(cards)).replace(/</g, '\\u003c');
 
 const title = `${SITE_NAME} · How companies build internal AI agents`;
 const description =
@@ -66,22 +53,33 @@ const graph = structuredData([
       <span class="eyebrow">Approaches, not rankings</span>
     </div>
     <form id="filters" hidden role="search" aria-label="Filter catalog">
-      <label class="search-label" for="q">
-        Search the map
-        <input id="q" name="q" type="search" placeholder="Company, agent, or kind of work…" autocomplete="off" />
-      </label>
-      <div class="filter-row">
-        {filters.map((filter) => (
-          <label for={filter.name}>
-            {filter.label}
-            <select id={filter.name} name={filter.name}>
-              <option value="">All</option>
-              {filter.options.map((option) => <option value={option.id}>{option.label}</option>)}
-            </select>
-          </label>
-        ))}
+      <label class="search-label" for="q">Search the map</label>
+      <div class="search-row">
+        <div class="search-field">
+          <div class="search-box">
+            <ul id="chips" class="chips" aria-label="Active filters"></ul>
+            <input
+              id="q"
+              name="q"
+              type="search"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="suggestions"
+              aria-autocomplete="list"
+              aria-describedby="search-help"
+              placeholder="Company, agent, work, approach type, or supervision level…"
+              autocomplete="off"
+            />
+          </div>
+          <ul id="suggestions" class="suggestions" role="listbox" aria-label="Filter suggestions" hidden></ul>
+        </div>
         <button type="reset">Reset</button>
       </div>
+      <p id="search-help" class="search-help">
+        Pick a suggestion, or type a work area, approach type, or supervision level and press Enter, to filter by it.
+        Other words search the text of every card.
+      </p>
+      <script is:inline id="facet-vocabulary" type="application/json" set:html={vocabulary} />
     </form>
     <p id="results" class="result-count" role="status" aria-live="polite" aria-atomic="true">{cards.length} approaches</p>
     <p id="empty" class="empty-state" hidden>
