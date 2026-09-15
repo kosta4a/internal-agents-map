@@ -13,7 +13,7 @@ verification gate, and update the status row when finished.
 | 003 | Reconcile catalog evidence and record research limitations | P2 | M | 002 (final validation) | DONE |
 | [004](004-publish-generated-mini-page.md) | Generate and publish a searchable mini page | P2 | M | 002, 003 | DONE |
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
-| [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | IN PROGRESS (Steps 1–6 on `feat/entry-pages-astro`; Step 7 deployment awaits authorization) |
+| [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -67,14 +67,22 @@ pages. Implementation and release have not been requested in this planning turn.
 discovery, data/export compatibility, verification, and rollout. This planning
 pass did not modify application code or deploy a site.
 
-## Entry-page implementation baseline
+## Entry-page release record
 
-2026-09-14, branch `feat/entry-pages-astro`: Steps 1–6 of Plan 006 are implemented.
-`npm run verify` passes from the worktree: 104 TypeScript tests, 14 negotiation
-tests, 174 Python tests, 133 browser tests, 51 built pages, 50 sitemap URLs, and
-the artifact checker on `dist/`. Not yet done: a Vercel preview deployment, the
-delivery checks against a real host, the rollback record, and the editorial pass
-on entry summaries.
+2026-09-15, `main` at `b2c298a`: Plan 006 merged and deployed to production through the
+existing Vercel project as deployment `internal-agents-ilockpa0i-nen-labs.vercel.app`.
+`npm run verify` passed before the push: 117 TypeScript tests, 14 negotiation tests,
+181 Python tests, 151 browser tests, 52 built pages, 51 sitemap URLs, and the artifact
+checker on `dist/`. `scripts/check_delivery.py https://internal-agents.com --root dist`
+passed 332 deployed response checks. Observed on the host: Vercel answers `.html`
+requests before the middleware, so an alias host plus a legacy `.html` path takes two
+permanent redirects, and an unknown `.html` path redirects once before its 404.
+
+Rollback: the previous production deployment `internal-agents-atlytgnxx-nen-labs.vercel.app`
+predates the entry pages, so promoting it would turn every `/agents/<id>` URL into a 404.
+The rollback target for later changes is `internal-agents-ilockpa0i-nen-labs.vercel.app`.
+Still open: an editorial pass on entry summaries, and Search Console submission of the
+updated sitemap.
 
 ## Latest verification
 

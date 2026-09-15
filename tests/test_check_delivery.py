@@ -149,6 +149,8 @@ class RouteTests(unittest.TestCase):
         cases = delivery.error_cases()
         entry = next(case for case in cases if case.path == "/agents/does-not-exist")
         self.assertEqual((entry.status, entry.artifact), (404, "404.html"))
+        legacy = next(case for case in cases if case.path == "/missing/nested/page.html")
+        self.assertEqual((legacy.status, legacy.location), (308, "/missing/nested/page"))
 
     def test_the_warming_list_alternates_both_representations(self):
         cases = delivery.warm_cases(MANIFEST["routes"])

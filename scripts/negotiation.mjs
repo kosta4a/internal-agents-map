@@ -62,7 +62,8 @@ export function resolveRequest({ routes, url, method = 'GET', accept = '' }) {
   const alias = ALIAS_HOSTS.has(url.hostname);
   const clean = cleanPath(url.pathname, routes);
   if (alias || clean) {
-    // One redirect answers an alias host and a legacy path together.
+    // One redirect answers an alias host and a legacy path together when this code
+    // sees the request. Vercel redirects `.html` paths itself before the middleware.
     const origin = alias ? CANONICAL_ORIGIN : url.origin;
     const target = clean ?? url.pathname;
     return { type: 'redirect', status: 308, location: origin + target + url.search };

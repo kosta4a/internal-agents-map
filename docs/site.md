@@ -46,8 +46,9 @@ and whitespace gates in one sequence.
 
 Astro uses `output: 'static'`, `build.format: 'file'`, and `trailingSlash: 'never'`. Each page
 becomes one file, such as `dist/agents/stripe-minions.html`, and Vercel `cleanUrls` serves it at
-`/agents/stripe-minions`. A request for the `.html` name or a trailing slash gets a permanent
-redirect to the clean path.
+`/agents/stripe-minions`. Vercel answers a request for the `.html` name before the middleware
+runs, so on an alias host that request takes two permanent redirects. A trailing slash gets a
+permanent redirect to the clean path.
 
 The build generates the directory, one page for each implementation, the two guides, the notes
 index, the notes, and the 404 page. It also generates `robots.txt`, `sitemap.xml`, `llms.txt`,

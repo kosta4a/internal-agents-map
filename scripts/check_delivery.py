@@ -164,7 +164,7 @@ def export_cases(routes: dict[str, dict[str, str]]) -> list[Case]:
 
 
 def redirect_cases(routes: dict[str, dict[str, str]]) -> list[Case]:
-    """A legacy path and a trailing slash reach the canonical path in one hop."""
+    """A legacy path and a trailing slash reach the canonical path with a permanent redirect."""
     cases: list[Case] = []
     for route in sorted(routes):
         for path in legacy_paths(route):
@@ -183,11 +183,21 @@ def alias_cases(routes: dict[str, dict[str, str]]) -> list[Case]:
 
 
 def error_cases() -> list[Case]:
-    """A path with no document is a real 404 that search engines must not index."""
+    """A path with no document is a real 404 that search engines must not index.
+
+    The host redirects every `.html` request to its extensionless path before it
+    looks for a document, so an unknown `.html` path answers 308 and then 404.
+    """
     return [
         Case(path=path, accept="text/html", status=404, artifact=ERROR_PAGE, mime="text/html")
-        for path in ("/agents/does-not-exist", "/missing-page", "/missing/nested/page.html")
+        for path in ("/agents/does-not-exist", "/missing-page", "/missing/nested/page")
     ] + [
+        Case(
+            path="/missing/nested/page.html",
+            accept="text/html",
+            status=308,
+            location="/missing/nested/page",
+        ),
         Case(path="/agents/does-not-exist.json", accept="*/*", status=404),
         Case(path="/agents/does-not-exist.md", accept="text/markdown", status=404),
     ]
