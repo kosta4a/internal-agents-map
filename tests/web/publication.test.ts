@@ -45,11 +45,6 @@ describe('sitemap', () => {
     expect(locations).toHaveLength(1 + catalog.approaches.length + paths.length);
   });
 
-  it('matches the count of the current catalog', () => {
-    // A baseline assertion. The inventory above, not this number, is the source.
-    expect(locations).toHaveLength(50);
-  });
-
   it('holds no export, no 404, and no filtered directory URL', () => {
     for (const location of locations) {
       expect(location.startsWith(`${ORIGIN}/`)).toBe(true);

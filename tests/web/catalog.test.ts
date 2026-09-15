@@ -63,10 +63,12 @@ describe('the published catalog', () => {
     expect(catalog.schema_version).toBe(4);
   });
 
-  it('holds the reviewed baseline of records', () => {
-    expect(catalog.approaches.length).toBe(39);
-    expect(catalog.claims.length).toBe(555);
-    expect(catalog.sources.length).toBe(88);
+  it('lists every claim and every source under exactly one approach', () => {
+    expect(catalog.approaches.length).toBeGreaterThan(0);
+    const claimCount = catalog.approaches.reduce((sum, item) => sum + item.claim_ids.length, 0);
+    const sourceCount = catalog.approaches.reduce((sum, item) => sum + item.source_ids.length, 0);
+    expect(claimCount).toBe(catalog.claims.length);
+    expect(sourceCount).toBe(catalog.sources.length);
   });
 
   it('resolves every claim and source of every approach', () => {

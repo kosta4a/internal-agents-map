@@ -12,8 +12,8 @@ type ControlKey = (typeof CONTROL_KEYS)[number];
 
 /** A claim anchor: `claim-<approach-id>--<field-path>`. */
 const CLAIM_FRAGMENT = /^claim-([a-z0-9-]+)--([a-z0-9-]+)$/;
-/** A source anchor: `source-<approach-id>-source-<number>`. */
-const SOURCE_FRAGMENT = /^source-([a-z0-9-]+)-source-([0-9]+)$/;
+/** A source anchor: `source-<source-id>`. The card of its entry lists the source id. */
+const SOURCE_FRAGMENT = /^source-([a-z0-9-]+)$/;
 /** An approach identifier on its own. */
 const APPROACH_FRAGMENT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -29,12 +29,26 @@ function approachIds(cards: readonly HTMLElement[]): ReadonlySet<string> {
   return new Set(cards.map((card) => card.dataset.approachId ?? ''));
 }
 
+/** The entry of every source identifier the cards list. */
+function sourceOwners(cards: readonly HTMLElement[]): ReadonlyMap<string, string> {
+  const owners = new Map<string, string>();
+  for (const card of cards) {
+    const approach = card.dataset.approachId ?? '';
+    for (const id of (card.dataset.sourceIds ?? '').split(' ')) if (id) owners.set(id, approach);
+  }
+  return owners;
+}
+
 /**
  * Find the entry page an old homepage fragment belongs to.
  * The path comes from the route helper and a known identifier. The anchor is
  * rebuilt from the matched parts, so no text of the fragment reaches the URL raw.
  */
-export function legacyTarget(hash: string, ids: ReadonlySet<string>): string | null {
+export function legacyTarget(
+  hash: string,
+  ids: ReadonlySet<string>,
+  sources: ReadonlyMap<string, string>,
+): string | null {
   let fragment: string;
   try {
     fragment = decodeURIComponent(hash.replace(/^#/, ''));
@@ -47,8 +61,9 @@ export function legacyTarget(hash: string, ids: ReadonlySet<string>): string | n
     return `${entryPath(claim[1]!)}#claim-${claim[1]!}--${claim[2]!}`;
   }
   const source = SOURCE_FRAGMENT.exec(fragment);
-  if (source && ids.has(source[1]!)) {
-    return `${entryPath(source[1]!)}#source-${source[1]!}-source-${source[2]!}`;
+  const owner = source ? sources.get(source[1]!) : undefined;
+  if (source && owner && ids.has(owner)) {
+    return `${entryPath(owner)}#source-${source[1]!}`;
   }
   if (APPROACH_FRAGMENT.test(fragment) && ids.has(fragment)) return entryPath(fragment);
   return null;
@@ -66,14 +81,15 @@ function control(form: HTMLFormElement, key: ControlKey): HTMLInputElement | HTM
 export function startDirectory(): void {
   const cards = [...document.querySelectorAll<HTMLElement>('.entry[data-approach-id]')];
   const ids = approachIds(cards);
-  const target = legacyTarget(location.hash, ids);
+  const sources = sourceOwners(cards);
+  const target = legacyTarget(location.hash, ids, sources);
   if (target) {
     location.replace(target);
     return;
   }
   // An old link can also arrive as a fragment change inside this page.
   window.addEventListener('hashchange', () => {
-    const next = legacyTarget(location.hash, ids);
+    const next = legacyTarget(location.hash, ids, sources);
     if (next) location.replace(next);
   });
 

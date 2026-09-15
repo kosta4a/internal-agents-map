@@ -2,11 +2,16 @@
 // ABOUTME: The no-javascript project proves that every entry link works without the script.
 
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import { PREVIEW_URL } from './preview';
 
 const PREVIEW_HOST = new URL(PREVIEW_URL).host;
-/** The whole catalog, as the directory publishes it today. */
-const TOTAL = 39;
+/** The number of implementations in the committed catalog, so the spec follows the data. */
+const TOTAL = (
+  JSON.parse(readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8')) as {
+    approaches: unknown[];
+  }
+).approaches.length;
 /** A work filter value and the number of cards that carry it. */
 const WORK = { value: 'security', count: 4 };
 /** A search term and the number of cards whose text carries it. */

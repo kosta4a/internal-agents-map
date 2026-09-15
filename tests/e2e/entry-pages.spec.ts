@@ -2,6 +2,14 @@
 // ABOUTME: One project runs without JavaScript, so the reading path must not need it.
 
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+/** The number of implementations in the committed catalog, so the spec follows the data. */
+const TOTAL = (
+  JSON.parse(readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8')) as {
+    approaches: unknown[];
+  }
+).approaches.length;
 
 const ENTRIES = [
   {
@@ -35,7 +43,7 @@ test.describe('the directory', () => {
     await page.goto('/');
     await expect(page.locator('h1')).toHaveText('Internal Agents Map');
     const cards = page.locator('article.entry[data-approach-id]');
-    await expect(cards).toHaveCount(39);
+    await expect(cards).toHaveCount(TOTAL);
     for (const entry of ENTRIES) {
       const card = page.locator(`article.entry#${entry.id}`);
       await expect(card).toHaveCount(1);

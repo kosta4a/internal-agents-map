@@ -141,6 +141,10 @@
       "html": "/agents/stripe-minions.html",
       "markdown": "/agents/stripe-minions.md"
     },
+    "/agents/strongdm-software-factory": {
+      "html": "/agents/strongdm-software-factory.html",
+      "markdown": "/agents/strongdm-software-factory.md"
+    },
     "/agents/uber-coding-agent": {
       "html": "/agents/uber-coding-agent.html",
       "markdown": "/agents/uber-coding-agent.md"

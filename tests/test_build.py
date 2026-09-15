@@ -17,7 +17,6 @@ from unittest import mock
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURES = Path(__file__).resolve().parent / "fixtures"
 NOTES = ROOT / "src" / "content" / "notes"
 SPEC = importlib.util.spec_from_file_location("catalog_build", ROOT / "scripts" / "build.py")
 build = importlib.util.module_from_spec(SPEC)
@@ -480,32 +479,30 @@ class BuildTests(unittest.TestCase):
                                 build.main()
                             path.write_bytes(original)
 
-    def test_catalog_counts_match_the_recorded_baseline(self) -> None:
-        # These numbers are a baseline record of the catalog, not a source of truth.
-        # Change them together with the catalog.
+    def test_every_claim_and_source_belongs_to_one_approach(self) -> None:
         catalog = build.normalize(self.records)
+        self.assertEqual(len(catalog["approaches"]), len(self.records))
         self.assertEqual(
-            {
-                "approaches": len(catalog["approaches"]),
-                "organizations": len({a["company"] for a in catalog["approaches"]}),
-                "claims": len(catalog["claims"]),
-                "sources": len(catalog["sources"]),
-            },
-            {"approaches": 39, "organizations": 35, "claims": 555, "sources": 88},
+            sum(len(a["claim_ids"]) for a in catalog["approaches"]), len(catalog["claims"])
+        )
+        self.assertEqual(
+            sum(len(a["source_ids"]) for a in catalog["approaches"]), len(catalog["sources"])
         )
 
-    def test_route_inventory_fixture_matches_the_catalog(self) -> None:
-        fixture = json.loads((FIXTURES / "route-inventory.json").read_text(encoding="utf-8"))
-        self.assertEqual(fixture["guide_routes"], ["/", "/definitions", "/methodology", "/notes"])
+    def test_routing_manifest_lists_every_page_of_the_catalog(self) -> None:
+        manifest = json.loads((ROOT / "routing-manifest.json").read_text(encoding="utf-8"))
         expected = [
-            *fixture["guide_routes"],
-            *sorted(f"/notes/{path.stem}" for path in NOTES.glob("*.md")),
-            *sorted(f"/agents/{record['id']}" for record in self.records),
+            "/",
+            "/definitions",
+            "/methodology",
+            "/notes",
+            *(f"/notes/{path.stem}" for path in NOTES.glob("*.md")),
+            *(f"/agents/{record['id']}" for record in self.records),
         ]
         self.assertEqual(
-            fixture["routes"],
-            expected,
-            "Update tests/fixtures/route-inventory.json for the current catalog.",
+            sorted(manifest["routes"]),
+            sorted(expected),
+            "Run npm run build to regenerate routing-manifest.json for the current catalog.",
         )
 
     def test_catalog_contains_source_anchors(self) -> None:

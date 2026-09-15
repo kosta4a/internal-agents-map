@@ -430,6 +430,8 @@ export interface DirectoryCard {
   readonly domains: readonly TermView[];
   readonly boundaries: readonly TermView[];
   readonly reviewedAt: string;
+  /** The source identifiers of the entry, so an old source fragment can find its page. */
+  readonly sourceIds: readonly string[];
 }
 
 /** The length a directory card shows before it links to the whole entry. */
@@ -468,6 +470,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
       ]),
       approachType: approach.approach_type,
       approachTypeLabel: termLabel(approach.approach_type),
+      sourceIds: approach.source_ids,
       domains,
       boundaries: (boundaries.length > 0 ? boundaries : ['unknown']).map(termView),
       reviewedAt: approach.last_reviewed_at,
