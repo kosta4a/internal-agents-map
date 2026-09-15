@@ -12,7 +12,7 @@ import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urljoin, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL_ORIGIN = "https://internal-agents.com"
@@ -274,8 +274,26 @@ def expected_body(case: Case, root: Path) -> bytes | None:
     return (root / case.artifact).read_bytes() if case.artifact else None
 
 
-def check_response(case: Case, response: Response, root: Path) -> list[str]:
-    """Name every contract that one response breaks."""
+def origin_of(base: str) -> str:
+    """The scheme and host of a deployment address, with no path. The scheme is https."""
+    parts = urlsplit(base if "//" in base else "//" + base, scheme="https")
+    return f"{parts.scheme}://{parts.netloc}"
+
+
+def requested_url(case: Case, origin: str) -> str:
+    """The address one case asks for: its own alias host, or the deployment that runs."""
+    return (f"https://{case.host}" if case.host else origin.rstrip("/")) + case.path
+
+
+def head_body(dump: bytes, payload: bytes) -> bytes:
+    """The body of a HEAD response. curl writes the header block into the payload file."""
+    return payload[len(dump) :] if payload.startswith(dump) else payload
+
+
+def check_response(
+    case: Case, response: Response, root: Path, origin: str = CANONICAL_ORIGIN
+) -> list[str]:
+    """Name every contract that one response breaks. `origin` is the deployment asked."""
     problems: list[str] = []
     if response.status != case.status:
         problems.append(f"HTTP {response.status}, wanted {case.status}")
@@ -285,8 +303,11 @@ def check_response(case: Case, response: Response, root: Path) -> list[str]:
         problems.append(f"Content-Type {content_type!r}, wanted {case.mime}")
     if case.location is not None:
         location = response.headers.get("location", "")
-        if location not in (case.location, CANONICAL_ORIGIN + case.location):
-            problems.append(f"Location {location!r}, wanted {case.location}")
+        # A relative target and the origin that was asked mean the same place.
+        target = requested_url(case, origin)
+        wanted = urljoin(target, case.location)
+        if urljoin(target, location) != wanted:
+            problems.append(f"Location {location!r}, wanted {wanted}")
     if case.artifact and case.method != "HEAD":
         wanted = expected_body(case, root)
         if response.body != wanted:
@@ -353,8 +374,11 @@ def request(case: Case, base: str, preview: bool, resolve_ip: str | None) -> Res
         result = subprocess.run(command, capture_output=True, text=True, timeout=50)
         if result.returncode:
             raise AssertionError(f"Request failed: {case.describe()}: {result.stderr}")
-        status, values = parse_headers(headers.read_text())
+        dump = headers.read_bytes()
+        status, values = parse_headers(dump.decode(errors="replace"))
         received = body.read_bytes()
+        if case.method == "HEAD":
+            received = head_body(dump, received)
         if preview and case.artifact and case.artifact.endswith(".html"):
             received = PREVIEW_TOOLBAR.sub(b"", received)
         return Response(status, values, received)
@@ -370,9 +394,10 @@ def check(
     artifact = ROOT / root
     routes = load_routes(routes_path)
     cases = build_cases(routes, artifact, preview)
+    origin = origin_of(base)
 
     def verify(case: Case) -> str:
-        problems = check_response(case, request(case, base, preview, resolve_ip), artifact)
+        problems = check_response(case, request(case, base, preview, resolve_ip), artifact, origin)
         if problems:
             raise AssertionError(case.describe() + ": " + "; ".join(problems))
         return case.describe()

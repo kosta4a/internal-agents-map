@@ -37,6 +37,7 @@ MANIFEST = {
         },
     },
 }
+PREVIEW_ORIGIN = "https://map-preview.vercel.app"
 PAGE_HEADERS = {
     "content-type": "text/html; charset=utf-8",
     "vary": "Accept",
@@ -248,6 +249,35 @@ class HeaderTests(unittest.TestCase):
                 delivery.check_response(case, response(308, {"location": value}), self.root), []
             )
 
+    def test_a_redirect_may_stay_on_the_origin_that_was_asked(self):
+        case = delivery.Case(path="/index.html", status=308, location="/")
+        for value in ("/", PREVIEW_ORIGIN + "/"):
+            self.assertEqual(
+                delivery.check_response(
+                    case, response(308, {"location": value}), self.root, PREVIEW_ORIGIN
+                ),
+                [],
+            )
+
+    def test_a_redirect_to_another_origin_is_named(self):
+        case = delivery.Case(path="/index.html", status=308, location="/")
+        answer = response(308, {"location": "https://somewhere-else.example/"})
+        problems = delivery.check_response(case, answer, self.root, PREVIEW_ORIGIN)
+        self.assertIn("Location", problems[0])
+
+    def test_an_alias_host_must_reach_the_production_origin(self):
+        case = delivery.Case(
+            path="/",
+            status=308,
+            location=delivery.CANONICAL_ORIGIN + "/",
+            host="www.internal-agents.com",
+        )
+        good = response(308, {"location": delivery.CANONICAL_ORIGIN + "/"})
+        self.assertEqual(delivery.check_response(case, good, self.root, PREVIEW_ORIGIN), [])
+        preview = response(308, {"location": PREVIEW_ORIGIN + "/"})
+        problems = delivery.check_response(case, preview, self.root, PREVIEW_ORIGIN)
+        self.assertIn("Location", problems[0])
+
     def test_a_page_must_revalidate_and_an_asset_must_not(self):
         page = self.case()
         self.assertIn(
@@ -279,6 +309,27 @@ class HeaderTests(unittest.TestCase):
         case = delivery.Case(path="/", method="HEAD", mime="text/html")
         answer = response(200, PAGE_HEADERS, b"<html></html>")
         self.assertIn("HEAD returned a body", delivery.check_response(case, answer, self.root))
+
+
+class PayloadTests(unittest.TestCase):
+    """curl repeats the header block in the payload file of a --head request."""
+
+    DUMP = b"HTTP/2 200\r\ncontent-type: text/html\r\ncontent-length: 18\r\n\r\n"
+
+    def test_a_head_payload_that_repeats_the_headers_is_no_body(self):
+        self.assertEqual(delivery.head_body(self.DUMP, self.DUMP), b"")
+
+    def test_a_head_payload_after_the_headers_is_a_body(self):
+        self.assertEqual(delivery.head_body(self.DUMP, self.DUMP + b"oops"), b"oops")
+
+    def test_a_payload_without_the_header_block_stays_whole(self):
+        self.assertEqual(delivery.head_body(self.DUMP, b"oops"), b"oops")
+
+    def test_reads_the_origin_of_a_deployment_address(self):
+        self.assertEqual(
+            delivery.origin_of("https://internal-agents.com/"), delivery.CANONICAL_ORIGIN
+        )
+        self.assertEqual(delivery.origin_of("map-preview.vercel.app"), PREVIEW_ORIGIN)
 
 
 if __name__ == "__main__":
