@@ -3,7 +3,6 @@
 // ABOUTME: Chart placements come from the catalog, so lost evidence removes a marker.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
 import Inline from '../components/Inline.astro';
-import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell } from '../lib/definitions';
 import {
@@ -63,7 +62,6 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
   structuredData={graph}
 >
   <header class="guide-header">
-    <Topography />
     <p class="eyebrow">{DEFINITIONS_EYEBROW}</p>
     <h1>{DEFINITIONS_HEADING}</h1>
     <p class="lede">{DEFINITIONS_LEDE}</p>

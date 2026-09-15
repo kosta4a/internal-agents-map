@@ -2,6 +2,7 @@
 // ABOUTME: The shared page frame: head metadata, sidebar navigation, and footer.
 // ABOUTME: Every page passes its own title, description, and structured data.
 import '../styles/site.css';
+import { loadCatalog } from '../lib/catalog';
 import { canonicalUrl, guidePath, homePath, markdownPath, notesIndexPath } from '../lib/routes';
 import {
   OG_IMAGE,
@@ -40,6 +41,11 @@ const {
 const url = canonicalUrl(path);
 const contribute =
   'https://github.com/steel-experiments/internal-agents-map/issues/new?title=Catalog+suggestion';
+// The newest entry review, shown once in the footer of every page.
+const reviewed = loadCatalog()
+  .approaches.map((approach) => approach.last_reviewed_at)
+  .sort()
+  .at(-1);
 ---
 <!doctype html>
 <html lang="en">
@@ -52,7 +58,7 @@ const contribute =
   <link rel="canonical" href={url} />
   <link rel="alternate" type="text/markdown" href={canonicalUrl(markdownPath(path))} />
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
-  <link rel="preload" href="/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/Areal.woff2" as="font" type="font/woff2" crossorigin />
   <meta property="og:type" content={ogType} />
   {articlePublishedTime && (
     <meta property="article:published_time" content={articlePublishedTime} />
@@ -100,6 +106,9 @@ const contribute =
     <div class="footer-brand">
       <span>{SITE_NAME}</span>
       <small>Compiled by <a href="https://steel.dev/?utm_source=internal-agents-map&utm_medium=website&utm_content=footer">Steel</a>, browser infrastructure for AI agents.</small>
+      {reviewed && (
+        <small>Latest entry review: <time datetime={reviewed}>{reviewed}</time>. Individual source dates vary.</small>
+      )}
     </div>
     <div class="contribution-invite">
       <strong>Know an internal agent?</strong>

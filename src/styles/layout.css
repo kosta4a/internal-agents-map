@@ -2,10 +2,10 @@
 /* ABOUTME: Ported from templates/site.css, including its responsive behaviour. */
 .page-shell {
   display: grid;
-  grid-template-columns: 224px minmax(0, 800px);
-  gap: 64px;
+  grid-template-columns: 224px minmax(0, 700px);
+  gap: 32px;
   max-width: 1248px;
-  padding: 56px 32px 0;
+  padding: 64px 32px 0;
   margin: auto;
 }
 .sidebar nav {
@@ -15,7 +15,7 @@
 .brand {
   display: block;
   color: var(--ink);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.25;
   font-weight: 600;
   text-decoration: none;
@@ -24,15 +24,16 @@
 .brand-mark {
   display: block;
   color: var(--blue);
-  font-size: 26px;
+  font-size: 20px;
   margin-bottom: 12px;
 }
 .nav-links {
   display: grid;
   gap: 12px;
-  margin-top: 36px;
+  margin-top: 32px;
 }
 .nav-links a {
+  font-size: 14px;
   color: var(--muted);
   text-decoration: none;
   width: fit-content;
@@ -43,7 +44,7 @@
 .sidebar-note {
   font-size: 12px;
   color: var(--muted);
-  margin-top: 64px;
+  margin-top: 32px;
 }
 .skip-link {
   position: absolute;
@@ -55,10 +56,10 @@
 }
 .skip-link:focus { top: 12px; }
 footer {
-  border-top: 1px solid var(--rule);
   color: var(--muted);
   font-size: 12px;
-  margin-top: 48px;
+  margin-top: 32px;
+  padding-top: 32px;
 }
 .footer-inner {
   max-width: 1248px;
@@ -81,7 +82,7 @@ footer {
 }
 .contribution-invite strong {
   color: var(--ink);
-  font-weight: 550;
+  font-weight: 500;
 }
 .contribution-invite p { margin-top: 8px; }
 .contribution-links {
@@ -99,12 +100,11 @@ footer {
 @media (max-width: 800px) {
   .page-shell {
     display: block;
-    padding: 24px 22px 0;
+    padding: 24px 24px 0;
   }
   .sidebar {
-    border-bottom: 1px solid var(--rule);
     margin-bottom: 24px;
-    padding-bottom: 20px;
+    padding-bottom: 24px;
   }
   .sidebar nav { position: static; }
   .brand { font-size: 16px; }
@@ -117,14 +117,14 @@ footer {
   .nav-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 22px;
+    gap: 12px 24px;
     margin-top: 16px;
-    font-size: 13px;
+    font-size: 14px;
   }
   .sidebar-note { display: none; }
   .footer-inner {
     flex-wrap: wrap;
-    padding-right: 22px;
-    padding-left: 22px;
+    padding-right: 24px;
+    padding-left: 24px;
   }
 }

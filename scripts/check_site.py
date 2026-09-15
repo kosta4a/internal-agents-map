@@ -17,7 +17,7 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 
 # Files that public/ publishes exactly as they are authored.
-PUBLIC_FILES = {"favicon.ico", "og.png", "fonts/Geist.woff2", "fonts/OFL.txt"}
+PUBLIC_FILES = {"favicon.ico", "og.png", "fonts/Areal.woff2"}
 # Exports and discovery files that no page route serves.
 EXPORT_FILES = {
     "agents.json",

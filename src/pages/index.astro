@@ -3,7 +3,6 @@
 // ABOUTME: The filter form only hides cards, so every entry link stays crawlable.
 import SiteLayout from '../layouts/SiteLayout.astro';
 import AgentCard from '../components/AgentCard.astro';
-import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import { directoryCards } from '../lib/entry-view';
 import { canonicalUrl, homePath } from '../lib/routes';
@@ -33,30 +32,30 @@ const graph = structuredData([
 ---
 <SiteLayout title={title} description={description} path={homePath()} current="catalog" structuredData={graph}>
   <header class="intro">
-    <Topography />
-    <p class="eyebrow">Agents at work</p>
-    <h1>{SITE_NAME}</h1>
-    <p class="lede">AI systems organizations build or adapt to do work for their own teams.</p>
+    <h1>AI systems organizations build or adapt to do work for their own teams.</h1>
     <p>{SITE_DESCRIPTION} Explore how teams connect models to their knowledge, tools, and workflows, and where people stay involved.</p>
     <div class="stats">
       <div class="stat"><strong>{catalog.approaches.length}</strong><span>approaches</span></div>
       <div class="stat"><strong>{organizations}</strong><span>organizations</span></div>
       <div class="stat"><strong>{catalog.sources.length}</strong><span>sources</span></div>
     </div>
-    {reviewed && (
-      <p class="review-date">Latest entry review: <time datetime={reviewed}>{reviewed}</time>. Individual source dates vary.</p>
-    )}
   </header>
   <section id="catalog" aria-labelledby="catalog-title">
     <div class="section-heading">
       <h2 id="catalog-title">Explore the catalog</h2>
-      <span class="eyebrow">Approaches, not rankings</span>
+      <span id="results-count" class="result-count" aria-hidden="true">{cards.length} items</span>
     </div>
     <form id="filters" hidden role="search" aria-label="Filter catalog">
-      <label class="search-label" for="q">Search the map</label>
       <div class="search-row">
         <div class="search-field">
           <div class="search-box">
+            <label class="search-label" for="q">
+              <svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="7" cy="7" r="4.5" />
+                <path d="M10.4 10.4 14 14" stroke-linecap="round" />
+              </svg>
+              <span class="visually-hidden">Search the map</span>
+            </label>
             <ul id="chips" class="chips" aria-label="Active filters"></ul>
             <input
               id="q"
@@ -73,15 +72,14 @@ const graph = structuredData([
           </div>
           <ul id="suggestions" class="suggestions" role="listbox" aria-label="Filter suggestions" hidden></ul>
         </div>
-        <button type="reset">Reset</button>
       </div>
-      <p id="search-help" class="search-help">
+      <p id="search-help" class="search-help visually-hidden">
         Pick a suggestion, or type a work area, approach type, or supervision level and press Enter, to filter by it.
         Other words search the text of every card.
       </p>
       <script is:inline id="facet-vocabulary" type="application/json" set:html={vocabulary} />
     </form>
-    <p id="results" class="result-count" role="status" aria-live="polite" aria-atomic="true">{cards.length} approaches</p>
+    <p id="results" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{cards.length} items</p>
     <p id="empty" class="empty-state" hidden>
       No approaches match these filters. Try a broader search or{' '}
       <button type="reset" form="filters" class="text-button">reset the filters</button>.

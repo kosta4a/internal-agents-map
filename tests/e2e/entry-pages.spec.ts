@@ -61,7 +61,9 @@ async function structuredData(page: Page): Promise<Record<string, unknown>> {
 test.describe('the directory', () => {
   test('links to every entry page in the initial HTML', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('h1')).toHaveText('Internal Agents Map');
+    await expect(page.locator('h1')).toHaveText(
+      'AI systems organizations build or adapt to do work for their own teams.',
+    );
     const cards = page.locator('article.entry[data-approach-id]');
     await expect(cards).toHaveCount(TOTAL);
     for (const entry of ENTRIES) {
@@ -221,7 +223,7 @@ test.describe('page previews', () => {
 });
 
 test.describe('company marks', () => {
-  test('leads the entry header with the company logo before the eyebrow', async ({ page }) => {
+  test('leads the entry header with the company logo before the heading', async ({ page }) => {
     for (const entry of ENTRIES) {
       await page.goto(`/agents/${entry.id}`);
       const company = companyOf(entry.id);
@@ -229,9 +231,7 @@ test.describe('company marks', () => {
         `header.entry-header > span.company-logo[data-company-id="${company?.id ?? ''}"]`,
       );
       await expect(mark).toHaveCount(1);
-      await expect(
-        page.locator('header.entry-header > span.company-logo ~ p.eyebrow'),
-      ).toHaveCount(1);
+      await expect(page.locator('header.entry-header > span.company-logo ~ h1')).toHaveCount(1);
 
       if (company?.logo) {
         await expect(mark.locator('img')).toHaveAttribute('src', `/${company.logo.path}`);

@@ -51,16 +51,16 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
 ---
 <SiteLayout title={title} description={description} path={entry.path} current="catalog" structuredData={graph}>
   <article class="entry-page" data-approach-id={entry.id}>
-    <a class="page-back" href="/">← All implementations</a>
+    <a class="page-back" href="/">← Back</a>
     <header class="entry-header">
       <CompanyLogo company={entry.companyView} size={40} eager />
-      <p class="eyebrow">{entry.company} · {entry.approachTypeLabel}</p>
       <h1>{entry.agentName}</h1>
       {entry.summary ? (
         <>
           <p class="lede" id={entry.summary.anchor} data-claim-id={entry.summary.id}>{entry.summary.text}</p>
           {entry.summary.citations.length > 0 && (
             <p class="citations">
+              <span class="citations-label">{entry.summary.citations.length === 1 ? 'Source' : 'Sources'}:</span>
               {entry.summary.citations.map((citation) => (
                 <a
                   class:list={['citation', citation.relation === 'contradicts' && 'citation-contradicts']}
@@ -83,6 +83,10 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
         </div>
       )}
       <dl class="entry-facts">
+        <div>
+          <dt>Company</dt>
+          <dd>{entry.company}</dd>
+        </div>
         <div>
           <dt>Approach type</dt>
           <dd>{entry.approachTypeLabel}</dd>
