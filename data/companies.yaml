@@ -1,0 +1,251 @@
+# ABOUTME: The organizations the catalog names, with their logo files and provenance.
+# ABOUTME: Each logo is the trademark of its owner; an owner can ask for its removal.
+- id: airbnb
+  name: Airbnb
+  homepage: https://www.airbnb.com/
+  logo:
+    file: airbnb.svg
+    source_url: https://www.airbnb.com/
+    accessed_at: '2026-09-15'
+- id: atlassian
+  name: Atlassian
+  homepage: https://www.atlassian.com/
+  logo:
+    file: atlassian.svg
+    source_url: https://atlassian.design/foundations/logos
+    accessed_at: '2026-09-15'
+- id: block
+  name: Block
+  homepage: https://block.xyz/
+  logo:
+    file: block.svg
+    source_url: https://block.xyz/mediakit
+    accessed_at: '2026-09-15'
+- id: brex
+  name: Brex
+  homepage: https://www.brex.com/
+  logo:
+    file: brex.svg
+    source_url: https://www.brex.com/about
+    accessed_at: '2026-09-15'
+- id: browserbase
+  name: Browserbase
+  homepage: https://www.browserbase.com/
+  logo:
+    file: browserbase.svg
+    source_url: https://www.browserbase.com/
+    accessed_at: '2026-09-15'
+- id: cloudflare
+  name: Cloudflare
+  homepage: https://www.cloudflare.com/
+  logo:
+    file: cloudflare.png
+    source_url: https://www.cloudflare.com/press/press-kit/
+    accessed_at: '2026-09-15'
+- id: coinbase
+  name: Coinbase
+  homepage: https://www.coinbase.com/
+  logo:
+    file: coinbase.png
+    source_url: https://github.com/coinbase
+    accessed_at: '2026-09-15'
+- id: databricks
+  name: Databricks
+  homepage: https://www.databricks.com/
+  logo:
+    file: databricks.svg
+    source_url: https://www.databricks.com/company/newsroom/press-kit
+    accessed_at: '2026-09-15'
+- id: domu
+  name: Domu
+  homepage: https://domu.ai/
+  logo:
+    file: domu.svg
+    source_url: https://domu.ai/
+    accessed_at: '2026-09-15'
+- id: doordash
+  name: DoorDash
+  homepage: https://www.doordash.com/
+  logo:
+    file: doordash.png
+    source_url: https://github.com/doordash
+    accessed_at: '2026-09-15'
+- id: dropbox
+  name: Dropbox
+  homepage: https://www.dropbox.com/
+  logo:
+    file: dropbox.svg
+    source_url: https://brand.dropbox.com/logo
+    accessed_at: '2026-09-15'
+- id: flex
+  name: Flex
+  homepage: https://www.withflex.com/
+  logo:
+    file: flex.svg
+    source_url: https://www.withflex.com/
+    accessed_at: '2026-09-15'
+- id: github
+  name: GitHub
+  homepage: https://github.com/
+  logo:
+    file: github.svg
+    source_url: https://github.com/logos
+    accessed_at: '2026-09-15'
+- id: harvey
+  name: Harvey
+  homepage: https://www.harvey.ai/
+  logo:
+    file: harvey.svg
+    source_url: https://www.harvey.ai/press
+    accessed_at: '2026-09-15'
+- id: hubspot
+  name: HubSpot
+  homepage: https://www.hubspot.com/
+  logo: none
+  logo_note: The trademark guidelines do not permit use of the logo on another website without
+    written permission. The monogram shows instead.
+- id: linear
+  name: Linear
+  homepage: https://linear.app/
+  logo:
+    file: linear.svg
+    source_url: https://linear.app/brand
+    accessed_at: '2026-09-15'
+- id: microsoft
+  name: Microsoft
+  homepage: https://www.microsoft.com/
+  logo: none
+  logo_note: The trademark guidelines do not permit use of the logos without an express license.
+    The monogram shows instead.
+- id: monday-com
+  name: monday.com
+  homepage: https://monday.com/
+  logo:
+    file: monday-com.svg
+    source_url: https://www.brand-monday.com/resources
+    accessed_at: '2026-09-15'
+- id: notion
+  name: Notion
+  homepage: https://www.notion.com/
+  logo:
+    file: notion.svg
+    source_url: https://www.notion.com/newsroom
+    accessed_at: '2026-09-15'
+- id: plaid
+  name: Plaid
+  homepage: https://plaid.com/
+  logo:
+    file: plaid.svg
+    source_url: https://plaid.com/press/
+    accessed_at: '2026-09-15'
+- id: posthog
+  name: PostHog
+  homepage: https://posthog.com/
+  logo:
+    file: posthog.svg
+    source_url: https://posthog.com/handbook/brand/assets
+    accessed_at: '2026-09-15'
+- id: ramp
+  name: Ramp
+  homepage: https://ramp.com/
+  logo:
+    file: ramp.svg
+    source_url: https://ramp.com/press
+    accessed_at: '2026-09-15'
+- id: replit
+  name: Replit
+  homepage: https://replit.com/
+  logo:
+    file: replit.svg
+    source_url: https://replit.com/brand
+    accessed_at: '2026-09-15'
+- id: retool
+  name: Retool
+  homepage: https://retool.com/
+  logo:
+    file: retool.svg
+    source_url: https://retool.com/newsroom
+    accessed_at: '2026-09-15'
+- id: salesforce
+  name: Salesforce
+  homepage: https://www.salesforce.com/
+  logo:
+    file: salesforce.svg
+    source_url: https://www.salesforce.com/
+    accessed_at: '2026-09-15'
+- id: sentry
+  name: Sentry
+  homepage: https://sentry.io/
+  logo:
+    file: sentry.svg
+    source_url: https://sentry.io/branding/
+    accessed_at: '2026-09-15'
+- id: shopify
+  name: Shopify
+  homepage: https://www.shopify.com/
+  logo:
+    file: shopify.svg
+    source_url: https://www.shopify.com/brand-assets
+    accessed_at: '2026-09-15'
+- id: sierra
+  name: Sierra
+  homepage: https://sierra.ai/
+  logo: none
+  logo_note: The brand page requires written authorization for any use of its brand assets.
+    The monogram shows instead.
+- id: slack
+  name: Slack
+  homepage: https://slack.com/
+  logo:
+    file: slack.svg
+    source_url: https://slack.com/media-kit
+    accessed_at: '2026-09-15'
+- id: spotify
+  name: Spotify
+  homepage: https://spotify.com/
+  logo:
+    file: spotify.svg
+    source_url: https://developer.spotify.com/documentation/design
+    accessed_at: '2026-09-15'
+- id: stripe
+  name: Stripe
+  homepage: https://stripe.com/
+  logo:
+    file: stripe.svg
+    source_url: https://stripe.com/newsroom/brand-assets
+    accessed_at: '2026-09-15'
+- id: strongdm
+  name: StrongDM
+  homepage: https://www.strongdm.com/
+  logo:
+    file: strongdm.png
+    source_url: https://docs.strongdm.com/
+    accessed_at: '2026-09-15'
+- id: uber
+  name: Uber
+  homepage: https://www.uber.com/
+  logo:
+    file: uber.png
+    source_url: https://developer.uber.com/docs/riders/guides/design-guidelines
+    accessed_at: '2026-09-15'
+- id: workos
+  name: WorkOS
+  homepage: https://workos.com/
+  logo:
+    file: workos.svg
+    source_url: https://workos.com/
+    accessed_at: '2026-09-15'
+- id: y-combinator
+  name: Y Combinator
+  homepage: https://www.ycombinator.com/
+  logo:
+    file: y-combinator.svg
+    source_url: https://www.ycombinator.com/
+    accessed_at: '2026-09-15'
+- id: zup
+  name: Zup
+  homepage: https://zup.com.br/
+  logo:
+    file: zup.svg
+    source_url: https://zup.com.br/
+    accessed_at: '2026-09-15'

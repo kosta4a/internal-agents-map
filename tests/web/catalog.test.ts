@@ -7,6 +7,7 @@ import { CATALOG_SCHEMA_VERSION, loadCatalog, validateCatalog } from '../../src/
 const approach = {
   id: 'example-agent',
   company: 'Example',
+  company_id: 'example',
   agent_name: 'Example agent',
   approach_type: 'task-agent',
   deployment_stage: 'pilot',
@@ -20,6 +21,13 @@ const approach = {
   claim_ids: ['example-agent--summary'],
   source_ids: ['example-agent-source-1'],
   interfaces: [],
+};
+
+const company = {
+  id: 'example',
+  name: 'Example',
+  homepage: 'https://www.example.com/',
+  logo: null,
 };
 
 const claim = {
@@ -52,6 +60,7 @@ function fixture(overrides: Record<string, unknown> = {}) {
     approaches: [structuredClone(approach)],
     claims: [structuredClone(claim)],
     sources: [structuredClone(source)],
+    companies: [structuredClone(company)],
     ...overrides,
   };
 }
@@ -60,7 +69,17 @@ describe('the published catalog', () => {
   const catalog = loadCatalog();
 
   it('uses the schema version the website reads', () => {
-    expect(catalog.schema_version).toBe(4);
+    expect(catalog.schema_version).toBe(5);
+  });
+
+  it('resolves the company of every approach and uses every company', () => {
+    const companyIds = new Set(catalog.companies.map((item) => item.id));
+    const used = new Set<string>();
+    for (const item of catalog.approaches) {
+      expect(companyIds.has(item.company_id)).toBe(true);
+      used.add(item.company_id);
+    }
+    for (const id of companyIds) expect(used.has(id)).toBe(true);
   });
 
   it('lists every claim and every source under exactly one approach', () => {
@@ -87,7 +106,40 @@ describe('catalog validation', () => {
   });
 
   it('rejects another schema version', () => {
-    expect(() => validateCatalog(fixture({ schema_version: 3 }))).toThrow(/schema_version must be 4, found 3/);
+    expect(() => validateCatalog(fixture({ schema_version: 4 }))).toThrow(/schema_version must be 5, found 4/);
+  });
+
+  it('names the approach when its company identifier does not resolve', () => {
+    const broken = fixture();
+    broken.approaches[0]!.company_id = 'ghost-company';
+    expect(() => validateCatalog(broken)).toThrow(
+      /approach "example-agent" lists unknown company "ghost-company"/,
+    );
+  });
+
+  it('names the approach when the company name and identifier disagree', () => {
+    const broken = fixture();
+    broken.companies[0]!.name = 'Example Incorporated';
+    expect(() => validateCatalog(broken)).toThrow(
+      /approach "example-agent" names company "Example", but company "example" is "Example Incorporated"/,
+    );
+  });
+
+  it('rejects an unused company', () => {
+    const broken = fixture();
+    broken.companies.push({ ...structuredClone(company), id: 'idle-company', name: 'Idle' });
+    expect(() => validateCatalog(broken)).toThrow(/company "idle-company" is not used by any approach/);
+  });
+
+  it('rejects a duplicate company identifier and a duplicate name', () => {
+    const duplicateId = fixture();
+    duplicateId.companies.push({ ...structuredClone(company), name: 'Other Name' });
+    expect(() => validateCatalog(duplicateId)).toThrow(/company "example" is declared more than once/);
+    const duplicateName = fixture();
+    duplicateName.companies.push({ ...structuredClone(company), id: 'other-id' });
+    expect(() => validateCatalog(duplicateName)).toThrow(
+      /company name "Example" is declared more than once/,
+    );
   });
 
   it('names the claim path when evidence cites an unknown source', () => {

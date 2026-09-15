@@ -1,0 +1,29 @@
+---
+// ABOUTME: Shows the vendored logo of one organization, or its monogram fallback.
+// ABOUTME: The mark is decorative: the company name stays beside it as text.
+import type { CompanyView } from '../lib/companies';
+
+interface Props {
+  company: CompanyView;
+  /** The box height in pixels. The logo width follows its aspect ratio. */
+  size: number;
+  /** The directory holds many marks, so only the entry page loads its one eagerly. */
+  eager?: boolean;
+}
+
+const { company, size, eager = false } = Astro.props;
+---
+<span class="company-logo" data-company-id={company.id} style={`--logo-size:${size}px`}>
+  {company.logo ? (
+    <img
+      src={`/${company.logo.path}`}
+      alt=""
+      width={company.logo.width}
+      height={company.logo.height}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  ) : (
+    <span class="company-logo-monogram" aria-hidden="true">{company.monogram}</span>
+  )}
+</span>

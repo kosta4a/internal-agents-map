@@ -276,6 +276,21 @@ export const METHODOLOGY_SECTIONS: readonly GuideSection[] = [
     ],
   },
   {
+    id: 'logos',
+    titleId: 'logos-title',
+    heading: 'How we use company logos',
+    body: [
+      ['Each logo is the trademark of its owner. The owner keeps all rights.'],
+      [
+        'The catalog shows a logo only to identify the organization of an entry. It does not show an endorsement, a partnership, or a review of the organization.',
+      ],
+      [
+        'An owner can ask us to remove its logo. We then show a monogram instead. The entry itself does not change.',
+      ],
+      ['A logo says nothing about the evidence. It is not a quality signal.'],
+    ],
+  },
+  {
     id: 'limits',
     titleId: 'limits-title',
     heading: 'What the map cannot tell you',

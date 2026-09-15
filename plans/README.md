@@ -14,6 +14,7 @@ verification gate, and update the status row when finished.
 | [004](004-publish-generated-mini-page.md) | Generate and publish a searchable mini page | P2 | M | 002, 003 | DONE |
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
 | [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
+| [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -30,6 +31,15 @@ retains Python evidence validation, and preserves existing URLs and export
 interfaces. The proposed clean URL policy permanently redirects existing `.html`
 pages. Implementation and release have not been requested in this planning turn.
 
+Plan 007 was requested on 2026-09-15 as a proposal for company logos on the
+directory cards and the entry pages. It recommends one company registry with
+vendored assets, a monogram fallback, and gray scale presentation. Implemented
+the same day, followed by the asset collection: 33 organizations carry a vendored
+logo from their own brand or press surface, and 3 (HubSpot, Microsoft, Sierra)
+stay on the monogram because their brand rules do not permit third-party use.
+Each record keeps its source page and collection date; the gray-scale review
+sheet is recorded in the plan.
+
 ## Dependency notes
 
 - Plan 003 research can run alongside Plan 002; final generation and validation use both changes.
@@ -40,6 +50,9 @@ pages. Implementation and release have not been requested in this planning turn.
 - Plan 006 builds on the published site and the delivery contracts from Plan 005.
   Implement its data boundary and three representative entry pages before migrating
   all pages; verify the replacement before retiring the current renderer or cutting over.
+- Plan 007 builds on the catalog, view, and route boundaries from Plan 006. Its
+  registry and validation work is independent of collecting the logo assets, so the
+  two can run at the same time.
 
 ## Findings considered and rejected
 

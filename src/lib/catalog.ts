@@ -4,7 +4,7 @@
 import catalogText from '../../data/agents.json?raw';
 
 /** The only catalog schema this website reads. */
-export const CATALOG_SCHEMA_VERSION = 4;
+export const CATALOG_SCHEMA_VERSION = 5;
 
 const CATALOG_FILE = 'data/agents.json';
 
@@ -73,6 +73,26 @@ export interface Relationship {
   readonly approach_id: string;
 }
 
+/** The vendored logo of one organization, with the provenance of the asset. */
+export interface CompanyLogo {
+  readonly path: string;
+  readonly media_type: string;
+  readonly width: number;
+  readonly height: number;
+  readonly bytes: number;
+  readonly sha256: string;
+  readonly source_url: string;
+  readonly accessed_at: string;
+}
+
+/** One organization the catalog names, joined to its approaches by identifier. */
+export interface Company {
+  readonly id: string;
+  readonly name: string;
+  readonly homepage: string;
+  readonly logo: CompanyLogo | null;
+}
+
 export interface Rubric {
   readonly invocation: readonly string[];
   readonly state: string;
@@ -83,6 +103,7 @@ export interface Rubric {
 export interface Approach {
   readonly id: string;
   readonly company: string;
+  readonly company_id: string;
   readonly agent_name: string;
   readonly approach_type: string;
   readonly deployment_stage: string;
@@ -105,6 +126,7 @@ export interface Catalog {
   readonly approaches: readonly Approach[];
   readonly claims: readonly Claim[];
   readonly sources: readonly Source[];
+  readonly companies: readonly Company[];
 }
 
 function fail(message: string): never {
@@ -127,10 +149,22 @@ export function validateCatalog(value: unknown): Catalog {
         `found ${JSON.stringify(value.schema_version)}.`,
     );
   }
-  for (const key of ['approaches', 'claims', 'sources']) {
+  for (const key of ['approaches', 'claims', 'sources', 'companies']) {
     if (!Array.isArray(value[key])) fail(`${key} must be an array.`);
   }
   const catalog = value as unknown as Catalog;
+
+  const companies = new Map<string, Company>();
+  const companyNames = new Set<string>();
+  for (const company of catalog.companies) {
+    if (!isRecord(company)) fail('every company must be an object.');
+    if (companies.has(company.id)) fail(`company "${company.id}" is declared more than once.`);
+    if (companyNames.has(company.name)) {
+      fail(`company name "${company.name}" is declared more than once.`);
+    }
+    companies.set(company.id, company);
+    companyNames.add(company.name);
+  }
 
   const claims = new Map<string, Claim>();
   for (const claim of catalog.claims) {
@@ -148,7 +182,19 @@ export function validateCatalog(value: unknown): Catalog {
     approaches.add(approach.id);
   }
 
+  const usedCompanies = new Set<string>();
   for (const approach of catalog.approaches) {
+    const company = companies.get(approach.company_id);
+    if (!company) {
+      fail(`approach "${approach.id}" lists unknown company "${approach.company_id}".`);
+    }
+    if (company.name !== approach.company) {
+      fail(
+        `approach "${approach.id}" names company "${approach.company}", ` +
+          `but company "${company.id}" is "${company.name}".`,
+      );
+    }
+    usedCompanies.add(approach.company_id);
     for (const claimId of approach.claim_ids) {
       const claim = claims.get(claimId);
       if (!claim) fail(`approach "${approach.id}" lists unknown claim "${claimId}".`);
@@ -179,6 +225,12 @@ export function validateCatalog(value: unknown): Catalog {
   for (const source of catalog.sources) {
     if (!approaches.has(source.approach_id)) {
       fail(`source "${source.id}" belongs to unknown approach "${source.approach_id}".`);
+    }
+  }
+
+  for (const company of catalog.companies) {
+    if (!usedCompanies.has(company.id)) {
+      fail(`company "${company.id}" is not used by any approach.`);
     }
   }
 

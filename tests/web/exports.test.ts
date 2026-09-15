@@ -3,7 +3,7 @@
 
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { loadCatalog, type Catalog, type Claim } from '../../src/lib/catalog';
+import { loadCatalog, validateCatalog, type Catalog, type Claim } from '../../src/lib/catalog';
 import {
   catalogMarkdown,
   compactIndexJson,
@@ -34,6 +34,11 @@ describe('record JSON', () => {
       expect(record.sources, approach.id).toEqual(
         approach.source_ids.map((id) => catalog.sources.find((source) => source.id === id)),
       );
+      expect(record.companies, approach.id).toEqual([
+        catalog.companies.find((company) => company.id === approach.company_id),
+      ]);
+      // A record is a complete catalog slice, so the catalog validator accepts it.
+      expect(() => validateCatalog(record), approach.id).not.toThrow();
       expect(text, approach.id).toBe(`${JSON.stringify(record, null, 2)}\n`);
     }
   });

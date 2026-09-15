@@ -158,6 +158,6 @@ test.describe('the Methodology guide', () => {
     );
     await expect(page.locator('a[href="/definitions"]')).not.toHaveCount(0);
     await expect(page.locator('a[href="/notes"]')).not.toHaveCount(0);
-    await expect(page.locator('section')).toHaveCount(6);
+    await expect(page.locator('section')).toHaveCount(7);
   });
 });

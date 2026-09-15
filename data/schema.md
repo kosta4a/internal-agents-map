@@ -2,11 +2,12 @@
 
 Each YAML file in `data/agents/` describes one reported approach. An approach can be an agent, a platform, an orchestration system, or an implemented supporting pattern.
 
-The build creates three linked collections in `data/agents.json`:
+The build creates four linked collections in `data/agents.json`:
 
 - `approaches` contains the systems and their comparison fields.
 - `claims` contains sourced statements derived from authored fields.
 - `sources` contains the evidence and commentary records.
+- `companies` contains the organization registry with each logo descriptor.
 
 Copy `templates/agent.yaml` when you add an approach. Omit optional fields when no public source documents them. Use `unknown` for required rubric fields when the sources do not provide an answer.
 
@@ -97,6 +98,24 @@ Interface values are `slack`, `github`, `web`, `cli`, `linear`, `chrome-extensio
 `primitives` is a list of maps with `name` and `desc` fields. `key_metrics` and `lessons_learned` are lists of strings. `headline_metric` is a short reported result.
 
 Treat all company metrics as self-reported unless an independent source verifies them. Include the date, scope, denominator, and measurement method when the source provides them.
+
+## Company registry
+
+`data/companies.yaml` holds one record per organization, sorted by `id`. The registry links every approach record to one organization and names the logo asset of each organization.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | A kebab-case ID. It is also the logo file stem. |
+| `name` | string | The organization name. It must equal the `company` value of the approach records. |
+| `homepage` | string | The organization homepage. It must use HTTPS. |
+| `logo` | map or `none` | The logo asset record, or `none` while no asset is collected. A logo map holds exactly `file`, `source_url`, and `accessed_at`. |
+| `logo_note` | string | Required with `logo: none`. It states the reason no logo is shown. It is not allowed when a logo file is named. |
+
+The join runs both ways. Every `company` value in `data/agents/` must have a registry record. Every registry record must be used by at least one approach. `public/logos/` may hold only files the registry names.
+
+Logo files live in `public/logos/<id>.svg` or `public/logos/<id>.png`. The build rejects an SVG larger than 64 KiB and a PNG larger than 128 KiB or narrower than 128 pixels. An SVG needs a `viewBox`. It must not hold a DOCTYPE, an ENTITY declaration, a script, a `foreignObject`, an `on*` attribute, a `javascript:` value, or a non-fragment `href`. The intrinsic size comes from the `viewBox` or from the PNG header.
+
+The build derives the `companies` collection into `data/agents.json` (schema version 5) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
 
 ## Source records
 

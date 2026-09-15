@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "approaches": [
     {
       "id": "airbnb-airchat",
@@ -35,6 +35,7 @@
         "identity": "unknown",
         "evidence_strength": "mixed"
       },
+      "company_id": "airbnb",
       "claim_ids": [
         "airbnb-airchat--summary",
         "airbnb-airchat--headline-metric",
@@ -88,6 +89,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "atlassian",
       "claim_ids": [
         "atlassian-rovo-dev--summary",
         "atlassian-rovo-dev--headline-metric",
@@ -140,6 +142,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "block",
       "claim_ids": [
         "block-builderbot--summary",
         "block-builderbot--headline-metric",
@@ -207,6 +210,7 @@
         "identity": "unknown",
         "evidence_strength": "secondary-only"
       },
+      "company_id": "brex",
       "claim_ids": [
         "brex-agent-platform--summary",
         "brex-agent-platform--headline-metric",
@@ -275,6 +279,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "browserbase",
       "claim_ids": [
         "browserbase-bb--summary",
         "browserbase-bb--headline-metric",
@@ -340,6 +345,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "cloudflare",
       "claim_ids": [
         "cloudflare-ai-stack--summary",
         "cloudflare-ai-stack--headline-metric",
@@ -413,6 +419,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "coinbase",
       "claim_ids": [
         "coinbase-forge-mux--summary",
         "coinbase-forge-mux--headline-metric",
@@ -484,6 +491,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "databricks",
       "claim_ids": [
         "databricks-costar--summary",
         "databricks-costar--architecture-harness",
@@ -534,6 +542,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "domu",
       "claim_ids": [
         "domu-clementino--summary",
         "domu-clementino--headline-metric",
@@ -599,6 +608,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "doordash",
       "claim_ids": [
         "doordash-code-review--summary",
         "doordash-code-review--headline-metric",
@@ -660,6 +670,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "doordash",
       "claim_ids": [
         "doordash-flux--summary",
         "doordash-flux--headline-metric",
@@ -737,6 +748,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "dropbox",
       "claim_ids": [
         "dropbox-nova--summary",
         "dropbox-nova--headline-metric",
@@ -804,6 +816,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "flex",
       "claim_ids": [
         "flex-investigation-agent--summary",
         "flex-investigation-agent--architecture-sandbox",
@@ -855,6 +868,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "github",
       "claim_ids": [
         "github-qubot--summary",
         "github-qubot--headline-metric",
@@ -904,6 +918,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "harvey",
       "claim_ids": [
         "harvey-spectre--summary",
         "harvey-spectre--architecture-sandbox",
@@ -962,6 +977,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "hubspot",
       "claim_ids": [
         "hubspot-sidekick--summary",
         "hubspot-sidekick--headline-metric",
@@ -1017,6 +1033,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "linear",
       "claim_ids": [
         "linear-agent--summary",
         "linear-agent--architecture-sandbox",
@@ -1083,6 +1100,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "microsoft",
       "claim_ids": [
         "microsoft-prassistant--summary",
         "microsoft-prassistant--headline-metric",
@@ -1133,6 +1151,7 @@
         "identity": "dedicated-agent",
         "evidence_strength": "secondary-only"
       },
+      "company_id": "monday-com",
       "claim_ids": [
         "monday-sphera-atlas-morphex--summary",
         "monday-sphera-atlas-morphex--headline-metric",
@@ -1203,6 +1222,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "notion",
       "claim_ids": [
         "notion-custom-agents--summary",
         "notion-custom-agents--headline-metric",
@@ -1249,6 +1269,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "plaid",
       "claim_ids": [
         "plaid-ai-annotator--summary",
         "plaid-ai-annotator--headline-metric",
@@ -1295,6 +1316,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "plaid",
       "claim_ids": [
         "plaid-fix-my-connection--summary",
         "plaid-fix-my-connection--headline-metric",
@@ -1340,6 +1362,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "plaid",
       "claim_ids": [
         "plaid-internal-mcp-server--summary",
         "plaid-internal-mcp-server--headline-metric",
@@ -1388,6 +1411,7 @@
         "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "posthog",
       "claim_ids": [
         "posthog-stamphog--summary",
         "posthog-stamphog--headline-metric",
@@ -1455,6 +1479,7 @@
         "identity": "unknown",
         "evidence_strength": "mixed"
       },
+      "company_id": "ramp",
       "claim_ids": [
         "ramp-inspect--summary",
         "ramp-inspect--headline-metric",
@@ -1536,6 +1561,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "replit",
       "claim_ids": [
         "replit-manager-agent--summary",
         "replit-manager-agent--headline-metric",
@@ -1592,6 +1618,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "retool",
       "claim_ids": [
         "retool-retoolgpt--summary",
         "retool-retoolgpt--architecture-model",
@@ -1638,6 +1665,7 @@
         "identity": "user",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "salesforce",
       "claim_ids": [
         "salesforce-slackbot--summary",
         "salesforce-slackbot--architecture-harness",
@@ -1697,6 +1725,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "sentry",
       "claim_ids": [
         "sentry-junior--summary",
         "sentry-junior--headline-metric",
@@ -1768,6 +1797,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "shopify",
       "claim_ids": [
         "shopify-internal-agents--summary",
         "shopify-internal-agents--headline-metric",
@@ -1836,6 +1866,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "sierra",
       "claim_ids": [
         "sierra-pinecone--summary",
         "sierra-pinecone--headline-metric",
@@ -1902,6 +1933,7 @@
         "identity": "unknown",
         "evidence_strength": "mixed"
       },
+      "company_id": "slack",
       "claim_ids": [
         "slack-context-system--summary",
         "slack-context-system--headline-metric",
@@ -1959,6 +1991,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "spotify",
       "claim_ids": [
         "spotify-honk-xirp--summary",
         "spotify-honk-xirp--headline-metric",
@@ -2028,6 +2061,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "stripe",
       "claim_ids": [
         "stripe-minions--summary",
         "stripe-minions--headline-metric",
@@ -2096,6 +2130,7 @@
         "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "strongdm",
       "claim_ids": [
         "strongdm-software-factory--summary",
         "strongdm-software-factory--architecture-sandbox",
@@ -2158,6 +2193,7 @@
         "identity": "unknown",
         "evidence_strength": "secondary-only"
       },
+      "company_id": "uber",
       "claim_ids": [
         "uber-coding-agent--summary",
         "uber-coding-agent--headline-metric",
@@ -2211,6 +2247,7 @@
         "identity": "service",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "uber",
       "claim_ids": [
         "uber-ureview--summary",
         "uber-ureview--headline-metric",
@@ -2276,6 +2313,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "workos",
       "claim_ids": [
         "workos-project-horizon--summary",
         "workos-project-horizon--architecture-sandbox",
@@ -2343,6 +2381,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "y-combinator",
       "claim_ids": [
         "ycombinator-agent-infra--summary",
         "ycombinator-agent-infra--architecture-sandbox",
@@ -2388,6 +2427,7 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "company_id": "zup",
       "claim_ids": [
         "zup-codegen--summary",
         "zup-codegen--architecture-harness",
@@ -16298,6 +16338,521 @@
       },
       "role": "evidence",
       "approach_id": "zup-codegen"
+    }
+  ],
+  "companies": [
+    {
+      "id": "airbnb",
+      "name": "Airbnb",
+      "homepage": "https://www.airbnb.com/",
+      "logo": {
+        "path": "logos/airbnb.svg",
+        "media_type": "image/svg+xml",
+        "width": 1007,
+        "height": 1080,
+        "bytes": 1902,
+        "sha256": "sha256:6c6f9772f5fad0e15a71c26f2307a1ce7c896e82f9a020c0987eb166f55a6f44",
+        "source_url": "https://www.airbnb.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "atlassian",
+      "name": "Atlassian",
+      "homepage": "https://www.atlassian.com/",
+      "logo": {
+        "path": "logos/atlassian.svg",
+        "media_type": "image/svg+xml",
+        "width": 48,
+        "height": 48,
+        "bytes": 1138,
+        "sha256": "sha256:4bde9a5f2253655b939847e8df0434bb718bd979922e2f13008a4ffe750c361d",
+        "source_url": "https://atlassian.design/foundations/logos",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "block",
+      "name": "Block",
+      "homepage": "https://block.xyz/",
+      "logo": {
+        "path": "logos/block.svg",
+        "media_type": "image/svg+xml",
+        "width": 440,
+        "height": 440,
+        "bytes": 762,
+        "sha256": "sha256:20484c6fd3ecc9160294c86877a0d8a6c5293c1307d7de2fe48a5b8c83dd1560",
+        "source_url": "https://block.xyz/mediakit",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "brex",
+      "name": "Brex",
+      "homepage": "https://www.brex.com/",
+      "logo": {
+        "path": "logos/brex.svg",
+        "media_type": "image/svg+xml",
+        "width": 122,
+        "height": 32,
+        "bytes": 1489,
+        "sha256": "sha256:1b584fdec40151ccedec144e2f63f28486f811923f1db957a3fbeb49d950ec6e",
+        "source_url": "https://www.brex.com/about",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "browserbase",
+      "name": "Browserbase",
+      "homepage": "https://www.browserbase.com/",
+      "logo": {
+        "path": "logos/browserbase.svg",
+        "media_type": "image/svg+xml",
+        "width": 30,
+        "height": 30,
+        "bytes": 481,
+        "sha256": "sha256:e6d94a2a3e978b7eb2c70cbcf63c7445d0f9547dd145b9278aafa7bf836b0b89",
+        "source_url": "https://www.browserbase.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare",
+      "homepage": "https://www.cloudflare.com/",
+      "logo": {
+        "path": "logos/cloudflare.png",
+        "media_type": "image/png",
+        "width": 512,
+        "height": 173,
+        "bytes": 11443,
+        "sha256": "sha256:400b70b8bb7db80da137ef8e8fcb835a692410a3083598964da08ed1756df145",
+        "source_url": "https://www.cloudflare.com/press/press-kit/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "coinbase",
+      "name": "Coinbase",
+      "homepage": "https://www.coinbase.com/",
+      "logo": {
+        "path": "logos/coinbase.png",
+        "media_type": "image/png",
+        "width": 400,
+        "height": 400,
+        "bytes": 7383,
+        "sha256": "sha256:dbeeada7bfb992dd453f1c12db32e4dad1a20f1b0d0cde8259f58b4ccd4ebdc2",
+        "source_url": "https://github.com/coinbase",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "homepage": "https://www.databricks.com/",
+      "logo": {
+        "path": "logos/databricks.svg",
+        "media_type": "image/svg+xml",
+        "width": 15,
+        "height": 17,
+        "bytes": 676,
+        "sha256": "sha256:7de87fef1567963690991896469ad7ed29e29c57c12c42822fca78e3f09f40e2",
+        "source_url": "https://www.databricks.com/company/newsroom/press-kit",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "domu",
+      "name": "Domu",
+      "homepage": "https://domu.ai/",
+      "logo": {
+        "path": "logos/domu.svg",
+        "media_type": "image/svg+xml",
+        "width": 709,
+        "height": 709,
+        "bytes": 1021,
+        "sha256": "sha256:0ef7d8c31e4ff7cc9fabd7c30b7e07eb94b509feb29fedb4ed8c0c82844547a3",
+        "source_url": "https://domu.ai/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "doordash",
+      "name": "DoorDash",
+      "homepage": "https://www.doordash.com/",
+      "logo": {
+        "path": "logos/doordash.png",
+        "media_type": "image/png",
+        "width": 460,
+        "height": 460,
+        "bytes": 5012,
+        "sha256": "sha256:896154ba141aeb451484f47e09fa9530f6dad16b372a5bd8b42279ca787dba00",
+        "source_url": "https://github.com/doordash",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "dropbox",
+      "name": "Dropbox",
+      "homepage": "https://www.dropbox.com/",
+      "logo": {
+        "path": "logos/dropbox.svg",
+        "media_type": "image/svg+xml",
+        "width": 129,
+        "height": 128,
+        "bytes": 553,
+        "sha256": "sha256:c2175e421fbe504b015a2d66c822b529d5eed0cfd76408755b3f0f6dcf1b44e1",
+        "source_url": "https://brand.dropbox.com/logo",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "flex",
+      "name": "Flex",
+      "homepage": "https://www.withflex.com/",
+      "logo": {
+        "path": "logos/flex.svg",
+        "media_type": "image/svg+xml",
+        "width": 70,
+        "height": 32,
+        "bytes": 2238,
+        "sha256": "sha256:c74213c165721fe7b5e69060f125a568e8dee3cfff73d73d8aea31f6aa2fd225",
+        "source_url": "https://www.withflex.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "homepage": "https://github.com/",
+      "logo": {
+        "path": "logos/github.svg",
+        "media_type": "image/svg+xml",
+        "width": 98,
+        "height": 96,
+        "bytes": 1559,
+        "sha256": "sha256:693d7abe6f899646cc2e96856723b45e95f71885a54910b2749f6decdf7e1ee1",
+        "source_url": "https://github.com/logos",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "harvey",
+      "name": "Harvey",
+      "homepage": "https://www.harvey.ai/",
+      "logo": {
+        "path": "logos/harvey.svg",
+        "media_type": "image/svg+xml",
+        "width": 3022,
+        "height": 908,
+        "bytes": 1245,
+        "sha256": "sha256:ba10880dacd2639b39a6a48599af9ad6a433f6b895c6219636b405797c052fbf",
+        "source_url": "https://www.harvey.ai/press",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "hubspot",
+      "name": "HubSpot",
+      "homepage": "https://www.hubspot.com/",
+      "logo": null
+    },
+    {
+      "id": "linear",
+      "name": "Linear",
+      "homepage": "https://linear.app/",
+      "logo": {
+        "path": "logos/linear.svg",
+        "media_type": "image/svg+xml",
+        "width": 100,
+        "height": 100,
+        "bytes": 1060,
+        "sha256": "sha256:e683e95a5eb9b360ae06360c0350fd1b5fcf3d2222ef9de8e71fa0bc413dccc3",
+        "source_url": "https://linear.app/brand",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "homepage": "https://www.microsoft.com/",
+      "logo": null
+    },
+    {
+      "id": "monday-com",
+      "name": "monday.com",
+      "homepage": "https://monday.com/",
+      "logo": {
+        "path": "logos/monday-com.svg",
+        "media_type": "image/svg+xml",
+        "width": 543,
+        "height": 127,
+        "bytes": 4732,
+        "sha256": "sha256:4b31322ad7d3893d3f219bbde14e2a72857cc9f5eda8ebda7baeb872ec6ddf9b",
+        "source_url": "https://www.brand-monday.com/resources",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "homepage": "https://www.notion.com/",
+      "logo": {
+        "path": "logos/notion.svg",
+        "media_type": "image/svg+xml",
+        "width": 335,
+        "height": 350,
+        "bytes": 2283,
+        "sha256": "sha256:59462b4c554e9fd24059ecaedf686b9952a39ad4b73681899d8bec7128c1300b",
+        "source_url": "https://www.notion.com/newsroom",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "plaid",
+      "name": "Plaid",
+      "homepage": "https://plaid.com/",
+      "logo": {
+        "path": "logos/plaid.svg",
+        "media_type": "image/svg+xml",
+        "width": 77,
+        "height": 29,
+        "bytes": 2480,
+        "sha256": "sha256:4601cd327da78e58d9a99a7c7083efc781015648923cc56aa8aff58c8673e0fb",
+        "source_url": "https://plaid.com/press/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "posthog",
+      "name": "PostHog",
+      "homepage": "https://posthog.com/",
+      "logo": {
+        "path": "logos/posthog.svg",
+        "media_type": "image/svg+xml",
+        "width": 52,
+        "height": 28,
+        "bytes": 2730,
+        "sha256": "sha256:afae57f848b549e32e5ef9b58cc14da9733ca237224b8e69b5866519f541fbe7",
+        "source_url": "https://posthog.com/handbook/brand/assets",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "ramp",
+      "name": "Ramp",
+      "homepage": "https://ramp.com/",
+      "logo": {
+        "path": "logos/ramp.svg",
+        "media_type": "image/svg+xml",
+        "width": 155,
+        "height": 134,
+        "bytes": 351,
+        "sha256": "sha256:5934a980f06e5e4cb17ebef85c62abddebb183ee2309724c2f0b34de34ba83fa",
+        "source_url": "https://ramp.com/press",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "replit",
+      "name": "Replit",
+      "homepage": "https://replit.com/",
+      "logo": {
+        "path": "logos/replit.svg",
+        "media_type": "image/svg+xml",
+        "width": 378,
+        "height": 519,
+        "bytes": 2209,
+        "sha256": "sha256:161fa3c69fdaae7a019d286af72c1cbb04fd54bd3301799583db2384e1d1813e",
+        "source_url": "https://replit.com/brand",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "retool",
+      "name": "Retool",
+      "homepage": "https://retool.com/",
+      "logo": {
+        "path": "logos/retool.svg",
+        "media_type": "image/svg+xml",
+        "width": 58,
+        "height": 61,
+        "bytes": 653,
+        "sha256": "sha256:bcb9254daa7e7fa6ef70e9a5d602e956401f3440264cb69521d2047f0e1d13d8",
+        "source_url": "https://retool.com/newsroom",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "homepage": "https://www.salesforce.com/",
+      "logo": {
+        "path": "logos/salesforce.svg",
+        "media_type": "image/svg+xml",
+        "width": 206,
+        "height": 144,
+        "bytes": 587,
+        "sha256": "sha256:27d2e6b96eb4f1ff0995032f1d29dd84d62ee7e251df1fbe26c19bcf6ab4a98d",
+        "source_url": "https://www.salesforce.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "sentry",
+      "name": "Sentry",
+      "homepage": "https://sentry.io/",
+      "logo": {
+        "path": "logos/sentry.svg",
+        "media_type": "image/svg+xml",
+        "width": 50,
+        "height": 44,
+        "bytes": 610,
+        "sha256": "sha256:272ca5192cd474b26762b2dcd03dc8ab687ffa7b7d16b60dff199a79f6d42be2",
+        "source_url": "https://sentry.io/branding/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "shopify",
+      "name": "Shopify",
+      "homepage": "https://www.shopify.com/",
+      "logo": {
+        "path": "logos/shopify.svg",
+        "media_type": "image/svg+xml",
+        "width": 89,
+        "height": 101,
+        "bytes": 1618,
+        "sha256": "sha256:66166b2e55d67988b56b4bd28b63c271e2b9713358cb723070a92bde17ad7d63",
+        "source_url": "https://www.shopify.com/brand-assets",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "sierra",
+      "name": "Sierra",
+      "homepage": "https://sierra.ai/",
+      "logo": null
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "homepage": "https://slack.com/",
+      "logo": {
+        "path": "logos/slack.svg",
+        "media_type": "image/svg+xml",
+        "width": 54,
+        "height": 54,
+        "bytes": 2101,
+        "sha256": "sha256:1f40066b694020057218c46eb2a11982b278d89b2dc8f96a21e4ea04e2b9db3b",
+        "source_url": "https://slack.com/media-kit",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "homepage": "https://spotify.com/",
+      "logo": {
+        "path": "logos/spotify.svg",
+        "media_type": "image/svg+xml",
+        "width": 237,
+        "height": 226,
+        "bytes": 1255,
+        "sha256": "sha256:ead72f82725038389cca09f439fdb7807640e122500c934f2500c7036bf40dbb",
+        "source_url": "https://developer.spotify.com/documentation/design",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe",
+      "homepage": "https://stripe.com/",
+      "logo": {
+        "path": "logos/stripe.svg",
+        "media_type": "image/svg+xml",
+        "width": 360,
+        "height": 150,
+        "bytes": 2139,
+        "sha256": "sha256:4448c4b4f954285d2b2aeb6d92391c85fdc290e008c2679d2c006d6d72ae1ae9",
+        "source_url": "https://stripe.com/newsroom/brand-assets",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "strongdm",
+      "name": "StrongDM",
+      "homepage": "https://www.strongdm.com/",
+      "logo": {
+        "path": "logos/strongdm.png",
+        "media_type": "image/png",
+        "width": 804,
+        "height": 217,
+        "bytes": 7165,
+        "sha256": "sha256:41033bb3a9c31ec70ef5c954e8417522018650943c3c2fc5610053c805107510",
+        "source_url": "https://docs.strongdm.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "uber",
+      "name": "Uber",
+      "homepage": "https://www.uber.com/",
+      "logo": {
+        "path": "logos/uber.png",
+        "media_type": "image/png",
+        "width": 858,
+        "height": 375,
+        "bytes": 5778,
+        "sha256": "sha256:4252a887e54aaacc77fc04a9e645af195df46c4f295ded21598dce06e50dde5e",
+        "source_url": "https://developer.uber.com/docs/riders/guides/design-guidelines",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "workos",
+      "name": "WorkOS",
+      "homepage": "https://workos.com/",
+      "logo": {
+        "path": "logos/workos.svg",
+        "media_type": "image/svg+xml",
+        "width": 242,
+        "height": 210,
+        "bytes": 865,
+        "sha256": "sha256:c215f201adb0bb8c282a86ab0247aa6423009562d2781c566a89fee3732c38d8",
+        "source_url": "https://workos.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "y-combinator",
+      "name": "Y Combinator",
+      "homepage": "https://www.ycombinator.com/",
+      "logo": {
+        "path": "logos/y-combinator.svg",
+        "media_type": "image/svg+xml",
+        "width": 48,
+        "height": 48,
+        "bytes": 414,
+        "sha256": "sha256:6dc79af8b0aeae7182c5d9e89027a8d7bb2bdeefb1ab6f585ebd6e7bfabe320a",
+        "source_url": "https://www.ycombinator.com/",
+        "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "zup",
+      "name": "Zup",
+      "homepage": "https://zup.com.br/",
+      "logo": {
+        "path": "logos/zup.svg",
+        "media_type": "image/svg+xml",
+        "width": 1038,
+        "height": 355,
+        "bytes": 1400,
+        "sha256": "sha256:4d4ef17d2ffc383f07e79f782f4c4e09433e9a319eba2cde67199728c0433843",
+        "source_url": "https://zup.com.br/",
+        "accessed_at": "2026-09-15"
+      }
     }
   ]
 }

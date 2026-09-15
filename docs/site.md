@@ -34,7 +34,7 @@ It watches `data/agents/`, so a record edit produces a new catalog and the page 
 validation failure stays visible in the terminal; the server does not serve older data silently.
 
 Run `npm run build` for the complete static build and `npm run preview -- --host 127.0.0.1
---port 4173` to serve the built files. The build writes `dist/`, which Git ignores. Do not commit
+--port 4180` to serve the built files. The build writes `dist/`, which Git ignores. Do not commit
 website output. Astro caches in `.astro/`, and the browser tests write `playwright-report/` and
 `test-results/`; Git ignores these too.
 
@@ -90,6 +90,37 @@ asset from commit `3c80bfcc1ba4988ece0eda46a282e15d29e61bbf`, path
 [public/fonts/Geist.woff2](../public/fonts/Geist.woff2). The accompanying
 [SIL Open Font License](../public/fonts/OFL.txt) stays with the font and is published beside it.
 The font's license applies to that asset; repository licenses continue to govern other content.
+
+### Company logos
+
+Every organization mark renders through one component, `CompanyLogo.astro`, which reads
+the `companies` collection of the catalog. The directory card shows the mark at 20 px and
+loads it lazily; the entry page shows it at 40 px and loads it eagerly. A vendored logo
+renders in gray scale so that marks of many colors stay quiet inside the restrained
+palette. Without a logo, the component shows a monogram: the first letters of up to the
+first two words of the company name that start with a letter or a digit, on a quiet
+surface tile.
+
+The mark is decorative. The image carries an empty `alt`, and the monogram is
+`aria-hidden`. The company name stays beside the mark as text. No page requests an
+external image. Logo assets are vendored into `public/logos/` the same way as the Geist
+font, with `source_url` and `accessed_at` provenance in the registry. A byte change to a
+logo changes the derived catalog, so `scripts/build.py --check` fails until the output is
+regenerated and committed.
+
+The artifact gates treat logos as published files. `scripts/check_site.py` derives the
+expected logo files from the catalog companies, and `scripts/check_delivery.py` checks
+their content types on the host. The Methodology guide carries the trademark and removal
+statement for the marks.
+
+When you collect an asset, take it from the brand, press, or media page of the
+organization. Do not take it from a logo aggregator, a search result, or a screen
+capture. Choose the dark or full-color version for the white background, never a white
+version, because gray scale keeps the original lightness. Prefer SVG; use PNG only when
+the organization publishes no vector asset. Remove metadata, comments, and unused
+definitions from the file, and record the exact page that published the asset in
+`source_url`. When the brand rules do not permit use, keep `logo: none` and write the
+reason in `logo_note`.
 
 ## Reading and sharing
 

@@ -29,7 +29,7 @@ EXPORT_FILES = {
 }
 # The document the host returns for an unknown path. No route points to it.
 ERROR_PAGE = "404.html"
-DIRECTORIES = {"_astro", "fonts", "notes", "agents"}
+DIRECTORIES = {"_astro", "fonts", "notes", "agents", "logos"}
 # A bundled asset is named `<name>.<content hash>.<extension>`.
 BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
 CSS_URL = re.compile(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)")
@@ -156,6 +156,11 @@ def validate(
     check_entry_routes(routes, approaches, errors)
     expected = route_files(routes, errors) | PUBLIC_FILES | EXPORT_FILES | {ERROR_PAGE}
     expected |= {f"agents/{approach['id']}.json" for approach in approaches}
+    # The published logo set comes from the companies the catalog declares.
+    for company in catalog.get("companies") or []:
+        logo = company.get("logo")
+        if isinstance(logo, dict) and isinstance(logo.get("path"), str):
+            expected.add(logo["path"])
     if errors:
         return errors
 

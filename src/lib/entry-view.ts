@@ -13,6 +13,7 @@ import {
   type Source,
 } from './catalog';
 import { fieldLabel, levelLabel, termLabel } from './labels';
+import { companyView, type CompanyView } from './companies';
 import { notesForApproach } from './notes';
 import { entryPath } from './routes';
 import { shorten } from './text';
@@ -119,6 +120,9 @@ export interface EntryView {
   readonly id: string;
   readonly path: string;
   readonly company: string;
+  readonly companyId: string;
+  /** The logo or monogram mark the entry header shows. */
+  readonly companyView: CompanyView;
   readonly agentName: string;
   readonly title: string;
   readonly approachType: string;
@@ -377,6 +381,8 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     id: approach.id,
     path: entryPath(approach.id),
     company: approach.company,
+    companyId: approach.company_id,
+    companyView: companyView(catalog, approach.company_id),
     agentName: approach.agent_name,
     title: `${approach.company} — ${approach.agent_name}`,
     approachType: approach.approach_type,
@@ -419,6 +425,8 @@ export interface DirectoryCard {
   readonly id: string;
   readonly path: string;
   readonly company: string;
+  /** The logo or monogram mark the card shows beside the company name. */
+  readonly companyView: CompanyView;
   readonly agentName: string;
   readonly summary: string;
   /** The first sentences of the summary, for the directory card. */
@@ -457,6 +465,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
       id: approach.id,
       path: entryPath(approach.id),
       company: approach.company,
+      companyView: companyView(catalog, approach.company_id),
       agentName: approach.agent_name,
       summary: summary?.text ?? 'Unknown',
       excerpt: shorten(summary?.text ?? 'Unknown', CARD_SUMMARY_LIMIT),

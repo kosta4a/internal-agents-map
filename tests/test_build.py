@@ -7,6 +7,7 @@ import importlib.util
 import io
 import json
 import shutil
+import struct
 import sys
 import tempfile
 import unittest
@@ -96,6 +97,53 @@ class BuildTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.records = build.load_agents()
+        cls.companies = build.load_companies(cls.records)
+
+    def company_fixture(self, **overrides) -> dict:
+        company = {
+            "id": "fixture-company",
+            "name": "Fixture",
+            "homepage": "https://www.fixture.example/",
+            "logo": "none",
+            "logo_note": "No logo asset has been collected yet.",
+        }
+        company.update(overrides)
+        if isinstance(company.get("logo"), dict):
+            company.pop("logo_note", None)
+        return company
+
+    def fixture_records(self) -> list[dict]:
+        return [{"id": "fixture-agent", "company": "Fixture"}]
+
+    def write_registry(self, root: Path, companies: list[dict]) -> None:
+        (root / "data").mkdir(parents=True, exist_ok=True)
+        (root / "data" / "companies.yaml").write_text(
+            yaml.safe_dump(companies, sort_keys=False), encoding="utf-8"
+        )
+
+    def write_logo(self, root: Path, name: str, content: bytes) -> None:
+        logos = root / "public" / "logos"
+        logos.mkdir(parents=True, exist_ok=True)
+        (logos / name).write_bytes(content)
+
+    def assert_registry_invalid(self, records: list[dict], root: Path) -> None:
+        with (
+            contextlib.redirect_stderr(io.StringIO()),
+            self.assertRaises(SystemExit),
+        ):
+            build.load_companies(records, root=root)
+
+    def logo_svg(self, **overrides) -> bytes:
+        attributes = {
+            "xmlns": "http://www.w3.org/2000/svg",
+            "viewBox": "0 0 128 40",
+            **overrides,
+        }
+        markup = " ".join(f'{key}="{value}"' for key, value in attributes.items())
+        return f'<svg {markup}><path d="M0 0h128v40H0z"/></svg>'.encode("utf-8")
+
+    def logo_png(self, width: int = 128, height: int = 40) -> bytes:
+        return b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0dIHDR" + struct.pack(">II", width, height)
 
     def source_fixture(self) -> dict:
         return {
@@ -176,12 +224,14 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(len(source_ids), len(set(source_ids)))
 
     def test_normalized_export_has_linked_collections(self) -> None:
-        export = build.normalize(self.records)
-        self.assertEqual(export["schema_version"], 4)
+        export = build.normalize(self.records, self.companies)
+        self.assertEqual(export["schema_version"], 5)
         claim_ids = {claim["id"] for claim in export["claims"]}
         source_ids = {source["id"] for source in export["sources"]}
+        company_ids = {company["id"] for company in export["companies"]}
         self.assertTrue(all(source["role"] in build.SOURCE_ROLES for source in export["sources"]))
         for approach in export["approaches"]:
+            self.assertIn(approach["company_id"], company_ids)
             self.assertTrue(set(approach["claim_ids"]).issubset(claim_ids))
             self.assertTrue(set(approach["source_ids"]).issubset(source_ids))
             self.assertTrue(approach["operating_models"])
@@ -369,11 +419,11 @@ class BuildTests(unittest.TestCase):
             source, manifest, _ = self.write_capture(root, source=record["sources"][0])
             record["sources"][0] = source
             with mock.patch.object(build, "ROOT", root):
-                export = build.normalize([record])
+                export = build.normalize([record], [self.company_fixture(name=record["company"])])
             normalized_source = next(
                 item for item in export["sources"] if item["id"] == source["id"]
             )
-            self.assertEqual(export["schema_version"], 4)
+            self.assertEqual(export["schema_version"], 5)
             self.assertEqual(normalized_source["capture"], manifest)
             self.assertNotIn("manifest_path", normalized_source["capture"])
 
@@ -420,7 +470,7 @@ class BuildTests(unittest.TestCase):
                 )
 
     def test_the_default_build_writes_the_data_and_the_repository_documents(self) -> None:
-        outputs = build.data_outputs(self.records, build.normalize(self.records))
+        outputs = build.data_outputs(self.records, build.normalize(self.records, self.companies))
         self.assertEqual(
             set(outputs),
             {
@@ -439,12 +489,12 @@ class BuildTests(unittest.TestCase):
                 )
 
     def test_two_builds_of_the_same_records_agree(self) -> None:
-        first = build.data_outputs(self.records, build.normalize(self.records))
-        second = build.data_outputs(self.records, build.normalize(self.records))
+        first = build.data_outputs(self.records, build.normalize(self.records, self.companies))
+        second = build.data_outputs(self.records, build.normalize(self.records, self.companies))
         self.assertEqual(first, second)
 
     def test_outputs_are_staged_and_a_stale_file_fails_the_check(self) -> None:
-        catalog = build.normalize(self.records)
+        catalog = build.normalize(self.records, self.companies)
         outputs = build.data_outputs(self.records, catalog)
         with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
             root = Path(directory)
@@ -460,6 +510,7 @@ class BuildTests(unittest.TestCase):
                     )
                 with (
                     mock.patch.object(build, "load_agents", return_value=self.records),
+                    mock.patch.object(build, "load_companies", return_value=self.companies),
                     mock.patch.object(build, "normalize", return_value=catalog),
                     mock.patch.object(build, "data_outputs", return_value=relocated),
                     mock.patch.object(sys, "argv", ["build.py", "--check"]),
@@ -480,7 +531,7 @@ class BuildTests(unittest.TestCase):
                             path.write_bytes(original)
 
     def test_every_claim_and_source_belongs_to_one_approach(self) -> None:
-        catalog = build.normalize(self.records)
+        catalog = build.normalize(self.records, self.companies)
         self.assertEqual(len(catalog["approaches"]), len(self.records))
         self.assertEqual(
             sum(len(a["claim_ids"]) for a in catalog["approaches"]), len(catalog["claims"])
@@ -517,9 +568,9 @@ class BuildTests(unittest.TestCase):
             self.assertIn(f"[{record['agent_name']}](#{record['id']})", catalog)
 
     def test_overview_counts_match_export(self) -> None:
-        export = build.normalize(self.records)
+        export = build.normalize(self.records, self.companies)
         company_count = len({record["company"] for record in self.records})
-        overview = build.render_overview(self.records)
+        overview = build.render_overview(self.records, export)
         self.assertIn(f"{len(self.records)} approaches", overview)
         self.assertIn(f"{company_count} organizations", overview)
         self.assertIn(f"{len(export['sources'])} sources", overview)
@@ -569,6 +620,291 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(build.markdown("Acme | Corp\nTeam"), "Acme \\| Corp Team")
         self.assertEqual(build.markdown(["slack", "web"]), "slack, web")
 
+    def test_company_registry_loads_and_joins_both_ways(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_registry(root, [self.company_fixture()])
+            registry = build.load_companies(self.fixture_records(), root=root)
+            self.assertEqual(registry, [self.company_fixture()])
+
+    def assert_registry_error(self, records: list[dict], root: Path) -> str:
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr), self.assertRaises(SystemExit):
+            build.load_companies(records, root=root)
+        return stderr.getvalue()
+
+    def test_company_registry_must_join_both_ways(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_registry(root, [self.company_fixture()])
+            message = self.assert_registry_error(
+                [
+                    {"id": "fixture-agent", "company": "Fixture"},
+                    {"id": "other-agent", "company": "Other"},
+                ],
+                root,
+            )
+            self.assertIn(
+                "other-agent.yaml: company 'Other' has no record in data/companies.yaml.", message
+            )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_registry(
+                root,
+                [
+                    self.company_fixture(),
+                    self.company_fixture(
+                        id="unused-company",
+                        name="Unused",
+                        homepage="https://unused.example/",
+                    ),
+                ],
+            )
+            message = self.assert_registry_error(self.fixture_records(), root)
+            self.assertIn(
+                "data/companies.yaml: company 'unused-company' is not used by any approach record.",
+                message,
+            )
+
+    def test_company_registry_rejects_invalid_records(self) -> None:
+        fixtures = (
+            self.company_fixture(id="Fixture"),
+            self.company_fixture(name=""),
+            self.company_fixture(homepage="http://www.fixture.example/"),
+            self.company_fixture(logo_note=None),
+            self.company_fixture(logo=None),
+            self.company_fixture(
+                logo={
+                    "file": "fixture-company.gif",
+                    "source_url": "https://fixture.example/logo",
+                    "accessed_at": "2026-09-15",
+                }
+            ),
+            {**self.company_fixture(), "extra": True},
+        )
+        for company in fixtures:
+            with self.subTest(company=company), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.write_registry(root, [company])
+                self.assert_registry_invalid(self.fixture_records(), root)
+        for companies in (
+            [self.company_fixture(), self.company_fixture(homepage="https://other.example/")],
+            [
+                self.company_fixture(),
+                self.company_fixture(id="second-company", homepage="https://other.example/"),
+            ],
+            [self.company_fixture(id="z-company"), self.company_fixture(id="a-company")],
+        ):
+            with self.subTest(companies=companies), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.write_registry(root, companies)
+                self.assert_registry_invalid(self.fixture_records(), root)
+
+    def test_company_logo_file_rules(self) -> None:
+        fixtures = (
+            {
+                "file": "other.svg",
+                "source_url": "https://fixture.example/logo",
+                "accessed_at": "2026-09-15",
+            },
+            {
+                "file": "fixture-company.svg",
+                "source_url": "http://fixture.example/logo",
+                "accessed_at": "2026-09-15",
+            },
+            {
+                "file": "fixture-company.svg",
+                "source_url": "https://fixture.example/logo",
+                "accessed_at": "2026-9-15",
+            },
+            {"file": "fixture-company.svg", "source_url": "https://fixture.example/logo"},
+        )
+        for logo in fixtures:
+            with self.subTest(logo=logo), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.write_logo(root, "fixture-company.svg", self.logo_svg())
+                self.write_registry(root, [self.company_fixture(logo=logo)])
+                self.assert_registry_invalid(self.fixture_records(), root)
+
+    def test_company_logo_asset_must_exist_and_be_named_by_the_registry(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_registry(
+                root,
+                [
+                    self.company_fixture(
+                        logo={
+                            "file": "fixture-company.svg",
+                            "source_url": "https://fixture.example/logo",
+                            "accessed_at": "2026-09-15",
+                        }
+                    )
+                ],
+            )
+            self.assert_registry_invalid(self.fixture_records(), root)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_logo(root, "fixture-company.svg", self.logo_svg())
+            self.write_logo(root, "stray.svg", self.logo_svg())
+            self.write_registry(root, [self.company_fixture(logo="none")])
+            self.assert_registry_invalid(self.fixture_records(), root)
+
+    def test_company_logo_must_not_hold_unsafe_svg(self) -> None:
+        payloads = (
+            b'<!DOCTYPE svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40"/>',
+            b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40"><!ENTITY x "y"/></svg>',
+            b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40"><script>1</script></svg>',
+            b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40">'
+            b"<foreignObject><p>1</p></foreignObject></svg>",
+            self.logo_svg(onload="alert(1)"),
+            self.logo_svg(viewBox="0 0 128 40", href="https://evil.example/logo"),
+        )
+        for content in payloads:
+            with self.subTest(content=content), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.write_logo(root, "fixture-company.svg", content)
+                self.write_registry(
+                    root,
+                    [
+                        self.company_fixture(
+                            logo={
+                                "file": "fixture-company.svg",
+                                "source_url": "https://fixture.example/logo",
+                                "accessed_at": "2026-09-15",
+                            }
+                        )
+                    ],
+                )
+                self.assert_registry_invalid(self.fixture_records(), root)
+
+    def test_company_logo_assets_are_limited_in_size(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_logo(
+                root, "fixture-company.svg", self.logo_svg() + b" " * build.MAX_SVG_LOGO_BYTES
+            )
+            self.write_registry(
+                root,
+                [
+                    self.company_fixture(
+                        logo={
+                            "file": "fixture-company.svg",
+                            "source_url": "https://fixture.example/logo",
+                            "accessed_at": "2026-09-15",
+                        }
+                    )
+                ],
+            )
+            self.assert_registry_invalid(self.fixture_records(), root)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_logo(root, "fixture-company.png", self.logo_png(width=127))
+            self.write_registry(
+                root,
+                [
+                    self.company_fixture(
+                        logo={
+                            "file": "fixture-company.png",
+                            "source_url": "https://fixture.example/logo",
+                            "accessed_at": "2026-09-15",
+                        }
+                    )
+                ],
+            )
+            self.assert_registry_invalid(self.fixture_records(), root)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_logo(
+                root, "fixture-company.png", self.logo_png() + b"\x00" * build.MAX_PNG_LOGO_BYTES
+            )
+            self.write_registry(
+                root,
+                [
+                    self.company_fixture(
+                        logo={
+                            "file": "fixture-company.png",
+                            "source_url": "https://fixture.example/logo",
+                            "accessed_at": "2026-09-15",
+                        }
+                    )
+                ],
+            )
+            self.assert_registry_invalid(self.fixture_records(), root)
+
+    def test_company_logo_assets_need_a_usable_size(self) -> None:
+        payloads = (
+            ("fixture-company.svg", b'<svg xmlns="http://www.w3.org/2000/svg"><path/></svg>'),
+            ("fixture-company.svg", self.logo_svg(viewBox="0 0 0 40")),
+            ("fixture-company.svg", b"<svg viewBox='0 0 128'>path</svg>"),
+            ("fixture-company.svg", self.logo_svg(viewBox="0 0 inf 40")),
+            ("fixture-company.svg", self.logo_svg(viewBox="0 0 nan 40")),
+            ("fixture-company.png", b"\x89PNG\r\n\x1a\n" + b"\x00" * 8),
+        )
+        for name, content in payloads:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.write_logo(root, name, content)
+                self.write_registry(
+                    root,
+                    [
+                        self.company_fixture(
+                            logo={
+                                "file": name,
+                                "source_url": "https://fixture.example/logo",
+                                "accessed_at": "2026-09-15",
+                            }
+                        )
+                    ],
+                )
+                self.assert_registry_invalid(self.fixture_records(), root)
+
+    def test_company_logo_descriptor_derives_hash_bytes_and_size(self) -> None:
+        for name, content, media_type, size in (
+            ("fixture-company.svg", self.logo_svg(), "image/svg+xml", (128, 40)),
+            ("fixture-company.png", self.logo_png(width=200, height=64), "image/png", (200, 64)),
+        ):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.write_logo(root, name, content)
+                logo = {
+                    "file": name,
+                    "source_url": "https://fixture.example/logo",
+                    "accessed_at": "2026-09-15",
+                }
+                self.write_registry(root, [self.company_fixture(logo=logo)])
+                registry = build.load_companies(self.fixture_records(), root=root)
+                companies = build.normalize_companies(registry, root=root)
+                self.assertEqual(len(companies), 1)
+                descriptor = companies[0]["logo"]
+                self.assertEqual(
+                    descriptor,
+                    {
+                        "path": f"logos/{name}",
+                        "media_type": media_type,
+                        "width": size[0],
+                        "height": size[1],
+                        "bytes": len(content),
+                        "sha256": f"sha256:{hashlib.sha256(content).hexdigest()}",
+                        "source_url": "https://fixture.example/logo",
+                        "accessed_at": "2026-09-15",
+                    },
+                )
+
+    def test_company_without_a_logo_publishes_a_monogram_state(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_registry(root, [self.company_fixture()])
+            companies = build.normalize_companies(
+                build.load_companies(self.fixture_records(), root=root), root=root
+            )
+            self.assertEqual(companies[0]["logo"], None)
+        self.assertEqual(
+            build.company_summary(
+                [self.company_fixture(logo="none"), self.company_fixture(logo="none")]
+            ),
+            "2 organizations, 0 logos, 2 monograms",
+        )
+
     def test_duplicate_yaml_keys_fail(self) -> None:
         with self.assertRaises(yaml.constructor.ConstructorError):
             yaml.load("id: first\nid: second\n", Loader=build.UniqueKeyLoader)
@@ -600,7 +936,7 @@ class BuildTests(unittest.TestCase):
             build.validate_date("2026-02-31", "last_reviewed_at", "example.yaml")
 
     def test_json_is_serializable(self) -> None:
-        json.dumps(build.normalize(self.records))
+        json.dumps(build.normalize(self.records, self.companies))
 
     def test_template_matches_schema(self) -> None:
         template = yaml.safe_load((ROOT / "templates" / "agent.yaml").read_text(encoding="utf-8"))

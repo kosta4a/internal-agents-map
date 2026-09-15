@@ -27,11 +27,12 @@ STYLESHEET = "_astro/site.abcd1234.css"
 GUIDE_ROUTES = ("/", "/definitions", "/notes", "/notes/a-note")
 
 CATALOG = {
-    "schema_version": 4,
+    "schema_version": 5,
     "approaches": [
         {
             "id": "first-agent",
             "company": "First",
+            "company_id": "first",
             "agent_name": "First agent",
             "claim_ids": ["first-agent--summary"],
             "source_ids": ["first-agent-source-1"],
@@ -39,6 +40,7 @@ CATALOG = {
         {
             "id": "second-agent",
             "company": "Second",
+            "company_id": "second",
             "agent_name": "Second agent",
             "claim_ids": ["second-agent--summary"],
             "source_ids": ["second-agent-source-1"],
@@ -60,6 +62,29 @@ CATALOG = {
     "sources": [
         {"id": "first-agent-source-1", "approach_id": "first-agent"},
         {"id": "second-agent-source-1", "approach_id": "second-agent"},
+    ],
+    "companies": [
+        {
+            "id": "first",
+            "name": "First",
+            "homepage": "https://www.first.example/",
+            "logo": {
+                "path": "logos/first.svg",
+                "media_type": "image/svg+xml",
+                "width": 128,
+                "height": 40,
+                "bytes": 96,
+                "sha256": "sha256:" + "0" * 64,
+                "source_url": "https://www.first.example/press",
+                "accessed_at": "2026-09-15",
+            },
+        },
+        {
+            "id": "second",
+            "name": "Second",
+            "homepage": "https://www.second.example/",
+            "logo": None,
+        },
     ],
 }
 
@@ -154,6 +179,7 @@ def build_artifact(root):
         "fonts/OFL.txt": "licence",
         "agents.json": json.dumps(CATALOG),
         "agents/index.json": "[]",
+        "logos/first.svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40"/>',
         "data-guide.md": "# Data guide",
         "llms.txt": "# Internal Agents Map",
         "robots.txt": "User-agent: *",
@@ -210,6 +236,21 @@ class AstroArtifactTests(unittest.TestCase):
         errors = self.validate()
         self.assertTrue(any("agents/second-agent.html" in error for error in errors), errors)
         self.assertTrue(any("missing" in error for error in errors), errors)
+
+    def test_a_published_logo_passes_and_a_missing_logo_fails(self):
+        self.assertEqual(self.validate(), [])
+        (self.root / "logos/first.svg").unlink()
+        errors = self.validate()
+        self.assertTrue(any("missing" in error for error in errors), errors)
+        self.assertTrue(any("logos/first.svg" in error for error in errors), errors)
+
+    def test_an_unexpected_file_in_the_logo_directory_fails(self):
+        (self.root / "logos/stray.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"/>', encoding="utf-8"
+        )
+        errors = self.validate()
+        self.assertTrue(any("extra" in error for error in errors), errors)
+        self.assertTrue(any("logos/stray.svg" in error for error in errors), errors)
 
     def test_missing_claim_text_fails(self):
         self.rewrite(

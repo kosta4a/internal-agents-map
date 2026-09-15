@@ -39,6 +39,8 @@ Supporting systems can qualify when their connection to agent work is documented
 For an assessment, stop after the report. For an authorized catalog change:
 
 - Add: create `data/agents/<id>.yaml` from `templates/agent.yaml`.
+- New organization: add a record to `data/companies.yaml`. The build fails until the
+  registry holds it. Use `logo: none` with a reason when no logo asset is available.
 - Update: attach new sources and supported claims to the existing record. If the source adds
   nothing new, report that no change is needed.
 - Needs evidence or Out of scope: record the reason and source in `docs/coverage-backlog.md`.

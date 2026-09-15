@@ -105,6 +105,8 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(delivery.mime_for("index.md"), "text/markdown")
         self.assertEqual(delivery.mime_for("sitemap.xml"), "application/xml")
         self.assertEqual(delivery.mime_for("robots.txt"), "text/plain")
+        self.assertEqual(delivery.mime_for("logos/fixture.svg"), "image/svg+xml")
+        self.assertEqual(delivery.mime_for("logos/fixture.png"), "image/png")
 
     def test_every_route_is_asked_for_html_markdown_and_its_export(self):
         cases = delivery.route_cases(MANIFEST["routes"])
@@ -175,6 +177,23 @@ class RouteTests(unittest.TestCase):
             cases = delivery.asset_cases(root)
         self.assertEqual([case.path for case in cases], ["/_astro/site.abcd1234.css"])
         self.assertTrue(cases[0].immutable)
+
+    def test_a_published_logo_answers_with_its_image_type(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            cases = delivery.logo_cases(root)
+            self.assertEqual(cases, [])
+            (root / "logos").mkdir()
+            (root / "logos/fixture.svg").write_text("<svg/>", encoding="utf-8")
+            (root / "logos/fixture.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+            cases = delivery.logo_cases(root)
+        self.assertEqual(
+            [case.path for case in cases], ["/logos/fixture.png", "/logos/fixture.svg"]
+        )
+        self.assertEqual([case.mime for case in cases], ["image/png", "image/svg+xml"])
+        for case in cases:
+            self.assertEqual(case.artifact, "logos/" + case.path.rsplit("/", 1)[-1])
+            self.assertFalse(case.immutable)
 
 
 class HeaderTests(unittest.TestCase):

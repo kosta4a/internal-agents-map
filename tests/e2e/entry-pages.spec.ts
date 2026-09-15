@@ -4,12 +4,32 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
-/** The number of implementations in the committed catalog, so the spec follows the data. */
-const TOTAL = (
-  JSON.parse(readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8')) as {
-    approaches: unknown[];
-  }
-).approaches.length;
+/** One organization record, as far as the entry header reads it. */
+interface CatalogCompany {
+  readonly id: string;
+  readonly name: string;
+  readonly logo: { readonly path: string } | null;
+}
+
+/** The committed catalog, so the spec follows the data. */
+const CATALOG = JSON.parse(
+  readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8'),
+) as {
+  approaches: ReadonlyArray<{ id: string; company_id: string }>;
+  companies: ReadonlyArray<CatalogCompany>;
+};
+/** The number of implementations in the committed catalog. */
+const TOTAL = CATALOG.approaches.length;
+/** The organizations with a vendored logo, so their pages must show the image. */
+const COMPANIES_WITH_LOGOS = CATALOG.companies.filter(
+  (company): company is CatalogCompany & { logo: { readonly path: string } } =>
+    company.logo !== null,
+);
+/** The organization behind one approach, so the mark follows the catalog. */
+const companyOf = (approachId: string) => {
+  const approach = CATALOG.approaches.find((candidate) => candidate.id === approachId);
+  return CATALOG.companies.find((company) => company.id === approach?.company_id);
+};
 
 const ENTRIES = [
   {
@@ -198,4 +218,41 @@ test.describe('page previews', () => {
       });
     }
   });
+});
+
+test.describe('company marks', () => {
+  test('leads the entry header with the company logo before the eyebrow', async ({ page }) => {
+    for (const entry of ENTRIES) {
+      await page.goto(`/agents/${entry.id}`);
+      const company = companyOf(entry.id);
+      const mark = page.locator(
+        `header.entry-header > span.company-logo[data-company-id="${company?.id ?? ''}"]`,
+      );
+      await expect(mark).toHaveCount(1);
+      await expect(
+        page.locator('header.entry-header > span.company-logo ~ p.eyebrow'),
+      ).toHaveCount(1);
+
+      if (company?.logo) {
+        await expect(mark.locator('img')).toHaveAttribute('src', `/${company.logo.path}`);
+      } else {
+        await expect(mark.locator('span.company-logo-monogram')).toBeVisible();
+        await expect(mark.locator('img')).toHaveCount(0);
+      }
+    }
+  });
+
+  for (const company of COMPANIES_WITH_LOGOS) {
+    test(`shows the logo image of ${company.name} on an entry page`, async ({ page }) => {
+      const approach = CATALOG.approaches.find(
+        (candidate) => candidate.company_id === company.id,
+      );
+      test.skip(!approach, 'A company without an approach has no entry page.');
+      await page.goto(`/agents/${approach!.id}`);
+      const mark = page.locator(
+        `header.entry-header span.company-logo[data-company-id="${company.id}"]`,
+      );
+      await expect(mark.locator('img')).toHaveAttribute('src', `/${company.logo.path}`);
+    });
+  }
 });

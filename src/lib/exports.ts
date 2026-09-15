@@ -2,6 +2,7 @@
 // ABOUTME: Every claim, qualification, original citation, and preserved copy stays in the text.
 
 import { claimsById, requireApproach, sortedApproaches, sourcesById, type Catalog } from './catalog';
+import { requireCompany } from './companies';
 import {
   entryView,
   type ClaimView,
@@ -29,7 +30,8 @@ export function jsonDocument(value: unknown): string {
 
 /**
  * The record of one implementation in the catalog schema.
- * It carries the approach with the claims and the sources that it lists.
+ * It carries the approach with the claims, the sources, and the company that it lists,
+ * so the record validates as a complete catalog on its own.
  */
 export function recordJson(catalog: Catalog, id: string): string {
   const approach = requireApproach(catalog, id);
@@ -40,6 +42,7 @@ export function recordJson(catalog: Catalog, id: string): string {
     approaches: [approach],
     claims: approach.claim_ids.map((claimId) => claims.get(claimId)),
     sources: approach.source_ids.map((sourceId) => sources.get(sourceId)),
+    companies: [requireCompany(catalog, approach.company_id)],
   });
 }
 

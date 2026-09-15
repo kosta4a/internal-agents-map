@@ -3,6 +3,7 @@
 // ABOUTME: Every section is built from normalized claims, never from stored HTML.
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Claim from '../../components/Claim.astro';
+import CompanyLogo from '../../components/CompanyLogo.astro';
 import ResearchDetails from '../../components/ResearchDetails.astro';
 import SourceList from '../../components/SourceList.astro';
 import { loadCatalog } from '../../lib/catalog';
@@ -52,6 +53,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
   <article class="entry-page" data-approach-id={entry.id}>
     <a class="page-back" href="/">← All implementations</a>
     <header class="entry-header">
+      <CompanyLogo company={entry.companyView} size={40} eager />
       <p class="eyebrow">{entry.company} · {entry.approachTypeLabel}</p>
       <h1>{entry.agentName}</h1>
       {entry.summary ? (

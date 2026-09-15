@@ -13,9 +13,10 @@ entry includes identification and filter fields, `last_reviewed_at`, a human-rea
 
 [The complete dataset](https://internal-agents.com/agents.json) and individual JSON
 records use the catalog schema version below. Individual records retain the same
-`approaches`, `claims`, and `sources` collections, limited to one approach and its
-associated evidence. Join `claim_ids` and `source_ids` by `id`; do not infer facts
-from an agent's name or fill in unknown fields.
+`approaches`, `claims`, `sources`, and `companies` collections, limited to one approach,
+its evidence, and its organization. Join each approach's `company_id` to a company `id`
+for the name, homepage, and logo descriptor. Join `claim_ids` and `source_ids` by `id`;
+do not infer facts from an agent's name or fill in unknown fields.
 
 Markdown is also available by sending `Accept: text/markdown` to a published HTML
 page. HTML is the default; an explicit `.md` URL always returns Markdown. Negotiated

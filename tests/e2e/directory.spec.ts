@@ -6,12 +6,24 @@ import { readFileSync } from 'node:fs';
 import { PREVIEW_URL } from './preview';
 
 const PREVIEW_HOST = new URL(PREVIEW_URL).host;
-/** The number of implementations in the committed catalog, so the spec follows the data. */
-const TOTAL = (
-  JSON.parse(readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8')) as {
-    approaches: unknown[];
-  }
-).approaches.length;
+/** The committed catalog, so the spec follows the data. */
+const CATALOG = JSON.parse(
+  readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8'),
+) as {
+  approaches: ReadonlyArray<{ id: string; company_id: string }>;
+  companies: ReadonlyArray<{ id: string; logo: { readonly path: string } | null }>;
+};
+/** The number of implementations in the committed catalog. */
+const TOTAL = CATALOG.approaches.length;
+/** The logo descriptor of each company, or null when only its monogram remains. */
+const LOGO_BY_COMPANY = new Map(CATALOG.companies.map((company) => [company.id, company.logo]));
+/** Cards whose companies show a monogram, and cards whose companies show a logo. */
+const MONOGRAM_CARDS = CATALOG.approaches
+  .filter((approach) => LOGO_BY_COMPANY.get(approach.company_id) === null)
+  .slice(0, 3);
+const LOGO_CARDS = CATALOG.approaches
+  .filter((approach) => LOGO_BY_COMPANY.get(approach.company_id) !== null)
+  .slice(0, 3);
 /** A work filter value. The cards that carry it are counted from the page. */
 const WORK = { value: 'security' };
 /** A search term. The cards whose text carries it are counted from the page. */
@@ -50,6 +62,30 @@ test.describe('the directory without javascript', () => {
     await page.goto('/#block-builderbot');
     expect(new URL(page.url()).pathname).toBe('/');
     await expect(page.locator('article.entry#block-builderbot')).toBeVisible();
+  });
+
+  test('gives every card exactly one company logo mark', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('article.entry')).toHaveCount(TOTAL);
+    await expect(page.locator('article.entry span.company-logo')).toHaveCount(TOTAL);
+    await expect(page.locator('article.entry:has(span.company-logo[data-company-id])')).toHaveCount(
+      TOTAL,
+    );
+
+    for (const approach of MONOGRAM_CARDS) {
+      const mark = page.locator(`article.entry#${approach.id} span.company-logo`);
+      await expect(mark).toHaveAttribute('data-company-id', approach.company_id);
+      await expect(mark.locator('span.company-logo-monogram')).toBeVisible();
+      await expect(mark.locator('img')).toHaveCount(0);
+    }
+
+    for (const approach of LOGO_CARDS) {
+      const logo = LOGO_BY_COMPANY.get(approach.company_id)!;
+      const mark = page.locator(`article.entry#${approach.id} span.company-logo`);
+      await expect(mark).toHaveAttribute('data-company-id', approach.company_id);
+      await expect(mark.locator('img')).toHaveAttribute('src', `/${logo.path}`);
+      await expect(mark.locator('span.company-logo-monogram')).toHaveCount(0);
+    }
   });
 });
 

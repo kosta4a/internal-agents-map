@@ -7,10 +7,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
+import struct
 import sys
 import tempfile
+import xml.etree.ElementTree as ET
 from collections import Counter
 from datetime import date, datetime
 from pathlib import Path, PurePosixPath
@@ -208,6 +211,16 @@ DATE_RE = re.compile(r"^\d{4}(?:-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12]\d|3[01]))?)
 RFC3339_UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$")
 SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 MAX_PDF_BYTES = 10 * 1024 * 1024
+COMPANY_REQUIRED_FIELDS = {"id", "name", "homepage", "logo"}
+COMPANY_OPTIONAL_FIELDS = {"logo_note"}
+COMPANY_LOGO_FIELDS = {"file", "source_url", "accessed_at"}
+LOGO_MEDIA_TYPES = {".svg": "image/svg+xml", ".png": "image/png"}
+MAX_SVG_LOGO_BYTES = 64 * 1024
+MAX_PNG_LOGO_BYTES = 128 * 1024
+MIN_PNG_LOGO_WIDTH = 128
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+COMPANIES_FILE_NAME = "data/companies.yaml"
+LOGOS_DIR_NAME = "public/logos"
 CAPTURE_MANIFEST_FIELDS = {
     "schema_version",
     "source_id",
@@ -763,6 +776,225 @@ def load_agents() -> list[dict]:
     return records
 
 
+def svg_logo_size(content: bytes, where: str) -> tuple[int, int]:
+    """Check an SVG logo for unsafe markup and read the size of its viewBox."""
+    try:
+        text = content.decode("utf-8")
+    except UnicodeDecodeError:
+        die(f"{where}: an SVG logo must be valid UTF-8.")
+    lowered = text.lower()
+    if "<!doctype" in lowered or "<!entity" in lowered:
+        die(f"{where}: an SVG logo must not hold a DOCTYPE or ENTITY declaration.")
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError as error:
+        die(f"{where}: the SVG logo does not parse: {error}")
+    for element in root.iter():
+        tag = element.tag.rsplit("}", 1)[-1] if isinstance(element.tag, str) else ""
+        if tag.lower() in {"script", "foreignobject"}:
+            die(f"{where}: an SVG logo must not hold a {tag} element.")
+        for attribute, value in element.attrib.items():
+            name = attribute.rsplit("}", 1)[-1]
+            if name.startswith("on"):
+                die(f"{where}: an SVG logo must not hold the '{name}' attribute.")
+            if isinstance(value, str) and "javascript:" in value.lower():
+                die(f"{where}: an SVG logo must not hold a 'javascript:' value.")
+            if name == "href" and not value.startswith("#"):
+                die(f"{where}: an SVG logo href must stay a local fragment, found {value!r}.")
+    view_box = root.attrib.get("viewBox") or root.attrib.get("viewbox")
+    if not isinstance(view_box, str) or not view_box.strip():
+        die(f"{where}: an SVG logo needs a viewBox so the page can reserve its size.")
+    parts = view_box.replace(",", " ").split()
+    if len(parts) != 4:
+        die(f"{where}: the SVG viewBox must hold four numbers.")
+    try:
+        width, height = float(parts[2]), float(parts[3])
+    except ValueError:
+        die(f"{where}: the SVG viewBox must hold four numbers.")
+    if not (math.isfinite(width) and math.isfinite(height)) or width <= 0 or height <= 0:
+        die(f"{where}: the SVG viewBox must describe a positive size.")
+    return math.ceil(width), math.ceil(height)
+
+
+def png_logo_size(content: bytes, where: str) -> tuple[int, int]:
+    """Read the intrinsic pixel size of a PNG from its IHDR header."""
+    if len(content) < 24 or not content.startswith(PNG_SIGNATURE) or content[12:16] != b"IHDR":
+        die(f"{where}: the PNG logo header is not readable.")
+    width, height = struct.unpack(">II", content[16:24])
+    if width < MIN_PNG_LOGO_WIDTH:
+        die(f"{where}: a PNG logo must be at least {MIN_PNG_LOGO_WIDTH} pixels wide.")
+    return width, height
+
+
+def read_logo_descriptor(company: dict, repository: Path) -> dict:
+    """Read one registry logo asset, check it, and derive its published descriptor."""
+    file_name = company["logo"]["file"]
+    where = f"{LOGOS_DIR_NAME}/{file_name}"
+    try:
+        content = (repository / LOGOS_DIR_NAME / file_name).read_bytes()
+    except OSError as error:
+        die(f"{where}: could not read the logo asset: {error}")
+    suffix = PurePosixPath(file_name).suffix
+    if suffix == ".svg":
+        width, height = svg_logo_size(content, where)
+        limit = MAX_SVG_LOGO_BYTES
+    else:
+        width, height = png_logo_size(content, where)
+        limit = MAX_PNG_LOGO_BYTES
+    if len(content) > limit:
+        die(f"{where}: the logo asset exceeds its limit of {limit // 1024} KiB.")
+    return {
+        "path": f"logos/{file_name}",
+        "media_type": LOGO_MEDIA_TYPES[suffix],
+        "width": width,
+        "height": height,
+        "bytes": len(content),
+        "sha256": f"sha256:{hashlib.sha256(content).hexdigest()}",
+        "source_url": company["logo"]["source_url"],
+        "accessed_at": company["logo"]["accessed_at"],
+    }
+
+
+def load_companies(records: list[dict], *, root: Path | None = None) -> list[dict]:
+    """Load data/companies.yaml and validate its records, its join, and its assets."""
+    repository = root or ROOT
+    registry_path = repository / COMPANIES_FILE_NAME
+    if not registry_path.is_file():
+        die(f"{COMPANIES_FILE_NAME}: the company registry is required.")
+    try:
+        registry = yaml.load(registry_path.read_text(encoding="utf-8"), Loader=UniqueKeyLoader)
+    except yaml.YAMLError as error:
+        die(f"YAML parse error in {COMPANIES_FILE_NAME}:\n    {error}")
+    if not isinstance(registry, list) or not registry:
+        die(f"{COMPANIES_FILE_NAME}: must hold a non-empty list of company records.")
+    seen_ids: set[str] = set()
+    seen_names: set[str] = set()
+    named_files: set[str] = set()
+    for company in registry:
+        require_exact_fields(
+            company,
+            COMPANY_REQUIRED_FIELDS,
+            COMPANY_OPTIONAL_FIELDS,
+            "company",
+            COMPANIES_FILE_NAME,
+        )
+        company_id = company["id"]
+        if not isinstance(company_id, str) or not ID_RE.fullmatch(company_id):
+            die(f"{COMPANIES_FILE_NAME}: company id {company_id!r} must use kebab-case.")
+        if company_id in seen_ids:
+            die(f"{COMPANIES_FILE_NAME}: duplicate company id {company_id!r}.")
+        seen_ids.add(company_id)
+        name = company["name"]
+        if not isinstance(name, str) or not name.strip():
+            die(f"{COMPANIES_FILE_NAME}: company {company_id!r} needs a non-empty name.")
+        if name in seen_names:
+            die(f"{COMPANIES_FILE_NAME}: duplicate company name {name!r}.")
+        seen_names.add(name)
+        validate_https_url(
+            company["homepage"], f"companies.{company_id}.homepage", COMPANIES_FILE_NAME
+        )
+        logo = company["logo"]
+        if logo == "none":
+            note = company.get("logo_note")
+            if not isinstance(note, str) or not note.strip():
+                die(
+                    f"{COMPANIES_FILE_NAME}: companies.{company_id} uses 'logo: none' "
+                    "and needs a logo_note."
+                )
+        elif isinstance(logo, dict):
+            if "logo_note" in company:
+                die(
+                    f"{COMPANIES_FILE_NAME}: companies.{company_id} names a logo file "
+                    "and also holds a logo_note."
+                )
+            descriptor = require_exact_fields(
+                logo,
+                COMPANY_LOGO_FIELDS,
+                set(),
+                f"companies.{company_id}.logo",
+                COMPANIES_FILE_NAME,
+            )
+            validate_https_url(
+                descriptor["source_url"],
+                f"companies.{company_id}.logo.source_url",
+                COMPANIES_FILE_NAME,
+            )
+            validate_date(
+                descriptor["accessed_at"],
+                f"companies.{company_id}.logo.accessed_at",
+                COMPANIES_FILE_NAME,
+            )
+            file_name = descriptor["file"]
+            pure = PurePosixPath(file_name) if isinstance(file_name, str) else None
+            if (
+                pure is None
+                or len(pure.parts) != 1
+                or pure.stem != company_id
+                or pure.suffix not in LOGO_MEDIA_TYPES
+            ):
+                die(
+                    f"{COMPANIES_FILE_NAME}: companies.{company_id}.logo.file must be "
+                    f"'{company_id}.svg' or '{company_id}.png'."
+                )
+            named_files.add(file_name)
+        else:
+            die(
+                f"{COMPANIES_FILE_NAME}: companies.{company_id}.logo must be a mapping "
+                "or the value 'none'."
+            )
+    ids = [company["id"] for company in registry]
+    if ids != sorted(ids):
+        die(f"{COMPANIES_FILE_NAME}: company records must stay sorted by id.")
+    approach_files: dict[str, str] = {}
+    for record in records:
+        approach_files.setdefault(record["company"], f"{record['id']}.yaml")
+    for name in sorted(set(approach_files) - seen_names):
+        die(f"{approach_files[name]}: company {name!r} has no record in {COMPANIES_FILE_NAME}.")
+    for company in registry:
+        if company["name"] not in approach_files:
+            die(
+                f"{COMPANIES_FILE_NAME}: company {company['id']!r} is not used "
+                "by any approach record."
+            )
+    logos_dir = repository / LOGOS_DIR_NAME
+    for company in registry:
+        if company["logo"] == "none":
+            continue
+        if not (logos_dir / company["logo"]["file"]).is_file():
+            die(
+                f"{COMPANIES_FILE_NAME}: companies.{company['id']}.logo.file "
+                f"{company['logo']['file']!r} is missing from {LOGOS_DIR_NAME}/."
+            )
+    if logos_dir.is_dir():
+        strays = sorted(
+            str(path.name) for path in logos_dir.iterdir() if path.name not in named_files
+        )
+        if strays:
+            die(f"{LOGOS_DIR_NAME}/ holds files the registry does not name: {', '.join(strays)}")
+    # Reading every asset here validates its size, its safety, and its usable size.
+    normalize_companies(registry, root=repository)
+    return registry
+
+
+def normalize_companies(registry: list[dict], *, root: Path | None = None) -> list[dict]:
+    """Derive the published company collection, checking every logo asset."""
+    repository = root or ROOT
+    companies = []
+    for company in registry:
+        descriptor = (
+            None if company["logo"] == "none" else read_logo_descriptor(company, repository)
+        )
+        companies.append(
+            {
+                "id": company["id"],
+                "name": company["name"],
+                "homepage": company["homepage"],
+                "logo": descriptor,
+            }
+        )
+    return companies
+
+
 def markdown(value: Any) -> str:
     if value is None or value == "" or value == []:
         return "Unknown"
@@ -859,8 +1091,7 @@ def render_overview_table(records: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def render_overview(records: list[dict]) -> str:
-    export = normalize(records)
+def render_overview(records: list[dict], export: dict) -> str:
     company_count = len({record["company"] for record in records})
     summary = (
         f"**Current map: {len(records)} approaches across {company_count} organizations, "
@@ -1087,10 +1318,11 @@ def render_landscape(records: list[dict]) -> str:
     return "\n".join(out)
 
 
-def normalize(records: list[dict]) -> dict:
+def normalize(records: list[dict], companies: list[dict]) -> dict:
     approaches = []
     claims = []
     sources = []
+    company_ids = {company["name"]: company["id"] for company in companies}
     for record in records:
         claim_value_fields = {
             "summary",
@@ -1105,6 +1337,7 @@ def normalize(records: list[dict]) -> dict:
             for key, value in record.items()
             if key not in {"sources", "evidence", "claim_metadata"} | claim_value_fields
         }
+        approach["company_id"] = company_ids[record["company"]]
         approach["operating_models"] = [
             {**item, "level": BOUNDARY_LEVELS[item["attention_boundary"]]}
             for item in record["operating_models"]
@@ -1165,7 +1398,13 @@ def normalize(records: list[dict]) -> dict:
             if manifest is not None:
                 normalized_source["capture"] = manifest
             sources.append(normalized_source)
-    return {"schema_version": 4, "approaches": approaches, "claims": claims, "sources": sources}
+    return {
+        "schema_version": 5,
+        "approaches": approaches,
+        "claims": claims,
+        "sources": sources,
+        "companies": normalize_companies(companies),
+    }
 
 
 def replace_between_markers(
@@ -1185,7 +1424,7 @@ def data_outputs(records: list[dict], catalog: dict) -> dict[Path, str | bytes]:
     adoption_lessons = ADOPTION_LESSONS.read_text(encoding="utf-8")
     return {
         README: replace_between_markers(
-            readme, OVERVIEW_BEGIN, OVERVIEW_END, render_overview(records), "README.md"
+            readme, OVERVIEW_BEGIN, OVERVIEW_END, render_overview(records, catalog), "README.md"
         ),
         PATTERNS: replace_between_markers(
             patterns,
@@ -1226,12 +1465,19 @@ def write_outputs(outputs: dict[Path, str | bytes]) -> None:
             temporary_path.unlink(missing_ok=True)
 
 
+def company_summary(registry: list[dict]) -> str:
+    """State the logo coverage, so the remaining asset work stays visible."""
+    logos = sum(1 for company in registry if company["logo"] != "none")
+    return f"{len(registry)} organizations, {logos} logos, {len(registry) - logos} monograms"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Fail if generated files are stale.")
     args = parser.parse_args()
     records = load_agents()
-    outputs = data_outputs(records, normalize(records))
+    companies = load_companies(records)
+    outputs = data_outputs(records, normalize(records, companies))
     stale = [
         path
         for path, content in outputs.items()
@@ -1244,10 +1490,13 @@ def main() -> None:
                 "Generated files are stale: "
                 + ", ".join(str(path.relative_to(ROOT)) for path in stale)
             )
-        print(f"Validated {len(records)} approaches. Generated files are current.")
+        print(
+            f"Validated {len(records)} approaches, {company_summary(companies)}. "
+            "Generated files are current."
+        )
         return
     write_outputs(outputs)
-    print(f"\n{len(records)} approaches. Build complete.")
+    print(f"\n{len(records)} approaches, {company_summary(companies)}. Build complete.")
 
 
 if __name__ == "__main__":

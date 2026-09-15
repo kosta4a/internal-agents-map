@@ -1,6 +1,7 @@
 ---
 // ABOUTME: One compact directory card that links to the page of an implementation.
 // ABOUTME: It keeps the approach id, so older fragment links still find the card.
+import CompanyLogo from './CompanyLogo.astro';
 import type { DirectoryCard } from '../lib/entry-view';
 
 interface Props {
@@ -20,7 +21,10 @@ const { card } = Astro.props;
   data-supervision={card.boundaries.map((boundary) => boundary.id).join(' ')}
 >
   <div class="entry-top">
-    <span class="company">{card.company}</span>
+    <span class="company">
+      <CompanyLogo company={card.companyView} size={20} />
+      <span>{card.company}</span>
+    </span>
     <span class="entry-type">{card.approachTypeLabel}</span>
   </div>
   <h3><a href={card.path}>{card.agentName}</a></h3>

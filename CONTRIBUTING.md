@@ -85,6 +85,18 @@ the repository documents. Node builds the website.
 
 Apply the [inclusion rules](#inclusion-rules) before writing a record.
 
+A new organization also needs a record in `data/companies.yaml`; the build fails until the registry holds it. See the [company registry rules](data/schema.md#company-registry).
+
+## Add a company logo
+
+1. Edit the organization's record in `data/companies.yaml`.
+2. Put the asset at `public/logos/<id>.svg` or `public/logos/<id>.png`. The file stem must equal the record `id`.
+3. Replace `logo: none` and its `logo_note` with the logo mapping: `file`, `source_url`, and `accessed_at`.
+4. Prefer an SVG from the organization's own brand or press page. Keep `logo: none` with a reason in `logo_note` when no usable asset exists or the terms are unclear.
+5. Run `uv run python scripts/build.py`. It checks the file limits and the SVG safety rules, then records the derived size, bytes, and hash in the catalog output.
+
+Each logo is the trademark of its owner. The [schema](data/schema.md#company-registry) lists the file limits.
+
 ## Add a source or commentary
 
 Sources can include:

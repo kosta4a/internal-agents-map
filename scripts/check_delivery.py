@@ -31,6 +31,8 @@ MIME_TYPES = {
     ".json": "application/json",
     ".xml": "application/xml",
     ".txt": "text/plain",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
 }
 
 
@@ -211,6 +213,14 @@ def asset_cases(root: Path) -> list[Case]:
     ]
 
 
+def logo_cases(root: Path) -> list[Case]:
+    """A published company logo answers with its image content type."""
+    logos = sorted(path.name for path in (root / "logos").glob("*") if path.is_file())
+    return [
+        Case(path="/logos/" + name, artifact="logos/" + name, mime=mime_for(name)) for name in logos
+    ]
+
+
 def head_cases(routes: dict[str, dict[str, str]]) -> list[Case]:
     """HEAD answers the same status and headers as GET, with no body."""
     sample = ["/", *entry_routes(routes)[:2]]
@@ -258,6 +268,7 @@ def build_cases(routes: dict[str, dict[str, str]], root: Path, preview: bool) ->
         *redirect_cases(routes),
         *error_cases(),
         *asset_cases(root),
+        *logo_cases(root),
         *head_cases(routes),
     ]
     if not preview:

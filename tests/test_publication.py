@@ -196,7 +196,8 @@ class PublicationTests(unittest.TestCase):
 
     def test_the_data_build_writes_no_hosting_or_routing_configuration(self):
         records = build.load_agents()
-        outputs = build.data_outputs(records, build.normalize(records))
+        companies = build.load_companies(records)
+        outputs = build.data_outputs(records, build.normalize(records, companies))
         for path in (ROOT / "vercel.json", ROOT / "routing-manifest.json"):
             self.assertNotIn(path, outputs)
         manifest = json.loads((ROOT / "routing-manifest.json").read_text(encoding="utf-8"))

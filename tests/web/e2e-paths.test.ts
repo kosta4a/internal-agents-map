@@ -21,8 +21,10 @@ describe('the browser specs', () => {
   it('writes every screenshot to the output path of the test', () => {
     for (const name of specFiles()) {
       const text = readFileSync(new URL(name, E2E_DIR), 'utf8');
-      for (const [line] of text.matchAll(/^.*\bpath:.*$/gm)) {
-        expect(line, `${name}: ${line}`).toMatch(/outputPath\(/);
+      for (const call of text.matchAll(/screenshot\(([^)]*)\)/g)) {
+        if (call[1]!.includes('path:')) {
+          expect(call[1]!, `${name}: ${call[0]}`).toMatch(/outputPath\(/);
+        }
       }
     }
   });
