@@ -7,7 +7,7 @@ year: 2026
 first_public_evidence:
   date: '2026'
   source_id: slack-context-system-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-15'
 status: internal
 domains:
 - research
@@ -21,8 +21,9 @@ rubric:
   state: durable-session
   identity: unknown
   evidence_strength: mixed
-summary: A coordinator/dispatcher multi-agent design with structured context channels for long-running investigations
-  spanning hundreds of steps.
+summary: Slack's engineering team runs an agentic service that investigates security alerts. A Director agent orchestrates
+  rounds, Expert agents gather evidence, and a Critic scores each finding for credibility. Instead of message history, three
+  written channels carry the state between rounds.
 headline_metric: Context management for security investigations spanning hundreds of inference requests and megabytes
   of output
 architecture:

@@ -12,7 +12,7 @@
         "date": "2025",
         "source_id": "airbnb-airchat-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding",
@@ -66,7 +66,7 @@
         "date": "2024-11",
         "source_id": "atlassian-rovo-dev-source-3"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "commercialized",
       "domains": [
         "coding",
@@ -184,7 +184,7 @@
         "date": "2025-09-25",
         "source_id": "brex-agent-platform-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "finance-ops",
@@ -317,7 +317,7 @@
         "date": "2026",
         "source_id": "cloudflare-ai-stack-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding",
@@ -460,7 +460,7 @@
         "date": "2025",
         "source_id": "databricks-costar-source-1"
       },
-      "last_reviewed_at": "2026-08-31",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding",
@@ -712,7 +712,7 @@
         "date": "2026",
         "source_id": "dropbox-nova-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding",
@@ -781,7 +781,7 @@
         "date": "2026",
         "source_id": "flex-investigation-agent-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "finance-ops",
@@ -941,7 +941,7 @@
         "date": "2026-03",
         "source_id": "hubspot-sidekick-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "code-review"
@@ -1062,7 +1062,7 @@
         "date": "2025-07",
         "source_id": "microsoft-prassistant-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "code-review"
@@ -1179,7 +1179,7 @@
         "date": "2026-04",
         "source_id": "notion-custom-agents-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "support",
@@ -1319,7 +1319,7 @@
         "date": "2025",
         "source_id": "plaid-internal-mcp-server-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding"
@@ -1881,7 +1881,7 @@
         "date": "2026",
         "source_id": "slack-context-system-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "research"
@@ -2137,7 +2137,7 @@
         "date": "2026",
         "source_id": "uber-coding-agent-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding"
@@ -2321,7 +2321,7 @@
         "date": "2026",
         "source_id": "ycombinator-agent-infra-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding",
@@ -2367,7 +2367,7 @@
         "date": "2026",
         "source_id": "zup-codegen-source-1"
       },
-      "last_reviewed_at": "2026-08-31",
+      "last_reviewed_at": "2026-09-15",
       "status": "internal",
       "domains": [
         "coding"
@@ -2411,7 +2411,7 @@
       "id": "airbnb-airchat--summary",
       "approach_id": "airbnb-airchat",
       "field": "summary",
-      "text": "Airbnb's internal agentic-coding harness, built by its Dev AI team. Airchat is a wrapper over Claude Code with a unified gateway for cost and metrics, an internal plugin marketplace, AirDev Workspaces for parallel sessions, and more than a dozen internal MCP servers that connect agents to internal systems. The team abandoned an earlier from-scratch orchestrator and shipped a thin shim over Airchat instead.",
+      "text": "Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding agents such as Claude Code. The team first built its own orchestrator from scratch, never shipped it, and delegated to Airchat with a thin shim instead.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -2424,6 +2424,10 @@
         },
         {
           "source_id": "airbnb-airchat-source-2",
+          "relation": "supports"
+        },
+        {
+          "source_id": "airbnb-airchat-source-3",
           "relation": "supports"
         }
       ]
@@ -2542,7 +2546,7 @@
       "id": "atlassian-rovo-dev--summary",
       "approach_id": "atlassian-rovo-dev",
       "field": "summary",
-      "text": "Atlassian's internal coding agent, built on the HULA (Human-in-the-loop software development agents) framework. Rovo Dev works inside Jira and runs a four-step cycle (set context, generate a plan, generate code, and raise a pull request). Atlassian dogfooded it across all Jira sites for more than a year across 1,900+ repositories. It reached general availability in October 2025.",
+      "text": "Rovo Dev is Atlassian's coding agent, available internally on all Jira sites. It works from a Jira work item to a pull request, and the developer reviews the plan and the code at each step. It became generally available in October 2025.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -2551,6 +2555,10 @@
       "evidence": [
         {
           "source_id": "atlassian-rovo-dev-source-1",
+          "relation": "supports"
+        },
+        {
+          "source_id": "atlassian-rovo-dev-source-2",
           "relation": "supports"
         },
         {
@@ -2994,7 +3002,7 @@
       "id": "brex-agent-platform--summary",
       "approach_id": "brex-agent-platform",
       "field": "summary",
-      "text": "Retool-based internal platform where employees build, test, and deploy agents for KYC, disputes, QA, collections, and operations.",
+      "text": "Brex built an internal platform in Retool where operations staff build, test and deploy agents for KYC checks, card disputes, support quality assurance and collections. A roughly 25-person systems engineering team maintains it, and analysts still review every case the agents do not handle with high confidence.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -3724,7 +3732,7 @@
       "id": "cloudflare-ai-stack--summary",
       "approach_id": "cloudflare-ai-stack",
       "field": "summary",
-      "text": "An internal platform of MCP servers, an access layer, and AI tooling (incl. an AI code reviewer) that makes agents useful inside Cloudflare.",
+      "text": "Cloudflare's Dev Productivity team runs an internal AI engineering stack built on the company's own products. It puts MCP servers behind one OAuth portal, routes every model request through a gateway, and generates context files across thousands of repos. Every merge request gets an automated multi-agent review.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4573,7 +4581,7 @@
       "id": "databricks-costar--summary",
       "approach_id": "databricks-costar",
       "field": "summary",
-      "text": "Databricks' internal engineering agents and the coSTAR framework that ships and tests them. Databricks uses internal agents as daily coding drivers on its own codebase, including code-review and on-call support work. coSTAR tests agents on a private benchmark built from Databricks' multi-million line codebase before they ship. Omnigent is a separate shipping open-source product and is excluded from this record.",
+      "text": "Databricks runs internal engineering agents for work such as on-call support and automated code review. coSTAR ships and tests them, using LLM judges as the test suite and a coding assistant to refine the agent until the judges pass. Databricks' open-source Omnigent is a separate product.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -5642,7 +5650,7 @@
       "id": "dropbox-nova--summary",
       "approach_id": "dropbox-nova",
       "field": "summary",
-      "text": "An internal platform for coding agents: engineers launch parallel sessions and internal systems invoke agents inside automated SDLC workflows.",
+      "text": "Nova is Dropbox's internal service for running coding agents in its cloud. Engineers launch parallel sessions from a web UI, CLI, or API, and internal systems call agents inside automated workflows like CI triage and migrations. Callers attach validation commands that Nova runs after each attempt.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -5995,7 +6003,7 @@
       "id": "flex-investigation-agent--summary",
       "approach_id": "flex-investigation-agent",
       "field": "summary",
-      "text": "A Slack agent for HSA/FSA payment operations that traces a payment end-to-end and, when it finds a software bug, prepares a PR with a proposed fix.",
+      "text": "Flex runs an internal Slack agent that support, operations, and engineering use to debug HSA and FSA payment problems. Given an email, order number, or error string, it traces the transaction across systems and answers in plain English. On high-confidence bugs it opens a pull request for review.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6530,7 +6538,7 @@
       "id": "hubspot-sidekick--summary",
       "approach_id": "hubspot-sidekick",
       "field": "summary",
-      "text": "HubSpot's internal AI code-review agent. Sidekick reviews every pull request and uses a multi-model Judge Agent to filter comments before posting. Its review implementation moved from Claude Code on Crucible Kubernetes workloads to Aviator, HubSpot's internal Java agent framework; the later report does not specify Aviator's execution isolation.",
+      "text": "Sidekick is HubSpot's internal AI code reviewer, built by its Developer Experience AI team. It runs on every pull request in GitHub. A second Judge Agent evaluates each draft comment for succinctness, accuracy, and actionability, and only comments that pass are posted.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -7024,7 +7032,7 @@
       "id": "microsoft-prassistant--summary",
       "approach_id": "microsoft-prassistant",
       "field": "summary",
-      "text": "Microsoft's internal AI code-review agent, built by the Developer Division Data and AI team. When an engineer creates a pull request, PRAssistant joins as a reviewer and leaves comments like a human reviewer. It is a distinct internal build that predates and later informed GitHub Copilot Pull Request Reviews.",
+      "text": "PRAssistant is Microsoft's internal AI code reviewer, built by its Developer Division Data and AI team. It joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -7587,7 +7595,7 @@
       "id": "notion-custom-agents--summary",
       "approach_id": "notion-custom-agents",
       "field": "summary",
-      "text": "Notion's Custom Agents platform, dogfooded internally across non-engineering teams such as IT ticketing, supply chain, procurement, and recruiting. By the end of alpha testing, Notion had more than 3,000 internal Custom Agents. Notion's own security team is one of the most active internal users. Notion rebuilt the agent harness three to five times as frontier models improved.",
+      "text": "Custom Agents is Notion's platform for building agents in a Notion workspace, and Notion ships it internally first. Staff in IT ticketing, supply chain procurement, and recruiting build their own agents. One early internal agent triages bugs posted in Slack into task-database entries.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -7929,7 +7937,7 @@
       "id": "plaid-internal-mcp-server--summary",
       "approach_id": "plaid-internal-mcp-server",
       "field": "summary",
-      "text": "Plaid's central internal Model Context Protocol server. Plaid built it because third-party MCP servers could not reach its internal data. The server integrates more than 20 tools and several internal services such as Jira, application logs, and data schemas, behind Plaid's identity-aware proxy and centralized authorization. Plaid reports thousands of tool calls and dozens of agents built on the server. Separately, Claude Code and Cursor are used by more than 80% of Plaid engineers; server adoption is not quantified.",
+      "text": "Plaid's internal Model Context Protocol server is supporting infrastructure rather than an agent. The central server connects engineers' AI tools to internal systems such as Jira, application logs, and data schemas that third-party MCP servers cannot reach.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -10633,7 +10641,7 @@
       "id": "slack-context-system--summary",
       "approach_id": "slack-context-system",
       "field": "summary",
-      "text": "A coordinator/dispatcher multi-agent design with structured context channels for long-running investigations spanning hundreds of steps.",
+      "text": "Slack's engineering team runs an agentic service that investigates security alerts. A Director agent orchestrates rounds, Expert agents gather evidence, and a Critic scores each finding for credibility. Instead of message history, three written channels carry the state between rounds.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -12021,7 +12029,7 @@
       "id": "uber-coding-agent--summary",
       "approach_id": "uber-coding-agent",
       "field": "summary",
-      "text": "Uber's internal coding agent, reported by its CTO as producing roughly 1,800 complete code changes per week.",
+      "text": "Uber runs an internal coding agent that writes complete code changes with no human authoring, and engineers review and approve them. Its CTO reports that engineers now delegate tasks to the agent rather than accept its suggestions, and that its share of all code changes has grown from under 1%.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -12890,7 +12898,7 @@
       "id": "ycombinator-agent-infra--summary",
       "approach_id": "ycombinator-agent-infra",
       "field": "summary",
-      "text": "Internal agent infrastructure and own harnesses built from the ground up, framed as making AI the operating system the whole organization runs on.",
+      "text": "Y Combinator built its own agent harness and infrastructure, led by partner Pete Koomen. It is an agent loop over a shared tool registry, now over 350 tools, including one that runs read-only SQL against YC's single Postgres database. Agent conversations are broadcast to a Slack channel.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "low",
@@ -12992,7 +13000,7 @@
       "id": "zup-codegen--summary",
       "approach_id": "zup-codegen",
       "field": "summary",
-      "text": "A research-documented internal coding agent where constrained editing tools and layered safety controls mattered more than prompt tweaks.",
+      "text": "CodeGen is Zup's internal coding agent, described in a paper by its builders. They report that targeted tool design, such as string-replacement edits over full-file rewrites, and layered safety guardrails mattered more than prompt engineering. Progressive human oversight drove adoption.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",

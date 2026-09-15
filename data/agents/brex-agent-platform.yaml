@@ -7,7 +7,7 @@ year: 2025
 first_public_evidence:
   date: '2025-09-25'
   source_id: brex-agent-platform-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-15'
 status: internal
 domains:
 - finance-ops
@@ -23,8 +23,9 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: secondary-only
-summary: Retool-based internal platform where employees build, test, and deploy agents for KYC, disputes, QA, collections,
-  and operations.
+summary: Brex built an internal platform in Retool where operations staff build, test and deploy agents for KYC checks,
+  card disputes, support quality assurance and collections. A roughly 25-person systems engineering team
+  maintains it, and analysts still review every case the agents do not handle with high confidence.
 headline_metric: Dispute processing time fell from three hours to three seconds
 architecture:
   sandbox: Retool-hosted runtime (no bespoke execution env described)

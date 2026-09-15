@@ -12,12 +12,17 @@ const TOTAL = (
     approaches: unknown[];
   }
 ).approaches.length;
-/** A work filter value and the number of cards that carry it. */
-const WORK = { value: 'security', count: 4 };
-/** A search term and the number of cards whose text carries it. */
-const SEARCH = { term: 'uber', count: 4 };
+/** A work filter value. The cards that carry it are counted from the page. */
+const WORK = { value: 'security' };
+/** A search term. The cards whose text carries it are counted from the page. */
+const SEARCH = { term: 'uber' };
 
 const visibleCards = (page: Page) => page.locator('article.entry:not([hidden])');
+/** How many cards carry the work value, hidden or not. */
+const workCount = (page: Page) => page.locator(`article.entry[data-work~="${WORK.value}"]`).count();
+/** How many cards carry the search term in their searchable text, hidden or not. */
+const searchCount = (page: Page) =>
+  page.locator(`article.entry[data-search*="${SEARCH.term}"]`).count();
 
 test.describe('the directory without javascript', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled !== false, 'This is the no-JS project.');
@@ -62,8 +67,10 @@ test.describe('the directory with javascript', () => {
   test('searches the cards and records the search in the URL', async ({ page }) => {
     await page.goto('/');
     await page.fill('#q', SEARCH.term);
-    await expect(visibleCards(page)).toHaveCount(SEARCH.count);
-    await expect(page.locator('#results')).toHaveText(`${SEARCH.count} of ${TOTAL} approaches`);
+    await expect(visibleCards(page)).toHaveCount(await searchCount(page));
+    await expect(page.locator('#results')).toHaveText(
+      `${await searchCount(page)} of ${TOTAL} approaches`,
+    );
     await expect(page).toHaveURL(new RegExp(`\\?q=${SEARCH.term}$`));
     await expect(page.locator('article.entry#uber-ureview')).toBeVisible();
   });
@@ -71,14 +78,14 @@ test.describe('the directory with javascript', () => {
   test('filters by work and records the filter in the URL', async ({ page }) => {
     await page.goto('/');
     await page.selectOption('#work', WORK.value);
-    await expect(visibleCards(page)).toHaveCount(WORK.count);
+    await expect(visibleCards(page)).toHaveCount(await workCount(page));
     await expect(page).toHaveURL(new RegExp(`\\?work=${WORK.value}$`));
   });
 
   test('restores the state of a shared filtered address', async ({ page }) => {
     await page.goto(`/?work=${WORK.value}`);
     await expect(page.locator('#work')).toHaveValue(WORK.value);
-    await expect(visibleCards(page)).toHaveCount(WORK.count);
+    await expect(visibleCards(page)).toHaveCount(await workCount(page));
   });
 
   test('ignores a filter value that the catalog does not use', async ({ page }) => {
@@ -104,7 +111,7 @@ test.describe('the directory with javascript', () => {
 
     await page.goBack();
     await expect(page.locator('#supervision')).toHaveValue('');
-    await expect(visibleCards(page)).toHaveCount(WORK.count);
+    await expect(visibleCards(page)).toHaveCount(await workCount(page));
 
     await page.goBack();
     await expect(page.locator('#work')).toHaveValue('');
@@ -112,7 +119,7 @@ test.describe('the directory with javascript', () => {
 
     await page.goForward();
     await expect(page.locator('#work')).toHaveValue(WORK.value);
-    await expect(visibleCards(page)).toHaveCount(WORK.count);
+    await expect(visibleCards(page)).toHaveCount(await workCount(page));
   });
 
   test('explains an empty result and resets the filters', async ({ page }) => {
@@ -134,7 +141,7 @@ test.describe('the directory with javascript', () => {
     await page.locator('#q').focus();
     await page.keyboard.type(SEARCH.term);
     await page.keyboard.press('Enter');
-    await expect(visibleCards(page)).toHaveCount(SEARCH.count);
+    await expect(visibleCards(page)).toHaveCount(await searchCount(page));
     await expect(page).toHaveURL(new RegExp(`\\?q=${SEARCH.term}$`));
 
     await page.keyboard.press('Tab');

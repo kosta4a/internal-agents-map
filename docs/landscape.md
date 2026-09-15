@@ -65,7 +65,7 @@ Operating levels are generated from scoped, evidence-backed human-attention boun
 
 ## Airbnb: Airchat (airchat-cli)
 
-> Airbnb's internal agentic-coding harness, built by its Dev AI team. Airchat is a wrapper over Claude Code with a unified gateway for cost and metrics, an internal plugin marketplace, AirDev Workspaces for parallel sessions, and more than a dozen internal MCP servers that connect agents to internal systems. The team abandoned an earlier from-scratch orchestrator and shipped a thin shim over Airchat instead. <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2); Context: [airbnb-airchat-source-1](#airbnb-airchat-source-1).</small>
+> Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding agents such as Claude Code. The team first built its own orchestrator from scratch, never shipped it, and delegated to Airchat with a thin shim instead. <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2), [airbnb-airchat-source-3](#airbnb-airchat-source-3); Context: [airbnb-airchat-source-1](#airbnb-airchat-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -102,7 +102,7 @@ Operating levels are generated from scoped, evidence-backed human-attention boun
 - <a id="airbnb-airchat-source-2"></a>[Beyond the CLI (DX podcast)](https://getdx.com/podcast/beyond-the-cli-agentic-ai-for-async-workloads-and-non-developers/) ([snapshot](../archive/sources/airbnb-airchat-source-2/content.md), captured 2026-08-31) (podcast; direct-participant; evidence)
 - <a id="airbnb-airchat-source-3"></a>[How to get your team past the AI (The AI Thinker)](https://www.theaithinker.com/p/how-to-get-your-team-past-the-ai) ([snapshot](../archive/sources/airbnb-airchat-source-3/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -110,7 +110,7 @@ Last reviewed: 2026-09-09.
 
 ## Atlassian: Rovo Dev (RovoDev)
 
-> Atlassian's internal coding agent, built on the HULA (Human-in-the-loop software development agents) framework. Rovo Dev works inside Jira and runs a four-step cycle (set context, generate a plan, generate code, and raise a pull request). Atlassian dogfooded it across all Jira sites for more than a year across 1,900+ repositories. It reached general availability in October 2025. <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1), [atlassian-rovo-dev-source-3](#atlassian-rovo-dev-source-3).</small>
+> Rovo Dev is Atlassian's coding agent, available internally on all Jira sites. It works from a Jira work item to a pull request, and the developer reviews the plan and the code at each step. It became generally available in October 2025. <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1), [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2), [atlassian-rovo-dev-source-3](#atlassian-rovo-dev-source-3).</small>
 
 | Field | Value |
 | --- | --- |
@@ -147,7 +147,7 @@ Last reviewed: 2026-09-09.
 - <a id="atlassian-rovo-dev-source-2"></a>[Developer productivity improved with Rovo Dev](https://www.atlassian.com/blog/atlassian-engineering/developer-productivity-improved-with-rovo-dev) ([snapshot](../archive/sources/atlassian-rovo-dev-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="atlassian-rovo-dev-source-3"></a>[HULA: Human-in-the-loop software development agents (arXiv 2411.12924)](https://arxiv.org/abs/2411.12924) ([snapshot](../archive/sources/atlassian-rovo-dev-source-3/content.md), captured 2026-08-31) (paper; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -218,7 +218,7 @@ Last reviewed: 2026-09-09.
 
 ## Brex: Internal Agent Platform
 
-> Retool-based internal platform where employees build, test, and deploy agents for KYC, disputes, QA, collections, and operations. <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+> Brex built an internal platform in Retool where operations staff build, test and deploy agents for KYC checks, card disputes, support quality assurance and collections. A roughly 25-person systems engineering team maintains it, and analysts still review every case the agents do not handle with high confidence. <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -273,7 +273,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="brex-agent-platform-source-1"></a>[Agent, Human, Ops: How Brex Is Changing Roles and Workflows](https://www.firstround.com/ai/brex) ([snapshot](../archive/sources/brex-agent-platform-source-1/content.md), captured 2026-08-31) (case-study; independent-secondary; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -343,7 +343,7 @@ Last reviewed: 2026-09-09.
 
 ## Cloudflare: Internal AI engineering stack
 
-> An internal platform of MCP servers, an access layer, and AI tooling (incl. an AI code reviewer) that makes agents useful inside Cloudflare. <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1); Context: [cloudflare-ai-stack-source-2](#cloudflare-ai-stack-source-2).</small>
+> Cloudflare's Dev Productivity team runs an internal AI engineering stack built on the company's own products. It puts MCP servers behind one OAuth portal, routes every model request through a gateway, and generates context files across thousands of repos. Every merge request gets an automated multi-agent review. <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1); Context: [cloudflare-ai-stack-source-2](#cloudflare-ai-stack-source-2).</small>
 
 | Field | Value |
 | --- | --- |
@@ -401,7 +401,7 @@ Last reviewed: 2026-09-09.
 - <a id="cloudflare-ai-stack-source-1"></a>[The AI engineering stack we built internally](https://blog.cloudflare.com/internal-ai-engineering-stack/) ([snapshot](../archive/sources/cloudflare-ai-stack-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="cloudflare-ai-stack-source-2"></a>[Hacker News discussion of Cloudflare's internal AI engineering stack](https://news.ycombinator.com/item?id=47837240) ([snapshot](../archive/sources/cloudflare-ai-stack-source-2/content.md), captured 2026-08-31) (hn-thread; community; commentary)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -476,7 +476,7 @@ Last reviewed: 2026-09-15.
 
 ## Databricks: coSTAR and internal engineering agents
 
-> Databricks' internal engineering agents and the coSTAR framework that ships and tests them. Databricks uses internal agents as daily coding drivers on its own codebase, including code-review and on-call support work. coSTAR tests agents on a private benchmark built from Databricks' multi-million line codebase before they ship. Omnigent is a separate shipping open-source product and is excluded from this record. <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1), [databricks-costar-source-2](#databricks-costar-source-2).</small>
+> Databricks runs internal engineering agents for work such as on-call support and automated code review. coSTAR ships and tests them, using LLM judges as the test suite and a coding assistant to refine the agent until the judges pass. Databricks' open-source Omnigent is a separate product. <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1), [databricks-costar-source-2](#databricks-costar-source-2).</small>
 
 | Field | Value |
 | --- | --- |
@@ -511,7 +511,7 @@ Last reviewed: 2026-09-15.
 - <a id="databricks-costar-source-1"></a>[coSTAR: how we ship AI agents at Databricks fast](https://www.databricks.com/blog/costar-how-we-ship-ai-agents-databricks-fast-without-breaking-things) ([snapshot](../archive/sources/databricks-costar-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="databricks-costar-source-2"></a>[Benchmarking coding agents on a multi-million line codebase](https://www.databricks.com/blog/benchmarking-coding-agents-databricks-multi-million-line-codebase) ([snapshot](../archive/sources/databricks-costar-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-08-31.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -702,7 +702,7 @@ Last reviewed: 2026-09-09.
 
 ## Dropbox: Nova
 
-> An internal platform for coding agents: engineers launch parallel sessions and internal systems invoke agents inside automated SDLC workflows. <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+> Nova is Dropbox's internal service for running coding agents in its cloud. Engineers launch parallel sessions from a web UI, CLI, or API, and internal systems call agents inside automated workflows like CI triage and migrations. Callers attach validation commands that Nova runs after each attempt. <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -757,7 +757,7 @@ Last reviewed: 2026-09-09.
 - <a id="dropbox-nova-source-1"></a>[Introducing Nova, our internal platform for coding agents](https://dropbox.tech/machine-learning/introducing-nova-our-internal-platform-for-coding-agents) ([snapshot](../archive/sources/dropbox-nova-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="dropbox-nova-source-2"></a>[Hacker News submission for Nova](https://news.ycombinator.com/item?id=48235065) ([snapshot](../archive/sources/dropbox-nova-source-2/content.md), captured 2026-08-31) (hn-thread; community; discovery)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -765,7 +765,7 @@ Last reviewed: 2026-09-09.
 
 ## Flex: AI Investigation Agent
 
-> A Slack agent for HSA/FSA payment operations that traces a payment end-to-end and, when it finds a software bug, prepares a PR with a proposed fix. <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+> Flex runs an internal Slack agent that support, operations, and engineering use to debug HSA and FSA payment problems. Given an email, order number, or error string, it traces the transaction across systems and answers in plain English. On high-confidence bugs it opens a pull request for review. <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -806,7 +806,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="flex-investigation-agent-source-1"></a>[The Flex AI Investigation Agent for HSA/FSA payments](https://www.withflex.com/blog/the-flex-ai-investigation-agent-for-hsa-fsa-payments) ([snapshot](../archive/sources/flex-investigation-agent-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -911,7 +911,7 @@ Last reviewed: 2026-08-31.
 
 ## HubSpot: Sidekick
 
-> HubSpot's internal AI code-review agent. Sidekick reviews every pull request and uses a multi-model Judge Agent to filter comments before posting. Its review implementation moved from Claude Code on Crucible Kubernetes workloads to Aviator, HubSpot's internal Java agent framework; the later report does not specify Aviator's execution isolation. <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1); Context: [hubspot-sidekick-source-2](#hubspot-sidekick-source-2).</small>
+> Sidekick is HubSpot's internal AI code reviewer, built by its Developer Experience AI team. It runs on every pull request in GitHub. A second Judge Agent evaluates each draft comment for succinctness, accuracy, and actionability, and only comments that pass are posted. <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1); Context: [hubspot-sidekick-source-2](#hubspot-sidekick-source-2).</small>
 
 | Field | Value |
 | --- | --- |
@@ -950,7 +950,7 @@ Last reviewed: 2026-08-31.
 - <a id="hubspot-sidekick-source-1"></a>[Automated code review, the 6-month evolution](https://product.hubspot.com/blog/automated-code-review-the-6-month-evolution) ([snapshot](../archive/sources/hubspot-sidekick-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="hubspot-sidekick-source-2"></a>[Cloud coding agents at HubSpot](https://product.hubspot.com/blog/cloud-coding-agents-at-hubspot) ([snapshot](../archive/sources/hubspot-sidekick-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -1019,7 +1019,7 @@ Last reviewed: 2026-09-09.
 
 ## Microsoft: PRAssistant
 
-> Microsoft's internal AI code-review agent, built by the Developer Division Data and AI team. When an engineer creates a pull request, PRAssistant joins as a reviewer and leaves comments like a human reviewer. It is a distinct internal build that predates and later informed GitHub Copilot Pull Request Reviews. <small>Sources: [microsoft-prassistant-source-1](#microsoft-prassistant-source-1).</small>
+> PRAssistant is Microsoft's internal AI code reviewer, built by its Developer Division Data and AI team. It joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review. <small>Sources: [microsoft-prassistant-source-1](#microsoft-prassistant-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1054,7 +1054,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="microsoft-prassistant-source-1"></a>[Enhancing code quality at scale with AI-powered code reviews](https://devblogs.microsoft.com/engineering-at-microsoft/enhancing-code-quality-at-scale-with-ai-powered-code-reviews/) ([snapshot](../archive/sources/microsoft-prassistant-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -1128,7 +1128,7 @@ Last reviewed: 2026-09-09.
 
 ## Notion: Custom Agents
 
-> Notion's Custom Agents platform, dogfooded internally across non-engineering teams such as IT ticketing, supply chain, procurement, and recruiting. By the end of alpha testing, Notion had more than 3,000 internal Custom Agents. Notion's own security team is one of the most active internal users. Notion rebuilt the agent harness three to five times as frontier models improved. <small>Sources: [notion-custom-agents-source-1](#notion-custom-agents-source-1), [notion-custom-agents-source-2](#notion-custom-agents-source-2).</small>
+> Custom Agents is Notion's platform for building agents in a Notion workspace, and Notion ships it internally first. Staff in IT ticketing, supply chain procurement, and recruiting build their own agents. One early internal agent triages bugs posted in Slack into task-database entries. <small>Sources: [notion-custom-agents-source-1](#notion-custom-agents-source-1), [notion-custom-agents-source-2](#notion-custom-agents-source-2).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1160,7 +1160,7 @@ Last reviewed: 2026-09-09.
 - <a id="notion-custom-agents-source-1"></a>[Notion's Token Town: 5 Rebuilds, 100+ Tools (Latent Space)](https://latent.space/p/notion) ([snapshot](../archive/sources/notion-custom-agents-source-1/content.md), captured 2026-08-31) (podcast; direct-participant; evidence)
 - <a id="notion-custom-agents-source-2"></a>[How we built security into Custom Agents](https://www.notion.com/en-gb/blog/how-we-built-security-into-custom-agents) ([snapshot](../archive/sources/notion-custom-agents-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -1252,7 +1252,7 @@ Last reviewed: 2026-09-09.
 
 ## Plaid: Internal MCP server
 
-> Plaid's central internal Model Context Protocol server. Plaid built it because third-party MCP servers could not reach its internal data. The server integrates more than 20 tools and several internal services such as Jira, application logs, and data schemas, behind Plaid's identity-aware proxy and centralized authorization. Plaid reports thousands of tool calls and dozens of agents built on the server. Separately, Claude Code and Cursor are used by more than 80% of Plaid engineers; server adoption is not quantified. <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
+> Plaid's internal Model Context Protocol server is supporting infrastructure rather than an agent. The central server connects engineers' AI tools to internal systems such as Jira, application logs, and data schemas that third-party MCP servers cannot reach. <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1288,7 +1288,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="plaid-internal-mcp-server-source-1"></a>[The Plaid internal MCP server](https://engineering.plaid.com/the-plaid-internal-mcp-server-8eff08bb6bdb) ([snapshot](../archive/sources/plaid-internal-mcp-server-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -1774,7 +1774,7 @@ Last reviewed: 2026-09-09.
 
 ## Slack: Multi-agent context system
 
-> A coordinator/dispatcher multi-agent design with structured context channels for long-running investigations spanning hundreds of steps. <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1), [slack-context-system-source-2](#slack-context-system-source-2).</small>
+> Slack's engineering team runs an agentic service that investigates security alerts. A Director agent orchestrates rounds, Expert agents gather evidence, and a Critic scores each finding for credibility. Instead of message history, three written channels carry the state between rounds. <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1), [slack-context-system-source-2](#slack-context-system-source-2).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1823,7 +1823,7 @@ Last reviewed: 2026-09-09.
 - <a id="slack-context-system-source-1"></a>[Managing context in long-running agentic applications](https://slack.engineering/managing-context-in-long-run-agentic-applications/) ([snapshot](../archive/sources/slack-context-system-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="slack-context-system-source-2"></a>[How Slack manages context in long-running multi-agent systems](https://www.infoq.com/news/2026/04/slack-agent-context-management/) ([snapshot](../archive/sources/slack-context-system-source-2/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -2020,7 +2020,7 @@ Last reviewed: 2026-09-15.
 
 ## Uber: Internal coding agent (unnamed)
 
-> Uber's internal coding agent, reported by its CTO as producing roughly 1,800 complete code changes per week. <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+> Uber runs an internal coding agent that writes complete code changes with no human authoring, and engineers review and approve them. Its CTO reports that engineers now delegate tasks to the agent rather than accept its suggestions, and that its share of all code changes has grown from under 1%. <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -2055,7 +2055,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="uber-coding-agent-source-1"></a>[Uber's CTO on AI coding agents (Business Insider)](https://www.businessinsider.com/uber-cto-ai-coding-agentic-software-engineers-2026-3) ([snapshot](../archive/sources/uber-coding-agent-source-1/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -2187,7 +2187,7 @@ Last reviewed: 2026-08-31.
 
 ## Y Combinator: Internal agent infrastructure
 
-> Internal agent infrastructure and own harnesses built from the ground up, framed as making AI the operating system the whole organization runs on. <small>Sources: [ycombinator-agent-infra-source-1](#ycombinator-agent-infra-source-1).</small>
+> Y Combinator built its own agent harness and infrastructure, led by partner Pete Koomen. It is an agent loop over a shared tool registry, now over 350 tools, including one that runs read-only SQL against YC's single Postgres database. Agent conversations are broadcast to a Slack channel. <small>Sources: [ycombinator-agent-infra-source-1](#ycombinator-agent-infra-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -2221,7 +2221,7 @@ Last reviewed: 2026-08-31.
 
 - <a id="ycombinator-agent-infra-source-1"></a>[Inside YC's AI Playbook (Lightcone podcast, with Pete Koomen)](https://www.ycombinator.com/library/Qh-inside-yc-s-ai-playbook) ([snapshot](../archive/sources/ycombinator-agent-infra-source-1/content.md), captured 2026-08-31) (podcast; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-15.
 
 ---
 
@@ -2229,7 +2229,7 @@ Last reviewed: 2026-09-09.
 
 ## Zup: CodeGen
 
-> A research-documented internal coding agent where constrained editing tools and layered safety controls mattered more than prompt tweaks. <small>Sources: [zup-codegen-source-1](#zup-codegen-source-1).</small>
+> CodeGen is Zup's internal coding agent, described in a paper by its builders. They report that targeted tool design, such as string-replacement edits over full-file rewrites, and layered safety guardrails mattered more than prompt engineering. Progressive human oversight drove adoption. <small>Sources: [zup-codegen-source-1](#zup-codegen-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -2270,6 +2270,6 @@ Last reviewed: 2026-09-09.
 
 - <a id="zup-codegen-source-1"></a>[Building an Internal Coding Agent at Zup](https://arxiv.org/abs/2604.09805) ([snapshot](../archive/sources/zup-codegen-source-1/content.md), captured 2026-08-31) (paper; first-party; evidence)
 
-Last reviewed: 2026-08-31.
+Last reviewed: 2026-09-15.
 
 ---

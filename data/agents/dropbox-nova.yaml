@@ -7,7 +7,7 @@ year: 2026
 first_public_evidence:
   date: '2026'
   source_id: dropbox-nova-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-15'
 status: internal
 domains:
 - coding
@@ -25,8 +25,9 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: 'An internal platform for coding agents: engineers launch parallel sessions and internal systems invoke
-  agents inside automated SDLC workflows.'
+summary: Nova is Dropbox's internal service for running coding agents in its cloud. Engineers launch parallel sessions
+  from a web UI, CLI, or API, and internal systems call agents inside automated workflows like CI triage and migrations.
+  Callers attach validation commands that Nova runs after each attempt.
 headline_metric: Dozens of agents can run in parallel from one runbook
 architecture:
   sandbox: Isolated env with a codebase snapshot at a specific commit; full Dropbox monorepo via Bazel; hermetic

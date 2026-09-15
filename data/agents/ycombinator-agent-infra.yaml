@@ -7,7 +7,7 @@ year: 2026
 first_public_evidence:
   date: '2026'
   source_id: ycombinator-agent-infra-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-15'
 status: internal
 domains:
 - coding
@@ -22,8 +22,9 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: Internal agent infrastructure and own harnesses built from the ground up, framed as making AI the operating
-  system the whole organization runs on.
+summary: Y Combinator built its own agent harness and infrastructure, led by partner Pete Koomen. It is an agent loop
+  over a shared tool registry, now over 350 tools, including one that runs read-only SQL against YC's single
+  Postgres database. Agent conversations are broadcast to a Slack channel.
 architecture:
   sandbox: unknown
   harness: Own harnesses built from the ground up for internal AI use
