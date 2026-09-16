@@ -65,31 +65,65 @@ const {
 .diagram-number { display: block; color: var(--link); font-size: 12px; }
 
 /* The chart shows two questions about an implementation, not a score. */
-.quadrant-chart { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
-.quadrant-y-axis { writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-size: 12px; color: var(--muted); }
-.quadrant-plot { aspect-ratio: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); border: 1px solid var(--sand-10); }
+.quadrant-chart { position: relative; display: grid; gap: 12px; }
+/* Bottom to top: standard capabilities below, company-specific above. */
+.quadrant-y-axis {
+  position: absolute;
+  top: 0;
+  bottom: 30px;
+  right: calc(100% + 12px);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--muted);
+}
+.quadrant-plot {
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+  background: var(--sand-3);
+  overflow: hidden;
+}
 .quadrant-cell { position: relative; min-width: 0; }
-.quadrant-cell:nth-child(odd) { border-right: 1px solid var(--sand-7); }
-.quadrant-cell:nth-child(-n+2) { border-bottom: 1px solid var(--sand-7); background: var(--sand-2); }
-.quadrant-cell:nth-child(n+3) { background: var(--sand-2); }
-.quadrant-cell h3 { position: absolute; top: 12px; left: 14px; right: 14px; margin: 0; font-size: 12px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
-.quadrant-cell h3 span { display: block; margin-bottom: 8px; color: var(--link); font-size: 12px; line-height: 1.3; font-weight: 400; }
-.quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: 12px; }
+.quadrant-cell:nth-child(odd) { border-right: .5px solid var(--sand-6); }
+.quadrant-cell:nth-child(-n+2) { border-bottom: .5px solid var(--sand-6); }
+.quadrant-cell h3 { position: absolute; top: 20px; left: 20px; right: 20px; margin: 0; font-size: 14px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
+.quadrant-cell h3 span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 14px; line-height: 1.35; font-weight: 400; }
+.quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: 20px; }
+/* The two right-hand cells read from the edge they sit against. */
+.quadrant-cell:nth-child(2) h3, .quadrant-cell:nth-child(4) h3 { text-align: right; }
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
-.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 16px; }
+.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 18px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
 .quadrant-cell:nth-child(4) li { left: 12%; top: 15%; }
 .quadrant-cell:nth-child(4) li:nth-child(2) { left: 33%; top: 37%; }
 .quadrant-cell:nth-child(4) li:nth-child(3) { left: 20%; top: 60%; }
-.quadrant-cell li::before { content: ""; position: absolute; width: 8px; height: 8px; background: var(--accent); border: 2px solid #fff; border-radius: 50%; left: 0; top: 5px; }
+.quadrant-cell li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc((1.35em - 10px) / 2);
+  width: 10px;
+  height: 10px;
+  background: var(--blue-9);
+}
 .quadrant-cell a { display: block; line-height: 1.35; text-decoration: none; }
-.quadrant-cell a:hover { text-decoration: underline; }
-.quadrant-cell a strong { font-weight: 400; }
-.quadrant-cell a span { display: block; font-size: 12px; margin-top: 8px; }
-.quadrant-cell li > strong { display: block; font-weight: 400; line-height: 1.35; }
-.quadrant-cell li > span { display: block; font-size: 12px; line-height: 1.35; margin-top: 8px; }
-.quadrant-cell .reference-marker { color: var(--sand-10); }
-.quadrant-cell .reference-marker::before { background: #fff; border-color: var(--sand-10); }
+.quadrant-cell a:hover { color: var(--sand-10); }
+.quadrant-cell li strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.35; }
+.quadrant-cell li span { display: block; font-size: 14px; line-height: 1.35; margin-top: 6px; }
+.quadrant-cell .reference-marker { color: var(--sand-10); padding-left: 24px; }
+.quadrant-cell .reference-marker::before {
+  top: calc((1.35em - 16px) / 2);
+  width: 16px;
+  height: 16px;
+  background: var(--pink-9);
+  clip-path: var(--star);
+}
 .quadrant-cell li[data-chart-reference="deep-research"] { left: 5%; top: 42%; max-width: 40%; }
 .quadrant-cell li[data-chart-reference="ready-made-task"] { left: 49%; top: 42%; max-width: 48%; }
 .quadrant-cell li[data-chart-reference="general-assistant"] { left: 28%; top: 34%; max-width: 66%; }
@@ -101,13 +135,14 @@ const {
 .quadrant-cell li[data-chart-approach-id="brex-agent-platform"] { left: 10%; top: 30%; max-width: 58%; }
 .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: 56%; top: 50%; max-width: 38%; }
 .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 17%; top: 72%; max-width: 52%; }
-.quadrant-x-axis { grid-column: 2; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
-.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px 32px; color: var(--muted); font-size: 12px; }
+.quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
+.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: 12px; }
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.quadrant-legend i { width: 10px; height: 10px; border-radius: 50%; }
-.quadrant-legend .catalog-marker { background: var(--accent); border: 2px solid var(--accent); }
-.quadrant-legend .reference-marker-key { background: #fff; border: 2px solid var(--sand-10); }
-.guide .quadrant-figure { max-width: 680px; }
+.quadrant-legend i { width: 10px; height: 10px; }
+.quadrant-legend .catalog-marker { background: var(--blue-9); }
+.quadrant-legend .reference-marker-key { width: 16px; height: 16px; background: var(--pink-9); clip-path: var(--star); }
+/* The plot is the body's own width, so its scale label has room outside it. */
+.guide .quadrant-figure { max-width: none; }
 .guide-faq details {
   background: var(--sand-3);
   border-radius: 10px;
@@ -306,19 +341,28 @@ const {
   .guide-header h1 { font-size: 32px; }
   .guide-header { padding-bottom: 32px; }
   .guide section { padding: 32px 0; }
-  .quadrant-chart { grid-template-columns: 18px minmax(0, 1fr); gap: 8px; }
+  .quadrant-chart { gap: 8px; }
+  /* A narrow screen has no margin to hang the scale label in, so it leads the plot. */
+  .quadrant-y-axis {
+    position: static;
+    writing-mode: horizontal-tb;
+    transform: none;
+    text-align: left;
+  }
   .quadrant-plot { aspect-ratio: .82; }
   .quadrant-cell h3 { font-size: 12px; left: 6px; right: 6px; top: 6px; }
   .quadrant-cell h3 span { display: none; }
   .quadrant-cell:nth-child(n+3) h3 { bottom: 6px; }
-  .quadrant-cell li { font-size: 12px; padding-left: 12px; }
-  .quadrant-cell a span, .quadrant-cell li > span { font-size: 12px; }
-  .quadrant-cell li::before { width: 6px; height: 6px; border-width: 1px; top: 4px; }
+  .quadrant-cell li { font-size: 12px; padding-left: 14px; }
+  .quadrant-cell li span { font-size: 12px; }
+  .quadrant-cell li::before { width: 8px; height: 8px; top: calc((1.35em - 8px) / 2); }
+  .quadrant-cell .reference-marker { padding-left: 20px; }
+  .quadrant-cell .reference-marker::before { width: 14px; height: 14px; top: calc((1.35em - 14px) / 2); }
   .quadrant-cell li:nth-child(2) { left: 22%; }
   .quadrant-cell:nth-child(4) li:nth-child(2) { left: 28%; }
-  .quadrant-cell:nth-child(3) li > span { display: none; }
+  .quadrant-cell:nth-child(3) li span { display: none; }
   .quadrant-x-axis, .quadrant-y-axis { font-size: 12px; }
-  .quadrant-legend { margin-left: 24px; gap: 8px 16px; }
+  .quadrant-legend { gap: 8px 16px; }
   .core-definition { padding: 40px 20px; }
   .concept-pair { grid-template-columns: 1fr; }
   .concept-pair figure + figure { border-left: 0; border-top: 1px solid var(--sand-6); }
