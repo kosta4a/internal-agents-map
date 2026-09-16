@@ -14,13 +14,17 @@ domains:
 - code-review
 autonomy: autonomous
 operating_models:
-- scope: Atlas or Morphex feature task → tested and merged pull request
-  attention_boundary: outcome-review
+- scope: Morphex feature task → PR passing CI, remote sandbox, and Guardrails → automatic merge and production
+    ship
+  attention_boundary: exception-only
+- scope: Atlas feature task → sandbox-tested pull request (confidence-scored auto-merge above threshold, human
+    routing below)
+  attention_boundary: unknown
 rubric:
   invocation:
   - event-driven
   - interactive
-  state: cross-session-memory
+  state: mixed
   identity: dedicated-agent
   evidence_strength: secondary-only
 summary: An internal agent system on Amazon Bedrock where agents have identities, managers, scopes, and performance
@@ -78,6 +82,15 @@ evidence:
   operating_models.0:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 150, 169 (19 of 20 Morphex PRs merge automatically; above threshold merges,
+      below routes to a human)
+  operating_models.1:
+  - source_id: monday-sphera-atlas-morphex-source-1
+    relation: supports
+    locator: Preserved content.md, line 124 (Atlas tests run before he asks for human review)
+  - source_id: monday-sphera-atlas-morphex-source-1
+    relation: contextualizes
+    locator: Preserved content.md, line 169 (threshold routing described as driven out over the next two quarters)
   summary:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
@@ -156,9 +169,18 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: The secondary source reports predominantly automatic merges and automated guardrails, while
-      humans manage tasks and outcomes.
+    confidence: high
+    confidence_reason: The source states that nineteen of every twenty Morphex PRs merge automatically by passing
+      every gate and that approved PRs ship to production with no human in the loop; a PR below the confidence
+      threshold routes to a human.
+    valid_at: '2026'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: unverified
+    confidence_reason: The evidence is two-sided for Atlas; the source describes tests running before a request
+      for human review while also describing confidence-threshold auto-merge as being driven out over the following
+      two quarters.
     valid_at: '2026'
   lessons_learned.0:
     kind: inference

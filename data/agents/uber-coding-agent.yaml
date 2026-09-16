@@ -17,7 +17,7 @@ operating_models:
   attention_boundary: work-product-review
 rubric:
   invocation:
-  - unknown
+  - interactive
   state: unknown
   identity: unknown
   evidence_strength: secondary-only

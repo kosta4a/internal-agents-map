@@ -20,8 +20,41 @@
 - Depends on: completed Plans 003, 006, and 007.
 - Category: content correctness, information architecture, and data contracts.
 - Status: DONE on 2026-09-16. All seven phases were implemented and committed on the
-  isolated `codex/plan-008-reconcile` branch. Both generators and `npm run verify`
-  pass. No push or deployment was performed.
+  isolated `codex/plan-008-reconcile` branch, then squash-merged into `main` as
+  `15bacb9` after PR #2 (`bcaff15`). The initial release passed local verification
+  and 371 production response checks. Later Phase 1 corrections from the shared
+  checkout are retained in the follow-up reconciliation described below.
+
+### Parallel-execution reconciliation record
+
+Two executors worked this plan on 2026-09-16. A Claude Code session executed Phase 1
+in the shared checkout with a per-entry reviewer plus adversarial verification of every
+proposed correction; a Codex session captured an earlier snapshot of that work at
+`e10d371` and completed Phases 2–7 on the isolated branch. After both finished, the
+Claude session reconciled the results into the shared working tree:
+
+- The Codex branch (taxonomy migration, generated statistics, lessons and attribution,
+  notes revision, supervision definitions) was adopted as the base; its implementation
+  matches the plan's requirements for Phases 2–6.
+- The later, verifier-backed Phase 1 corrections that postdate the captured baseline
+  were re-applied on top: Microsoft's rename and interface correction, Ramp
+  (state/identity/invocation/summary), Stripe (invocation/summary), monday.com
+  (operating-model split and `mixed` state, superseding the branch's
+  `cross-session-memory`), Replit (split retaining the human-review lane, superseding
+  the branch's whole-scope `exception-only` flip), DoorDash Flux (two-platform summary,
+  model wording), Plaid Fix My Connection (boundary `unknown`, summary), Slack context
+  system (autonomy `autonomous`, state `unknown`), Dropbox Nova (autonomy, split models,
+  state, model field), Plaid MCP server (identity `user`), Sentry (identity, split
+  models, scheduled invocation, summary), and Zup (boundary `unknown`).
+- One Codex decision was accepted (Uber invocation `interactive`, engineer-initiated
+  delegation documented at `uber-coding-agent-source-1 content.md:18, 24`) and one was
+  refuted against the captures and reverted (Salesforce identity `user`; "on behalf of
+  employees" is a capability phrase, not an identity statement).
+- `docs/content-review-2026-09.md` records every decision, the six refuted corrections,
+  and this reconciliation. The later corrections were initially left uncommitted in the
+  shared checkout and missed the `15bacb9` release. The release follow-up carries all
+  fourteen changed records and their generated output forward, alongside this expanded
+  review and the byte-identical `plans/agent-page-content-audit.html`.
 
 Execution order: evidence corrections, taxonomy, statistics, lessons, notes,
 reader guidance, then final verification. Finish each phase as a reviewable unit.

@@ -694,12 +694,17 @@
         "on-call",
         "maintenance"
       ],
-      "autonomy": "human-in-loop",
+      "autonomy": "autonomous",
       "operating_models": [
         {
-          "scope": "agent-assisted SDLC workflow → accepted change",
-          "attention_boundary": "unknown",
-          "level": null
+          "scope": "event-triggered validation-gated remediation (Deflaker, crash-alert candidate fixes) → landed fix or candidates routed to service teams",
+          "attention_boundary": "exception-only",
+          "level": 5
+        },
+        {
+          "scope": "interactive developer session from web, CLI, or Slack → agent-assisted change",
+          "attention_boundary": "continuous-steering",
+          "level": 2
         }
       ],
       "rubric": {
@@ -707,7 +712,7 @@
           "event-driven",
           "interactive"
         ],
-        "state": "unknown",
+        "state": "durable-session",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -732,7 +737,8 @@
         "dropbox-nova--lessons-learned-1",
         "dropbox-nova--lessons-learned-2",
         "dropbox-nova--lessons-learned-3",
-        "dropbox-nova--operating-models-0"
+        "dropbox-nova--operating-models-0",
+        "dropbox-nova--operating-models-1"
       ],
       "source_ids": [
         "dropbox-nova-source-1",
@@ -1036,7 +1042,7 @@
     {
       "id": "microsoft-prassistant",
       "company": "Microsoft",
-      "agent_name": "PRAssistant",
+      "agent_name": "AI-powered code review assistant",
       "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2025,
@@ -1069,7 +1075,6 @@
       "claim_ids": [
         "microsoft-prassistant--summary",
         "microsoft-prassistant--headline-metric",
-        "microsoft-prassistant--architecture-interfaces",
         "microsoft-prassistant--key-metrics-0",
         "microsoft-prassistant--key-metrics-1",
         "microsoft-prassistant--key-metrics-2",
@@ -1078,9 +1083,7 @@
       "source_ids": [
         "microsoft-prassistant-source-1"
       ],
-      "interfaces": [
-        "github"
-      ]
+      "interfaces": []
     },
     {
       "id": "monday-sphera-atlas-morphex",
@@ -1102,9 +1105,14 @@
       "autonomy": "autonomous",
       "operating_models": [
         {
-          "scope": "Atlas or Morphex feature task → tested and merged pull request",
-          "attention_boundary": "outcome-review",
-          "level": 4
+          "scope": "Morphex feature task → PR passing CI, remote sandbox, and Guardrails → automatic merge and production ship",
+          "attention_boundary": "exception-only",
+          "level": 5
+        },
+        {
+          "scope": "Atlas feature task → sandbox-tested pull request (confidence-scored auto-merge above threshold, human routing below)",
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
@@ -1112,7 +1120,7 @@
           "event-driven",
           "interactive"
         ],
-        "state": "cross-session-memory",
+        "state": "mixed",
         "identity": "dedicated-agent",
         "evidence_strength": "secondary-only"
       },
@@ -1141,7 +1149,8 @@
         "monday-sphera-atlas-morphex--lessons-learned-2",
         "monday-sphera-atlas-morphex--lessons-learned-3",
         "monday-sphera-atlas-morphex--lessons-learned-4",
-        "monday-sphera-atlas-morphex--operating-models-0"
+        "monday-sphera-atlas-morphex--operating-models-0",
+        "monday-sphera-atlas-morphex--operating-models-1"
       ],
       "source_ids": [
         "monday-sphera-atlas-morphex-source-1"
@@ -1420,8 +1429,8 @@
       "operating_models": [
         {
           "scope": "integration degradation → repaired connection",
-          "attention_boundary": "outcome-review",
-          "level": 4
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
@@ -1475,7 +1484,7 @@
           "interactive"
         ],
         "state": "unknown",
-        "identity": "unknown",
+        "identity": "user",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "plaid",
@@ -1588,11 +1597,10 @@
       "rubric": {
         "invocation": [
           "background",
-          "event-driven",
           "interactive"
         ],
-        "state": "unknown",
-        "identity": "unknown",
+        "state": "durable-session",
+        "identity": "mixed",
         "evidence_strength": "mixed"
       },
       "company_id": "ramp",
@@ -1665,6 +1673,11 @@
       "operating_models": [
         {
           "scope": "objective → verifiable multi-agent work product",
+          "attention_boundary": "work-product-review",
+          "level": 3
+        },
+        {
+          "scope": "pull request → agent review with risk-gated human second reviewer",
           "attention_boundary": "exception-only",
           "level": 5
         }
@@ -1692,7 +1705,8 @@
         "replit-manager-agent--key-metrics-1",
         "replit-manager-agent--lessons-learned-0",
         "replit-manager-agent--lessons-learned-1",
-        "replit-manager-agent--operating-models-0"
+        "replit-manager-agent--operating-models-0",
+        "replit-manager-agent--operating-models-1"
       ],
       "source_ids": [
         "replit-manager-agent-source-1"
@@ -1732,7 +1746,7 @@
           "interactive"
         ],
         "state": "unknown",
-        "identity": "user",
+        "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "salesforce",
@@ -1781,18 +1795,24 @@
       "autonomy": "human-in-loop",
       "operating_models": [
         {
-          "scope": "assigned task → human-steered and reviewed output",
+          "scope": "interactive Slack task → human-steered and reviewed output",
           "attention_boundary": "continuous-steering",
           "level": 2
+        },
+        {
+          "scope": "event- or scheduler-triggered follow-up (watched GitHub PR) → agent-initiated thread update",
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
         "invocation": [
           "event-driven",
-          "interactive"
+          "interactive",
+          "scheduled"
         ],
         "state": "durable-session",
-        "identity": "unknown",
+        "identity": "mixed",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "sentry",
@@ -1817,7 +1837,8 @@
         "sentry-junior--lessons-learned-2",
         "sentry-junior--lessons-learned-3",
         "sentry-junior--lessons-learned-4",
-        "sentry-junior--operating-models-0"
+        "sentry-junior--operating-models-0",
+        "sentry-junior--operating-models-1"
       ],
       "source_ids": [
         "sentry-junior-source-1",
@@ -1986,7 +2007,7 @@
       "domains": [
         "research"
       ],
-      "autonomy": "human-in-loop",
+      "autonomy": "autonomous",
       "operating_models": [
         {
           "scope": "long-running investigation → synthesized report",
@@ -1998,7 +2019,7 @@
         "invocation": [
           "unknown"
         ],
-        "state": "durable-session",
+        "state": "unknown",
         "identity": "unknown",
         "evidence_strength": "mixed"
       },
@@ -2123,7 +2144,6 @@
       "rubric": {
         "invocation": [
           "background",
-          "event-driven",
           "interactive"
         ],
         "state": "unknown",
@@ -2256,7 +2276,7 @@
       ],
       "rubric": {
         "invocation": [
-          "unknown"
+          "interactive"
         ],
         "state": "unknown",
         "identity": "unknown",
@@ -2485,8 +2505,8 @@
       "operating_models": [
         {
           "scope": "constrained coding task → human-supervised edit",
-          "attention_boundary": "continuous-steering",
-          "level": 2
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
@@ -5057,7 +5077,7 @@
       "id": "doordash-flux--summary",
       "approach_id": "doordash-flux",
       "field": "summary",
-      "text": "DoorDash's internal agentic AI platform combines company-data access, an AI Marketplace of specialized agents, and the Flux cloud-agent runtime for engineering tasks.",
+      "text": "Two documented DoorDash internal platforms — an agentic AI platform / AI Marketplace for data and analytics, and Flux, a cloud engineering-agent platform built on sandboxes, an MCP gateway, and playbooks. No preserved source connects the two platforms.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -5136,7 +5156,7 @@
       "id": "doordash-flux--architecture-model",
       "approach_id": "doordash-flux",
       "field": "architecture.model",
-      "text": "Model-agnostic platform primitives support third-party or in-house agent components",
+      "text": "Sources name no model or provider; the documented primitives are modular, allowing the best third-party tool for each job or in-house builds, with multiple supported coding agent harnesses",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -5581,7 +5601,7 @@
       "id": "dropbox-nova--architecture-model",
       "approach_id": "dropbox-nova",
       "field": "architecture.model",
-      "text": "Platform-agnostic; multiple coding agents behind one interface; swap models without rebuilding infra; prompt-eval tooling",
+      "text": "Multiple coding agents behind one interface; prompt-evaluation tooling; helpers that make it easier to add AI-powered steps without rebuilding surrounding infrastructure; sources name no specific model or provider",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -5846,16 +5866,40 @@
       "id": "dropbox-nova--operating-models-0",
       "approach_id": "dropbox-nova",
       "field": "operating_models.0",
-      "text": "Unclassified for agent-assisted SDLC workflow → accepted change; human attention boundary: unknown.",
+      "text": "Level 5 for event-triggered validation-gated remediation (Deflaker, crash-alert candidate fixes) → landed fix or candidates routed to service teams; human attention boundary: exception-only.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "unverified",
-      "confidence_reason": "The source documents human participation but does not locate one consistent attention boundary across Nova workflows.",
+      "confidence": "high",
+      "confidence_reason": "The source states some tasks run autonomously in async workflows and describes the Deflaker fix-and-validate loop landing working fixes up to five attempts with no person in the loop; crash-alert candidates surface to service teams.",
       "valid_at": "2026-05-22",
       "evidence": [
         {
           "source_id": "dropbox-nova-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 18, 58, 62 (async workflows; capped fix-and-validate loop with no person in the loop)"
+        },
+        {
+          "source_id": "dropbox-nova-source-1",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 32 (publication kept outside the agent)"
+        }
+      ]
+    },
+    {
+      "id": "dropbox-nova--operating-models-1",
+      "approach_id": "dropbox-nova",
+      "field": "operating_models.1",
+      "text": "Level 2 for interactive developer session from web, CLI, or Slack → agent-assisted change; human attention boundary: continuous-steering.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The source describes standard interactive chat sessions in which engineers launch and steer agents; the exact review boundary of those sessions is not further specified.",
+      "valid_at": "2026-05-22",
+      "evidence": [
+        {
+          "source_id": "dropbox-nova-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 18, 26 (standard interactive chat; Nova continues the session on validation failure)"
         }
       ]
     },
@@ -6892,7 +6936,7 @@
       "id": "microsoft-prassistant--summary",
       "approach_id": "microsoft-prassistant",
       "field": "summary",
-      "text": "PRAssistant is Microsoft's internal AI code reviewer, built by its Developer Division Data and AI team. It joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review.",
+      "text": "Microsoft's internal AI-powered code review assistant, built in close collaboration with its Developer Division's Data & AI team. It joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6925,23 +6969,6 @@
       "reported_by": "Microsoft",
       "metric_scope": "PRs supported by the internal AI review assistant across Microsoft",
       "denominator": "Company pull requests for coverage share"
-    },
-    {
-      "id": "microsoft-prassistant--architecture-interfaces",
-      "approach_id": "microsoft-prassistant",
-      "field": "architecture.interfaces",
-      "text": "github",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "microsoft-prassistant-source-1",
-          "relation": "supports"
-        }
-      ]
     },
     {
       "id": "microsoft-prassistant--key-metrics-0",
@@ -7438,16 +7465,40 @@
       "id": "monday-sphera-atlas-morphex--operating-models-0",
       "approach_id": "monday-sphera-atlas-morphex",
       "field": "operating_models.0",
-      "text": "Level 4 for Atlas or Morphex feature task → tested and merged pull request; human attention boundary: outcome-review.",
+      "text": "Level 5 for Morphex feature task → PR passing CI, remote sandbox, and Guardrails → automatic merge and production ship; human attention boundary: exception-only.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The secondary source reports predominantly automatic merges and automated guardrails, while humans manage tasks and outcomes.",
+      "confidence": "high",
+      "confidence_reason": "The source states that nineteen of every twenty Morphex PRs merge automatically by passing every gate and that approved PRs ship to production with no human in the loop; a PR below the confidence threshold routes to a human.",
       "valid_at": "2026",
       "evidence": [
         {
           "source_id": "monday-sphera-atlas-morphex-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 150, 169 (19 of 20 Morphex PRs merge automatically; above threshold merges, below routes to a human)"
+        }
+      ]
+    },
+    {
+      "id": "monday-sphera-atlas-morphex--operating-models-1",
+      "approach_id": "monday-sphera-atlas-morphex",
+      "field": "operating_models.1",
+      "text": "Unclassified for Atlas feature task → sandbox-tested pull request (confidence-scored auto-merge above threshold, human routing below); human attention boundary: unknown.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "unverified",
+      "confidence_reason": "The evidence is two-sided for Atlas; the source describes tests running before a request for human review while also describing confidence-threshold auto-merge as being driven out over the following two quarters.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "monday-sphera-atlas-morphex-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 124 (Atlas tests run before he asks for human review)"
+        },
+        {
+          "source_id": "monday-sphera-atlas-morphex-source-1",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 169 (threshold routing described as driven out over the next two quarters)"
         }
       ]
     },
@@ -8289,7 +8340,7 @@
       "id": "plaid-fix-my-connection--summary",
       "approach_id": "plaid-fix-my-connection",
       "field": "summary",
-      "text": "Plaid's internal agent for bank-integration reliability. Fix My Connection proactively detects bank-integration failures and generates repair scripts automatically. Plaid reports more than 2 million successful user-permissioned logins and a 90% reduction in the average time to fix a degradation.",
+      "text": "Plaid's internal agent for bank-integration reliability. Fix My Connection proactively detects bank-integration access issues and automatically repairs them. Plaid reports more than 2 million successful user-permissioned logins and a 90% reduction in the average time to fix a degradation.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -8384,11 +8435,11 @@
       "id": "plaid-fix-my-connection--operating-models-0",
       "approach_id": "plaid-fix-my-connection",
       "field": "operating_models.0",
-      "text": "Level 4 for integration degradation → repaired connection; human attention boundary: outcome-review.",
+      "text": "Unclassified for integration degradation → repaired connection; human attention boundary: unknown.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "Plaid measures success by outcomes such as successful logins rather than per-repair inspection.",
+      "confidence": "unverified",
+      "confidence_reason": "The source reports aggregate impact such as successful logins and repair time; it does not document that a person reviews outcomes, work products, or exceptions on any run.",
       "valid_at": "2025-06",
       "evidence": [
         {
@@ -8915,7 +8966,7 @@
       "id": "ramp-inspect--summary",
       "approach_id": "ramp-inspect",
       "field": "summary",
-      "text": "A background coding agent that closes the loop on verifying its own work; runs tests, reviews telemetry, queries feature flags, visually verifies the frontend; now also monitoring production and proposing fixes; also a platform that hosts many internal agents.",
+      "text": "A background coding agent that closes the loop on verifying its own work; runs tests, reviews telemetry, queries feature flags, visually verifies the frontend; and serves as the platform hosting many internal agents, some of which monitor production and propose fixes (built on top of Inspect, not Inspect itself).",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -9699,16 +9750,34 @@
       "id": "replit-manager-agent--operating-models-0",
       "approach_id": "replit-manager-agent",
       "field": "operating_models.0",
-      "text": "Level 5 for objective → verifiable multi-agent work product; human attention boundary: exception-only.",
+      "text": "Level 3 for objective → verifiable multi-agent work product; human attention boundary: work-product-review.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "high",
-      "confidence_reason": "The source describes the system performing and checking the work itself, with a human reviewer called in only when the agent deems it necessary and human judgment entering on escalation.",
+      "confidence_reason": "The source describes autonomous parallel execution followed by human judgment on the resulting work; human code review remains a documented mode alongside the agent review lane.",
       "valid_at": "2026",
       "evidence": [
         {
           "source_id": "replit-manager-agent-source-1",
           "relation": "supports"
+        }
+      ]
+    },
+    {
+      "id": "replit-manager-agent--operating-models-1",
+      "approach_id": "replit-manager-agent",
+      "field": "operating_models.1",
+      "text": "Level 5 for pull request → agent review with risk-gated human second reviewer; human attention boundary: exception-only.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "high",
+      "confidence_reason": "The source states the agent assesses risk levels and only calls in a second human reviewer when necessary inside the agent review lane.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "replit-manager-agent-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 50 (assesses risk levels; second human reviewer only when necessary)"
         }
       ]
     },
@@ -9908,7 +9977,7 @@
       "id": "sentry-junior--summary",
       "approach_id": "sentry-junior",
       "field": "summary",
-      "text": "An open-source Slack agent built at Sentry that acts like an intern; takes tasks, retrieves context across many company systems, and is steered and reviewed by humans. Its CEO argues one general-purpose agent beat several vendor-specific bots.",
+      "text": "An open-source Slack agent built at Sentry that acts like an intern; takes tasks, retrieves context across many company systems, and is steered and reviewed by humans. Its author would rather have one general-purpose agent than several vendor-specific bots.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -10270,7 +10339,7 @@
       "id": "sentry-junior--operating-models-0",
       "approach_id": "sentry-junior",
       "field": "operating_models.0",
-      "text": "Level 2 for assigned task → human-steered and reviewed output; human attention boundary: continuous-steering.",
+      "text": "Level 2 for interactive Slack task → human-steered and reviewed output; human attention boundary: continuous-steering.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "high",
@@ -10279,7 +10348,26 @@
       "evidence": [
         {
           "source_id": "sentry-junior-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 12, 91 (steer-and-review framing; mid-run messages ingested as the worker continues)"
+        }
+      ]
+    },
+    {
+      "id": "sentry-junior--operating-models-1",
+      "approach_id": "sentry-junior",
+      "field": "operating_models.1",
+      "text": "Unclassified for event- or scheduler-triggered follow-up (watched GitHub PR) → agent-initiated thread update; human attention boundary: unknown.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "unverified",
+      "confidence_reason": "Webhook and scheduler inputs become synthetic messages the agent decides on alone; no passage documents a person reviewing the agent-initiated thread updates.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "sentry-junior-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 261, 279 (scheduled tasks and inbound events; the agent decides what to do)"
         }
       ]
     },
@@ -11749,7 +11837,7 @@
       "id": "stripe-minions--summary",
       "approach_id": "stripe-minions",
       "field": "summary",
-      "text": "Homegrown one-shot coding agents that read work context, locate the right repo/workspace, implement a change end-to-end, and produce a PR for human review.",
+      "text": "Homegrown one-shot coding agents that read work context, implement a change end-to-end, and produce a PR for human review.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -13548,11 +13636,11 @@
       "id": "zup-codegen--operating-models-0",
       "approach_id": "zup-codegen",
       "field": "operating_models.0",
-      "text": "Level 2 for constrained coding task → human-supervised edit; human attention boundary: continuous-steering.",
+      "text": "Unclassified for constrained coding task → human-supervised edit; human attention boundary: unknown.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The research source describes progressive human oversight but does not establish background delegation.",
+      "confidence": "unverified",
+      "confidence_reason": "The abstract names progressive human oversight modes but no passage establishes the oversight form: continuous steering, per-run work-product review, and outcome review are all consistent with it.",
       "valid_at": "2026",
       "evidence": [
         {

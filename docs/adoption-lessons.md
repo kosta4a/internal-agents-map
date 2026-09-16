@@ -8,7 +8,7 @@ This page summarizes reported operating practices in the catalog. These reports 
 
 These observations draw on 40 catalog entries. The entry is the counting unit; platforms and components can both appear. The evidence is uneven, and most sources are company reports.
 
-21 entries list Slack as an interface. The entry autonomy distribution is 21 `drafts-reviewed`, 9 `human-in-loop`, 5 `autonomous`, 1 `assistive`, and 4 `unknown`.
+21 entries list Slack as an interface. The entry autonomy distribution is 21 `drafts-reviewed`, 7 `human-in-loop`, 7 `autonomous`, 1 `assistive`, and 4 `unknown`.
 
 <!-- END ADOPTION SNAPSHOT -->
 

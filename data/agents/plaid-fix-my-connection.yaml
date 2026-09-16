@@ -15,7 +15,7 @@ domains:
 autonomy: autonomous
 operating_models:
 - scope: integration degradation → repaired connection
-  attention_boundary: outcome-review
+  attention_boundary: unknown
 rubric:
   invocation:
   - background
@@ -23,7 +23,7 @@ rubric:
   identity: unknown
   evidence_strength: detailed-primary
 summary: Plaid's internal agent for bank-integration reliability. Fix My Connection proactively detects bank-integration
-  failures and generates repair scripts automatically. Plaid reports more than 2 million successful user-permissioned
+  access issues and automatically repairs them. Plaid reports more than 2 million successful user-permissioned
   logins and a 90% reduction in the average time to fix a degradation.
 headline_metric: More than 2 million successful logins and 90% faster average repair
 architecture:
@@ -71,8 +71,9 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: Plaid measures success by outcomes such as successful logins rather than per-repair inspection.
+    confidence: unverified
+    confidence_reason: The source reports aggregate impact such as successful logins and repair time; it does not
+      document that a person reviews outcomes, work products, or exceptions on any run.
     valid_at: 2025-06
   headline_metric:
     kind: metric

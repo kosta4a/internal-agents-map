@@ -28,7 +28,7 @@ const LOGO_CARDS = CATALOG.approaches
 const WORK = { value: 'security', label: 'Security' };
 const INVOCATION = { value: 'background', label: 'Background' };
 /** A supervision value, the label of its chip, and the level a person can type to reach it. */
-const SUPERVISION = { value: 'outcome-review', label: 'Outcome review (level 4)', typed: 'level 4' };
+const SUPERVISION = { value: 'exception-only', label: 'Exception only (level 5)', typed: 'level 5' };
 /** A search term. The cards whose text carries it are counted from the page. */
 const SEARCH = { term: 'uber' };
 

@@ -14,7 +14,7 @@ domains:
 autonomy: human-in-loop
 operating_models:
 - scope: 'constrained coding task → human-supervised edit'
-  attention_boundary: continuous-steering
+  attention_boundary: unknown
 rubric:
   invocation:
   - unknown
@@ -83,8 +83,9 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: 'The research source describes progressive human oversight but does not establish background delegation.'
+    confidence: unverified
+    confidence_reason: 'The abstract names progressive human oversight modes but no passage establishes the oversight
+      form: continuous steering, per-run work-product review, and outcome review are all consistent with it.'
     valid_at: '2026'
   lessons_learned.0:
     kind: inference

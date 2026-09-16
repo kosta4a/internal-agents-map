@@ -19,7 +19,7 @@ rubric:
   invocation:
   - interactive
   state: unknown
-  identity: unknown
+  identity: user
   evidence_strength: detailed-primary
 summary: Plaid's internal Model Context Protocol server is supporting infrastructure rather than an agent. The
   central server connects engineers' AI tools to internal systems such as Jira, application logs, and data schemas

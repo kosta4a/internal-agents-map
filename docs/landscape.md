@@ -20,28 +20,28 @@ The L2-L5 labels adapt [Dan Shapiro's five levels of AI-assisted software develo
 | Domu | [Clementino](#domu-clementino) | agent | support, finance-ops, coding, recruitment, customer-success | L3 · employee request → approved customer-impacting action<br>L2 · individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting long emails)<br>Unknown · scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion) | human-in-loop | deployed | internal | 2026 |
 | DoorDash | [AI Code Review Agent](#doordash-code-review) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2026 |
 | DoorDash | [Flux / Agentic AI Platform](#doordash-flux) | platform | code-review, coding, ci-triage, on-call, maintenance, data | L3 · engineering task → reviewed agent output | drafts-reviewed | scaled | internal | 2025 |
-| Dropbox | [Nova](#dropbox-nova) | platform | coding, ci-triage, on-call, maintenance | Unknown · agent-assisted SDLC workflow → accepted change | human-in-loop | scaled | internal | 2026 |
+| Dropbox | [Nova](#dropbox-nova) | platform | coding, ci-triage, on-call, maintenance | L5 · event-triggered validation-gated remediation (Deflaker, crash-alert candidate fixes) → landed fix or candidates routed to service teams<br>L2 · interactive developer session from web, CLI, or Slack → agent-assisted change | autonomous | scaled | internal | 2026 |
 | Flex | [AI Investigation Agent](#flex-investigation-agent) | agent | finance-ops, on-call, coding | L3 · payment investigation → proposed code fix | drafts-reviewed | deployed | internal | 2026 |
 | GitHub | [Qubot](#github-qubot) | agent | data | Unknown · data question → warehouse answer | assistive | scaled | internal | 2026 |
 | Harvey | [Spectre](#harvey-spectre) | platform | coding, code-review, on-call, security | L3 · request from Slack, the web app, or an automation → reviewable diff or pull request | drafts-reviewed | deployed | internal | 2026 |
 | HubSpot | [Sidekick](#hubspot-sidekick) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2026 |
 | Linear | [Linear Agent](#linear-agent) | agent | support, customer-success, coding | L3 · assigned coding work → agent-created change | drafts-reviewed | scaled | commercialized | 2026 |
-| Microsoft | [PRAssistant](#microsoft-prassistant) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2025 |
-| monday.com | [Sphera / Atlas / Morphex](#monday-sphera-atlas-morphex) | agent-system | coding, code-review | L4 · Atlas or Morphex feature task → tested and merged pull request | autonomous | scaled | internal | 2026 |
+| Microsoft | [AI-powered code review assistant](#microsoft-prassistant) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2025 |
+| monday.com | [Sphera / Atlas / Morphex](#monday-sphera-atlas-morphex) | agent-system | coding, code-review | L5 · Morphex feature task → PR passing CI, remote sandbox, and Guardrails → automatic merge and production ship<br>Unknown · Atlas feature task → sandbox-tested pull request (confidence-scored auto-merge above threshold, human routing below) | autonomous | scaled | internal | 2026 |
 | Notion | [Custom Agents](#notion-custom-agents) | platform | support, finance-ops, recruitment, security | Unknown · cross-team internal tasks → Custom Agents output | unknown | scaled | internal | 2026 |
 | OpenAI | [Agentic software factory](#openai-software-factory) | agent-system | coding, code-review, ci-triage, ops | L5 · low-risk pull request -> merge in opted-in codebase areas<br>L3 · code change -> production rollout on the general path<br>Unknown · production alert -> proposed performance fix | human-in-loop | scaled | internal | 2026 |
 | OpenAI | [Sevbot](#openai-sevbot) | agent | on-call | L3 · incident detected -> applied mitigation | drafts-reviewed | deployed | internal | 2026 |
 | Plaid | [AI Annotator](#plaid-ai-annotator) | agent | data | Unknown · raw transactions → labeled training data | unknown | scaled | internal | 2025 |
-| Plaid | [Fix My Connection](#plaid-fix-my-connection) | agent | ops, maintenance | L4 · integration degradation → repaired connection | autonomous | scaled | internal | 2025 |
+| Plaid | [Fix My Connection](#plaid-fix-my-connection) | agent | ops, maintenance | Unknown · integration degradation → repaired connection | autonomous | scaled | internal | 2025 |
 | Plaid | [Internal MCP server](#plaid-internal-mcp-server) | supporting-pattern | coding | Unknown · engineer request → internal tool access | unknown | scaled | internal | 2025 |
 | PostHog | [StampHog](#posthog-stamphog) | agent | code-review | L5 · eligible pull request → approval decision | autonomous | scaled | open-sourced | 2026 |
 | Ramp | [Inspect](#ramp-inspect) | agent | coding, code-review, on-call | L3 · Inspect coding task → reviewed production merge | drafts-reviewed | scaled | internal | 2026 |
-| Replit | [Manager agent (agent-of-agents)](#replit-manager-agent) | orchestration-system | coding, code-review, support, research, data | L5 · objective → verifiable multi-agent work product | autonomous | scaled | internal | 2026 |
+| Replit | [Manager agent (agent-of-agents)](#replit-manager-agent) | orchestration-system | coding, code-review, support, research, data | L3 · objective → verifiable multi-agent work product<br>L5 · pull request → agent review with risk-gated human second reviewer | autonomous | scaled | internal | 2026 |
 | Salesforce | [Slackbot](#salesforce-slackbot) | agent | support, customer-success, ops | L3 · employee request → drafted work | drafts-reviewed | scaled | commercialized | 2025 |
-| Sentry | [Junior](#sentry-junior) | agent | coding, code-review, support, on-call | L2 · assigned task → human-steered and reviewed output | human-in-loop | deployed | open-sourced | 2026 |
+| Sentry | [Junior](#sentry-junior) | agent | coding, code-review, support, on-call | L2 · interactive Slack task → human-steered and reviewed output<br>Unknown · event- or scheduler-triggered follow-up (watched GitHub PR) → agent-initiated thread update | human-in-loop | deployed | open-sourced | 2026 |
 | Shopify | [Aquifer / River](#shopify-internal-agents) | platform | coding, code-review | Unknown · River coding request → River-opened, River-coauthored pull request | drafts-reviewed | scaled | internal | 2026 |
 | Sierra | [Pinecone](#sierra-pinecone) | agent | coding, code-review, support, research, data | L3 · employee request → reviewed agent output | drafts-reviewed | scaled | internal | 2026 |
-| Slack | [Multi-agent context system](#slack-context-system) | supporting-pattern | research | Unknown · long-running investigation → synthesized report | human-in-loop | research | internal | 2026 |
+| Slack | [Multi-agent context system](#slack-context-system) | supporting-pattern | research | Unknown · long-running investigation → synthesized report | autonomous | research | internal | 2026 |
 | Spotify | [Honk / Xirp](#spotify-honk-xirp) | agent-system | coding, migrations, code-review | L3 · Honk coding task → verified pull request | drafts-reviewed | scaled | mixed | 2025 |
 | Stripe | [Minions](#stripe-minions) | agent | coding, code-review | L3 · work context → merge-ready pull request | drafts-reviewed | scaled | internal | 2026 |
 | StrongDM | [Software Factory](#strongdm-software-factory) | agent-system | coding | Unknown · natural-language seed → agents implement and validate against scenario harness → converged software | autonomous | deployed | mixed | 2026 |
@@ -49,7 +49,7 @@ The L2-L5 labels adapt [Dan Shapiro's five levels of AI-assisted software develo
 | Uber | [uReview](#uber-ureview) | agent | code-review | L3 · pull request → filtered AI review findings | drafts-reviewed | scaled | internal | 2025 |
 | WorkOS | [Project Horizon](#workos-project-horizon) | platform | coding, code-review, security | L3 · requirements and acceptance criteria → tested implementation | drafts-reviewed | deployed | internal | 2026 |
 | Y Combinator | [Internal agent infrastructure](#ycombinator-agent-infra) | platform | coding, ops | Unknown · internal request → agent-assisted organizational work | human-in-loop | deployed | internal | 2026 |
-| Zup | [CodeGen](#zup-codegen) | agent | coding | L2 · constrained coding task → human-supervised edit | human-in-loop | research | internal | 2026 |
+| Zup | [CodeGen](#zup-codegen) | agent | coding | Unknown · constrained coding task → human-supervised edit | human-in-loop | research | internal | 2026 |
 
 ## Terms and rubric
 
@@ -576,7 +576,7 @@ Last reviewed: 2026-09-16.
 
 ## DoorDash: Flux / Agentic AI Platform
 
-> DoorDash's internal agentic AI platform combines company-data access, an AI Marketplace of specialized agents, and the Flux cloud-agent runtime for engineering tasks. <small>Sources: [doordash-flux-source-1](#doordash-flux-source-1), [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
+> Two documented DoorDash internal platforms — an agentic AI platform / AI Marketplace for data and analytics, and Flux, a cloud engineering-agent platform built on sandboxes, an MCP gateway, and playbooks. No preserved source connects the two platforms. <small>Sources: [doordash-flux-source-1](#doordash-flux-source-1), [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
 
 | Field | Value |
 | --- | --- |
@@ -601,7 +601,7 @@ Last reviewed: 2026-09-16.
 
 - Sandbox: Firecracker microVMs; <5s p95 end-to-end setup (boot, clone repos, install tools, configure harness) <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Harness: Maturity model: deterministic workflows → ReAct agents → hierarchical deep agents → experimental swarms <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
-- Model: Model-agnostic platform primitives support third-party or in-house agent components <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
+- Model: Sources name no model or provider; the documented primitives are modular, allowing the best third-party tool for each job or in-house builds, with multiple supported coding agent harnesses <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Interfaces: slack, github, scheduled, cli, skill, cursor <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Tool access: In-house MCP gateway ('Agent Gateway'); LangGraph orchestration; prospective A2A; tools declared per playbook with scoped, logged permissions <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Knowledge: AI Marketplace of specialized agents; DataExplorer for grounded analytics; DoorDash-specific context in playbooks <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
@@ -654,23 +654,24 @@ Last reviewed: 2026-09-16.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, ci-triage, on-call, maintenance |
-| Operating model | Unknown · agent-assisted SDLC workflow → accepted change |
-| Autonomy | human-in-loop |
+| Operating model | L5 · event-triggered validation-gated remediation (Deflaker, crash-alert candidate fixes) → landed fix or candidates routed to service teams<br>L2 · interactive developer session from web, CLI, or Slack → agent-assisted change |
+| Autonomy | autonomous |
 | Invocation | event-driven, interactive |
-| State | unknown |
+| State | durable-session |
 | Identity | unknown |
 | Evidence | detailed-primary |
 | Headline metric | Dozens of agents can run in parallel from one runbook <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small> |
 
 ### Operating model
 
-- **Unclassified · unknown** — agent-assisted SDLC workflow → accepted change (unverified confidence; 2026-05-22) <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- **Level 5 · exception-only** — event-triggered validation-gated remediation (Deflaker, crash-alert candidate fixes) → landed fix or candidates routed to service teams (high confidence; 2026-05-22) <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1); Context: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- **Level 2 · continuous-steering** — interactive developer session from web, CLI, or Slack → agent-assisted change (medium confidence; 2026-05-22) <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 
 ### Architecture
 
 - Sandbox: Isolated env with a codebase snapshot at a specific commit; full Dropbox monorepo via Bazel; hermetic remote execution + caching <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 - Harness: Validation loop (propose → validate → feed back) with continue_on_validation_failure and max_iterations (~5); branch management kept outside the agent <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
-- Model: Platform-agnostic; multiple coding agents behind one interface; swap models without rebuilding infra; prompt-eval tooling <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- Model: Multiple coding agents behind one interface; prompt-evaluation tooling; helpers that make it easier to add AI-powered steps without rebuilding surrounding infrastructure; sources name no specific model or provider <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 - Interfaces: web, cli, api, slack <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 - Tool access: Skills/plugins to gather evidence, read logs, inspect failures; MCP integrations; Bazel-aware selectivity tools <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 - Knowledge: Localized AGENTS.md per service; Dash (Dropbox context engineering); passing + failing test logs <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
@@ -960,9 +961,9 @@ Last reviewed: 2026-09-16.
 
 <a id="microsoft-prassistant"></a>
 
-## Microsoft: PRAssistant
+## Microsoft: AI-powered code review assistant
 
-> PRAssistant is Microsoft's internal AI code reviewer, built by its Developer Division Data and AI team. It joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review. <small>Sources: [microsoft-prassistant-source-1](#microsoft-prassistant-source-1).</small>
+> Microsoft's internal AI-powered code review assistant, built in close collaboration with its Developer Division's Data & AI team. It joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review. <small>Sources: [microsoft-prassistant-source-1](#microsoft-prassistant-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -985,7 +986,6 @@ Last reviewed: 2026-09-16.
 
 ### Architecture
 
-- Interfaces: github <small>Sources: [microsoft-prassistant-source-1](#microsoft-prassistant-source-1).</small>
 
 ### Reported metrics
 
@@ -1014,17 +1014,18 @@ Last reviewed: 2026-09-16.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, code-review |
-| Operating model | L4 · Atlas or Morphex feature task → tested and merged pull request |
+| Operating model | L5 · Morphex feature task → PR passing CI, remote sandbox, and Guardrails → automatic merge and production ship<br>Unknown · Atlas feature task → sandbox-tested pull request (confidence-scored auto-merge above threshold, human routing below) |
 | Autonomy | autonomous |
 | Invocation | event-driven, interactive |
-| State | cross-session-memory |
+| State | mixed |
 | Identity | dedicated-agent |
 | Evidence | secondary-only |
 | Headline metric | Morphex: 19 of 20 PRs merge without human review <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small> |
 
 ### Operating model
 
-- **Level 4 · outcome-review** — Atlas or Morphex feature task → tested and merged pull request (medium confidence; 2026) <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- **Level 5 · exception-only** — Morphex feature task → PR passing CI, remote sandbox, and Guardrails → automatic merge and production ship (high confidence; 2026) <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- **Unclassified · unknown** — Atlas feature task → sandbox-tested pull request (confidence-scored auto-merge above threshold, human routing below) (unverified confidence; 2026) <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1); Context: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 
 ### Architecture
 
@@ -1274,7 +1275,7 @@ Last reviewed: 2026-09-16.
 
 ## Plaid: Fix My Connection
 
-> Plaid's internal agent for bank-integration reliability. Fix My Connection proactively detects bank-integration failures and generates repair scripts automatically. Plaid reports more than 2 million successful user-permissioned logins and a 90% reduction in the average time to fix a degradation. <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
+> Plaid's internal agent for bank-integration reliability. Fix My Connection proactively detects bank-integration access issues and automatically repairs them. Plaid reports more than 2 million successful user-permissioned logins and a 90% reduction in the average time to fix a degradation. <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1283,7 +1284,7 @@ Last reviewed: 2026-09-16.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | ops, maintenance |
-| Operating model | L4 · integration degradation → repaired connection |
+| Operating model | Unknown · integration degradation → repaired connection |
 | Autonomy | autonomous |
 | Invocation | background |
 | State | unknown |
@@ -1293,7 +1294,7 @@ Last reviewed: 2026-09-16.
 
 ### Operating model
 
-- **Level 4 · outcome-review** — integration degradation → repaired connection (medium confidence; 2025-06) <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
+- **Unclassified · unknown** — integration degradation → repaired connection (unverified confidence; 2025-06) <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
 
 ### Architecture
 
@@ -1329,7 +1330,7 @@ Last reviewed: 2026-09-16.
 | Autonomy | unknown |
 | Invocation | interactive |
 | State | unknown |
-| Identity | unknown |
+| Identity | user |
 | Evidence | detailed-primary |
 | Headline metric | Dozens of agents rely on the internal MCP server; Claude Code and Cursor are used by over 80% of engineers <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small> |
 
@@ -1423,7 +1424,7 @@ Last reviewed: 2026-09-16.
 
 ## Ramp: Inspect
 
-> A background coding agent that closes the loop on verifying its own work; runs tests, reviews telemetry, queries feature flags, visually verifies the frontend; now also monitoring production and proposing fixes; also a platform that hosts many internal agents. <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1), [ramp-inspect-source-4](#ramp-inspect-source-4), [ramp-inspect-source-5](#ramp-inspect-source-5).</small>
+> A background coding agent that closes the loop on verifying its own work; runs tests, reviews telemetry, queries feature flags, visually verifies the frontend; and serves as the platform hosting many internal agents, some of which monitor production and propose fixes (built on top of Inspect, not Inspect itself). <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1), [ramp-inspect-source-4](#ramp-inspect-source-4), [ramp-inspect-source-5](#ramp-inspect-source-5).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1434,9 +1435,9 @@ Last reviewed: 2026-09-16.
 | Domains | coding, code-review, on-call |
 | Operating model | L3 · Inspect coding task → reviewed production merge |
 | Autonomy | drafts-reviewed |
-| Invocation | background, event-driven, interactive |
-| State | unknown |
-| Identity | unknown |
+| Invocation | background, interactive |
+| State | durable-session |
+| Identity | mixed |
 | Evidence | mixed |
 | Headline metric | 75% of Ramp's merged PRs raised by Inspect sessions (May 2026) <small>Sources: [ramp-inspect-source-5](#ramp-inspect-source-5).</small> |
 
@@ -1507,7 +1508,7 @@ Last reviewed: 2026-09-16.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, code-review, support, research, data |
-| Operating model | L5 · objective → verifiable multi-agent work product |
+| Operating model | L3 · objective → verifiable multi-agent work product<br>L5 · pull request → agent review with risk-gated human second reviewer |
 | Autonomy | autonomous |
 | Invocation | interactive |
 | State | unknown |
@@ -1517,7 +1518,8 @@ Last reviewed: 2026-09-16.
 
 ### Operating model
 
-- **Level 5 · exception-only** — objective → verifiable multi-agent work product (high confidence; 2026) <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- **Level 3 · work-product-review** — objective → verifiable multi-agent work product (high confidence; 2026) <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- **Level 5 · exception-only** — pull request → agent review with risk-gated human second reviewer (high confidence; 2026) <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 
 ### Architecture
 
@@ -1567,7 +1569,7 @@ Last reviewed: 2026-09-16.
 | Autonomy | drafts-reviewed |
 | Invocation | interactive |
 | State | unknown |
-| Identity | user |
+| Identity | unknown |
 | Evidence | detailed-primary |
 
 ### Operating model
@@ -1607,7 +1609,7 @@ Last reviewed: 2026-09-16.
 
 ## Sentry: Junior
 
-> An open-source Slack agent built at Sentry that acts like an intern; takes tasks, retrieves context across many company systems, and is steered and reviewed by humans. Its CEO argues one general-purpose agent beat several vendor-specific bots. <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1), [sentry-junior-source-2](#sentry-junior-source-2); Context: [sentry-junior-source-3](#sentry-junior-source-3).</small>
+> An open-source Slack agent built at Sentry that acts like an intern; takes tasks, retrieves context across many company systems, and is steered and reviewed by humans. Its author would rather have one general-purpose agent than several vendor-specific bots. <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1), [sentry-junior-source-2](#sentry-junior-source-2); Context: [sentry-junior-source-3](#sentry-junior-source-3).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1616,17 +1618,18 @@ Last reviewed: 2026-09-16.
 | Deployment stage | deployed |
 | Availability | open-sourced |
 | Domains | coding, code-review, support, on-call |
-| Operating model | L2 · assigned task → human-steered and reviewed output |
+| Operating model | L2 · interactive Slack task → human-steered and reviewed output<br>Unknown · event- or scheduler-triggered follow-up (watched GitHub PR) → agent-initiated thread update |
 | Autonomy | human-in-loop |
-| Invocation | event-driven, interactive |
+| Invocation | event-driven, interactive, scheduled |
 | State | durable-session |
-| Identity | unknown |
+| Identity | mixed |
 | Evidence | detailed-primary |
 | Headline metric | Open-source (Apache-2.0) Slack agent (~100k lines of TS) used internally at Sentry <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1), [sentry-junior-source-4](#sentry-junior-source-4).</small> |
 
 ### Operating model
 
-- **Level 2 · continuous-steering** — assigned task → human-steered and reviewed output (high confidence; 2026) <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- **Level 2 · continuous-steering** — interactive Slack task → human-steered and reviewed output (high confidence; 2026) <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- **Unclassified · unknown** — event- or scheduler-triggered follow-up (watched GitHub PR) → agent-initiated thread update (unverified confidence; 2026) <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 
 ### Architecture
 
@@ -1810,9 +1813,9 @@ Last reviewed: 2026-09-16.
 | Availability | internal |
 | Domains | research |
 | Operating model | Unknown · long-running investigation → synthesized report |
-| Autonomy | human-in-loop |
+| Autonomy | autonomous |
 | Invocation | unknown |
-| State | durable-session |
+| State | unknown |
 | Identity | unknown |
 | Evidence | mixed |
 | Headline metric | Context management for security investigations spanning hundreds of inference requests and megabytes of output <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1), [slack-context-system-source-2](#slack-context-system-source-2).</small> |
@@ -1922,7 +1925,7 @@ Last reviewed: 2026-09-16.
 
 ## Stripe: Minions
 
-> Homegrown one-shot coding agents that read work context, locate the right repo/workspace, implement a change end-to-end, and produce a PR for human review. <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1); Context: [stripe-minions-source-3](#stripe-minions-source-3), [stripe-minions-source-4](#stripe-minions-source-4), [stripe-minions-source-5](#stripe-minions-source-5), [stripe-minions-source-6](#stripe-minions-source-6), [stripe-minions-source-7](#stripe-minions-source-7).</small>
+> Homegrown one-shot coding agents that read work context, implement a change end-to-end, and produce a PR for human review. <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1); Context: [stripe-minions-source-3](#stripe-minions-source-3), [stripe-minions-source-4](#stripe-minions-source-4), [stripe-minions-source-5](#stripe-minions-source-5), [stripe-minions-source-6](#stripe-minions-source-6), [stripe-minions-source-7](#stripe-minions-source-7).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1933,7 +1936,7 @@ Last reviewed: 2026-09-16.
 | Domains | coding, code-review |
 | Operating model | L3 · work context → merge-ready pull request |
 | Autonomy | drafts-reviewed |
-| Invocation | background, event-driven, interactive |
+| Invocation | background, interactive |
 | State | unknown |
 | Identity | unknown |
 | Evidence | detailed-primary |
@@ -2057,7 +2060,7 @@ Last reviewed: 2026-09-16.
 | Domains | coding |
 | Operating model | L3 · coding request → complete code change |
 | Autonomy | drafts-reviewed |
-| Invocation | unknown |
+| Invocation | interactive |
 | State | unknown |
 | Identity | unknown |
 | Evidence | secondary-only |
@@ -2264,7 +2267,7 @@ Last reviewed: 2026-09-16.
 | Deployment stage | research |
 | Availability | internal |
 | Domains | coding |
-| Operating model | L2 · constrained coding task → human-supervised edit |
+| Operating model | Unknown · constrained coding task → human-supervised edit |
 | Autonomy | human-in-loop |
 | Invocation | unknown |
 | State | unknown |
@@ -2273,7 +2276,7 @@ Last reviewed: 2026-09-16.
 
 ### Operating model
 
-- **Level 2 · continuous-steering** — constrained coding task → human-supervised edit (medium confidence; 2026) <small>Sources: [zup-codegen-source-1](#zup-codegen-source-1).</small>
+- **Unclassified · unknown** — constrained coding task → human-supervised edit (unverified confidence; 2026) <small>Sources: [zup-codegen-source-1](#zup-codegen-source-1).</small>
 
 ### Architecture
 

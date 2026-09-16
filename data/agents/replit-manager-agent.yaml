@@ -18,6 +18,8 @@ domains:
 autonomy: autonomous
 operating_models:
 - scope: objective → verifiable multi-agent work product
+  attention_boundary: work-product-review
+- scope: pull request → agent review with risk-gated human second reviewer
   attention_boundary: exception-only
 rubric:
   invocation:
@@ -65,6 +67,10 @@ evidence:
   operating_models.0:
   - source_id: replit-manager-agent-source-1
     relation: supports
+  operating_models.1:
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, line 50 (assesses risk levels; second human reviewer only when necessary)
   summary:
   - source_id: replit-manager-agent-source-1
     relation: supports
@@ -113,8 +119,15 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: high
-    confidence_reason: The source describes the system performing and checking the work itself, with a human reviewer
-      called in only when the agent deems it necessary and human judgment entering on escalation.
+    confidence_reason: The source describes autonomous parallel execution followed by human judgment on the resulting
+      work; human code review remains a documented mode alongside the agent review lane.
+    valid_at: '2026'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: high
+    confidence_reason: The source states the agent assesses risk levels and only calls in a second human reviewer
+      when necessary inside the agent review lane.
     valid_at: '2026'
   lessons_learned.0:
     kind: inference

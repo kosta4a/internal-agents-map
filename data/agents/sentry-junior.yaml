@@ -16,18 +16,21 @@ domains:
 - on-call
 autonomy: human-in-loop
 operating_models:
-- scope: assigned task → human-steered and reviewed output
+- scope: interactive Slack task → human-steered and reviewed output
   attention_boundary: continuous-steering
+- scope: event- or scheduler-triggered follow-up (watched GitHub PR) → agent-initiated thread update
+  attention_boundary: unknown
 rubric:
   invocation:
   - event-driven
   - interactive
+  - scheduled
   state: durable-session
-  identity: unknown
+  identity: mixed
   evidence_strength: detailed-primary
 summary: An open-source Slack agent built at Sentry that acts like an intern; takes tasks, retrieves context across
-  many company systems, and is steered and reviewed by humans. Its CEO argues one general-purpose agent beat several
-  vendor-specific bots.
+  many company systems, and is steered and reviewed by humans. Its author would rather have one general-purpose
+  agent than several vendor-specific bots.
 headline_metric: Open-source (Apache-2.0) Slack agent (~100k lines of TS) used internally at Sentry
 architecture:
   sandbox: Vercel serverless functions; Vercel agent-browser sandbox with an on-path proxy for traffic interception;
@@ -108,6 +111,13 @@ evidence:
   operating_models.0:
   - source_id: sentry-junior-source-1
     relation: supports
+    locator: Preserved content.md, lines 12, 91 (steer-and-review framing; mid-run messages ingested as the worker
+      continues)
+  operating_models.1:
+  - source_id: sentry-junior-source-1
+    relation: supports
+    locator: Preserved content.md, lines 261, 279 (scheduled tasks and inbound events; the agent decides what to
+      do)
   summary:
   - source_id: sentry-junior-source-1
     relation: supports
@@ -184,6 +194,13 @@ claim_metadata:
     provenance: catalog-judgment
     confidence: high
     confidence_reason: The source explicitly describes humans steering and reviewing the agent throughout its work.
+    valid_at: '2026'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: unverified
+    confidence_reason: Webhook and scheduler inputs become synthetic messages the agent decides on alone; no passage
+      documents a person reviewing the agent-initiated thread updates.
     valid_at: '2026'
   lessons_learned.0:
     kind: opinion

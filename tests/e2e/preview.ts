@@ -1,5 +1,5 @@
 // ABOUTME: The address the browser tests use for the previewed static build.
-// ABOUTME: The Playwright config and the server hooks read the same values.
+// ABOUTME: The Playwright config and its managed server read the same values.
 
 export const PREVIEW_HOST = '127.0.0.1';
 /** The default port, or `PREVIEW_PORT` when another local server already holds it. */

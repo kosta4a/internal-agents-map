@@ -1,6 +1,6 @@
 id: microsoft-prassistant
 company: Microsoft
-agent_name: PRAssistant
+agent_name: AI-powered code review assistant
 approach_type: agent
 deployment_stage: scaled
 year: 2025
@@ -21,13 +21,12 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: PRAssistant is Microsoft's internal AI code reviewer, built by its Developer Division Data and AI team. It
-  joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested
-  edits the author applies. Microsoft says it shaped GitHub's Copilot code review.
+summary: Microsoft's internal AI-powered code review assistant, built in close collaboration with its Developer
+  Division's Data & AI team. It joins each pull request as a reviewer, summarizes the change, and comments on
+  specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review.
 headline_metric: Supports more than 90% of Microsoft PRs, impacting over 600,000 pull requests per month
 architecture:
-  interfaces:
-  - github
+  interfaces: []
 key_metrics:
 - More than 90% of pull requests across the company
 - More than 600,000 pull requests impacted per month
@@ -56,9 +55,6 @@ evidence:
   - source_id: microsoft-prassistant-source-1
     relation: supports
     locator: Preserved content.md, lines 10
-  architecture.interfaces:
-  - source_id: microsoft-prassistant-source-1
-    relation: supports
   key_metrics.0:
   - source_id: microsoft-prassistant-source-1
     relation: supports

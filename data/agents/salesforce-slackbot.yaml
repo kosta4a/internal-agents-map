@@ -21,7 +21,7 @@ rubric:
   invocation:
   - interactive
   state: unknown
-  identity: user
+  identity: unknown
   evidence_strength: detailed-primary
 summary: Salesforce was 'customer zero' for the rebuilt Slackbot; an employee agent that finds company context,
   drafts work, and connects Slack context with Salesforce data; now also an external product.

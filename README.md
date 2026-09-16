@@ -28,7 +28,7 @@ undocumented details stay unknown.
 
 <!-- BEGIN OVERVIEW -->
 
-**Current map: 40 approaches across 35 organizations, backed by 107 sources and 588 evidence-linked claims.**
+**Current map: 40 approaches across 35 organizations, backed by 107 sources and 591 evidence-linked claims.**
 
 ## Overview
 
@@ -50,7 +50,7 @@ undocumented details stay unknown.
 | Harvey | [Spectre](docs/landscape.md#harvey-spectre) | platform | coding, code-review, on-call, security |
 | HubSpot | [Sidekick](docs/landscape.md#hubspot-sidekick) | agent | code-review |
 | Linear | [Linear Agent](docs/landscape.md#linear-agent) | agent | support, customer-success, coding |
-| Microsoft | [PRAssistant](docs/landscape.md#microsoft-prassistant) | agent | code-review |
+| Microsoft | [AI-powered code review assistant](docs/landscape.md#microsoft-prassistant) | agent | code-review |
 | monday.com | [Sphera / Atlas / Morphex](docs/landscape.md#monday-sphera-atlas-morphex) | agent-system | coding, code-review |
 | Notion | [Custom Agents](docs/landscape.md#notion-custom-agents) | platform | support, finance-ops, recruitment, security |
 | OpenAI | [Agentic software factory](docs/landscape.md#openai-software-factory) | agent-system | coding, code-review, ci-triage, ops |
@@ -89,11 +89,11 @@ exception-only supervision. Levels describe a specific workflow, not company mat
 
 These counts classify 40 catalog entries. A platform and one of its components can both appear, so the entries are not independent deployments, shares of industry practice, or counts of successful runs.
 
-Entry autonomy is classified as 21 drafts-reviewed, 9 human-in-loop, 5 autonomous, 1 assistive, and 4 unknown. Human-in-loop includes approval checkpoints; it does not mean a person continuously steers the whole run.
+Entry autonomy is classified as 21 drafts-reviewed, 7 human-in-loop, 7 autonomous, 1 assistive, and 4 unknown. Human-in-loop includes approval checkpoints; it does not mean a person continuously steers the whole run.
 
-The catalog contains 47 scoped supervision assessments across those entries, including 3 continuous-steering, 25 work-product-review, 2 outcome-review, 4 exception-only, and 13 unknown assessments. 4 entries have more than one assessed workflow; the counts therefore do not assign one level to each company.
+The catalog contains 51 scoped supervision assessments across those entries, including 3 continuous-steering, 26 work-product-review, 0 outcome-review, 6 exception-only, and 16 unknown assessments. 8 entries have more than one assessed workflow; the counts therefore do not assign one level to each company.
 
-12 entries are platforms or supporting patterns. State duration is undocumented for 25 entries. Review cost, failure rates, and retired systems remain rarely reported.
+12 entries are platforms or supporting patterns. State duration is undocumented for 24 entries. Review cost, failure rates, and retired systems remain rarely reported.
 
 <!-- END README FINDINGS -->
 

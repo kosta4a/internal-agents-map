@@ -19,12 +19,11 @@ operating_models:
 rubric:
   invocation:
   - background
-  - event-driven
   - interactive
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: Homegrown one-shot coding agents that read work context, locate the right repo/workspace, implement a change
+summary: Homegrown one-shot coding agents that read work context, implement a change
   end-to-end, and produce a PR for human review.
 headline_metric: Over 1,300 completely minion-produced PRs merged per week in Part 2, with human review and no human-written
   code

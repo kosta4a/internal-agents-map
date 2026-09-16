@@ -20,14 +20,13 @@ operating_models:
 rubric:
   invocation:
   - background
-  - event-driven
   - interactive
-  state: unknown
-  identity: unknown
+  state: durable-session
+  identity: mixed
   evidence_strength: mixed
 summary: A background coding agent that closes the loop on verifying its own work; runs tests, reviews telemetry,
-  queries feature flags, visually verifies the frontend; now also monitoring production and proposing fixes; also
-  a platform that hosts many internal agents.
+  queries feature flags, visually verifies the frontend; and serves as the platform hosting many internal agents,
+  some of which monitor production and propose fixes (built on top of Inspect, not Inspect itself).
 headline_metric: 75% of Ramp's merged PRs raised by Inspect sessions (May 2026)
 architecture:
   sandbox: Modal sandboxes; per-repo images rebuilt every 30 min from snapshots; warm-on-keystroke; a pool of warm

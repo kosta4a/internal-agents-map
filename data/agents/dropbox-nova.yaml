@@ -14,15 +14,18 @@ domains:
 - ci-triage
 - on-call
 - maintenance
-autonomy: human-in-loop
+autonomy: autonomous
 operating_models:
-- scope: agent-assisted SDLC workflow → accepted change
-  attention_boundary: unknown
+- scope: event-triggered validation-gated remediation (Deflaker, crash-alert candidate fixes) → landed fix or
+    candidates routed to service teams
+  attention_boundary: exception-only
+- scope: interactive developer session from web, CLI, or Slack → agent-assisted change
+  attention_boundary: continuous-steering
 rubric:
   invocation:
   - event-driven
   - interactive
-  state: unknown
+  state: durable-session
   identity: unknown
   evidence_strength: detailed-primary
 summary: Nova is Dropbox's internal service for running coding agents in its cloud. Engineers launch parallel sessions
@@ -34,8 +37,8 @@ architecture:
     remote execution + caching
   harness: Validation loop (propose → validate → feed back) with continue_on_validation_failure and max_iterations
     (~5); branch management kept outside the agent
-  model: Platform-agnostic; multiple coding agents behind one interface; swap models without rebuilding infra; prompt-eval
-    tooling
+  model: Multiple coding agents behind one interface; prompt-evaluation tooling; helpers that make it easier to
+    add AI-powered steps without rebuilding surrounding infrastructure; sources name no specific model or provider
   interfaces:
   - web
   - cli
@@ -89,6 +92,16 @@ evidence:
   operating_models.0:
   - source_id: dropbox-nova-source-1
     relation: supports
+    locator: Preserved content.md, lines 18, 58, 62 (async workflows; capped fix-and-validate loop with no person
+      in the loop)
+  - source_id: dropbox-nova-source-1
+    relation: contextualizes
+    locator: Preserved content.md, line 32 (publication kept outside the agent)
+  operating_models.1:
+  - source_id: dropbox-nova-source-1
+    relation: supports
+    locator: Preserved content.md, lines 18, 26 (standard interactive chat; Nova continues the session on validation
+      failure)
   summary:
   - source_id: dropbox-nova-source-1
     relation: supports
@@ -154,9 +167,17 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: unverified
-    confidence_reason: The source documents human participation but does not locate one consistent attention boundary
-      across Nova workflows.
+    confidence: high
+    confidence_reason: The source states some tasks run autonomously in async workflows and describes the Deflaker
+      fix-and-validate loop landing working fixes up to five attempts with no person in the loop; crash-alert
+      candidates surface to service teams.
+    valid_at: '2026-05-22'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: The source describes standard interactive chat sessions in which engineers launch and steer
+      agents; the exact review boundary of those sessions is not further specified.
     valid_at: '2026-05-22'
   lessons_learned.0:
     kind: inference

@@ -41,9 +41,9 @@ describe('the facet vocabulary', () => {
   });
 
   it('names a supervision boundary with its level and answers to the level alone', () => {
-    const term = findTerm('supervision', 'outcome-review', vocabulary)!;
-    expect(term.label).toBe('Outcome review (level 4)');
-    expect(term.aliases).toEqual(['Outcome review', 'level 4']);
+    const term = findTerm('supervision', 'exception-only', vocabulary)!;
+    expect(term.label).toBe('Exception only (level 5)');
+    expect(term.aliases).toEqual(['Exception only', 'level 5']);
     const unknown = findTerm('supervision', 'unknown', vocabulary)!;
     expect(unknown.label).toBe('Unknown');
     expect(unknown.aliases).toEqual(['Unknown']);
@@ -55,8 +55,8 @@ describe('term resolution', () => {
     expect(resolveTerm('coding', vocabulary)?.id).toBe('coding');
     expect(resolveTerm('  Code Review ', vocabulary)?.id).toBe('code-review');
     expect(resolveTerm('BACKGROUND', vocabulary)?.id).toBe('background');
-    expect(resolveTerm('level 4', vocabulary)?.id).toBe('outcome-review');
-    expect(resolveTerm('outcome review', vocabulary)?.key).toBe('supervision');
+    expect(resolveTerm('level 5', vocabulary)?.id).toBe('exception-only');
+    expect(resolveTerm('work product review', vocabulary)?.key).toBe('supervision');
   });
 
   it('leaves free text alone', () => {
@@ -82,9 +82,8 @@ describe('suggestions', () => {
     const forCod = suggest('cod', vocabulary);
     expect(forCod.map((term) => term.id)).toEqual(['code-review', 'coding']);
     expect(suggest('coding', vocabulary)[0]?.id).toBe('coding');
-    expect(suggest('level 4', vocabulary).map((term) => term.id)).toEqual(['outcome-review']);
+    expect(suggest('level 5', vocabulary).map((term) => term.id)).toEqual(['exception-only']);
     expect(suggest('review level', vocabulary).map((term) => term.id)).toEqual([
-      'outcome-review',
       'work-product-review',
     ]);
   });
@@ -125,7 +124,7 @@ describe('card matching', () => {
 
   it('groups selected terms by facet in selection order', () => {
     const selected = [
-      findTerm('supervision', 'outcome-review', vocabulary)!,
+      findTerm('supervision', 'exception-only', vocabulary)!,
       findTerm('work', 'security', vocabulary)!,
       findTerm('work', 'coding', vocabulary)!,
     ];
@@ -133,7 +132,7 @@ describe('card matching', () => {
       work: ['security', 'coding'],
       type: [],
       invocation: [],
-      supervision: ['outcome-review'],
+      supervision: ['exception-only'],
     });
   });
 

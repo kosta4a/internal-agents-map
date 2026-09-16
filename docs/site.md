@@ -42,6 +42,12 @@ Run `npm run verify` before a pull request. It checks the committed data and arc
 runs the type, unit, build, artifact, Python test, lint, format, privacy, local-link, browser,
 and whitespace gates in one sequence.
 
+The browser tests use Playwright's managed `webServer` to start the built Astro site,
+wait up to 30 seconds for readiness, and stop it after the run. The server uses Astro's
+JavaScript API so it stays in the foreground in both agent environments and CI.
+The suite has a five-minute limit, and the complete validation job has a fifteen-minute
+limit. Tests require a free port: set `PREVIEW_PORT` to use a port other than 4180.
+
 ## Routes and formats
 
 Astro uses `output: 'static'`, `build.format: 'file'`, and `trailingSlash: 'never'`. Each page

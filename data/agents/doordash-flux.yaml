@@ -28,14 +28,16 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: DoorDash's internal agentic AI platform combines company-data access, an AI Marketplace of specialized
-  agents, and the Flux cloud-agent runtime for engineering tasks.
+summary: Two documented DoorDash internal platforms — an agentic AI platform / AI Marketplace for data and analytics,
+  and Flux, a cloud engineering-agent platform built on sandboxes, an MCP gateway, and playbooks. No preserved
+  source connects the two platforms.
 headline_metric: 130,000 engineering tasks automated in one month
 architecture:
   sandbox: Firecracker microVMs; <5s p95 end-to-end setup (boot, clone repos, install tools, configure harness)
   harness: 'Maturity model: deterministic workflows → ReAct agents → hierarchical deep agents → experimental
     swarms'
-  model: Model-agnostic platform primitives support third-party or in-house agent components
+  model: Sources name no model or provider; the documented primitives are modular, allowing the best third-party
+    tool for each job or in-house builds, with multiple supported coding agent harnesses
   interfaces:
   - slack
   - github

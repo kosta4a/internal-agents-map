@@ -15,7 +15,7 @@ verification gate, and update the status row when finished.
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
 | [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
 | [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
-| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; verified locally on `codex/plan-008-reconcile` 2026-09-16 |
+| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; initial release `15bacb9` published 2026-09-16; later Phase 1 corrections retained in the release follow-up |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -43,11 +43,10 @@ sheet is recorded in the plan.
 
 ## Dependency notes
 
-- Plan 008 covers all nine findings from the 2026-09-16 content review. Implement
-  evidence corrections before taxonomy, generated summaries, lessons, notes, and
-  reader guidance. The plan is a proposal; the same-turn Browserbase removal was
-  separately authorized and implemented locally. Preserve the existing uncommitted
-  OpenAI records and company/logo work when executing it.
+- Plan 008 covers all nine findings from the 2026-09-16 content review. Evidence
+  corrections precede taxonomy, generated summaries, lessons, notes, and reader
+  guidance. Implementation and publication were authorized after the proposal;
+  the OpenAI records, company/logo work, and Browserbase removal are included.
 - Plan 003 research can run alongside Plan 002; final generation and validation use both changes.
 - Plan 004 builds on the corrected catalog and verification from Plans 002–003.
   Generate the static page first, then connect publication to the existing validation job.
@@ -103,13 +102,37 @@ The rollback target for later changes is `internal-agents-ilockpa0i-nen-labs.ver
 Still open: an editorial pass on entry summaries, and Search Console submission of the
 updated sitemap.
 
-## Latest verification
+## Plan 008 release record
+
+On 2026-09-16, PR #2 was squash-merged as `bcaff15`, followed by the Plan 008 squash
+commit `15bacb9`. Vercel deployment `dpl_GXqrAs68W3N13poDbZYxCT8J6RuM`
+(`internal-agents-ny8qg9srd-nen-labs.vercel.app`) served that revision at
+<https://internal-agents.com/>. The complete local suite passed, and
+`scripts/check_delivery.py https://internal-agents.com --root dist` passed all
+371 deployed response checks. `DESIGN.md`, the Areal/Sand redesign, and PR #2's
+guide illustrations were retained.
+
+GitHub run `35144506397` was canceled after hanging before the browser tests:
+the global setup waited synchronously for `astro preview` to exit. Astro's CLI
+automatically backgrounds itself in an agent environment, which masked the problem
+locally. The follow-up uses Astro's preview API in a Playwright-managed server,
+with readiness, shutdown, suite, and CI job timeouts.
+
+The checkout comparison also found fourteen records with later Phase 1 corrections
+that were absent from `15bacb9`. Those records and their generated output are retained
+with the expanded [content review](../docs/content-review-2026-09.md).
+[The original page audit](agent-page-content-audit.html) is kept unchanged as a
+historical report: its published-site baseline predates Plan 008 and is not the
+current catalog inventory.
+
+## Verification history
 
 2026-09-16: Plan 008 completed on the isolated `codex/plan-008-reconcile` branch.
 The catalog has 40 approaches, 35 organizations, and 107 declared source captures.
 The ordered generation and `npm run verify` gate passed: 147 Vitest tests, 14 Node
 negotiation tests, 196 Python tests, and 283 Playwright tests with 38 expected skips;
-Astro built 52 pages and 51 canonical routes. No push or deployment was performed.
+Astro built 52 pages and 51 canonical routes. This verification preceded the
+publication recorded above.
 
 2026-09-09: Plans 002 and 003 applied and reviewed in the current checkout. All 97
 tests and required checks pass, including the concurrently added email-address

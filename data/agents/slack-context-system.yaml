@@ -11,14 +11,14 @@ last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - research
-autonomy: human-in-loop
+autonomy: autonomous
 operating_models:
 - scope: long-running investigation → synthesized report
   attention_boundary: unknown
 rubric:
   invocation:
   - unknown
-  state: durable-session
+  state: unknown
   identity: unknown
   evidence_strength: mixed
 summary: Slack's engineering team runs an agentic service that investigates security alerts. A Director agent orchestrates
