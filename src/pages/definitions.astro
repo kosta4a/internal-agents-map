@@ -74,8 +74,8 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     </div>
     <figure class="scope-figure">
       <svg viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel}>
-        <rect class="scope-frame" x="24" y="24" width="636" height="337" rx="12"/>
-        <text class="scope-label" x="44" y="56">Organization</text>
+        <rect class="scope-frame" x="0.5" y="0.5" width="683" height="384" rx="15.5"/>
+        <text class="scope-label" x="20" y="36">Organization</text>
         <path class="scope-link" id="scope-link-0" d="M202 192 C 296 192, 340 106, 456 106"/>
         <path class="scope-link" id="scope-link-1" d="M202 192 C 296 192, 340 192, 456 192"/>
         <path class="scope-link" id="scope-link-2" d="M202 192 C 296 192, 340 278, 456 278"/>
@@ -123,7 +123,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <figure class="quadrant-figure">
       <div class="quadrant-legend" aria-label="Marker legend"><span><i class="catalog-marker" aria-hidden="true"></i>{chart.legend.catalog}</span><span><i class="reference-marker-key" aria-hidden="true"></i>{chart.legend.reference}</span></div>
       <div class="quadrant-chart">
-        <div class="quadrant-y-axis">{chart.verticalAxis}</div>
+        <div class="quadrant-y-axis"><span>{chart.verticalAxis.from}</span><span>{chart.verticalAxis.to}</span></div>
         <div class="quadrant-plot">
           <div class="quadrant-cell">
             <h3><span>{chart.cells.specialized.scope}</span>{chart.cells.specialized.title}</h3>

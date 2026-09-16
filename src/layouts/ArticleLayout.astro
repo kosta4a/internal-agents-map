@@ -66,19 +66,25 @@ const {
 
 /* The chart shows two questions about an implementation, not a score. */
 .quadrant-chart { position: relative; display: grid; gap: 12px; }
-/* Bottom to top: standard capabilities below, company-specific above. */
+/* Standard sits at the foot of the scale, company-specific at its head. */
 .quadrant-y-axis {
   position: absolute;
   top: 0;
   bottom: 30px;
   right: calc(100% + 12px);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  text-align: center;
-  white-space: nowrap;
+  width: 1.2em;
   font-size: 12px;
   color: var(--muted);
 }
+.quadrant-y-axis span {
+  position: absolute;
+  left: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+.quadrant-y-axis span:first-child { bottom: 0; }
+.quadrant-y-axis span:last-child { top: 0; }
 .quadrant-plot {
   aspect-ratio: 1;
   display: grid;
@@ -90,15 +96,16 @@ const {
   overflow: hidden;
 }
 .quadrant-cell { position: relative; min-width: 0; }
-.quadrant-cell:nth-child(odd) { border-right: .5px solid var(--sand-6); }
-.quadrant-cell:nth-child(-n+2) { border-bottom: .5px solid var(--sand-6); }
-.quadrant-cell h3 { position: absolute; top: 20px; left: 20px; right: 20px; margin: 0; font-size: 14px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
-.quadrant-cell h3 span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 14px; line-height: 1.35; font-weight: 400; }
+/* The two axes are a reading aid inside the square, not edges of it. */
+.quadrant-cell:nth-child(odd) { border-right: 1px dotted var(--sand-7); }
+.quadrant-cell:nth-child(-n+2) { border-bottom: 1px dotted var(--sand-7); }
+.quadrant-cell h3 { position: absolute; top: 20px; left: 20px; right: 20px; margin: 0; font-size: 12px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
+.quadrant-cell h3 span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 12px; line-height: 1.35; font-weight: 400; }
 .quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: 20px; }
 /* The two right-hand cells read from the edge they sit against. */
 .quadrant-cell:nth-child(2) h3, .quadrant-cell:nth-child(4) h3 { text-align: right; }
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
-.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 18px; }
+.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 12px; padding-left: 18px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
 .quadrant-cell:nth-child(4) li { left: 12%; top: 15%; }
 .quadrant-cell:nth-child(4) li:nth-child(2) { left: 33%; top: 37%; }
@@ -110,15 +117,20 @@ const {
   top: calc((1.35em - 10px) / 2);
   width: 10px;
   height: 10px;
+  border-radius: 50%;
   background: var(--blue-9);
 }
 .quadrant-cell a { display: block; line-height: 1.35; text-decoration: none; }
 .quadrant-cell a:hover { color: var(--sand-10); }
-.quadrant-cell li strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.35; }
-.quadrant-cell li span { display: block; font-size: 14px; line-height: 1.35; margin-top: 6px; }
+.quadrant-cell li strong { display: block; font-size: 12px; font-weight: 500; line-height: 1.35; }
+.quadrant-cell li span { display: block; font-size: 12px; line-height: 1.35; margin-top: 6px; }
 .quadrant-cell .reference-marker { color: var(--sand-10); padding-left: 24px; }
+.quadrant-cell .reference-marker strong { color: var(--sand-12); }
+/* A reference names a class of product: breaking it reads as two of them. */
+.quadrant-cell .reference-marker { max-width: none; white-space: nowrap; }
 .quadrant-cell .reference-marker::before {
   top: calc((1.35em - 16px) / 2);
+  border-radius: 0;
   width: 16px;
   height: 16px;
   background: var(--pink-9);
@@ -136,10 +148,10 @@ const {
 .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: 56%; top: 50%; max-width: 38%; }
 .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 17%; top: 72%; max-width: 52%; }
 .quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
-.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: 12px; }
+.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: 14px; }
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
 .quadrant-legend i { width: 10px; height: 10px; }
-.quadrant-legend .catalog-marker { background: var(--blue-9); }
+.quadrant-legend .catalog-marker { border-radius: 50%; background: var(--blue-9); }
 .quadrant-legend .reference-marker-key { width: 16px; height: 16px; background: var(--pink-9); clip-path: var(--star); }
 /* The plot is the body's own width, so its scale label has room outside it. */
 .guide .quadrant-figure { max-width: none; }
@@ -213,9 +225,10 @@ const {
 /* The viewBox is the body's own width, so a label reads at its stated size. */
 .scope-label { fill: var(--muted); font-size: 14px; letter-spacing: -.01em; }
 .scope-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
-.scope-node { fill: #fff; stroke: var(--sand-10); stroke-width: 1.2; }
-.scope-agent { fill: var(--accent); stroke: var(--accent); }
-.scope-signal { fill: var(--accent); }
+/* The agent, what it reaches, and what passes between them share one colour. */
+.scope-node { fill: #fff; stroke: var(--blue-9); stroke-width: 1.2; }
+.scope-agent { fill: var(--blue-9); stroke: var(--blue-9); }
+.scope-signal { fill: var(--blue-9); }
 .concept-pair svg { display: block; width: 100%; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
 .concept-pair svg text { fill: var(--muted); stroke: none; font: 12px Areal, sans-serif; }
 .concept-pair svg .agent-dot { fill: var(--accent); stroke: var(--accent); }
@@ -345,10 +358,12 @@ const {
   /* A narrow screen has no margin to hang the scale label in, so it leads the plot. */
   .quadrant-y-axis {
     position: static;
-    writing-mode: horizontal-tb;
-    transform: none;
-    text-align: left;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
   }
+  .quadrant-y-axis span { position: static; writing-mode: horizontal-tb; transform: none; }
   .quadrant-plot { aspect-ratio: .82; }
   .quadrant-cell h3 { font-size: 12px; left: 6px; right: 6px; top: 6px; }
   .quadrant-cell h3 span { display: none; }
