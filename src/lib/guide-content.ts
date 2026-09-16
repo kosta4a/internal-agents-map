@@ -118,7 +118,7 @@ export const REFERENCE_PLACEMENTS: readonly ReferencePlacement[] = [
   },
 ];
 
-/** The reference markers that belong in the "ready-made task agents" region. */
+/** The reference markers that belong in the ready-made focused-agent region. */
 export const READY_REFERENCES = REFERENCE_PLACEMENTS.filter(
   (item) => item.id === 'deep-research' || item.id === 'ready-made-task',
 );
@@ -255,7 +255,7 @@ export const METHODOLOGY_SECTIONS: readonly GuideSection[] = [
       ],
       [
         'The levels do not rank companies or measure quality. See ',
-        { text: 'Definitions', path: guidePath('definitions') },
+        { text: 'the supervision definitions', path: `${guidePath('definitions')}#supervision` },
         ' for the terms and framework.',
       ],
     ],
@@ -344,6 +344,17 @@ export interface GuideQuestion {
   readonly answer: TextBlock;
 }
 
+export interface ClassificationDefinition {
+  readonly id: string;
+  readonly label: string;
+  readonly meaning: string;
+}
+
+export interface SupervisionDefinition extends ClassificationDefinition {
+  readonly level: string;
+  readonly attention: string;
+}
+
 const MINIONS_PATH = entryPath('stripe-minions');
 const MINIONS_PART_ONE =
   'https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents';
@@ -365,8 +376,53 @@ export const DEFINITIONS_INTRO: readonly TextBlock[] = [
 export const DEFINITIONS_JUMP_LINKS: readonly JumpLink[] = [
   { label: 'Internal agents ↓', fragment: 'terms' },
   { label: 'How agents fit ↓', fragment: 'quadrant' },
+  { label: 'Supervision ↓', fragment: 'supervision' },
   { label: 'Other terms ↓', fragment: 'terminology' },
 ];
+
+export const APPROACH_TYPE_DEFINITIONS: readonly ClassificationDefinition[] = [
+  { id: 'agent', label: 'Agent', meaning: 'One system that carries out tasks.' },
+  { id: 'agent-system', label: 'Agent system', meaning: 'A related family of agents with shared infrastructure.' },
+  { id: 'platform', label: 'Platform', meaning: 'Reusable infrastructure for several agents or workflows.' },
+  { id: 'orchestration-system', label: 'Orchestration system', meaning: 'A system whose primary role is coordinating agents.' },
+  { id: 'supporting-pattern', label: 'Supporting pattern', meaning: 'A narrower implemented component that enables agent operation.' },
+];
+
+export const INVOCATION_DEFINITIONS: readonly ClassificationDefinition[] = [
+  { id: 'interactive', label: 'Interactive', meaning: 'A person starts and exchanges messages with the system.' },
+  { id: 'background', label: 'Background', meaning: 'Work continues without continuous interaction after it starts.' },
+  { id: 'scheduled', label: 'Scheduled', meaning: 'A time rule starts the work.' },
+  { id: 'event-driven', label: 'Event-driven', meaning: 'A system event starts the work.' },
+  { id: 'unknown', label: 'Unknown', meaning: 'The collected evidence does not establish how work starts.' },
+];
+
+export const SUPERVISION_DEFINITIONS = {
+  heading: 'Supervision: where human attention returns',
+  intro: [
+    'The catalog assesses one documented workflow at a time. The boundary records when human attention normally returns during a successful run.',
+  ] as TextBlock,
+  source: [
+    'Levels 2–5 adapt ',
+    {
+      text: "Dan Shapiro’s five levels of AI-assisted software development",
+      href: 'https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-autocomplete-to-the-software-factory/',
+    },
+    '. Levels 0–1 describe manual work and discrete assistance, outside the internal-agent workflows assessed here.',
+  ] as TextBlock,
+  rows: [
+    { id: 'continuous-steering', label: 'Continuous steering', level: 'Level 2', attention: 'A person pairs with the agent throughout execution.', meaning: 'The person repeatedly guides the work as it proceeds.' },
+    { id: 'work-product-review', label: 'Work-product review', level: 'Level 3', attention: 'A person reviews the draft or implementation.', meaning: 'The agent produces work, but review returns to the produced artifact.' },
+    { id: 'outcome-review', label: 'Outcome review', level: 'Level 4', attention: 'A person evaluates tests, behavior, or outcomes.', meaning: 'The normal review boundary is the result rather than routine implementation inspection.' },
+    { id: 'exception-only', label: 'Exception-only', level: 'Level 5', attention: 'A person returns when the system raises an exception.', meaning: 'A normal successful run does not require routine human review.' },
+    { id: 'unknown', label: 'Unknown', level: 'No level', attention: 'The evidence does not locate the attention boundary.', meaning: 'The catalog does not infer a level from other fields.' },
+  ] as readonly SupervisionDefinition[],
+  limits: [
+    'Attention is separate from authority. A background run can still lack permission to publish, merge, spend money, or act in production. A level also does not state how long the system runs unattended.',
+  ] as TextBlock,
+  scope: [
+    'A level describes the named workflow and evidence date. It does not rank a company, maturity, autonomy, or output quality. One system can therefore have several scoped levels.',
+  ] as TextBlock,
+} as const;
 
 /** Section 01: what the map calls an internal agent. */
 export const DEFINITIONS_SCOPE = {
@@ -462,7 +518,7 @@ export const DEFINITIONS_CHART = {
       scope: 'Company-specific · broad',
       title: 'General internal agents & shared platforms',
     },
-    ready: { scope: 'Standard · focused', title: 'Ready-made task agents' },
+    ready: { scope: 'Standard · focused', title: 'Ready-made focused agents' },
     assistants: { scope: 'Standard · broad', title: 'General-purpose assistants' },
   } as Record<string, ChartCell>,
   emptyCell: 'No selected example currently fits.',

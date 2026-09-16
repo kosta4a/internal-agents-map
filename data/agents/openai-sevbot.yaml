@@ -1,0 +1,149 @@
+id: openai-sevbot
+company: OpenAI
+agent_name: Sevbot
+approach_type: agent
+deployment_stage: deployed
+year: 2026
+first_public_evidence:
+  date: "2025-11-20"
+  source_id: crtsh-sevbot-certificates
+last_reviewed_at: "2026-09-16"
+status: internal
+domains:
+- on-call
+autonomy: drafts-reviewed
+relationships:
+- type: component-of
+  approach_id: openai-software-factory
+operating_models:
+- scope: "incident detected -> applied mitigation"
+  attention_boundary: work-product-review
+rubric:
+  invocation:
+  - event-driven
+  state: unknown
+  identity: dedicated-agent
+  evidence_strength: secondary-only
+summary: OpenAI's internal incident-response agent, built on Codex. When an incident is
+  detected, the bot wakes up, collects context, determines possible mitigations without
+  executing any, and answers developers' questions in the incident Slack channel; an
+  engineer can tell it to apply a chosen mitigation.
+architecture:
+  sandbox: unknown
+  harness: Built on top of Codex
+  model: unknown
+  interfaces:
+  - slack
+primitives:
+- name: Propose-only mitigation
+  desc: The bot determines possible mitigations but never executes any; an engineer
+    tells it to apply a specific mitigation
+key_metrics: []
+lessons_learned:
+- OpenAI's stated goal is that Sevbot mitigates routine outages autonomously with
+  humans reviewing its actions on return; as of the report, on-call duty remains
+sources:
+- id: openai-sevbot-article
+  title: "Inside OpenAI's agentic software factory"
+  url: https://newsletter.pragmaticengineer.com/p/openai-software-factory
+  canonical_url: https://newsletter.pragmaticengineer.com/p/openai-software-factory
+  kind: news
+  provenance_class: independent-secondary
+  role: evidence
+  publisher: The Pragmatic Engineer
+  authors:
+  - Gergely Orosz
+  published_at: "2026-09-15"
+  accessed_at: "2026-09-16"
+  last_verified_at: "2026-09-16"
+  capture:
+    manifest_path: archive/sources/openai-sevbot-article/metadata.json
+- id: crtsh-sevbot-certificates
+  title: "Certificate Transparency records for sevbot.api.openai.com"
+  url: https://crt.sh/?q=sevbot.api.openai.com
+  canonical_url: https://crt.sh/?q=sevbot.api.openai.com
+  kind: other
+  provenance_class: aggregator
+  role: evidence
+  publisher: crt.sh
+  accessed_at: "2026-09-16"
+  last_verified_at: "2026-09-16"
+  capture:
+    manifest_path: archive/sources/crtsh-sevbot-certificates/metadata.json
+- id: github-sevbot-pr
+  title: "[SEVBot] Optionize initialized notification tolerance (openai-agents-python pull 2765 commits)"
+  url: https://github.com/openai/openai-agents-python/pull/2765/commits
+  canonical_url: https://github.com/openai/openai-agents-python/pull/2765/commits
+  kind: source-code
+  provenance_class: first-party
+  role: evidence
+  publisher: OpenAI
+  authors:
+  - elainegan-openai
+  published_at: "2026-03-24"
+  accessed_at: "2026-09-16"
+  last_verified_at: "2026-09-16"
+  capture:
+    manifest_path: archive/sources/github-sevbot-pr/metadata.json
+evidence:
+  summary:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, lines 188-193 (pipeline step 9: respond to outages)"
+  - source_id: crtsh-sevbot-certificates
+    relation: supports
+    locator: "Preserved content.md, lines 13-41 (certificate table for sevbot.api.openai.com; earliest not-before 2025-11-20 at lines 37-41, with renewals through 2026-08-01; evidences a deployed OpenAI service under the Sevbot name, not its incident-response behavior)"
+  - source_id: github-sevbot-pr
+    relation: supports
+    locator: "Preserved content.md, lines 21-27 (initial commit '[SEVBot] Optionize initialized notification tolerance', 219a67a, 2026-03-24, authored by an OpenAI employee and co-authored by Codex; evidences internal Sevbot-branded engineering work)"
+  operating_models.0:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, lines 190-193 (determines possible mitigations but never executes any; an engineer can tell it to apply a specific mitigation)"
+  architecture.sandbox:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, lines 188-195 describe Sevbot without documenting an execution sandbox"
+  architecture.harness:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, line 188 (Sevbot is built on top of Codex)"
+  architecture.model:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "The preserved article names no underlying models for Sevbot"
+  architecture.interfaces:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, line 192 (it is part of the Slack channel and answers devs' questions)"
+  primitives.0:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, lines 190-193 (mitigation bullet list)"
+  lessons_learned.0:
+  - source_id: openai-sevbot-article
+    relation: supports
+    locator: "Preserved content.md, line 195 (goal of autonomous action on routine outages; oncall duty is not a thing of the past)"
+claim_metadata:
+  operating_models.0:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: high
+    confidence_reason: "The article enumerates the boundary: Sevbot proposes mitigations and never executes any; an engineer commands the application."
+    valid_at: "2026-09"
+  architecture.sandbox:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: "The article does not document an execution sandbox; unknown does not mean absent."
+  architecture.model:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: "The article names no underlying models; unknown does not mean absent."
+  lessons_learned.0:
+    kind: fact
+    provenance: reported
+    confidence: high
+    confidence_reason: "The stated goal and the current on-call state are reported directly."
+    valid_at: "2026-09"

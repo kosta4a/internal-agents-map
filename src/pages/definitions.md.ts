@@ -5,6 +5,7 @@ import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell, type PlacementView } from '../lib/definitions';
 import {
   ASSISTANT_REFERENCES,
+  APPROACH_TYPE_DEFINITIONS,
   DEFINITIONS_CHART,
   DEFINITIONS_EYEBROW,
   DEFINITIONS_HEADING,
@@ -13,8 +14,10 @@ import {
   DEFINITIONS_LEDE,
   DEFINITIONS_QUESTIONS,
   DEFINITIONS_SCOPE,
+  SUPERVISION_DEFINITIONS,
   DEFINITIONS_TERMS,
   DEFINITIONS_WORKFLOW,
+  INVOCATION_DEFINITIONS,
   READY_REFERENCES,
   REFERENCE_PLACEMENTS,
   inlineMarkdown,
@@ -83,6 +86,7 @@ function document(): string {
   const chart = DEFINITIONS_CHART;
   const terms = DEFINITIONS_TERMS;
   const questions = DEFINITIONS_QUESTIONS;
+  const supervision = SUPERVISION_DEFINITIONS;
   return [
     `Source: ${page}`,
     DEFINITIONS_EYEBROW,
@@ -128,6 +132,20 @@ function document(): string {
     [...placed.map(placementNote), ...REFERENCE_PLACEMENTS.map(referenceNote)].join('\n'),
     `### ${chart.builtHeading}`,
     ...blocks(chart.builtBody),
+    `## ${supervision.heading}`,
+    inlineMarkdown(supervision.intro),
+    inlineMarkdown(supervision.source),
+    '| Boundary | Level | Human attention | Interpretation |',
+    '| --- | --- | --- | --- |',
+    ...supervision.rows.map((row) => `| ${row.label} | ${row.level} | ${row.attention} | ${row.meaning} |`),
+    inlineMarkdown(supervision.limits),
+    inlineMarkdown(supervision.scope),
+    '### Structural types',
+    'Structural type answers what kind of system the entry describes. It is independent of how work starts.',
+    ...APPROACH_TYPE_DEFINITIONS.map((item) => `- **${item.label}:** ${item.meaning}`),
+    '### Invocation modes',
+    'Invocation answers how work starts or proceeds. One system can support several modes.',
+    ...INVOCATION_DEFINITIONS.map((item) => `- **${item.label}:** ${item.meaning}`),
     terms.eyebrow,
     `## ${terms.heading}`,
     inlineMarkdown(terms.intro),

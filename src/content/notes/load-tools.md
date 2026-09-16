@@ -7,10 +7,10 @@ summary: An agent can find a tool before it loads the details.
 readingTime: 2 min read
 order: 5
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - cloudflare-ai-stack
   - sentry-junior
-  - browserbase-bb
 sources:
   - id: '1'
     title: 'Cloudflare: Our internal AI engineering stack'
@@ -20,21 +20,15 @@ sources:
     title: 'Sentry: Building an intern'
     url: https://cra.mr/building-an-intern/
     note: Progressive discovery and provider connections.
-  - id: '3'
-    title: 'Browserbase: Internal agents'
-    url: https://browserbase.com/blog/internal-agents
-    note: Task-specific skills and a small core tool set.
 ---
 
 <section aria-labelledby="what-the-teams-report">
 
 ## What the teams report
 
-Cloudflare found that tool definitions used context space before any task started. Its portal now exposes search and execution tools instead of every definition. [[1]](#source-1)
+Cloudflare found that tool definitions used context space before any task started. Its portal gives the model a search function over tool schemas, then an execution function for the selected tool. [[1]](#source-1)
 
-Sentry’s Junior starts without a connection to an MCP provider. Model Context Protocol (MCP) connects agents to tools. Junior connects after the agent requests a tool lookup. [[2]](#source-2)
-
-Browserbase loads skills for each task. These skills contain instructions for specific work. They are separate from the tools that perform actions. [[3]](#source-3)
+Sentry’s Junior starts without a connection to an MCP provider. Model Context Protocol (MCP) connects agents to tools. Junior first looks up a provider, then connects and discovers that provider’s tools. [[2]](#source-2)
 
 <blockquote cite="https://cra.mr/building-an-intern/"><p>“keep the always-on surface small”</p></blockquote>
 
@@ -48,7 +42,7 @@ Browserbase loads skills for each task. These skills contain instructions for sp
     <span class="note-arrow" aria-hidden="true">→</span>
     <div class="note-node note-node-accent"><span>03</span><strong>Use the tool</strong><small>Load the required details</small></div>
   </div>
-  <figcaption>Our simplified illustration of tool discovery. Skills supply instructions and may load separately.</figcaption>
+  <figcaption>Our simplified illustration of tool discovery.</figcaption>
 </figure>
 
 </section>
@@ -59,9 +53,9 @@ Browserbase loads skills for each task. These skills contain instructions for sp
 
 ## More tools need not mean more initial context
 
-Tool discovery can separate available capabilities from the context supplied at the start of a task.
+Both designs separate available capabilities from initial context. Cloudflare searches a schema catalog. Sentry discovers a provider before it discovers the provider’s tools.
 
-This adds a dependency: the agent must find the correct tool. A missing or unclear tool description can prevent that step.
+This adds a discovery dependency. Search quality, provider availability, descriptions, and permissions can prevent the agent from reaching a usable tool.
 
 A small tool set may not need discovery. The reports do not establish that fewer tool definitions always improve accuracy.
 

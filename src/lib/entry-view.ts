@@ -469,6 +469,7 @@ export interface DirectoryCard {
   readonly approachType: string;
   readonly approachTypeLabel: string;
   readonly domains: readonly TermView[];
+  readonly invocation: readonly TermView[];
   /** The attention boundaries of the scoped operating models, with their derived levels. */
   readonly boundaries: readonly BoundaryView[];
   readonly reviewedAt: string;
@@ -504,6 +505,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
       .sort()
       .map((id) => ({ ...termView(id), level: levels.get(id) ?? null }));
     const domains = approach.domains.map(termView);
+    const invocation = approach.rubric.invocation.map(termView);
     return {
       id: approach.id,
       path: entryPath(approach.id),
@@ -519,6 +521,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
         approach.approach_type,
         termLabel(approach.approach_type),
         ...domains.flatMap((domain) => [domain.id, domain.label]),
+        ...invocation.flatMap((mode) => [mode.id, mode.label]),
         ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
         approach.autonomy,
         termLabel(approach.autonomy),
@@ -527,6 +530,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
       approachTypeLabel: termLabel(approach.approach_type),
       sourceIds: approach.source_ids,
       domains,
+      invocation,
       boundaries,
       reviewedAt: approach.last_reviewed_at,
     };

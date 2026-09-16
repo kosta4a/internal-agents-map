@@ -1,13 +1,13 @@
 id: salesforce-slackbot
 company: Salesforce
 agent_name: Slackbot
-approach_type: task-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2025
 first_public_evidence:
   date: '2025-12-01'
   source_id: salesforce-slackbot-source-2
-last_reviewed_at: '2026-08-31'
+last_reviewed_at: '2026-09-16'
 status: commercialized
 domains:
 - support
@@ -27,7 +27,8 @@ summary: Salesforce was 'customer zero' for the rebuilt Slackbot; an employee ag
   drafts work, and connects Slack context with Salesforce data; now also an external product.
 architecture:
   harness: An employee agent intended as a front door to other agents
-  model: Not specified
+  model: Anthropic Claude (named via VentureBeat); additional providers planned within the year, with Google Gemini
+    named and OpenAI possible
   interfaces:
   - slack
   tool_access: Finds company context, drafts work, manages meetings, connects Slack context with Salesforce data
@@ -99,8 +100,9 @@ evidence:
   - source_id: salesforce-slackbot-source-1
     relation: supports
   architecture.model:
-  - source_id: salesforce-slackbot-source-1
+  - source_id: salesforce-slackbot-source-3
     relation: supports
+    locator: Preserved content.md, lines 32, 34
   architecture.tool_access:
   - source_id: salesforce-slackbot-source-1
     relation: supports
@@ -133,9 +135,9 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.

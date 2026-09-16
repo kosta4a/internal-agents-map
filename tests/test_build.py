@@ -42,15 +42,16 @@ class BuildTests(unittest.TestCase):
         ]
         records = [
             {
-                "approach_type": "task-agent",
+                "approach_type": "agent",
                 "autonomy": "unknown",
+                "operating_models": [{"attention_boundary": "unknown"}],
                 "rubric": {"state": "unknown"},
                 "architecture": {"sandbox": value},
             }
             for value in values
         ]
         self.assertIn(
-            "- 2 approaches document a concrete execution environment.",
+            "- 2 entries document a concrete execution environment.",
             build.render_patterns_snapshot(records),
         )
 
@@ -225,7 +226,7 @@ class BuildTests(unittest.TestCase):
 
     def test_normalized_export_has_linked_collections(self) -> None:
         export = build.normalize(self.records, self.companies)
-        self.assertEqual(export["schema_version"], 5)
+        self.assertEqual(export["schema_version"], 6)
         claim_ids = {claim["id"] for claim in export["claims"]}
         source_ids = {source["id"] for source in export["sources"]}
         company_ids = {company["id"] for company in export["companies"]}
@@ -423,7 +424,7 @@ class BuildTests(unittest.TestCase):
             normalized_source = next(
                 item for item in export["sources"] if item["id"] == source["id"]
             )
-            self.assertEqual(export["schema_version"], 5)
+            self.assertEqual(export["schema_version"], 6)
             self.assertEqual(normalized_source["capture"], manifest)
             self.assertNotIn("manifest_path", normalized_source["capture"])
 
@@ -586,31 +587,43 @@ class BuildTests(unittest.TestCase):
 
     def test_readme_findings_counts_are_current(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        autonomy_counts = Counter(record["autonomy"] for record in self.records)
-        unknown_state_count = sum(record["rubric"]["state"] == "unknown" for record in self.records)
-        self.assertIn(
-            f"{autonomy_counts['drafts-reviewed']} of the {len(self.records)} approaches",
-            readme,
-        )
-        self.assertIn(
-            f"{autonomy_counts['human-in-loop']} keep a person involved",
-            readme,
-        )
-        self.assertIn(
-            f"{autonomy_counts['autonomous']} report autonomous action",
-            readme,
-        )
-        self.assertIn(
-            f"State duration is undocumented for {unknown_state_count} approaches",
-            readme,
-        )
+        self.assertIn(build.render_readme_findings(self.records), readme)
+
+    def test_catalog_statistics_keep_entry_and_workflow_units_separate(self) -> None:
+        fixture = [
+            {
+                "approach_type": "platform",
+                "autonomy": "human-in-loop",
+                "operating_models": [
+                    {"attention_boundary": "work-product-review"},
+                    {"attention_boundary": "unknown"},
+                ],
+                "rubric": {"state": "mixed"},
+                "architecture": {"interfaces": ["slack"], "sandbox": "unknown"},
+            },
+            {
+                "approach_type": "supporting-pattern",
+                "autonomy": "unknown",
+                "operating_models": [{"attention_boundary": "unknown"}],
+                "rubric": {"state": "unknown"},
+                "architecture": {"interfaces": [], "sandbox": "Docker container"},
+            },
+        ]
+        stats = build.catalog_statistics(fixture)
+        self.assertEqual(stats["entries"], 2)
+        self.assertEqual(stats["supporting_entries"], 2)
+        self.assertEqual(stats["operating_models"], 3)
+        self.assertEqual(stats["multi_workflow_entries"], 1)
+        self.assertEqual(stats["attention_boundaries"]["work-product-review"], 1)
+        self.assertEqual(stats["attention_boundaries"]["unknown"], 2)
+        self.assertEqual(stats["autonomy"]["human-in-loop"], 1)
 
     def test_analysis_snapshots_match_catalog(self) -> None:
         patterns = build.render_patterns_snapshot(self.records)
         adoption = build.render_adoption_snapshot(self.records)
         autonomy_counts = Counter(record["autonomy"] for record in self.records)
-        self.assertIn(f"contains {len(self.records)} approaches", patterns)
-        self.assertIn(f"draw on {len(self.records)} cataloged approaches", adoption)
+        self.assertIn(f"contains {len(self.records)} entries", patterns)
+        self.assertIn(f"draw on {len(self.records)} catalog entries", adoption)
         self.assertIn(
             f"{autonomy_counts['drafts-reviewed']} `drafts-reviewed`",
             adoption,
@@ -947,9 +960,8 @@ class BuildTests(unittest.TestCase):
     def test_documented_sample_counts_are_current(self) -> None:
         patterns = (ROOT / "docs" / "patterns.md").read_text(encoding="utf-8")
         labels = {
-            "task-agent": "Task agent",
+            "agent": "Agent",
             "platform": "Platform",
-            "background-agent": "Background agent",
             "agent-system": "Agent system",
             "orchestration-system": "Orchestration system",
             "supporting-pattern": "Supporting pattern",

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "hn-zbrock-internal-adoption",
+  "original_url": "https://news.ycombinator.com/item?id=48435213",
+  "final_url": "https://news.ycombinator.com/item?id=48435213",
+  "captured_at": "2026-09-16T15:10:44Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/hn-zbrock-internal-adoption/content.md",
+      "sha256": "sha256:69d35a7d3ffafd0832b51a48aa5b5a6f87121f088b7d6896da9deb1906aacdba",
+      "bytes": 1569
+    }
+  }
+}

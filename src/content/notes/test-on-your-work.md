@@ -7,6 +7,7 @@ summary: Past tasks and failures can become repeatable checks.
 readingTime: 2 min read
 order: 7
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - databricks-costar
   - uber-ureview
@@ -29,11 +30,11 @@ sources:
 
 ## What the teams report
 
-Databricks builds benchmark tasks from actual code changes. It removes solution details from task descriptions and keeps relevant tests separate. People check each sample. [[1]](#source-1)
+Databricks builds benchmark tasks from actual code changes. It removes solution details from task descriptions so the agent cannot copy the historical solution. It also keeps relevant tests separate. People check each sample. [[1]](#source-1)
 
-The team also revises tests when they reject a valid alternative solution. A useful test must check the result without requiring the original implementation. [[1]](#source-1)
+The team revises tests when they reject a valid alternative solution. A useful test must check required behavior without requiring the original implementation. [[1]](#source-1)
 
-Uber evaluates uReview with a curated benchmark and feedback from engineers. These checks help the team adjust prompts, thresholds, and models. [[2]](#source-2)
+Uber evaluates uReview with a curated benchmark and feedback from engineers. Its benchmark concerns review findings, while Databricks evaluates code changes. Their scores are not interchangeable. [[2]](#source-2)
 
 <blockquote cite="https://www.databricks.com/blog/costar-how-we-ship-ai-agents-databricks-fast-without-breaking-things"><p>“every bug we find in production becomes a new scenario”</p></blockquote>
 
@@ -61,9 +62,9 @@ Uber evaluates uReview with a curated benchmark and feedback from engineers. The
 
 A test case needs a clear task, an initial state, and a way to assess the result. Past work can supply these parts.
 
-Databricks also checks model judges against human judgments in coSTAR. Its method covers several kinds of agents, including internal engineering workflows. [[3]](#source-3)
+Databricks also checks model judges against human judgments in coSTAR. Agreement on a sample can reveal judge drift, but the human labels and sample still define what the check covers. [[3]](#source-3)
 
-Past cases cannot cover every future failure. A strong result on one team’s tasks may not transfer to another team.
+Past cases cannot cover every future failure. Leakage can overstate performance, narrow tests can reject valid work, and a model judge can repeat model errors.
 
 <p class="note-question"><strong>A question for your build</strong>Which past failure must the next version avoid?</p>
 

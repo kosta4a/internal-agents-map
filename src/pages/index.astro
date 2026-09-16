@@ -63,7 +63,7 @@ const graph = structuredData([
               aria-controls="suggestions"
               aria-autocomplete="list"
               aria-describedby="search-help"
-              placeholder="Company, agent, work, approach type, or supervision level…"
+              placeholder="Company, agent, work, type, invocation, or supervision…"
               autocomplete="off"
             />
           </div>
@@ -71,8 +71,12 @@ const graph = structuredData([
         </div>
       </div>
       <p id="search-help" class="search-help visually-hidden">
-        Pick a suggestion, or type a work area, approach type, or supervision level and press Enter, to filter by it.
+        Pick a suggestion, or type a work area, approach type, invocation mode, or supervision level and press Enter, to filter by it.
         Other words search the text of every card.
+      </p>
+      <p id="legacy-filter-notice" class="search-help" hidden>
+        The old Background agent type combined structure and invocation. Use the Agent type
+        and Background invocation filters to choose the intended result set.
       </p>
       <script is:inline id="facet-vocabulary" type="application/json" set:html={vocabulary} />
     </form>

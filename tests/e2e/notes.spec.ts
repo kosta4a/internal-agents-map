@@ -89,8 +89,7 @@ test.describe('one note', () => {
     expect(article?.url).toBe('https://internal-agents.com/notes/stop-a-run');
     expect(article?.headline).toBe('When should an agent stop?');
     expect(article?.datePublished).toBe('2026-09-11');
-    // The note has never been changed since publication, so it claims no update.
-    expect(article?.dateModified).toBeUndefined();
+    expect(article?.dateModified).toBe('2026-09-16');
     expect(graph.map((node) => node['@type'])).toContain('BreadcrumbList');
   });
 
@@ -142,6 +141,16 @@ test.describe('the Definitions guide', () => {
     await expect(page.locator('.place-panel')).toHaveCount(4);
     await expect(page.locator('.workflow-figure')).toHaveCount(1);
     await assertFragmentsResolve(page);
+  });
+
+  test('explains scoped supervision and separates type from invocation', async ({ page }) => {
+    await page.goto('/definitions#supervision');
+    await expect(page.locator('#supervision')).toBeVisible();
+    await expect(page.locator('#supervision table tbody tr')).toHaveCount(5);
+    await expect(page.locator('#supervision')).toContainText('Level 2');
+    await expect(page.locator('#supervision')).toContainText('No level');
+    await expect(page.locator('#supervision')).toContainText('Structural types');
+    await expect(page.locator('#supervision')).toContainText('Invocation modes');
   });
 });
 

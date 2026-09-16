@@ -73,8 +73,12 @@ the repository documents. Node builds the website.
 
 1. Copy `templates/agent.yaml` to `data/agents/<id>.yaml`.
 2. Give the record a kebab-case ID that matches its file name.
-3. Add the shared rubric fields. Use `unknown` when the sources do not document a value.
-4. Add a scoped `operating_models` assessment. Record where human attention normally returns, not a company-wide maturity estimate.
+3. Classify structural type and invocation separately. Structural type describes the system;
+   invocation describes how work starts or proceeds. Use `unknown` when the sources do not
+   document an invocation mode.
+4. Add a scoped `operating_models` assessment. Record where human attention normally returns,
+   not a company-wide maturity estimate. Keep attention separate from tool authority,
+   publication permission, and how long the run can proceed unattended.
 5. Add structured source records before you summarize them.
 6. Preserve each accepted source while it is still live:
    `uv run python scripts/archive_sources.py --source-id <source-id>`. Review the captured

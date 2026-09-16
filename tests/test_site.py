@@ -107,7 +107,10 @@ class ArtifactTests(unittest.TestCase):
     def test_catalog_prose_reaches_the_page_as_text(self):
         # These claims hold characters that would open a tag or an attribute if
         # they were written to the page unescaped.
-        for claim_id in ("doordash-flux--architecture-sandbox", "browserbase-bb--key-metrics-1"):
+        for claim_id in (
+            "doordash-flux--architecture-sandbox",
+            "cloudflare-ai-stack--key-metrics-0",
+        ):
             claim = self.claims[claim_id]
             self.assertRegex(str(claim["text"]), r"[<>&\"]")
             text = checker.visible_text(self.entries[claim["approach_id"]])
@@ -130,7 +133,6 @@ class ArtifactTests(unittest.TestCase):
 
     def test_the_guides_send_the_reader_to_the_entry_pages(self):
         definitions = (DIST / "definitions.html").read_text(encoding="utf-8")
-        self.assertEqual(definitions.count("data-chart-approach-id="), 8)
         self.assertEqual(definitions.count("data-chart-reference="), 3)
         placed = {
             url.split("#")[0]
@@ -138,6 +140,7 @@ class ArtifactTests(unittest.TestCase):
             if url.startswith("/agents/")
         }
         self.assertTrue(placed)
+        self.assertEqual(definitions.count("data-chart-approach-id="), len(placed))
         known = {f"/agents/{a['id']}" for a in self.catalog["approaches"]}
         self.assertEqual(placed - known, set())
 

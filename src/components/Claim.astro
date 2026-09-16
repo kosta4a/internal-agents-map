@@ -29,6 +29,12 @@ const observed = claim.caveats.find((caveat) => caveat.label === OBSERVED) ?? nu
  */
 const isHeadline = claim.field === 'headline_metric';
 const tabled = claim.caveats.filter((caveat) => caveat.label !== OBSERVED);
+const attribution =
+  claim.kind === 'opinion' && claim.provenanceLabel === 'Reported'
+    ? 'Reported opinion'
+    : claim.provenanceLabel === 'Catalog judgment'
+      ? 'Catalog interpretation'
+      : null;
 ---
 <article class:list={['claim', mark && 'claim-marked']} id={claim.anchor} data-claim-id={claim.id}>
   {mark && <Icon name={mark} />}
@@ -37,6 +43,7 @@ const tabled = claim.caveats.filter((caveat) => caveat.label !== OBSERVED);
       {claim.label}{showKind && <span class="claim-kind"> ({claim.kindLabel.toLowerCase()})</span>}
     </span>
   )}
+  {attribution && <p class="claim-attribution">{attribution}</p>}
   <p class="claim-text">
     {isHeadline ? <>“<Arrowed text={claim.text} />”</> : <Arrowed text={claim.text} />}
   </p>

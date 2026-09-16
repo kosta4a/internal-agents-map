@@ -1,13 +1,13 @@
 id: flex-investigation-agent
 company: Flex
 agent_name: AI Investigation Agent
-approach_type: task-agent
+approach_type: agent
 deployment_stage: deployed
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: flex-investigation-agent-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - finance-ops
@@ -28,8 +28,10 @@ summary: Flex runs an internal Slack agent that support, operations, and enginee
   plain English. On high-confidence bugs it opens a pull request for review.
 architecture:
   sandbox: unknown
-  harness: Investigation-to-fix loop; underlying runtime not documented
-  model: Not specified
+  harness: Investigation-to-fix loop running as a serverless application on Modal; Slack requests are acknowledged,
+    the investigation runs in a spawned background function, and fixes come from a spawned coding sub-agent
+  model: Anthropic (named for the tool-calling investigation loop and the coding sub-agent); specific model version
+    not named
   interfaces:
   - slack
   tool_access: Traces a payment end-to-end across payment systems; can open a PR with a proposed fix when a bug
@@ -94,12 +96,12 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   architecture.sandbox:
     kind: inference
     provenance: catalog-judgment

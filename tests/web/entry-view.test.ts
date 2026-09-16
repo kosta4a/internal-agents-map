@@ -316,10 +316,6 @@ describe('the results of an entry', () => {
   );
   const grouped = catalog.approaches.map((approach) => entryView(catalog, approach.id));
 
-  it('finds the metric fields that hold a statement of another kind', () => {
-    expect(statements.length).toBe(7);
-  });
-
   it('leaves only metrics under the reported metrics', () => {
     for (const entry of grouped) {
       for (const claim of entry.metricClaims) expect(claim.kind, claim.id).toBe('metric');

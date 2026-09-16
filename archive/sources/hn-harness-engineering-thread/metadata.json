@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "hn-harness-engineering-thread",
+  "original_url": "https://news.ycombinator.com/item?id=48416264",
+  "final_url": "https://news.ycombinator.com/item?id=48416264",
+  "captured_at": "2026-09-16T15:10:30Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/hn-harness-engineering-thread/content.md",
+      "sha256": "sha256:5110b2ca83b2215a5c3a99088026ff66fcb5339dd245918e80e40485d1f8c2fe",
+      "bytes": 107549
+    }
+  }
+}

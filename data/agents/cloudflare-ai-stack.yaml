@@ -7,20 +7,22 @@ year: 2026
 first_public_evidence:
   date: '2026'
   source_id: cloudflare-ai-stack-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding
 - code-review
 autonomy: drafts-reviewed
 operating_models:
-- scope: pull request → AI review findings
+- scope: pull request → automated AI review findings posted as advisory comments
+  attention_boundary: unknown
+- scope: AGENTS.md generation → merge request the owning team reviews and refines
   attention_boundary: work-product-review
 rubric:
   invocation:
   - event-driven
   - interactive
-  state: unknown
+  state: mixed
   identity: unknown
   evidence_strength: detailed-primary
 summary: Cloudflare's Dev Productivity team runs an internal AI engineering stack built on the company's own products.
@@ -92,6 +94,11 @@ evidence:
   operating_models.0:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+    locator: Preserved content.md, lines 257, 269 (every MR reviewed automatically; engineers may scan findings)
+  operating_models.1:
+  - source_id: cloudflare-ai-stack-source-1
+    relation: supports
+    locator: Preserved content.md, line 247 (owning team reviews and refines the generated document)
   summary:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
@@ -169,9 +176,16 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: The source documents automated review findings, but the record combines several platform
-      workflows.
+    confidence: unverified
+    confidence_reason: The reviewer runs automatically on every merge request and posts advisory comments that
+      engineers may scan; no passage documents a person reviewing the findings on each run.
+    valid_at: '2026-04-20'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: high
+    confidence_reason: The source states the system opens a merge request so the owning team can review and refine
+      the generated AGENTS.md document.
     valid_at: '2026-04-20'
   headline_metric:
     valid_at: '2026'
@@ -196,19 +210,19 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "venturebeat-devday-codex",
+  "original_url": "https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025",
+  "final_url": "https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025",
+  "captured_at": "2026-09-16T15:10:18Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/venturebeat-devday-codex/content.md",
+      "sha256": "sha256:f5c463b0be6380f11d6d9912de16213e91387db2c6359b2c25c14cc098d2e30b",
+      "bytes": 9219
+    }
+  }
+}

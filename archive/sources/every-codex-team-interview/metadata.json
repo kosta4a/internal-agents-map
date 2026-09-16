@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "every-codex-team-interview",
+  "original_url": "https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent",
+  "final_url": "https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent",
+  "captured_at": "2026-09-16T15:11:05Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/every-codex-team-interview/content.md",
+      "sha256": "sha256:88ee77d3479caf1350b928b3bd768bc62a19e7ef07652b8056f62542144369ee",
+      "bytes": 40222
+    }
+  }
+}

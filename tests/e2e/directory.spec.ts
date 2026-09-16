@@ -26,6 +26,7 @@ const LOGO_CARDS = CATALOG.approaches
   .slice(0, 3);
 /** A work filter value, and the label the search box suggests for it. */
 const WORK = { value: 'security', label: 'Security' };
+const INVOCATION = { value: 'background', label: 'Background' };
 /** A supervision value, the label of its chip, and the level a person can type to reach it. */
 const SUPERVISION = { value: 'outcome-review', label: 'Outcome review (level 4)', typed: 'level 4' };
 /** A search term. The cards whose text carries it are counted from the page. */
@@ -178,6 +179,41 @@ test.describe('the directory with javascript', () => {
     await expect(visibleCards(page)).toHaveCount(either);
   });
 
+  test('filters structural type and invocation independently', async ({ page }) => {
+    await page.goto(`/?type=agent&invocation=${INVOCATION.value}`);
+    await expect(chip(page, 'type', 'agent')).toContainText('Agent');
+    await expect(chip(page, 'invocation', INVOCATION.value)).toContainText(INVOCATION.label);
+    const matching = await page
+      .locator('article.entry[data-type~="agent"][data-invocation~="background"]')
+      .count();
+    await expect(visibleCards(page)).toHaveCount(matching);
+  });
+
+  test('combines repeated invocation values with OR', async ({ page }) => {
+    await page.goto('/?invocation=background&invocation=scheduled');
+    await expect(chips(page)).toHaveCount(2);
+    const either = await page
+      .locator('article.entry[data-invocation~="background"], article.entry[data-invocation~="scheduled"]')
+      .count();
+    await expect(visibleCards(page)).toHaveCount(either);
+  });
+
+  test('migrates the old task-agent type to agent', async ({ page }) => {
+    await page.goto('/?type=task-agent');
+    await expect(chip(page, 'type', 'agent')).toContainText('Agent');
+    await expect(visibleCards(page)).toHaveCount(
+      await page.locator('article.entry[data-type~="agent"]').count(),
+    );
+  });
+
+  test('explains the old background-agent type and preserves other filters', async ({ page }) => {
+    await page.goto(`/?type=background-agent&work=${WORK.value}`);
+    await expect(page.locator('#legacy-filter-notice')).toBeVisible();
+    await expect(page.locator('#legacy-filter-notice')).toContainText('Background invocation');
+    await expect(chip(page, 'work', WORK.value)).toBeVisible();
+    await expect(visibleCards(page)).toHaveCount(await workCount(page));
+  });
+
   test('restores the state of a shared filtered address', async ({ page }) => {
     await page.goto(`/?work=${WORK.value}`);
     await expect(chip(page, 'work', WORK.value)).toBeVisible();
@@ -205,7 +241,13 @@ test.describe('the directory with javascript', () => {
     await expect(page).toHaveURL(new RegExp(`work=${WORK.value}`));
     await page.fill('#q', SUPERVISION.typed);
     await page.keyboard.press('Enter');
-    await expect(visibleCards(page)).toHaveCount(1);
+    await expect(visibleCards(page)).toHaveCount(
+      await page
+        .locator(
+          `article.entry[data-work~="${WORK.value}"][data-supervision~="${SUPERVISION.value}"]`,
+        )
+        .count(),
+    );
 
     await page.goBack();
     await expect(chip(page, 'supervision', SUPERVISION.value)).toHaveCount(0);

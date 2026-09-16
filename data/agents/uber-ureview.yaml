@@ -4,13 +4,13 @@ agent_name: uReview
 relationships:
 - type: related-to
   approach_id: uber-coding-agent
-approach_type: background-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2025
 first_public_evidence:
   date: '2025-08-12'
   source_id: uber-ureview-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - code-review

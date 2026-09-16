@@ -42,7 +42,6 @@ DOT returned to the backlog on 2026-08-31 after Atlassian removed its only sourc
 legitimate snapshot had been saved.
 
 - GitHub — Qubot → [landscape](landscape.md#github-qubot)
-- Retool — RetoolGPT → [landscape](landscape.md#retool-retoolgpt)
 - Atlassian — Rovo Dev → [landscape](landscape.md#atlassian-rovo-dev)
 - Notion — Custom Agents → [landscape](landscape.md#notion-custom-agents)
 - Microsoft — PRAssistant → [landscape](landscape.md#microsoft-prassistant)
@@ -82,14 +81,22 @@ or repos that describe an agent they built for their own teams.
 - **Sources**:
   - [How we built an internal data analytics agent](https://github.blog/ai-and-ml/github-copilot/how-we-built-an-internal-data-analytics-agent/) — GitHub engineering blog, 2026-06-19. First-party.
 
-### Retool — RetoolGPT
+### Retool — RetoolGPT / Retool Agents
 
-- **Status**: Verified, ready.
-- **Confidence**: high.
-- **What it does**: RetoolGPT is an internal assistant built on ChatGPT. It reads Retool's
-  internal Confluence documents, Retool documentation, and Linear tickets.
-- **Reported stage**: deployed across the team. Retool deployed it into a read-only environment so
-  the whole team could use it.
+- **Status**: Needs version-specific evidence. Removed from active catalog membership on
+  2026-09-16.
+- **Confidence**: unverified for agent eligibility.
+- **What the preserved article establishes**: The deployed RetoolGPT version is an internal
+  retrieval assistant. A user explicitly selects Confluence or another source; the article says
+  model-selected tool calls are a future capability. Its references to building RetoolGPT "as an
+  agent" and to Retool Agents describe a later product/version without enough evidence to show
+  the model-directed version operating internally.
+- **Eligibility gap**: Find readable, version-specific evidence that Retool used a RetoolGPT or
+  Retool Agents version internally where the model selected and invoked tools at runtime. The
+  read-only deployment passage concerns who may edit the app and does not establish a tool
+  permission boundary.
+- **Implementation correction**: RetoolGPT can use any model provider available in Retool,
+  including OpenAI, Anthropic, or a custom provider. It was not documented as built on ChatGPT.
 - **Sources**:
   - [How we built RetoolGPT](https://retool.com/blog/how-we-built-retoolgpt) — Retool engineering blog, 2025-08-05. First-party.
   - [AI Build Week, Day 3 talk](https://www.youtube.com/watch?v=8VTdYUBAZsY) — YouTube.
@@ -332,7 +339,7 @@ A product the company sells is not enough on its own.
   it touched, and engineers accepted 73% of its recommendations for production deployment.
 - **Reported stage**: scaled internally.
 - **Why it is a border case**: the paper frames TestGen-LLM as a system or tool rather than an
-  autonomous agent. The internal build and deployment are clear. Whether it fits the `task-agent`
+  autonomous agent. The internal build and deployment are clear. Whether it fits the `agent`
   definition is a catalog judgment.
 - **Sources**:
   - [Automated unit test improvement using LLMs at Meta (arXiv 2402.09171)](https://arxiv.org/abs/2402.09171) — paper.

@@ -21,10 +21,6 @@
       "html": "/agents/brex-agent-platform.html",
       "markdown": "/agents/brex-agent-platform.md"
     },
-    "/agents/browserbase-bb": {
-      "html": "/agents/browserbase-bb.html",
-      "markdown": "/agents/browserbase-bb.md"
-    },
     "/agents/cloudflare-ai-stack": {
       "html": "/agents/cloudflare-ai-stack.html",
       "markdown": "/agents/cloudflare-ai-stack.md"
@@ -85,6 +81,14 @@
       "html": "/agents/notion-custom-agents.html",
       "markdown": "/agents/notion-custom-agents.md"
     },
+    "/agents/openai-software-factory": {
+      "html": "/agents/openai-software-factory.html",
+      "markdown": "/agents/openai-software-factory.md"
+    },
+    "/agents/openai-sevbot": {
+      "html": "/agents/openai-sevbot.html",
+      "markdown": "/agents/openai-sevbot.md"
+    },
     "/agents/plaid-ai-annotator": {
       "html": "/agents/plaid-ai-annotator.html",
       "markdown": "/agents/plaid-ai-annotator.md"
@@ -108,10 +112,6 @@
     "/agents/replit-manager-agent": {
       "html": "/agents/replit-manager-agent.html",
       "markdown": "/agents/replit-manager-agent.md"
-    },
-    "/agents/retool-retoolgpt": {
-      "html": "/agents/retool-retoolgpt.html",
-      "markdown": "/agents/retool-retoolgpt.md"
     },
     "/agents/salesforce-slackbot": {
       "html": "/agents/salesforce-slackbot.html",

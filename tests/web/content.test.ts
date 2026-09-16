@@ -112,7 +112,9 @@ describe('the Markdown export of a note', () => {
   it('keeps the citations, the diagram text, and the sources', () => {
     expect(markdown).toContain('Source: https://internal-agents.com/notes/stop-a-run');
     expect(markdown).toContain('[[1]](https://internal-agents.com/notes/stop-a-run#source-stripe)');
-    expect(markdown).toContain('At the limit → Save the work and explain the failure.');
+    expect(markdown).toContain(
+      'At the limit → Return the branch, check results, and verified findings that exist.',
+    );
     expect(markdown).toContain(
       'Our illustration of a possible control flow. Each source uses different checks and limits.',
     );

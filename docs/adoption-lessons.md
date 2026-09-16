@@ -6,9 +6,9 @@ This page summarizes reported operating practices in the catalog. These reports 
 
 ## Catalog snapshot
 
-These observations draw on 40 cataloged approaches. The evidence is uneven, and most sources are company reports.
+These observations draw on 40 catalog entries. The entry is the counting unit; platforms and components can both appear. The evidence is uneven, and most sources are company reports.
 
-20 approaches list Slack as an interface. The autonomy distribution is 23 `drafts-reviewed`, 8 `human-in-loop`, 4 `autonomous`, 2 `assistive`, and 3 `unknown`.
+21 entries list Slack as an interface. The entry autonomy distribution is 21 `drafts-reviewed`, 9 `human-in-loop`, 5 `autonomous`, 1 `assistive`, and 4 `unknown`.
 
 <!-- END ADOPTION SNAPSHOT -->
 
@@ -40,7 +40,7 @@ The catalog also contains limits. Existing permissions can be too broad for an a
 
 ## Centralize shared controls when the system grows
 
-Cloudflare reports a central gateway and MCP portal. Browserbase, Sentry, WorkOS, and Sierra report proxies or gateways for authorization, logging, or credential injection.
+Cloudflare reports a central gateway and MCP portal. Sentry, WorkOS, and Sierra report proxies or gateways for authorization, logging, or credential injection.
 
 Shared controls can reduce repeated integration work. They can also become a shared failure point. Compare this choice with the deployment stage and number of connected systems.
 

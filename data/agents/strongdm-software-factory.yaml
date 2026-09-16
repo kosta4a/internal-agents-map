@@ -9,14 +9,14 @@ year: 2026
 first_public_evidence:
   date: "2026-02-06"
   source_id: strongdm-factory-overview
-last_reviewed_at: "2026-09-15"
+last_reviewed_at: "2026-09-16"
 status: mixed
 domains:
 - coding
 autonomy: autonomous
 operating_models:
 - scope: "natural-language seed → agents implement and validate against scenario harness → converged software"
-  attention_boundary: exception-only
+  attention_boundary: unknown
 rubric:
   invocation:
   - background
@@ -255,8 +255,8 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: "The site documents zero human code-writing and review with automatic scenario validation, but not what happens when scenarios fail to converge; human authorship of seeds and scenarios sits before the run itself."
+    confidence: unverified
+    confidence_reason: "The site documents zero human code-writing and review with automatic scenario validation, but no passage states that a person is summoned when scenarios fail to converge; what happens on non-convergence is undocumented."
     valid_at: "2026-09"
   architecture.sandbox:
     kind: inference

@@ -7,7 +7,7 @@ year: 2025
 first_public_evidence:
   date: '2025-11-11'
   source_id: doordash-flux-source-2
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - code-review
@@ -28,8 +28,8 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: DoorDash's internal agentic AI platform; a unified cognitive layer over company data and operations, with
-  an AI Marketplace of specialized agents and the Flux cloud-agent runtime for engineering tasks.
+summary: DoorDash's internal agentic AI platform combines company-data access, an AI Marketplace of specialized
+  agents, and the Flux cloud-agent runtime for engineering tasks.
 headline_metric: 130,000 engineering tasks automated in one month
 architecture:
   sandbox: Firecracker microVMs; <5s p95 end-to-end setup (boot, clone repos, install tools, configure harness)
@@ -208,32 +208,32 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.4:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.5:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   headline_metric:
     metric_scope: Engineering tasks automated in one reported month; calendar measurement month unspecified
     valid_at: '2026-08-11'

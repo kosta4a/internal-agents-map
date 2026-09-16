@@ -7,7 +7,7 @@ year: 2026
 first_public_evidence:
   date: '2026'
   source_id: harvey-spectre-source-1
-last_reviewed_at: '2026-08-31'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding
@@ -16,16 +16,18 @@ domains:
 - security
 autonomy: drafts-reviewed
 operating_models:
-- scope: 'incident or request → reviewable diff or pull request'
+- scope: 'request from Slack, the web app, or an automation → reviewable diff or pull request'
   attention_boundary: work-product-review
 rubric:
   invocation:
   - interactive
-  state: unknown
+  - background
+  - scheduled
+  state: durable-session
   identity: unknown
   evidence_strength: detailed-primary
-summary: Harvey's internal collaborative cloud agent platform; reacts to incidents, bug reports, and Slack messages
-  and produces reviewable diffs, branches, and PRs.
+summary: Harvey's internal collaborative cloud agent platform; turns requests from Slack, the web app, or automations
+  into durable runs that return reviewable summaries, diffs, branches, and PRs.
 architecture:
   sandbox: Isolated ephemeral execution environments; durable runs
   harness: Collaborative cloud agent platform with explicit boundaries around GitHub, Datadog, Linear, and other
@@ -35,8 +37,10 @@ architecture:
   - slack
   - web
   - automation
-  tool_access: Explicit tool boundaries; reacts to incidents, bug reports, customer feedback, and Slack messages
-  credentials: Explicit tool boundaries; outputs are reviewable
+  tool_access: Explicit tool boundaries; tool configuration injected at run start; requests start from Slack, the
+    web app, or automations; connects to systems like GitHub, Datadog, and Linear
+  credentials: Short-lived, scoped credentials injected at run start; no ambient access to the control plane or
+    a user's machine
   context_mgmt: Durable runs over disposable execution environments
 primitives:
 - name: Durable runs / ephemeral execution
@@ -123,14 +127,14 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.

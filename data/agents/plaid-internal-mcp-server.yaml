@@ -7,7 +7,7 @@ year: 2025
 first_public_evidence:
   date: '2025'
   source_id: plaid-internal-mcp-server-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding

@@ -18,6 +18,7 @@ const { card } = Astro.props;
   data-search={card.search}
   data-work={card.domains.map((domain) => domain.id).join(' ')}
   data-type={card.approachType}
+  data-invocation={card.invocation.map((mode) => mode.id).join(' ')}
   data-supervision={card.boundaries.map((boundary) => boundary.id).join(' ')}
 >
   <div class="entry-box">

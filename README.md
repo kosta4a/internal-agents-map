@@ -28,52 +28,52 @@ undocumented details stay unknown.
 
 <!-- BEGIN OVERVIEW -->
 
-**Current map: 40 approaches across 36 organizations, backed by 98 sources and 578 evidence-linked claims.**
+**Current map: 40 approaches across 35 organizations, backed by 107 sources and 588 evidence-linked claims.**
 
 ## Overview
 
 | Organization | Approach | Type | Work |
 | --- | --- | --- | --- |
 | Airbnb | [Airchat (airchat-cli)](docs/landscape.md#airbnb-airchat) | platform | coding, code-review |
-| Atlassian | [Rovo Dev (RovoDev)](docs/landscape.md#atlassian-rovo-dev) | task-agent | coding, code-review |
+| Atlassian | [Rovo Dev (RovoDev)](docs/landscape.md#atlassian-rovo-dev) | agent | coding, code-review |
 | Block | [Builderbot](docs/landscape.md#block-builderbot) | orchestration-system | coding, code-review |
 | Brex | [Internal Agent Platform](docs/landscape.md#brex-agent-platform) | platform | finance-ops, support, customer-success |
-| Browserbase | [bb](docs/landscape.md#browserbase-bb) | task-agent | coding, code-review, support, customer-success, research |
 | Cloudflare | [Internal AI engineering stack](docs/landscape.md#cloudflare-ai-stack) | platform | coding, code-review |
 | Coinbase | [Forge / Mux](docs/landscape.md#coinbase-forge-mux) | agent-system | coding, code-review |
 | Databricks | [coSTAR and internal engineering agents](docs/landscape.md#databricks-costar) | agent-system | coding, code-review, on-call |
-| Domu | [Clementino](docs/landscape.md#domu-clementino) | task-agent | support, finance-ops, coding, recruitment, customer-success |
-| DoorDash | [AI Code Review Agent](docs/landscape.md#doordash-code-review) | background-agent | code-review |
+| Domu | [Clementino](docs/landscape.md#domu-clementino) | agent | support, finance-ops, coding, recruitment, customer-success |
+| DoorDash | [AI Code Review Agent](docs/landscape.md#doordash-code-review) | agent | code-review |
 | DoorDash | [Flux / Agentic AI Platform](docs/landscape.md#doordash-flux) | platform | code-review, coding, ci-triage, on-call, maintenance, data |
 | Dropbox | [Nova](docs/landscape.md#dropbox-nova) | platform | coding, ci-triage, on-call, maintenance |
-| Flex | [AI Investigation Agent](docs/landscape.md#flex-investigation-agent) | task-agent | finance-ops, on-call, coding |
-| GitHub | [Qubot](docs/landscape.md#github-qubot) | task-agent | data |
+| Flex | [AI Investigation Agent](docs/landscape.md#flex-investigation-agent) | agent | finance-ops, on-call, coding |
+| GitHub | [Qubot](docs/landscape.md#github-qubot) | agent | data |
 | Harvey | [Spectre](docs/landscape.md#harvey-spectre) | platform | coding, code-review, on-call, security |
-| HubSpot | [Sidekick](docs/landscape.md#hubspot-sidekick) | task-agent | code-review |
-| Linear | [Linear Agent](docs/landscape.md#linear-agent) | task-agent | support, customer-success, coding |
-| Microsoft | [PRAssistant](docs/landscape.md#microsoft-prassistant) | background-agent | code-review |
+| HubSpot | [Sidekick](docs/landscape.md#hubspot-sidekick) | agent | code-review |
+| Linear | [Linear Agent](docs/landscape.md#linear-agent) | agent | support, customer-success, coding |
+| Microsoft | [PRAssistant](docs/landscape.md#microsoft-prassistant) | agent | code-review |
 | monday.com | [Sphera / Atlas / Morphex](docs/landscape.md#monday-sphera-atlas-morphex) | agent-system | coding, code-review |
 | Notion | [Custom Agents](docs/landscape.md#notion-custom-agents) | platform | support, finance-ops, recruitment, security |
-| Plaid | [AI Annotator](docs/landscape.md#plaid-ai-annotator) | task-agent | data |
-| Plaid | [Fix My Connection](docs/landscape.md#plaid-fix-my-connection) | task-agent | ops, maintenance |
+| OpenAI | [Agentic software factory](docs/landscape.md#openai-software-factory) | agent-system | coding, code-review, ci-triage, ops |
+| OpenAI | [Sevbot](docs/landscape.md#openai-sevbot) | agent | on-call |
+| Plaid | [AI Annotator](docs/landscape.md#plaid-ai-annotator) | agent | data |
+| Plaid | [Fix My Connection](docs/landscape.md#plaid-fix-my-connection) | agent | ops, maintenance |
 | Plaid | [Internal MCP server](docs/landscape.md#plaid-internal-mcp-server) | supporting-pattern | coding |
-| PostHog | [StampHog](docs/landscape.md#posthog-stamphog) | background-agent | code-review |
-| Ramp | [Inspect](docs/landscape.md#ramp-inspect) | background-agent | coding, code-review, on-call |
+| PostHog | [StampHog](docs/landscape.md#posthog-stamphog) | agent | code-review |
+| Ramp | [Inspect](docs/landscape.md#ramp-inspect) | agent | coding, code-review, on-call |
 | Replit | [Manager agent (agent-of-agents)](docs/landscape.md#replit-manager-agent) | orchestration-system | coding, code-review, support, research, data |
-| Retool | [RetoolGPT](docs/landscape.md#retool-retoolgpt) | task-agent | support, coding |
-| Salesforce | [Slackbot](docs/landscape.md#salesforce-slackbot) | task-agent | support, customer-success, ops |
-| Sentry | [Junior](docs/landscape.md#sentry-junior) | task-agent | coding, code-review, support, on-call |
-| Shopify | [Aquifer / River](docs/landscape.md#shopify-internal-agents) | platform | coding, code-review, research, security |
-| Sierra | [Pinecone](docs/landscape.md#sierra-pinecone) | task-agent | coding, code-review, support, research, data |
+| Salesforce | [Slackbot](docs/landscape.md#salesforce-slackbot) | agent | support, customer-success, ops |
+| Sentry | [Junior](docs/landscape.md#sentry-junior) | agent | coding, code-review, support, on-call |
+| Shopify | [Aquifer / River](docs/landscape.md#shopify-internal-agents) | platform | coding, code-review |
+| Sierra | [Pinecone](docs/landscape.md#sierra-pinecone) | agent | coding, code-review, support, research, data |
 | Slack | [Multi-agent context system](docs/landscape.md#slack-context-system) | supporting-pattern | research |
 | Spotify | [Honk / Xirp](docs/landscape.md#spotify-honk-xirp) | agent-system | coding, migrations, code-review |
-| Stripe | [Minions](docs/landscape.md#stripe-minions) | background-agent | coding, code-review |
+| Stripe | [Minions](docs/landscape.md#stripe-minions) | agent | coding, code-review |
 | StrongDM | [Software Factory](docs/landscape.md#strongdm-software-factory) | agent-system | coding |
-| Uber | [Internal coding agent (unnamed)](docs/landscape.md#uber-coding-agent) | task-agent | coding |
-| Uber | [uReview](docs/landscape.md#uber-ureview) | background-agent | code-review |
+| Uber | [Internal coding agent (unnamed)](docs/landscape.md#uber-coding-agent) | agent | coding |
+| Uber | [uReview](docs/landscape.md#uber-ureview) | agent | code-review |
 | WorkOS | [Project Horizon](docs/landscape.md#workos-project-horizon) | platform | coding, code-review, security |
 | Y Combinator | [Internal agent infrastructure](docs/landscape.md#ycombinator-agent-infra) | platform | coding, ops |
-| Zup | [CodeGen](docs/landscape.md#zup-codegen) | task-agent | coding |
+| Zup | [CodeGen](docs/landscape.md#zup-codegen) | agent | coding |
 
 <!-- END OVERVIEW -->
 
@@ -83,19 +83,19 @@ framework](https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-au
 exception-only supervision. Levels describe a specific workflow, not company maturity. [Methodology
 →](data/schema.md#operating-models-and-derived-levels)
 
+<!-- BEGIN README FINDINGS -->
+
 ## What the current map shows
 
-Human review is still the norm. 23 of the 40 approaches produce a draft or implementation for
-review. 8 keep a person involved throughout the work. 4 report autonomous action within a
-scoped workflow; 2 are assistive and 3 remain unknown.
+These counts classify 40 catalog entries. A platform and one of its components can both appear, so the entries are not independent deployments, shares of industry practice, or counts of successful runs.
 
-Different systems keep solving similar infrastructure problems: company context, scoped tools,
-execution environments, verification, and integration with systems of record.
+Entry autonomy is classified as 21 drafts-reviewed, 9 human-in-loop, 5 autonomous, 1 assistive, and 4 unknown. Human-in-loop includes approval checkpoints; it does not mean a person continuously steers the whole run.
 
-Some internal agents are durable: their identity or state persists across runs and restarts.
-Others start fresh. Durability is a design choice, not an inclusion requirement.
-State duration is undocumented for 34 approaches. Review cost, failure rates, and retired
-systems are rarely reported.
+The catalog contains 47 scoped supervision assessments across those entries, including 3 continuous-steering, 25 work-product-review, 2 outcome-review, 4 exception-only, and 13 unknown assessments. 4 entries have more than one assessed workflow; the counts therefore do not assign one level to each company.
+
+12 entries are platforms or supporting patterns. State duration is undocumented for 25 entries. Review cost, failure rates, and retired systems remain rarely reported.
+
+<!-- END README FINDINGS -->
 
 ## What belongs in the map
 

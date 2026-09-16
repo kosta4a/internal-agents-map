@@ -7,26 +7,25 @@ year: 2026
 first_public_evidence:
   date: '2026'
   source_id: shopify-internal-agents-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding
 - code-review
-- research
-- security
 autonomy: drafts-reviewed
 operating_models:
-- scope: River coding request → reviewed pull request
-  attention_boundary: work-product-review
+- scope: River coding request → River-opened, River-coauthored pull request
+  attention_boundary: unknown
 rubric:
   invocation:
   - event-driven
   - interactive
-  state: unknown
+  state: durable-session
   identity: unknown
   evidence_strength: detailed-primary
 summary: The Aquifer agent platform (session/harness/sandbox split) powers River, a Slack-native coding agent, plus
-  research, migration, and app-security agents.
+  PR-review and headless Vanilla agent profiles; other teams have requested research, migration, and compliance-scan
+  agents.
 headline_metric: 1 in 8 merged PRs company-wide coauthored by River
 architecture:
   sandbox: An execution environment (filesystem, shell, repo, build/test) separated from the harness; Shopify credits
@@ -74,6 +73,7 @@ evidence:
   operating_models.0:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 65, 83, 140
   summary:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -142,29 +142,31 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: The source documents pull-request creation but does not establish outcome-only supervision.
+    confidence: unverified
+    confidence_reason: The source documents River-opened, River-coauthored pull requests that are later merged,
+      but no passage establishes that a person reviews the work product on each run; PR review runs as a separate
+      Aquifer profile and is described as often having no human in the loop.
     valid_at: '2026'
   lessons_learned.0:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   headline_metric:
     metric_scope: Merged River-coauthored PRs across Shopify
     denominator: All Shopify merged pull requests

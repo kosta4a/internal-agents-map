@@ -2,7 +2,7 @@
 // ABOUTME: The tests read the real catalog, so a broken company link fails here first.
 
 import { describe, expect, it } from 'vitest';
-import { loadCatalog } from '../../src/lib/catalog';
+import { loadCatalog, type Catalog, type Company } from '../../src/lib/catalog';
 import { companiesById, companyView, monogram, requireCompany } from '../../src/lib/companies';
 
 const catalog = loadCatalog();
@@ -31,10 +31,17 @@ describe('monogram', () => {
 
 describe('company view', () => {
   it('builds the view of a company whose brand rules keep the monogram', () => {
-    expect(companyView(catalog, 'hubspot')).toEqual({
-      id: 'hubspot',
-      name: 'HubSpot',
-      monogram: 'H',
+    const ghostCo: Company = {
+      id: 'ghost-co',
+      name: 'Ghost Co',
+      homepage: 'https://ghost.example/',
+      logo: null,
+    };
+    const monogramOnly: Catalog = { ...catalog, companies: [...catalog.companies, ghostCo] };
+    expect(companyView(monogramOnly, 'ghost-co')).toEqual({
+      id: 'ghost-co',
+      name: 'Ghost Co',
+      monogram: 'GC',
       logo: null,
     });
   });

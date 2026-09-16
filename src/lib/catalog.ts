@@ -4,7 +4,7 @@
 import catalogText from '../../data/agents.json?raw';
 
 /** The only catalog schema this website reads. */
-export const CATALOG_SCHEMA_VERSION = 5;
+export const CATALOG_SCHEMA_VERSION = 6;
 
 const CATALOG_FILE = 'data/agents.json';
 

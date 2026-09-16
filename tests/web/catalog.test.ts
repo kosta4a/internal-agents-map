@@ -9,7 +9,7 @@ const approach = {
   company: 'Example',
   company_id: 'example',
   agent_name: 'Example agent',
-  approach_type: 'task-agent',
+  approach_type: 'agent',
   deployment_stage: 'pilot',
   year: 2026,
   last_reviewed_at: '2026-09-09',
@@ -69,7 +69,7 @@ describe('the published catalog', () => {
   const catalog = loadCatalog();
 
   it('uses the schema version the website reads', () => {
-    expect(catalog.schema_version).toBe(5);
+    expect(catalog.schema_version).toBe(6);
   });
 
   it('resolves the company of every approach and uses every company', () => {
@@ -106,7 +106,7 @@ describe('catalog validation', () => {
   });
 
   it('rejects another schema version', () => {
-    expect(() => validateCatalog(fixture({ schema_version: 4 }))).toThrow(/schema_version must be 5, found 4/);
+    expect(() => validateCatalog(fixture({ schema_version: 4 }))).toThrow(/schema_version must be 6, found 4/);
   });
 
   it('names the approach when its company identifier does not resolve', () => {

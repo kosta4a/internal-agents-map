@@ -7,7 +7,7 @@ year: 2025
 first_public_evidence:
   date: '2025'
   source_id: airbnb-airchat-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding
@@ -24,13 +24,13 @@ rubric:
   identity: unknown
   evidence_strength: mixed
 summary: Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding
-  agents such as Claude Code. The team first built its own orchestrator from scratch, never shipped it, and delegated
-  to Airchat with a thin shim instead.
+  agents such as Claude Code and Codex. The team first built its own orchestrator from scratch, never shipped it, and
+  delegated to Airchat with a thin shim instead.
 headline_metric: About 64% of pull requests materialized through agentic coding
 architecture:
-  harness: Wrapper over Claude Code with a unified gateway, an internal plugin marketplace, and AirDev parallel
-    workspaces
-  model: Claude Code (a vendor agent), wrapped by Airbnb
+  harness: Wrapper over vendor coding agents with a unified gateway, an internal plugin marketplace, and AirDev
+    parallel workspaces
+  model: Vendor coding agents (Claude Code and Codex are named in use), wrapped by Airbnb
   tool_access: More than a dozen internal MCP servers connect agents to internal systems
   interfaces: []
 key_metrics:
@@ -71,8 +71,11 @@ sources:
     manifest_path: archive/sources/airbnb-airchat-source-3/metadata.json
 evidence:
   operating_models.0:
-  - source_id: airbnb-airchat-source-2
+  - source_id: airbnb-airchat-source-3
     relation: supports
+    locator: Preserved content.md, lines 82, 250
+  - source_id: airbnb-airchat-source-2
+    relation: contextualizes
   summary:
   - source_id: airbnb-airchat-source-1
     relation: contextualizes

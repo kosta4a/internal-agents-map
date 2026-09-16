@@ -15,6 +15,7 @@ verification gate, and update the status row when finished.
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
 | [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
 | [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
+| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; verified locally on `codex/plan-008-reconcile` 2026-09-16 |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -42,6 +43,11 @@ sheet is recorded in the plan.
 
 ## Dependency notes
 
+- Plan 008 covers all nine findings from the 2026-09-16 content review. Implement
+  evidence corrections before taxonomy, generated summaries, lessons, notes, and
+  reader guidance. The plan is a proposal; the same-turn Browserbase removal was
+  separately authorized and implemented locally. Preserve the existing uncommitted
+  OpenAI records and company/logo work when executing it.
 - Plan 003 research can run alongside Plan 002; final generation and validation use both changes.
 - Plan 004 builds on the corrected catalog and verification from Plans 002–003.
   Generate the static page first, then connect publication to the existing validation job.
@@ -98,6 +104,12 @@ Still open: an editorial pass on entry summaries, and Search Console submission 
 updated sitemap.
 
 ## Latest verification
+
+2026-09-16: Plan 008 completed on the isolated `codex/plan-008-reconcile` branch.
+The catalog has 40 approaches, 35 organizations, and 107 declared source captures.
+The ordered generation and `npm run verify` gate passed: 147 Vitest tests, 14 Node
+negotiation tests, 196 Python tests, and 283 Playwright tests with 38 expected skips;
+Astro built 52 pages and 51 canonical routes. No push or deployment was performed.
 
 2026-09-09: Plans 002 and 003 applied and reviewed in the current checkout. All 97
 tests and required checks pass, including the concurrently added email-address

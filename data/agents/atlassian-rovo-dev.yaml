@@ -4,13 +4,13 @@ agent_name: Rovo Dev (RovoDev)
 aliases:
 - RovoDev
 - HULA
-approach_type: task-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2024
 first_public_evidence:
   date: 2024-11
   source_id: atlassian-rovo-dev-source-3
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: commercialized
 domains:
 - coding

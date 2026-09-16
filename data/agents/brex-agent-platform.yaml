@@ -7,7 +7,7 @@ year: 2025
 first_public_evidence:
   date: '2025-09-25'
   source_id: brex-agent-platform-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - finance-ops
@@ -15,11 +15,18 @@ domains:
 - customer-success
 autonomy: human-in-loop
 operating_models:
-- scope: internal operations request → completed operation
-  attention_boundary: continuous-steering
+- scope: high-confidence operations case (support first touch, fraud recommendation) → automated completion;
+    low-confidence remainder → analyst review
+  attention_boundary: exception-only
+- scope: KYC application → completed verification steps
+  attention_boundary: work-product-review
+- scope: collections follow-up interaction → drafted response options the servicing team selects, customizes,
+    or sends
+  attention_boundary: work-product-review
 rubric:
   invocation:
   - interactive
+  - event-driven
   state: unknown
   identity: unknown
   evidence_strength: secondary-only
@@ -31,7 +38,7 @@ architecture:
   sandbox: Retool-hosted runtime (no bespoke execution env described)
   harness: Retool-based builder with prompt management and multi-model testing/evaluation; built by a ~25-person
     systems-engineering team
-  model: Multi-model
+  model: Not documented for deployed agents; the platform provides multi-model testing and evaluation at build time
   interfaces:
   - slack
   - internal-ui
@@ -73,6 +80,18 @@ evidence:
   operating_models.0:
   - source_id: brex-agent-platform-source-1
     relation: supports
+    locator: Preserved content.md, lines 76, 159
+  operating_models.1:
+  - source_id: brex-agent-platform-source-1
+    relation: supports
+    locator: Preserved content.md, lines 143, 205
+  - source_id: brex-agent-platform-source-1
+    relation: contextualizes
+    locator: Preserved content.md, line 211 (humans shift toward reviewing trends)
+  operating_models.2:
+  - source_id: brex-agent-platform-source-1
+    relation: supports
+    locator: Preserved content.md, line 173
   summary:
   - source_id: brex-agent-platform-source-1
     relation: supports
@@ -143,15 +162,30 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The secondary report describes a human remaining in the middle of the workflow, but does
-      not fully specify each review surface.
+    confidence_reason: The report documents confidence-threshold automation for fraud recommendations and describes
+      L1 process work as fully automated in most cases, with the remainder reviewed by an analyst.
+    valid_at: '2025-09-25'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: low
+    confidence_reason: The report documents human checks inside the KYC flow and humans reviewing LLM work, but a
+      later passage shifts humans toward reviewing trends, so the per-run boundary is mixed in the evidence.
+    valid_at: '2025-09-25'
+  operating_models.2:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: The report documents the servicing team picking among agent-drafted response options before
+      anything is sent; initial outreach itself is automated.
     valid_at: '2025-09-25'
   headline_metric:
     valid_at: '2025'
     metric_scope: Dispute-submission preparation using the internal agent platform; not end-to-end chargeback resolution
   key_metrics.0:
     valid_at: '2025'
-    metric_scope: Customer-support cases resolved by the chatbot at first touch
+    metric_scope: Customer-support cases resolved by the chatbot at first touch (Brex customer-facing product AI,
+      adjacent to this internal platform)
     denominator: Customer-support cases; exact sample size not provided
   key_metrics.1:
     valid_at: '2025'
@@ -166,27 +200,27 @@ claim_metadata:
     valid_at: '2025'
     metric_scope: KYC adverse-media classification; human versus agent accuracy
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The case study attributes the architecture-first approval stance to Brex's team; it is not an independent comparison of vendors or legal review methods.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.4:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.

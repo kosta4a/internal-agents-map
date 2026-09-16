@@ -100,6 +100,9 @@ for (const entry of ENTRIES) {
 
       await expect(page.locator('#sources')).toBeVisible();
       await expect(page.locator('#related')).toBeVisible();
+      await expect(
+        page.locator('#human-involvement a[href="/definitions#supervision"]'),
+      ).toHaveText('supervision definitions');
       await expect(page.locator('a[href="/"]').first()).toBeVisible();
     });
 
@@ -180,6 +183,20 @@ test.describe('reported results', () => {
     const opinion = results.locator('.claim', { hasText: 'now takes days' });
     await expect(opinion).toHaveCount(1);
     await expect(opinion.locator('.claim-kind')).toHaveText('(opinion)');
+  });
+});
+
+test.describe('lesson attribution', () => {
+  test('shows reported opinions and catalog interpretations without field labels', async ({ page }) => {
+    await page.goto('/agents/strongdm-software-factory');
+    await expect(
+      page.locator('#claim-strongdm-software-factory--lessons-learned-2 .claim-attribution'),
+    ).toHaveText('Reported opinion');
+
+    await page.goto('/agents/sentry-junior');
+    await expect(
+      page.locator('#claim-sentry-junior--lessons-learned-3 .claim-attribution'),
+    ).toHaveText('Catalog interpretation');
   });
 });
 

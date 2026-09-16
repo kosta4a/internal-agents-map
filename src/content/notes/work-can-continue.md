@@ -7,6 +7,7 @@ summary: A new worker can continue from a saved record.
 readingTime: 2 min read
 order: 4
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - shopify-internal-agents
   - sentry-junior
@@ -30,11 +31,11 @@ sources:
 
 ## What the teams report
 
-Shopify keeps the session record in Postgres. A worker can stop, and a new worker can read the same history. The session keeps its identity. [[1]](#source-1)
+Shopify keeps the conversation and session record in Postgres. A worker can stop, and a new worker can read the same history under the same session identity. [[1]](#source-1)
 
-Sentry’s Junior pauses before a serverless timeout. It places a continuation task in a queue so another run can continue the work. [[2]](#source-2)
+Sentry’s Junior pauses before a serverless timeout. It places a continuation task in a queue so another run can continue. The report describes task continuation, not recovery of every local file. [[2]](#source-2)
 
-Sierra uses checkpoints and ordered events to restore a runner after it stops for a period of inactivity. [[3]](#source-3)
+Sierra uses checkpoints and ordered events to restore a runner after inactivity. Event replay can restore recorded state; it cannot infer an external action that was never recorded. [[3]](#source-3)
 
 <blockquote cite="https://shopify.engineering/under-the-river"><p>“Cells die, sandboxes die, machines die. The conversation doesn't.”</p></blockquote>
 
@@ -60,11 +61,11 @@ Sierra uses checkpoints and ordered events to restore a runner after it stops fo
 
 ## A saved record needs a clear scope
 
-A conversation, a file, and an action in another system are different kinds of state. Each needs a defined recovery method.
+A conversation, a workspace file, and an action in another system are different kinds of state. Each needs its own record and recovery method.
 
-Conversation history alone does not establish which actions completed. A recovery design also needs to account for work already done.
+Conversation history can restore the exchange. Durable storage can restore a file. An idempotency key or receipt can establish whether an external action completed.
 
-These cases show ways to continue a task. They do not establish that every file or action survives every failure.
+The reports preserve different records, so “resume” has no single scope across these systems.
 
 <p class="note-question"><strong>A question for your build</strong>What must the next worker know before it can continue?</p>
 

@@ -27,7 +27,7 @@ STYLESHEET = "_astro/site.abcd1234.css"
 GUIDE_ROUTES = ("/", "/definitions", "/notes", "/notes/a-note")
 
 CATALOG = {
-    "schema_version": 5,
+    "schema_version": 6,
     "approaches": [
         {
             "id": "first-agent",

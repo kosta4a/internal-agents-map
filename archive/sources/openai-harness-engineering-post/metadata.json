@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "openai-harness-engineering-post",
+  "original_url": "https://openai.com/index/harness-engineering/",
+  "final_url": "https://openai.com/index/harness-engineering/",
+  "captured_at": "2026-09-16T15:11:49Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/openai-harness-engineering-post/content.md",
+      "sha256": "sha256:27d44ea698136d81fea46787c9bc2847c0d45f4eb15574a2ed8ed21e637ec36d",
+      "bytes": 20859
+    }
+  }
+}

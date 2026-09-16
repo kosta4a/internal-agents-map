@@ -69,7 +69,7 @@ describe('compact index', () => {
   };
 
   it('describes every implementation of the catalog, in catalog order', () => {
-    expect(current.schema_version).toBe(1);
+    expect(current.schema_version).toBe(2);
     expect(current.approaches.map((entry) => entry.id)).toEqual(
       catalog.approaches.map((approach) => approach.id),
     );
@@ -138,6 +138,15 @@ describe('record Markdown', () => {
     )) {
       expect(markdown).toContain(`${relation.relationLabel} · [${relation.number}]`);
     }
+  });
+});
+
+describe('lesson attribution in Markdown', () => {
+  it('keeps reported opinion and catalog judgment provenance beside lesson text', () => {
+    const reported = recordMarkdown(catalog, 'strongdm-software-factory');
+    expect(reported).toContain('Opinion · Reported');
+    const interpreted = recordMarkdown(catalog, 'sentry-junior');
+    expect(interpreted).toContain('Inference · Catalog judgment');
   });
 });
 

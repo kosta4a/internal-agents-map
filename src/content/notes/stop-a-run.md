@@ -7,6 +7,7 @@ summary: A failed run can still produce useful work. Stripe, Dropbox, and DoorDa
 readingTime: 2 min read
 order: 1
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - stripe-minions
   - dropbox-nova
@@ -30,15 +31,15 @@ sources:
 
 ## What the teams report
 
-Stripe limits Minions to two rounds of continuous integration (CI) checks. It then returns the branch to a person. More attempts cost time and compute. [[1]](#source-stripe)
+Stripe limits Minions to two rounds of continuous integration (CI) checks. It then returns the branch and the check results to a person. This is an attempt limit. [[1]](#source-stripe)
 
-Dropbox uses a different limit for Deflaker, its tool to repair unstable tests. It carries notes and test logs between attempts. It stops after a successful fix or five attempts. [[2]](#source-dropbox)
+Dropbox uses a different attempt limit for Deflaker, its tool to repair unstable tests. It carries notes and test logs between attempts. It stops after a successful fix or five attempts. [[2]](#source-dropbox)
 
 <blockquote cite="https://careersatdoordash.com/blog/doordash-built-an-ai-code-reviewer-engineers-actually-listen-to/"><p>“A turn counter is not a progress detector.”</p></blockquote>
 
 <p class="quote-credit">DoorDash, on a repeated request that did not advance the turn counter. <a href="#source-doordash">[3]</a></p>
 
-DoorDash added deadlines for each agent. A soft deadline requests verified findings. A hard deadline stops the agent. [[3]](#source-doordash)
+DoorDash instead added elapsed-time deadlines for each agent. A soft deadline requests the verified findings collected so far. A hard deadline stops the agent. [[3]](#source-doordash)
 
 <figure class="note-diagram">
   <div class="note-flow">
@@ -48,7 +49,7 @@ DoorDash added deadlines for each agent. A soft deadline requests verified findi
     <span class="note-arrow" aria-hidden="true">→</span>
     <div class="note-node note-node-accent"><span>03</span><strong>Stop or retry</strong><small>Apply the run limit</small></div>
   </div>
-  <p class="note-diagram-tail">At the limit → Save the work and explain the failure.</p>
+  <p class="note-diagram-tail">At the limit → Return the branch, check results, and verified findings that exist.</p>
   <figcaption>Our illustration of a possible control flow. Each source uses different checks and limits.</figcaption>
 </figure>
 
@@ -62,7 +63,7 @@ DoorDash added deadlines for each agent. A soft deadline requests verified findi
 
 An attempt limit and a time limit address different failures. Neither limit explains what the next person needs.
 
-A useful exit can include the current work, failed checks, and a reason to stop. This is a design proposal, not a shared implementation.
+A useful exit can include the current branch or patch, failed checks, verified findings, and a reason to stop. The sources report different subsets. This combined handoff is our design proposal.
 
 The cases do not establish one correct retry count.
 

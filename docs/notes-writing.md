@@ -1,8 +1,9 @@
 # Writing notes
 
 Notes help builders consider one agent design choice at a time. Keep each article short:
-about 200–350 words, one useful diagram, and a few original sources. Longer comparisons
-can remain in the architecture and adoption documents.
+about 200–350 words and a few original sources. Add a diagram or quotation only when it
+explains something that the surrounding prose does not. Longer comparisons can remain
+in the architecture and adoption documents.
 
 ## Language
 
@@ -25,24 +26,26 @@ source language, separate from the authored prose.
 
 ## Evidence and interpretation
 
-Use this structure:
-
-1. A concrete title and a one-sentence observation.
-2. What the team reports, with a quote and source references.
-3. One original diagram that explains the process or comparison.
-4. Our observation, its limits, and one question for the reader.
-5. Original source links and related catalog entries.
+Start with a concrete title and observation. Organize the rest around the question the
+note examines. Report what each source says before adding a catalog interpretation.
+Keep the distinction visible in the prose. A note can use a comparison, branch, loop,
+or sequence when that form explains the mechanism. It does not need a quotation, a
+diagram, a caution, and a closing question in the same fixed order.
 
 Check quotes against preserved sources. Preserve qualification, time, and scope.
 Do not treat a catalog judgment as independent evidence. An implementation does not
 prove effectiveness. A result from one company does not establish a general rule.
-Read the source again when its evidence or the associated catalog claims change.
+State uncertainty next to the claim that it qualifies. Remove a generic caveat when
+the note already identifies the specific evidence limit. Read the source again when
+its evidence or the associated catalog claims change.
 
 ## Illustrations
 
 Use the existing Areal type, white background, fine gray rules, and restrained teal
 accent. HTML/CSS diagrams keep labels readable and let the layout adapt to small
-screens. Mark arrows as decorative when the text already gives the order.
+screens. Show the branch, loop, comparison, or shared state that matters to the note.
+Omit the diagram when it would only repeat the prose. Mark arrows as decorative when
+the text already gives the order.
 
 Captions identify the illustration as ours and explain any simplification. Do not
 invent scores, proportions, or performance improvements. A conceptual quadrant needs

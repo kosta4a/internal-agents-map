@@ -21,7 +21,7 @@ import {
 } from './routes';
 
 /** The schema version of the compact index. It is separate from the catalog version. */
-export const COMPACT_INDEX_SCHEMA_VERSION = 1;
+export const COMPACT_INDEX_SCHEMA_VERSION = 2;
 
 /** Serialize an export the way the published JSON files are written. */
 export function jsonDocument(value: unknown): string {
@@ -205,6 +205,10 @@ export function entryMarkdown(entry: EntryView, level = 1): string[] {
 
   if (entry.operatingModels.length > 0) {
     lines.push(heading(level + 1, 'Where people stay involved'), '');
+    lines.push(
+      `Each scope pairs its normal attention boundary with supporting evidence. See the [supervision definitions](${canonicalUrl('/definitions#supervision')}) for the level mapping and limits.`,
+      '',
+    );
     for (const model of entry.operatingModels) {
       lines.push(`- **${model.scope}** — ${model.boundaryLabel} · ${model.levelLabel}`);
     }

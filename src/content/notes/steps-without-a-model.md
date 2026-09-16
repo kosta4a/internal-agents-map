@@ -7,6 +7,7 @@ summary: Code can control a step that must follow a fixed rule.
 readingTime: 2 min read
 order: 6
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - stripe-minions
   - dropbox-nova
@@ -30,9 +31,9 @@ sources:
 
 ## What the teams report
 
-Stripe’s blueprints combine model-directed work with ordinary code. A model can implement a task, while code runs configured checks and pushes changes. [[1]](#source-1)
+Stripe’s blueprints combine model-directed work with ordinary code. A model can implement a task, while code runs configured checks and controls the push step. [[1]](#source-1)
 
-Dropbox keeps code publication outside the agent. Its workflows start continuous integration (CI) checks and return failures to the agent for repair. [[2]](#source-2)
+Dropbox keeps code publication outside the agent. Its workflows start continuous integration (CI) checks, return failures for repair, and retain publication control in the surrounding system. [[2]](#source-2)
 
 PostHog checks whether a pull request is eligible for agent approval. Its fixed gates remain authoritative. The model can make approval stricter but cannot relax a gate. [[3]](#source-3)
 
@@ -59,11 +60,11 @@ PostHog checks whether a pull request is eligible for agent approval. Its fixed 
 
 ## The rule and the judgment can stay separate
 
-A known rule can have a predictable check. The model can handle the parts that require interpretation.
+A deterministic check can enforce a known policy, such as whether a required test passed. Model judgment can assess evidence that the policy does not encode.
 
-This separation can also make failures easier to inspect. The record can show which rule blocked the next step.
+Publication is a separate authority boundary. Passing a test need not grant the agent permission to push, merge, or approve.
 
-A passing check proves only what that check covers. It does not establish that the complete result is correct.
+A passing check proves only its encoded condition. It does not prove that the implementation is correct or that publication is authorized.
 
 <p class="note-question"><strong>A question for your build</strong>Which step must happen the same way on every run?</p>
 

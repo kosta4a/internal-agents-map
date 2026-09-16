@@ -1,13 +1,13 @@
 id: domu-clementino
 company: Domu
 agent_name: Clementino
-approach_type: task-agent
+approach_type: agent
 deployment_stage: deployed
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: domu-clementino-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - support
@@ -19,10 +19,16 @@ autonomy: human-in-loop
 operating_models:
 - scope: employee request → approved customer-impacting action
   attention_boundary: work-product-review
+- scope: individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting
+    long emails)
+  attention_boundary: continuous-steering
+- scope: scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion)
+  attention_boundary: unknown
 rubric:
   invocation:
   - interactive
-  state: unknown
+  - scheduled
+  state: cross-session-memory
   identity: unknown
   evidence_strength: detailed-primary
 summary: A general-purpose 'AI colleague' spanning sales, finance, client ops, engineering, and recruitment, later
@@ -67,6 +73,14 @@ evidence:
   operating_models.0:
   - source_id: domu-clementino-source-1
     relation: supports
+  operating_models.1:
+  - source_id: domu-clementino-source-1
+    relation: supports
+    locator: Preserved content.md, lines 76, 80 (two workflows; work watched in one place as it happens)
+  operating_models.2:
+  - source_id: domu-clementino-source-1
+    relation: supports
+    locator: Preserved content.md, lines 70, 78 (scheduled jobs post at 5am; review, if any, not described)
   summary:
   - source_id: domu-clementino-source-1
     relation: supports
@@ -121,21 +135,35 @@ claim_metadata:
     confidence: high
     confidence_reason: The source documents explicit human approval for customer-impacting actions.
     valid_at: '2026'
+  operating_models.1:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: high
+    confidence_reason: The source describes the author working alongside the agent in Cowork and watching what
+      happens in one place, with no approval gate described.
+    valid_at: '2026'
+  operating_models.2:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: unverified
+    confidence_reason: The source lists scheduled jobs that post without a person starting them, but does not
+      describe whether anyone reviews their output.
+    valid_at: '2026'
   lessons_learned.0:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   headline_metric:
     metric_scope: Clementino toolkit integration modules organized into skills
   key_metrics.0:

@@ -1,13 +1,13 @@
 id: microsoft-prassistant
 company: Microsoft
 agent_name: PRAssistant
-approach_type: background-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2025
 first_public_evidence:
   date: 2025-07
   source_id: microsoft-prassistant-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - code-review

@@ -80,17 +80,6 @@ export const PLACEMENT_CANDIDATES: readonly PlacementCandidate[] = [
     requirements: DEFAULT_REQUIREMENTS,
   },
   {
-    id: 'retool-retoolgpt',
-    cell: 'ready',
-    reason:
-      'One internal question-and-answer workflow built on ChatGPT, adapted with Retool’s Confluence documents, product documentation, and Linear tickets. Placed above the default product reference because it uses company knowledge.',
-    requirements: [
-      { field: 'summary', label: 'Scope' },
-      { field: 'architecture.model', label: 'Base product' },
-      { field: 'architecture.knowledge', label: 'Context' },
-    ],
-  },
-  {
     id: 'brex-agent-platform',
     cell: 'shared',
     reason:

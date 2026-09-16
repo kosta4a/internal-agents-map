@@ -1,20 +1,20 @@
 id: uber-coding-agent
 company: Uber
 agent_name: Internal coding agent (unnamed)
-approach_type: task-agent
+approach_type: agent
 deployment_stage: deployed
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: uber-coding-agent-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding
 autonomy: drafts-reviewed
 operating_models:
 - scope: coding request → complete code change
-  attention_boundary: unknown
+  attention_boundary: work-product-review
 rubric:
   invocation:
   - unknown
@@ -46,6 +46,7 @@ evidence:
   operating_models.0:
   - source_id: uber-coding-agent-source-1
     relation: supports
+    locator: Preserved content.md, line 26 (zero human authoring; engineers review and approve)
   summary:
   - source_id: uber-coding-agent-source-1
     relation: supports
@@ -71,8 +72,9 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: unverified
-    confidence_reason: The available source reports output volume but does not document where human attention returns.
+    confidence: medium
+    confidence_reason: The CTO states there is zero human authoring and that engineers review and approve the
+      agent-written code, which locates human attention at review of the work product.
     valid_at: '2026'
   summary:
     confidence: medium

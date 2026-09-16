@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "github-sevbot-pr",
+  "original_url": "https://github.com/openai/openai-agents-python/pull/2765/commits",
+  "final_url": "https://github.com/openai/openai-agents-python/pull/2765/commits",
+  "captured_at": "2026-09-16T15:15:48Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/github-sevbot-pr/content.md",
+      "sha256": "sha256:f34c82404bdc9ebb8fb1c62fda9b868a4e63d36e8be06dd9a64f7cf27a025431",
+      "bytes": 2430
+    }
+  }
+}

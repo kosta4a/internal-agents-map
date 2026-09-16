@@ -7,6 +7,7 @@ summary: Uber and HubSpot check review comments before engineers see them.
 readingTime: 2 min read
 order: 2
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - uber-ureview
   - hubspot-sidekick
@@ -25,13 +26,13 @@ sources:
 
 ## What the teams report
 
-Uber found that a single prompt produced false alarms and valid comments with little value. Its uReview system checks confidence and removes duplicate comments. It also suppresses categories that engineers rarely use. [[1]](#source-uber)
+Uber found that a single prompt produced false alarms and valid comments with little value. Its uReview system checks confidence, removes duplicates, and suppresses categories that engineers rarely use. These filters favor precision over comment volume. [[1]](#source-uber)
 
 <blockquote cite="https://www.uber.com/us/en/blog/ureview/"><p>“Precision Is More Valuable than Volume”</p></blockquote>
 
 <p class="quote-credit">A section title in Uber’s uReview report. <a href="#source-uber">[1]</a></p>
 
-HubSpot made its reviewer faster, but review quality remained a problem. It added a judge agent to check comments before publication. [[2]](#source-hubspot)
+HubSpot made its reviewer faster, but review quality remained a problem. It added a judge agent to check comments before publication. The judge is another model decision, not an independent proof that a comment is correct. [[2]](#source-hubspot)
 
 <figure class="note-diagram">
   <div class="note-flow">
@@ -54,9 +55,9 @@ HubSpot made its reviewer faster, but review quality remained a problem. It adde
 
 Comment count shows how much an agent writes. It does not show how much useful work the team completes.
 
-A useful evaluation can track accepted findings, review time, and missed defects. A filter can reduce noise and still remove a real issue.
+A useful evaluation can track accepted findings, review time, and missed defects. Precision alone misses the false-negative side: a strict filter can reduce noise and suppress a real issue.
 
-A model judge can also make mistakes. The reports do not establish that an extra agent always improves a review.
+A published comment also creates downstream work. An engineer must inspect its evidence, decide whether to act, and dismiss or resolve it. Neither report measures all of that cost.
 
 <p class="note-question"><strong>A question for your build</strong>Does each additional comment save more work than it creates?</p>
 

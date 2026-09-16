@@ -1,5 +1,5 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "approaches": [
     {
       "id": "airbnb-airchat",
@@ -12,7 +12,7 @@
         "date": "2025",
         "source_id": "airbnb-airchat-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -60,14 +60,14 @@
         "RovoDev",
         "HULA"
       ],
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2024,
       "first_public_evidence": {
         "date": "2024-11",
         "source_id": "atlassian-rovo-dev-source-3"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "commercialized",
       "domains": [
         "coding",
@@ -119,7 +119,7 @@
         "date": "2026",
         "source_id": "block-builderbot-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -187,7 +187,7 @@
         "date": "2025-09-25",
         "source_id": "brex-agent-platform-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "finance-ops",
@@ -197,14 +197,25 @@
       "autonomy": "human-in-loop",
       "operating_models": [
         {
-          "scope": "internal operations request → completed operation",
-          "attention_boundary": "continuous-steering",
-          "level": 2
+          "scope": "high-confidence operations case (support first touch, fraud recommendation) → automated completion; low-confidence remainder → analyst review",
+          "attention_boundary": "exception-only",
+          "level": 5
+        },
+        {
+          "scope": "KYC application → completed verification steps",
+          "attention_boundary": "work-product-review",
+          "level": 3
+        },
+        {
+          "scope": "collections follow-up interaction → drafted response options the servicing team selects, customizes, or sends",
+          "attention_boundary": "work-product-review",
+          "level": 3
         }
       ],
       "rubric": {
         "invocation": [
-          "interactive"
+          "interactive",
+          "event-driven"
         ],
         "state": "unknown",
         "identity": "unknown",
@@ -232,7 +243,9 @@
         "brex-agent-platform--lessons-learned-2",
         "brex-agent-platform--lessons-learned-3",
         "brex-agent-platform--lessons-learned-4",
-        "brex-agent-platform--operating-models-0"
+        "brex-agent-platform--operating-models-0",
+        "brex-agent-platform--operating-models-1",
+        "brex-agent-platform--operating-models-2"
       ],
       "source_ids": [
         "brex-agent-platform-source-1"
@@ -240,75 +253,6 @@
       "interfaces": [
         "slack",
         "internal-ui"
-      ]
-    },
-    {
-      "id": "browserbase-bb",
-      "company": "Browserbase",
-      "agent_name": "bb",
-      "approach_type": "task-agent",
-      "deployment_stage": "deployed",
-      "year": 2026,
-      "first_public_evidence": {
-        "date": "2026",
-        "source_id": "browserbase-bb-source-1"
-      },
-      "last_reviewed_at": "2026-09-09",
-      "status": "internal",
-      "domains": [
-        "coding",
-        "code-review",
-        "support",
-        "customer-success",
-        "research"
-      ],
-      "autonomy": "drafts-reviewed",
-      "operating_models": [
-        {
-          "scope": "coding request → reviewed pull request",
-          "attention_boundary": "work-product-review",
-          "level": 3
-        }
-      ],
-      "rubric": {
-        "invocation": [
-          "event-driven",
-          "interactive"
-        ],
-        "state": "unknown",
-        "identity": "unknown",
-        "evidence_strength": "detailed-primary"
-      },
-      "company_id": "browserbase",
-      "claim_ids": [
-        "browserbase-bb--summary",
-        "browserbase-bb--headline-metric",
-        "browserbase-bb--architecture-sandbox",
-        "browserbase-bb--architecture-harness",
-        "browserbase-bb--architecture-model",
-        "browserbase-bb--architecture-interfaces",
-        "browserbase-bb--architecture-tool-access",
-        "browserbase-bb--architecture-knowledge",
-        "browserbase-bb--architecture-credentials",
-        "browserbase-bb--primitives-0",
-        "browserbase-bb--primitives-1",
-        "browserbase-bb--primitives-2",
-        "browserbase-bb--key-metrics-0",
-        "browserbase-bb--key-metrics-1",
-        "browserbase-bb--key-metrics-2",
-        "browserbase-bb--lessons-learned-0",
-        "browserbase-bb--lessons-learned-1",
-        "browserbase-bb--lessons-learned-2",
-        "browserbase-bb--lessons-learned-3",
-        "browserbase-bb--operating-models-0"
-      ],
-      "source_ids": [
-        "browserbase-bb-source-1"
-      ],
-      "interfaces": [
-        "slack",
-        "web",
-        "webhook"
       ]
     },
     {
@@ -322,7 +266,7 @@
         "date": "2026",
         "source_id": "cloudflare-ai-stack-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -331,7 +275,12 @@
       "autonomy": "drafts-reviewed",
       "operating_models": [
         {
-          "scope": "pull request → AI review findings",
+          "scope": "pull request → automated AI review findings posted as advisory comments",
+          "attention_boundary": "unknown",
+          "level": null
+        },
+        {
+          "scope": "AGENTS.md generation → merge request the owning team reviews and refines",
           "attention_boundary": "work-product-review",
           "level": 3
         }
@@ -341,7 +290,7 @@
           "event-driven",
           "interactive"
         ],
-        "state": "unknown",
+        "state": "mixed",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -369,7 +318,8 @@
         "cloudflare-ai-stack--lessons-learned-1",
         "cloudflare-ai-stack--lessons-learned-2",
         "cloudflare-ai-stack--lessons-learned-3",
-        "cloudflare-ai-stack--operating-models-0"
+        "cloudflare-ai-stack--operating-models-0",
+        "cloudflare-ai-stack--operating-models-1"
       ],
       "source_ids": [
         "cloudflare-ai-stack-source-1",
@@ -396,7 +346,7 @@
         "date": "2026",
         "source_id": "coinbase-forge-mux-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -405,7 +355,7 @@
       "autonomy": "drafts-reviewed",
       "operating_models": [
         {
-          "scope": "Slack, GitHub, or Linear request → reviewed pull request and build",
+          "scope": "Slack, GitHub, or Linear request → drafted fix and pull request pushed back for review",
           "attention_boundary": "work-product-review",
           "level": 3
         }
@@ -467,7 +417,7 @@
         "date": "2025",
         "source_id": "databricks-costar-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -510,14 +460,14 @@
       "id": "domu-clementino",
       "company": "Domu",
       "agent_name": "Clementino",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "deployed",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "domu-clementino-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "support",
@@ -532,13 +482,24 @@
           "scope": "employee request → approved customer-impacting action",
           "attention_boundary": "work-product-review",
           "level": 3
+        },
+        {
+          "scope": "individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting long emails)",
+          "attention_boundary": "continuous-steering",
+          "level": 2
+        },
+        {
+          "scope": "scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion)",
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
         "invocation": [
-          "interactive"
+          "interactive",
+          "scheduled"
         ],
-        "state": "unknown",
+        "state": "cross-session-memory",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -559,7 +520,9 @@
         "domu-clementino--lessons-learned-0",
         "domu-clementino--lessons-learned-1",
         "domu-clementino--lessons-learned-2",
-        "domu-clementino--operating-models-0"
+        "domu-clementino--operating-models-0",
+        "domu-clementino--operating-models-1",
+        "domu-clementino--operating-models-2"
       ],
       "source_ids": [
         "domu-clementino-source-1"
@@ -579,14 +542,14 @@
           "approach_id": "doordash-flux"
         }
       ],
-      "approach_type": "background-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "doordash-code-review-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "code-review"
@@ -642,7 +605,7 @@
         "date": "2025-11-11",
         "source_id": "doordash-flux-source-2"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "code-review",
@@ -723,7 +686,7 @@
         "date": "2026",
         "source_id": "dropbox-nova-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -786,14 +749,14 @@
       "id": "flex-investigation-agent",
       "company": "Flex",
       "agent_name": "AI Investigation Agent",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "deployed",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "flex-investigation-agent-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "finance-ops",
@@ -840,14 +803,14 @@
       "id": "github-qubot",
       "company": "GitHub",
       "agent_name": "Qubot",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026-06",
         "source_id": "github-qubot-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "data"
@@ -894,7 +857,7 @@
         "date": "2026",
         "source_id": "harvey-spectre-source-1"
       },
-      "last_reviewed_at": "2026-08-31",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -905,16 +868,18 @@
       "autonomy": "drafts-reviewed",
       "operating_models": [
         {
-          "scope": "incident or request → reviewable diff or pull request",
+          "scope": "request from Slack, the web app, or an automation → reviewable diff or pull request",
           "attention_boundary": "work-product-review",
           "level": 3
         }
       ],
       "rubric": {
         "invocation": [
-          "interactive"
+          "interactive",
+          "background",
+          "scheduled"
         ],
-        "state": "unknown",
+        "state": "durable-session",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -949,14 +914,14 @@
       "id": "hubspot-sidekick",
       "company": "HubSpot",
       "agent_name": "Sidekick",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026-03",
         "source_id": "hubspot-sidekick-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "code-review"
@@ -1002,14 +967,14 @@
       "id": "linear-agent",
       "company": "Linear",
       "agent_name": "Linear Agent",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "linear-agent-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "commercialized",
       "domains": [
         "support",
@@ -1029,8 +994,8 @@
           "event-driven",
           "interactive"
         ],
-        "state": "unknown",
-        "identity": "unknown",
+        "state": "durable-session",
+        "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "linear",
@@ -1072,14 +1037,14 @@
       "id": "microsoft-prassistant",
       "company": "Microsoft",
       "agent_name": "PRAssistant",
-      "approach_type": "background-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2025,
       "first_public_evidence": {
         "date": "2025-07",
         "source_id": "microsoft-prassistant-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "code-review"
@@ -1128,7 +1093,7 @@
         "date": "2026",
         "source_id": "monday-sphera-atlas-morphex-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -1147,7 +1112,7 @@
           "event-driven",
           "interactive"
         ],
-        "state": "unknown",
+        "state": "cross-session-memory",
         "identity": "dedicated-agent",
         "evidence_strength": "secondary-only"
       },
@@ -1198,7 +1163,7 @@
         "date": "2026-04",
         "source_id": "notion-custom-agents-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "support",
@@ -1216,10 +1181,12 @@
       ],
       "rubric": {
         "invocation": [
-          "interactive"
+          "interactive",
+          "background",
+          "event-driven"
         ],
-        "state": "unknown",
-        "identity": "unknown",
+        "state": "mixed",
+        "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "notion",
@@ -1238,32 +1205,181 @@
       "interfaces": []
     },
     {
-      "id": "plaid-ai-annotator",
-      "company": "Plaid",
-      "agent_name": "AI Annotator",
-      "approach_type": "task-agent",
+      "id": "openai-software-factory",
+      "company": "OpenAI",
+      "agent_name": "Agentic software factory",
+      "approach_type": "agent-system",
       "deployment_stage": "scaled",
-      "year": 2025,
+      "year": 2026,
       "first_public_evidence": {
-        "date": "2025-06",
-        "source_id": "plaid-ai-annotator-source-1"
+        "date": "2025-10-09",
+        "source_id": "venturebeat-devday-codex"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
-        "data"
+        "coding",
+        "code-review",
+        "ci-triage",
+        "ops"
       ],
-      "autonomy": "drafts-reviewed",
+      "autonomy": "human-in-loop",
       "operating_models": [
         {
-          "scope": "raw transactions → labeled training data",
+          "scope": "low-risk pull request -> merge in opted-in codebase areas",
+          "attention_boundary": "exception-only",
+          "level": 5
+        },
+        {
+          "scope": "code change -> production rollout on the general path",
+          "attention_boundary": "work-product-review",
+          "level": 3
+        },
+        {
+          "scope": "production alert -> proposed performance fix",
+          "attention_boundary": "unknown",
+          "level": null
+        }
+      ],
+      "rubric": {
+        "invocation": [
+          "interactive",
+          "background",
+          "scheduled",
+          "event-driven"
+        ],
+        "state": "durable-session",
+        "identity": "unknown",
+        "evidence_strength": "mixed"
+      },
+      "company_id": "openai",
+      "claim_ids": [
+        "openai-software-factory--summary",
+        "openai-software-factory--headline-metric",
+        "openai-software-factory--architecture-sandbox",
+        "openai-software-factory--architecture-harness",
+        "openai-software-factory--architecture-model",
+        "openai-software-factory--architecture-interfaces",
+        "openai-software-factory--architecture-tool-access",
+        "openai-software-factory--architecture-knowledge",
+        "openai-software-factory--architecture-context-mgmt",
+        "openai-software-factory--primitives-0",
+        "openai-software-factory--primitives-1",
+        "openai-software-factory--primitives-2",
+        "openai-software-factory--primitives-3",
+        "openai-software-factory--primitives-4",
+        "openai-software-factory--key-metrics-0",
+        "openai-software-factory--key-metrics-1",
+        "openai-software-factory--lessons-learned-0",
+        "openai-software-factory--lessons-learned-1",
+        "openai-software-factory--operating-models-0",
+        "openai-software-factory--operating-models-1",
+        "openai-software-factory--operating-models-2"
+      ],
+      "source_ids": [
+        "openai-factory-article",
+        "venturebeat-devday-codex",
+        "openai-harness-engineering-post",
+        "hn-harness-engineering-thread",
+        "hn-zbrock-internal-prototype",
+        "hn-zbrock-internal-adoption",
+        "openai-agents-api-post",
+        "openai-chatgpt-work-post",
+        "every-codex-team-interview"
+      ],
+      "interfaces": [
+        "desktop",
+        "cli",
+        "slack",
+        "github",
+        "skill"
+      ]
+    },
+    {
+      "id": "openai-sevbot",
+      "company": "OpenAI",
+      "agent_name": "Sevbot",
+      "approach_type": "agent",
+      "deployment_stage": "deployed",
+      "year": 2026,
+      "first_public_evidence": {
+        "date": "2025-11-20",
+        "source_id": "crtsh-sevbot-certificates"
+      },
+      "last_reviewed_at": "2026-09-16",
+      "status": "internal",
+      "domains": [
+        "on-call"
+      ],
+      "autonomy": "drafts-reviewed",
+      "relationships": [
+        {
+          "type": "component-of",
+          "approach_id": "openai-software-factory"
+        }
+      ],
+      "operating_models": [
+        {
+          "scope": "incident detected -> applied mitigation",
           "attention_boundary": "work-product-review",
           "level": 3
         }
       ],
       "rubric": {
         "invocation": [
-          "background"
+          "event-driven"
+        ],
+        "state": "unknown",
+        "identity": "dedicated-agent",
+        "evidence_strength": "secondary-only"
+      },
+      "company_id": "openai",
+      "claim_ids": [
+        "openai-sevbot--summary",
+        "openai-sevbot--architecture-sandbox",
+        "openai-sevbot--architecture-harness",
+        "openai-sevbot--architecture-model",
+        "openai-sevbot--architecture-interfaces",
+        "openai-sevbot--primitives-0",
+        "openai-sevbot--lessons-learned-0",
+        "openai-sevbot--operating-models-0"
+      ],
+      "source_ids": [
+        "openai-sevbot-article",
+        "crtsh-sevbot-certificates",
+        "github-sevbot-pr"
+      ],
+      "interfaces": [
+        "slack"
+      ]
+    },
+    {
+      "id": "plaid-ai-annotator",
+      "company": "Plaid",
+      "agent_name": "AI Annotator",
+      "approach_type": "agent",
+      "deployment_stage": "scaled",
+      "year": 2025,
+      "first_public_evidence": {
+        "date": "2025-06",
+        "source_id": "plaid-ai-annotator-source-1"
+      },
+      "last_reviewed_at": "2026-09-16",
+      "status": "internal",
+      "domains": [
+        "data"
+      ],
+      "autonomy": "unknown",
+      "operating_models": [
+        {
+          "scope": "raw transactions → labeled training data",
+          "attention_boundary": "unknown",
+          "level": null
+        }
+      ],
+      "rubric": {
+        "invocation": [
+          "unknown"
         ],
         "state": "unknown",
         "identity": "unknown",
@@ -1287,14 +1403,14 @@
       "id": "plaid-fix-my-connection",
       "company": "Plaid",
       "agent_name": "Fix My Connection",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2025,
       "first_public_evidence": {
         "date": "2025-06",
         "source_id": "plaid-fix-my-connection-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "ops",
@@ -1341,7 +1457,7 @@
         "date": "2025",
         "source_id": "plaid-internal-mcp-server-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding"
@@ -1382,14 +1498,14 @@
       "id": "posthog-stamphog",
       "company": "PostHog",
       "agent_name": "StampHog",
-      "approach_type": "background-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026-07-09",
         "source_id": "posthog-stamphog-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "open-sourced",
       "domains": [
         "code-review"
@@ -1447,14 +1563,14 @@
       "id": "ramp-inspect",
       "company": "Ramp",
       "agent_name": "Inspect",
-      "approach_type": "background-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "ramp-inspect-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -1536,7 +1652,7 @@
         "date": "2026",
         "source_id": "replit-manager-agent-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -1545,12 +1661,12 @@
         "research",
         "data"
       ],
-      "autonomy": "drafts-reviewed",
+      "autonomy": "autonomous",
       "operating_models": [
         {
           "scope": "objective → verifiable multi-agent work product",
-          "attention_boundary": "work-product-review",
-          "level": 3
+          "attention_boundary": "exception-only",
+          "level": 5
         }
       ],
       "rubric": {
@@ -1586,63 +1702,17 @@
       ]
     },
     {
-      "id": "retool-retoolgpt",
-      "company": "Retool",
-      "agent_name": "RetoolGPT",
-      "approach_type": "task-agent",
-      "deployment_stage": "deployed",
-      "year": 2025,
-      "first_public_evidence": {
-        "date": "2025-08",
-        "source_id": "retool-retoolgpt-source-1"
-      },
-      "last_reviewed_at": "2026-08-31",
-      "status": "internal",
-      "domains": [
-        "support",
-        "coding"
-      ],
-      "autonomy": "assistive",
-      "operating_models": [
-        {
-          "scope": "internal question → sourced answer",
-          "attention_boundary": "unknown",
-          "level": null
-        }
-      ],
-      "rubric": {
-        "invocation": [
-          "interactive"
-        ],
-        "state": "unknown",
-        "identity": "unknown",
-        "evidence_strength": "detailed-primary"
-      },
-      "company_id": "retool",
-      "claim_ids": [
-        "retool-retoolgpt--summary",
-        "retool-retoolgpt--architecture-model",
-        "retool-retoolgpt--architecture-knowledge",
-        "retool-retoolgpt--operating-models-0"
-      ],
-      "source_ids": [
-        "retool-retoolgpt-source-1",
-        "retool-retoolgpt-source-2"
-      ],
-      "interfaces": []
-    },
-    {
       "id": "salesforce-slackbot",
       "company": "Salesforce",
       "agent_name": "Slackbot",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2025,
       "first_public_evidence": {
         "date": "2025-12-01",
         "source_id": "salesforce-slackbot-source-2"
       },
-      "last_reviewed_at": "2026-08-31",
+      "last_reviewed_at": "2026-09-16",
       "status": "commercialized",
       "domains": [
         "support",
@@ -1693,14 +1763,14 @@
       "id": "sentry-junior",
       "company": "Sentry",
       "agent_name": "Junior",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "deployed",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "sentry-junior-source-2"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "open-sourced",
       "domains": [
         "coding",
@@ -1721,7 +1791,7 @@
           "event-driven",
           "interactive"
         ],
-        "state": "unknown",
+        "state": "durable-session",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -1772,20 +1842,18 @@
         "date": "2026",
         "source_id": "shopify-internal-agents-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
-        "code-review",
-        "research",
-        "security"
+        "code-review"
       ],
       "autonomy": "drafts-reviewed",
       "operating_models": [
         {
-          "scope": "River coding request → reviewed pull request",
-          "attention_boundary": "work-product-review",
-          "level": 3
+          "scope": "River coding request → River-opened, River-coauthored pull request",
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
@@ -1793,7 +1861,7 @@
           "event-driven",
           "interactive"
         ],
-        "state": "unknown",
+        "state": "durable-session",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -1833,14 +1901,14 @@
       "id": "sierra-pinecone",
       "company": "Sierra",
       "agent_name": "Pinecone",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "sierra-pinecone-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -1860,10 +1928,11 @@
       "rubric": {
         "invocation": [
           "event-driven",
-          "interactive"
+          "interactive",
+          "scheduled"
         ],
         "state": "durable-session",
-        "identity": "unknown",
+        "identity": "mixed",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "sierra",
@@ -1912,7 +1981,7 @@
         "date": "2026",
         "source_id": "slack-context-system-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "research"
@@ -1967,7 +2036,7 @@
         "date": "2025",
         "source_id": "spotify-honk-xirp-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "mixed",
       "domains": [
         "coding",
@@ -1984,10 +2053,10 @@
       ],
       "rubric": {
         "invocation": [
-          "event-driven",
-          "interactive"
+          "interactive",
+          "background"
         ],
-        "state": "durable-session",
+        "state": "unknown",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -2030,14 +2099,14 @@
       "id": "stripe-minions",
       "company": "Stripe",
       "agent_name": "Minions",
-      "approach_type": "background-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "stripe-minions-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -2109,7 +2178,7 @@
         "date": "2026-02-06",
         "source_id": "strongdm-factory-overview"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "mixed",
       "domains": [
         "coding"
@@ -2118,8 +2187,8 @@
       "operating_models": [
         {
           "scope": "natural-language seed → agents implement and validate against scenario harness → converged software",
-          "attention_boundary": "exception-only",
-          "level": 5
+          "attention_boundary": "unknown",
+          "level": null
         }
       ],
       "rubric": {
@@ -2165,14 +2234,14 @@
       "id": "uber-coding-agent",
       "company": "Uber",
       "agent_name": "Internal coding agent (unnamed)",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "deployed",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "uber-coding-agent-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding"
@@ -2181,8 +2250,8 @@
       "operating_models": [
         {
           "scope": "coding request → complete code change",
-          "attention_boundary": "unknown",
-          "level": null
+          "attention_boundary": "work-product-review",
+          "level": 3
         }
       ],
       "rubric": {
@@ -2218,14 +2287,14 @@
           "approach_id": "uber-coding-agent"
         }
       ],
-      "approach_type": "background-agent",
+      "approach_type": "agent",
       "deployment_stage": "scaled",
       "year": 2025,
       "first_public_evidence": {
         "date": "2025-08-12",
         "source_id": "uber-ureview-source-1"
       },
-      "last_reviewed_at": "2026-09-09",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "code-review"
@@ -2289,7 +2358,7 @@
         "date": "2026",
         "source_id": "workos-project-horizon-source-1"
       },
-      "last_reviewed_at": "2026-08-31",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -2300,8 +2369,8 @@
       "operating_models": [
         {
           "scope": "requirements and acceptance criteria → tested implementation",
-          "attention_boundary": "outcome-review",
-          "level": 4
+          "attention_boundary": "work-product-review",
+          "level": 3
         }
       ],
       "rubric": {
@@ -2309,8 +2378,8 @@
           "event-driven",
           "interactive"
         ],
-        "state": "durable-session",
-        "identity": "unknown",
+        "state": "mixed",
+        "identity": "user",
         "evidence_strength": "detailed-primary"
       },
       "company_id": "workos",
@@ -2359,7 +2428,7 @@
         "date": "2026",
         "source_id": "ycombinator-agent-infra-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding",
@@ -2375,9 +2444,10 @@
       ],
       "rubric": {
         "invocation": [
-          "unknown"
+          "interactive",
+          "scheduled"
         ],
-        "state": "unknown",
+        "state": "cross-session-memory",
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
@@ -2399,14 +2469,14 @@
       "id": "zup-codegen",
       "company": "Zup",
       "agent_name": "CodeGen",
-      "approach_type": "task-agent",
+      "approach_type": "agent",
       "deployment_stage": "research",
       "year": 2026,
       "first_public_evidence": {
         "date": "2026",
         "source_id": "zup-codegen-source-1"
       },
-      "last_reviewed_at": "2026-09-15",
+      "last_reviewed_at": "2026-09-16",
       "status": "internal",
       "domains": [
         "coding"
@@ -2451,7 +2521,7 @@
       "id": "airbnb-airchat--summary",
       "approach_id": "airbnb-airchat",
       "field": "summary",
-      "text": "Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding agents such as Claude Code. The team first built its own orchestrator from scratch, never shipped it, and delegated to Airchat with a thin shim instead.",
+      "text": "Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding agents such as Claude Code and Codex. The team first built its own orchestrator from scratch, never shipped it, and delegated to Airchat with a thin shim instead.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -2497,7 +2567,7 @@
       "id": "airbnb-airchat--architecture-harness",
       "approach_id": "airbnb-airchat",
       "field": "architecture.harness",
-      "text": "Wrapper over Claude Code with a unified gateway, an internal plugin marketplace, and AirDev parallel workspaces",
+      "text": "Wrapper over vendor coding agents with a unified gateway, an internal plugin marketplace, and AirDev parallel workspaces",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -2514,7 +2584,7 @@
       "id": "airbnb-airchat--architecture-model",
       "approach_id": "airbnb-airchat",
       "field": "architecture.model",
-      "text": "Claude Code (a vendor agent), wrapped by Airbnb",
+      "text": "Vendor coding agents (Claude Code and Codex are named in use), wrapped by Airbnb",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -2577,8 +2647,13 @@
       "valid_at": "2025",
       "evidence": [
         {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 82, 250"
+        },
+        {
           "source_id": "airbnb-airchat-source-2",
-          "relation": "supports"
+          "relation": "contextualizes"
         }
       ]
     },
@@ -2978,7 +3053,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -2995,7 +3070,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -3012,7 +3087,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -3113,7 +3188,7 @@
       "id": "brex-agent-platform--architecture-model",
       "approach_id": "brex-agent-platform",
       "field": "architecture.model",
-      "text": "Multi-model",
+      "text": "Not documented for deployed agents; the platform provides multi-model testing and evaluation at build time",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "medium",
@@ -3246,7 +3321,7 @@
         }
       ],
       "reported_by": "Brex",
-      "metric_scope": "Customer-support cases resolved by the chatbot at first touch",
+      "metric_scope": "Customer-support cases resolved by the chatbot at first touch (Brex customer-facing product AI, adjacent to this internal platform)",
       "denominator": "Customer-support cases; exact sample size not provided"
     },
     {
@@ -3316,10 +3391,10 @@
       "approach_id": "brex-agent-platform",
       "field": "lessons_learned.0",
       "text": "Target 40% automation, not 100%; the last mile drives investments that often yield zero value",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
+      "kind": "opinion",
+      "provenance": "reported",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The case study attributes the architecture-first approval stance to Brex's team; it is not an independent comparison of vendors or legal review methods.",
       "valid_at": null,
       "evidence": [
         {
@@ -3336,7 +3411,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -3353,7 +3428,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -3370,7 +3445,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -3387,7 +3462,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -3400,371 +3475,58 @@
       "id": "brex-agent-platform--operating-models-0",
       "approach_id": "brex-agent-platform",
       "field": "operating_models.0",
-      "text": "Level 2 for internal operations request → completed operation; human attention boundary: continuous-steering.",
+      "text": "Level 5 for high-confidence operations case (support first touch, fraud recommendation) → automated completion; low-confidence remainder → analyst review; human attention boundary: exception-only.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The secondary report describes a human remaining in the middle of the workflow, but does not fully specify each review surface.",
+      "confidence_reason": "The report documents confidence-threshold automation for fraud recommendations and describes L1 process work as fully automated in most cases, with the remainder reviewed by an analyst.",
       "valid_at": "2025-09-25",
       "evidence": [
         {
           "source_id": "brex-agent-platform-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--summary",
-      "approach_id": "browserbase-bb",
-      "field": "summary",
-      "text": "One generalized agent in Slack that writes PRs, investigates sessions, queries the warehouse, logs feature requests, and runs browser agents across engineering, ops, sales, and support.",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--headline-metric",
-      "approach_id": "browserbase-bb",
-      "field": "headline_metric",
-      "text": "Feature-request pipeline at 100% coverage with zero human effort",
-      "kind": "metric",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
           "relation": "supports",
-          "locator": "Preserved content.md, lines 26"
-        }
-      ],
-      "reported_by": "Browserbase",
-      "metric_scope": "Automatic feature-request scanning of every closed support ticket and meeting transcript",
-      "denominator": "Closed support tickets and meeting transcripts"
-    },
-    {
-      "id": "browserbase-bb--architecture-sandbox",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.sandbox",
-      "text": "Ephemeral Linux VM; pre-warmed snapshot rebuilt every 30 min; idles out after 30 min",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
+          "locator": "Preserved content.md, lines 76, 159"
         }
       ]
     },
     {
-      "id": "browserbase-bb--architecture-harness",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.harness",
-      "text": "OpenCode core loop with 6 tools (read/write/edit/exec/safebash/skill)",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
+      "id": "brex-agent-platform--operating-models-1",
+      "approach_id": "brex-agent-platform",
+      "field": "operating_models.1",
+      "text": "Level 3 for KYC application → completed verification steps; human attention boundary: work-product-review.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "low",
+      "confidence_reason": "The report documents human checks inside the KYC flow and humans reviewing LLM work, but a later passage shifts humans toward reviewing trends, so the per-run boundary is mixed in the evidence.",
+      "valid_at": "2025-09-25",
       "evidence": [
         {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--architecture-model",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.model",
-      "text": "Frontier models",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--architecture-interfaces",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.interfaces",
-      "text": "slack, web, webhook",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--architecture-tool-access",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.tool_access",
-      "text": "exec routes through a serverless integration proxy (Snowflake, HubSpot, Pylon, Grafana); the sandbox never sees real secrets",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--architecture-knowledge",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.knowledge",
-      "text": "Key repos cloned into /knowledge/; skills (markdown) loaded on demand",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--architecture-credentials",
-      "approach_id": "browserbase-bb",
-      "field": "architecture.credentials",
-      "text": "Credential brokering; the sandbox boots with references + rotating session tokens only; the proxy holds real creds; egress injection for a few hosts",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--primitives-0",
-      "approach_id": "browserbase-bb",
-      "field": "primitives.0",
-      "text": "Markdown playbooks lazy-loaded per task so the general agent stays small",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--primitives-1",
-      "approach_id": "browserbase-bb",
-      "field": "primitives.1",
-      "text": "Scoped permissions per session limit the actions available to the agent",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--primitives-2",
-      "approach_id": "browserbase-bb",
-      "field": "primitives.2",
-      "text": "The sandbox runs arbitrary code yet never touches a secret",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--key-metrics-0",
-      "approach_id": "browserbase-bb",
-      "field": "key_metrics.0",
-      "text": "Feature-request pipeline at 100% coverage, zero human effort",
-      "kind": "metric",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
+          "source_id": "brex-agent-platform-source-1",
           "relation": "supports",
-          "locator": "Preserved content.md, lines 26"
+          "locator": "Preserved content.md, lines 143, 205"
+        },
+        {
+          "source_id": "brex-agent-platform-source-1",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 211 (humans shift toward reviewing trends)"
         }
-      ],
-      "reported_by": "Browserbase",
-      "metric_scope": "Automatic feature-request scanning of every closed support ticket and meeting transcript",
-      "denominator": "Closed support tickets and meeting transcripts"
+      ]
     },
     {
-      "id": "browserbase-bb--key-metrics-1",
-      "approach_id": "browserbase-bb",
-      "field": "key_metrics.1",
-      "text": "99% of first-response times < 24 hrs",
-      "kind": "metric",
-      "provenance": "reported",
+      "id": "brex-agent-platform--operating-models-2",
+      "approach_id": "brex-agent-platform",
+      "field": "operating_models.2",
+      "text": "Level 3 for collections follow-up interaction → drafted response options the servicing team selects, customizes, or sends; human attention boundary: work-product-review.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The source reports 99% below 24 hours with awkward wording; no sample, timestamps, or method is provided.",
-      "valid_at": null,
+      "confidence_reason": "The report documents the servicing team picking among agent-drafted response options before anything is sent; initial outreach itself is automated.",
+      "valid_at": "2025-09-25",
       "evidence": [
         {
-          "source_id": "browserbase-bb-source-1",
+          "source_id": "brex-agent-platform-source-1",
           "relation": "supports",
-          "locator": "Preserved content.md, lines 26"
-        }
-      ],
-      "reported_by": "Browserbase",
-      "metric_scope": "Reported support first-response time below 24 hours",
-      "denominator": "Support first responses; exact sample and measurement window not provided"
-    },
-    {
-      "id": "browserbase-bb--key-metrics-2",
-      "approach_id": "browserbase-bb",
-      "field": "key_metrics.2",
-      "text": "Session investigation: 30–60 min of log-diving → one Slack message",
-      "kind": "metric",
-      "provenance": "reported",
-      "confidence": "medium",
-      "confidence_reason": "A Slack message replaces the manual initiation workflow; the article does not report end-to-end automated investigation latency.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports",
-          "locator": "Preserved content.md, lines 26"
-        }
-      ],
-      "reported_by": "Browserbase",
-      "metric_scope": "Session investigation initiation: manual log-diving versus a Slack request"
-    },
-    {
-      "id": "browserbase-bb--lessons-learned-0",
-      "approach_id": "browserbase-bb",
-      "field": "lessons_learned.0",
-      "text": "One agent with good abstractions beats a fleet of narrow bots",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--lessons-learned-1",
-      "approach_id": "browserbase-bb",
-      "field": "lessons_learned.1",
-      "text": "Separate capabilities from the core loop; domain logic lives in skills + service packages",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--lessons-learned-2",
-      "approach_id": "browserbase-bb",
-      "field": "lessons_learned.2",
-      "text": "Don't trust the model, remove its ability to do wrong: scope tools and services per invocation source",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--lessons-learned-3",
-      "approach_id": "browserbase-bb",
-      "field": "lessons_learned.3",
-      "text": "Meet people where they are; Slack is the highest-leverage surface because that's where work already happens",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "browserbase-bb--operating-models-0",
-      "approach_id": "browserbase-bb",
-      "field": "operating_models.0",
-      "text": "Level 3 for coding request → reviewed pull request; human attention boundary: work-product-review.",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
-      "confidence": "high",
-      "confidence_reason": "The source documents agent-authored pull requests while the enclosing workflow retains human review.",
-      "valid_at": "2026",
-      "evidence": [
-        {
-          "source_id": "browserbase-bb-source-1",
-          "relation": "supports"
+          "locator": "Preserved content.md, line 173"
         }
       ]
     },
@@ -4105,7 +3867,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4122,7 +3884,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4139,7 +3901,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4156,7 +3918,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4169,16 +3931,35 @@
       "id": "cloudflare-ai-stack--operating-models-0",
       "approach_id": "cloudflare-ai-stack",
       "field": "operating_models.0",
-      "text": "Level 3 for pull request → AI review findings; human attention boundary: work-product-review.",
+      "text": "Unclassified for pull request → automated AI review findings posted as advisory comments; human attention boundary: unknown.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The source documents automated review findings, but the record combines several platform workflows.",
+      "confidence": "unverified",
+      "confidence_reason": "The reviewer runs automatically on every merge request and posts advisory comments that engineers may scan; no passage documents a person reviewing the findings on each run.",
       "valid_at": "2026-04-20",
       "evidence": [
         {
           "source_id": "cloudflare-ai-stack-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 257, 269 (every MR reviewed automatically; engineers may scan findings)"
+        }
+      ]
+    },
+    {
+      "id": "cloudflare-ai-stack--operating-models-1",
+      "approach_id": "cloudflare-ai-stack",
+      "field": "operating_models.1",
+      "text": "Level 3 for AGENTS.md generation → merge request the owning team reviews and refines; human attention boundary: work-product-review.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "high",
+      "confidence_reason": "The source states the system opens a merge request so the owning team can review and refine the generated AGENTS.md document.",
+      "valid_at": "2026-04-20",
+      "evidence": [
+        {
+          "source_id": "cloudflare-ai-stack-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 247 (owning team reviews and refines the generated document)"
         }
       ]
     },
@@ -4186,7 +3967,7 @@
       "id": "coinbase-forge-mux--summary",
       "approach_id": "coinbase-forge-mux",
       "field": "summary",
-      "text": "Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and one-off build; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs merged company-wide come from these background agents.",
+      "text": "Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, drafted fix, and pull request; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs merged come from these background agents.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4221,7 +4002,7 @@
       "kind": "metric",
       "provenance": "reported",
       "confidence": "medium",
-      "confidence_reason": "Self-reported share stated by the engineering leader who built the harness; measurement method and period not documented. A thread reply says the share covers the whole company.",
+      "confidence_reason": "Self-reported share stated by the engineering leader who built the harness; measurement method and period not documented. The preserved tweet says only 'all PRs merged'; no preserved reply establishes a company-wide scope.",
       "valid_at": "2026-02",
       "evidence": [
         {
@@ -4232,7 +4013,7 @@
       ],
       "reported_by": "Coinbase",
       "metric_scope": "PRs merged by in-house background agents",
-      "denominator": "All PRs merged company-wide"
+      "denominator": "All PRs merged; the scope beyond engineering is not documented in the preserved capture"
     },
     {
       "id": "coinbase-forge-mux--architecture-sandbox",
@@ -4286,7 +4067,7 @@
       "id": "coinbase-forge-mux--architecture-model",
       "approach_id": "coinbase-forge-mux",
       "field": "architecture.model",
-      "text": "Portfolio across multiple providers; the Slack agent Claude bot can use multiple underlying models despite its name",
+      "text": "The Slack agent Claude bot can use multiple underlying models despite its name; the documented portfolio spans harnesses (Claude Code, OpenCode, Cursor, Copilot), and no source names the models' providers",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4364,7 +4145,7 @@
       "id": "coinbase-forge-mux--primitives-0",
       "approach_id": "coinbase-forge-mux",
       "field": "primitives.0",
-      "text": "Custom harness: Slack bug discussion → Linear issue → fix → PR → one-off build",
+      "text": "Custom harness: Slack bug discussion → Linear issue → drafted fix → PR pushed back for review",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4427,7 +4208,7 @@
       "kind": "metric",
       "provenance": "reported",
       "confidence": "medium",
-      "confidence_reason": "Self-reported share stated by the engineering leader who built the harness; measurement method and period not documented. A thread reply says the share covers the whole company.",
+      "confidence_reason": "Self-reported share stated by the engineering leader who built the harness; measurement method and period not documented. The preserved tweet says only 'all PRs merged'; no preserved reply establishes a company-wide scope.",
       "valid_at": "2026-02",
       "evidence": [
         {
@@ -4438,7 +4219,7 @@
       ],
       "reported_by": "Coinbase",
       "metric_scope": "PRs merged by in-house background agents",
-      "denominator": "All PRs merged company-wide"
+      "denominator": "All PRs merged; the scope beyond engineering is not documented in the preserved capture"
     },
     {
       "id": "coinbase-forge-mux--key-metrics-2",
@@ -4493,7 +4274,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4510,7 +4291,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4527,7 +4308,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4599,11 +4380,11 @@
       "id": "coinbase-forge-mux--operating-models-0",
       "approach_id": "coinbase-forge-mux",
       "field": "operating_models.0",
-      "text": "Level 3 for Slack, GitHub, or Linear request → reviewed pull request and build; human attention boundary: work-product-review.",
+      "text": "Level 3 for Slack, GitHub, or Linear request → drafted fix and pull request pushed back for review; human attention boundary: work-product-review.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "high",
-      "confidence_reason": "The source describes delegated implementation that returns a pull request and build for human review.",
+      "confidence_reason": "The sources describe delegated implementation that drafts a fix and pushes a pull request back to Slack for review; no source documents a build step.",
       "valid_at": "2026",
       "evidence": [
         {
@@ -4621,7 +4402,7 @@
       "id": "databricks-costar--summary",
       "approach_id": "databricks-costar",
       "field": "summary",
-      "text": "Databricks runs internal engineering agents for work such as on-call support and automated code review. coSTAR ships and tests them, using LLM judges as the test suite and a coding assistant to refine the agent until the judges pass. Databricks' open-source Omnigent is a separate product.",
+      "text": "Databricks runs internal engineering agents for work such as on-call support and automated code review. coSTAR ships and tests them, using LLM judges as the test suite and a coding assistant to refine the agent until the judges pass. Databricks' Omnigent is a separate product.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -4676,18 +4457,21 @@
       "id": "databricks-costar--key-metrics-0",
       "approach_id": "databricks-costar",
       "field": "key_metrics.0",
-      "text": "Internal agents serve as daily coding drivers on the Databricks codebase",
-      "kind": "fact",
+      "text": "coSTAR reduced the time to verify agent changes from two weeks down to hours",
+      "kind": "metric",
       "provenance": "reported",
       "confidence": "medium",
-      "confidence_reason": "Databricks described internal use in its own engineering blog.",
-      "valid_at": null,
+      "confidence_reason": "Databricks reported the reduction in its own engineering blog; the measurement method is not described.",
+      "valid_at": "2025",
       "evidence": [
         {
           "source_id": "databricks-costar-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, line 11"
         }
-      ]
+      ],
+      "reported_by": "Databricks",
+      "metric_scope": "Time to verify agent changes on the Databricks codebase under coSTAR"
     },
     {
       "id": "databricks-costar--key-metrics-1",
@@ -4941,7 +4725,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4958,7 +4742,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4975,7 +4759,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -4998,6 +4782,42 @@
         {
           "source_id": "domu-clementino-source-1",
           "relation": "supports"
+        }
+      ]
+    },
+    {
+      "id": "domu-clementino--operating-models-1",
+      "approach_id": "domu-clementino",
+      "field": "operating_models.1",
+      "text": "Level 2 for individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting long emails); human attention boundary: continuous-steering.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "high",
+      "confidence_reason": "The source describes the author working alongside the agent in Cowork and watching what happens in one place, with no approval gate described.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "domu-clementino-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 76, 80 (two workflows; work watched in one place as it happens)"
+        }
+      ]
+    },
+    {
+      "id": "domu-clementino--operating-models-2",
+      "approach_id": "domu-clementino",
+      "field": "operating_models.2",
+      "text": "Unclassified for scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion); human attention boundary: unknown.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "unverified",
+      "confidence_reason": "The source lists scheduled jobs that post without a person starting them, but does not describe whether anyone reviews their output.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "domu-clementino-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 70, 78 (scheduled jobs post at 5am; review, if any, not described)"
         }
       ]
     },
@@ -5190,7 +5010,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5207,7 +5027,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5237,7 +5057,7 @@
       "id": "doordash-flux--summary",
       "approach_id": "doordash-flux",
       "field": "summary",
-      "text": "DoorDash's internal agentic AI platform; a unified cognitive layer over company data and operations, with an AI Marketplace of specialized agents and the Flux cloud-agent runtime for engineering tasks.",
+      "text": "DoorDash's internal agentic AI platform combines company-data access, an AI Marketplace of specialized agents, and the Flux cloud-agent runtime for engineering tasks.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -5575,7 +5395,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5592,7 +5412,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5609,7 +5429,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5626,7 +5446,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5643,7 +5463,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5660,7 +5480,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5962,7 +5782,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5979,7 +5799,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -5996,7 +5816,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6013,7 +5833,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6077,7 +5897,7 @@
       "id": "flex-investigation-agent--architecture-harness",
       "approach_id": "flex-investigation-agent",
       "field": "architecture.harness",
-      "text": "Investigation-to-fix loop; underlying runtime not documented",
+      "text": "Investigation-to-fix loop running as a serverless application on Modal; Slack requests are acknowledged, the investigation runs in a spawned background function, and fixes come from a spawned coding sub-agent",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6094,7 +5914,7 @@
       "id": "flex-investigation-agent--architecture-model",
       "approach_id": "flex-investigation-agent",
       "field": "architecture.model",
-      "text": "Not specified",
+      "text": "Anthropic (named for the tool-calling investigation loop and the coding sub-agent); specific model version not named",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6166,7 +5986,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6183,7 +6003,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6340,7 +6160,7 @@
       "id": "harvey-spectre--summary",
       "approach_id": "harvey-spectre",
       "field": "summary",
-      "text": "Harvey's internal collaborative cloud agent platform; reacts to incidents, bug reports, and Slack messages and produces reviewable diffs, branches, and PRs.",
+      "text": "Harvey's internal collaborative cloud agent platform; turns requests from Slack, the web app, or automations into durable runs that return reviewable summaries, diffs, branches, and PRs.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6425,7 +6245,7 @@
       "id": "harvey-spectre--architecture-tool-access",
       "approach_id": "harvey-spectre",
       "field": "architecture.tool_access",
-      "text": "Explicit tool boundaries; reacts to incidents, bug reports, customer feedback, and Slack messages",
+      "text": "Explicit tool boundaries; tool configuration injected at run start; requests start from Slack, the web app, or automations; connects to systems like GitHub, Datadog, and Linear",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6442,7 +6262,7 @@
       "id": "harvey-spectre--architecture-credentials",
       "approach_id": "harvey-spectre",
       "field": "architecture.credentials",
-      "text": "Explicit tool boundaries; outputs are reviewable",
+      "text": "Short-lived, scoped credentials injected at run start; no ambient access to the control plane or a user's machine",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6514,7 +6334,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6531,7 +6351,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6548,7 +6368,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6561,7 +6381,7 @@
       "id": "harvey-spectre--operating-models-0",
       "approach_id": "harvey-spectre",
       "field": "operating_models.0",
-      "text": "Level 3 for incident or request → reviewable diff or pull request; human attention boundary: work-product-review.",
+      "text": "Level 3 for request from Slack, the web app, or an automation → reviewable diff or pull request; human attention boundary: work-product-review.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "high",
@@ -6771,7 +6591,7 @@
       "id": "linear-agent--summary",
       "approach_id": "linear-agent",
       "field": "summary",
-      "text": "A native agent that synthesizes workspace context, triages, creates follow-up work, runs coding sessions, and executes scheduled/event-driven 'Loops'; used by Linear's own CX, Product, and Engineering teams.",
+      "text": "A native agent that synthesizes workspace context, scopes customer feedback into issues, creates follow-up work, runs coding sessions, and can be triggered automatically when issues enter triage; used by Linear's own CX, Product, and Engineering teams.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -6974,7 +6794,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -6991,7 +6811,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7008,7 +6828,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7025,7 +6845,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7042,7 +6862,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7537,7 +7357,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7550,11 +7370,11 @@
       "id": "monday-sphera-atlas-morphex--lessons-learned-1",
       "approach_id": "monday-sphera-atlas-morphex",
       "field": "lessons_learned.1",
-      "text": "Skip the vector store; file-based memory (MEMORY.md) was the right answer",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
+      "text": "monday.com chose file-based memory (MEMORY.md and daily diaries) instead of vector retrieval for these agents",
+      "kind": "opinion",
+      "provenance": "reported",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The case study reports monday.com's choice and rationale for its own agents; it does not compare that design with vector retrieval in other workloads.",
       "valid_at": null,
       "evidence": [
         {
@@ -7571,7 +7391,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7588,7 +7408,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7605,7 +7425,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -7749,10 +7569,614 @@
       ]
     },
     {
+      "id": "openai-software-factory--summary",
+      "approach_id": "openai-software-factory",
+      "field": "summary",
+      "text": "An agent system built around OpenAI's internal Codex. A person defines the outcome; Codex implements the change and babysits CI until green; domain-specialist agents review each change behind risk-tiered routing; and a per-change deploy agent handholds approved changes to production and builds its own monitoring dashboards.",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 138-186 (pipeline steps 1-8)"
+        },
+        {
+          "source_id": "openai-harness-engineering-post",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, lines 46-48 (one OpenAI team's repository runs review predominantly agent-to-agent; a single team's account, not the company-wide pipeline)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--headline-metric",
+      "approach_id": "openai-software-factory",
+      "field": "headline_metric",
+      "text": "Almost all OpenAI employees used Codex and ChatGPT Work weekly as of the September 2026 report (self-reported).",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Company usage claim relayed by an independent reporter; no method or denominator published. OpenAI's own 2026-09-10 launch post states nearly 100% of teams inside OpenAI, including finance and sales, use ChatGPT Work and Codex (a teams denominator, not employees).",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 46"
+        },
+        {
+          "source_id": "openai-chatgpt-work-post",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 34 (OpenAI's own launch post: nearly 100% of teams inside OpenAI, including finance and sales, use ChatGPT Work and Codex; teams denominator, OpenAI self-report)"
+        },
+        {
+          "source_id": "every-codex-team-interview",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 486 (Codex lead, February 2026: 'almost everyone technical at the company uses Codex')"
+        }
+      ],
+      "reported_by": "OpenAI",
+      "metric_scope": "Weekly Codex and ChatGPT Work use across OpenAI employees",
+      "measurement_method": "Internal token-usage tracking by department, chart sourced to OpenAI"
+    },
+    {
+      "id": "openai-software-factory--architecture-sandbox",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.sandbox",
+      "text": "unknown",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The article does not document an execution sandbox; unknown does not mean absent.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 138-186 describe the pipeline without documenting an execution sandbox"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--architecture-harness",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.harness",
+      "text": "Internal Codex, described as much more advanced than the external product because it is plugged into almost every OpenAI system; ChatGPT Work runs on the same harness",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 48 (internal Codex is a lot more advanced than its external counterpart; ChatGPT Work is powered by the Codex harness)"
+        },
+        {
+          "source_id": "openai-agents-api-post",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 12-14 (OpenAI scaled Codex and ChatGPT for Work on the same harness; the Agents API exposes 'that same harness and infrastructure that powers Codex')"
+        },
+        {
+          "source_id": "hn-zbrock-internal-prototype",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 12 (harness-engineering co-author: 'It was an internal prototype that looked very much like the current Codex app')"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--architecture-model",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.model",
+      "text": "unknown",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The article names no underlying models for the internal harness; unknown does not mean absent.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "The preserved article names no underlying models for the internal Codex harness"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--architecture-interfaces",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.interfaces",
+      "text": "desktop, cli, slack, github, skill",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 48, 80, and 140-145 (Codex app and CLI, GitHub, Slack, internal skills)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--architecture-tool-access",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.tool_access",
+      "text": "Git repositories and GitHub, Slack, Notion, Databricks, Datadog, and internal logs and data sources",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 140-145"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--architecture-knowledge",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.knowledge",
+      "text": "OpenAI moved its documentation inside the source code; internal Codex skills, some maintained by Codex itself; new engineers are directed to ask Codex during onboarding",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 140-147 (documentation inside the source code; internal skills; onboarding)"
+        },
+        {
+          "source_id": "openai-harness-engineering-post",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 30, 73, and 117 (structured docs/ directory as the system of record; a roughly 100-line AGENTS.md serving as a map; a recurring doc-gardening agent; the initial AGENTS.md was written by Codex)"
+        },
+        {
+          "source_id": "every-codex-team-interview",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 236, 258, and 274 (automations that keep PRs mergeable by resolving merge conflicts, a random-file bug-finder that runs multiple times a day, and a bot that quietly fixes bugs in recently merged PRs)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--architecture-context-mgmt",
+      "approach_id": "openai-software-factory",
+      "field": "architecture.context_mgmt",
+      "text": "The /goal setting lets an agent work until a goal is complete; threads run for days and spin off other agents",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 52-56 (/goal setting; long-running threads)"
+        },
+        {
+          "source_id": "openai-harness-engineering-post",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 58 (single Codex runs 'upwards of six hours' while humans sleep; hours, not the days the article reports)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--primitives-0",
+      "approach_id": "openai-software-factory",
+      "field": "primitives.0",
+      "text": "Multiple agents, each configured as a domain specialist, review every change; the article compares this to a review by a domain expert from each relevant infrastructure team",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 155-157 (domain-specialist review agents)"
+        },
+        {
+          "source_id": "venturebeat-devday-codex",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 44 (DevDay 2025, October 2025: nearly every pull request at OpenAI is reviewed by Codex, catching hundreds of issues daily; OpenAI's own figure relayed by press)"
+        },
+        {
+          "source_id": "openai-harness-engineering-post",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 46 and 48 (Codex requests additional specific agent reviews locally and in the cloud until all agent reviewers are satisfied; 'almost all review effort' handled agent-to-agent; one repository)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--primitives-1",
+      "approach_id": "openai-software-factory",
+      "field": "primitives.1",
+      "text": "Changes are classified by risk; high-risk changes can trigger more agent reviews or a mandated human review, while opted-in low-risk areas use an agent that auto-approves pull requests",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 159 (risk classification and auto-approve)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--primitives-2",
+      "approach_id": "openai-software-factory",
+      "field": "primitives.2",
+      "text": "After a human approves production, an assigned agent handholds the change to full rollout; it decides which signals mean success or failure, builds its own monitoring dashboard, and watches production signals",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 165-175 (agentic deploy)"
+        },
+        {
+          "source_id": "hn-zbrock-internal-adoption",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, lines 12 and 16 (harness-engineering co-author: many internal teams adopted the same practices; some run centralized agent-mediated integration queues and local Codex threads that monitor CI; no self-built deploy dashboards described)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--primitives-3",
+      "approach_id": "openai-software-factory",
+      "field": "primitives.3",
+      "text": "A perf harness sends problematic pull requests to the Synthetics A/B framework to evaluate performance implications",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 153 (perf harness sends problematic PRs to the Synthetics A/B framework)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--primitives-4",
+      "approach_id": "openai-software-factory",
+      "field": "primitives.4",
+      "text": "Agents sift through alerts and dashboards, de-duplicate signals, identify real latency regressions, root-cause them, and propose fixes",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 186 (Perf Factory)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--key-metrics-0",
+      "approach_id": "openai-software-factory",
+      "field": "key_metrics.0",
+      "text": "Non-engineering orgs such as finance, recruitment, and legal went from about 0% to 90% Codex usage within a four-month period (self-reported)",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Company adoption figures relayed by an independent reporter; the four-month window carries no calendar dates. OpenAI's launch post corroborates finance-org use (month-end close reduced from days to hours) but not the 0%-to-90% trajectory.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 46 (non-engineering orgs went from ~0% to 90% usage in a four-month period)"
+        },
+        {
+          "source_id": "openai-chatgpt-work-post",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 37 (OpenAI's finance org uses ChatGPT Work for month-end close and forecasting, reduced from days to hours; corroborates non-engineering adoption, not the 0%-to-90% trajectory)"
+        }
+      ],
+      "reported_by": "OpenAI",
+      "metric_scope": "Weekly Codex use in non-engineering orgs such as finance, recruitment, and legal"
+    },
+    {
+      "id": "openai-software-factory--key-metrics-1",
+      "approach_id": "openai-software-factory",
+      "field": "key_metrics.1",
+      "text": "Some build-test-deploy systems saw about a 10x load increase within roughly six months (self-reported)",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A VP of Engineering load estimate relayed by an independent reporter.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 92 (roughly 10x load increase on some systems in about six months)"
+        }
+      ],
+      "reported_by": "OpenAI",
+      "metric_scope": "Load on build-test-deploy pipeline systems"
+    },
+    {
+      "id": "openai-software-factory--lessons-learned-0",
+      "approach_id": "openai-software-factory",
+      "field": "lessons_learned.0",
+      "text": "Longer-running /goal tasks drove adoption; one long-running agent that spins off other agents reduces the surface a person manages",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "Stated explanation by the Codex desktop lead in the reported interviews.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 52-56 (Andrew Ambrosino on long-running tasks and agents spinning off agents)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--lessons-learned-1",
+      "approach_id": "openai-software-factory",
+      "field": "lessons_learned.1",
+      "text": "Role-specific and team-specific plugins spread adoption beyond a generic coding agent",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "Stated explanation by the Codex desktop lead in the reported interviews.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 64 (role-specific and team-specific plugins are created and distributed)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--operating-models-0",
+      "approach_id": "openai-software-factory",
+      "field": "operating_models.0",
+      "text": "Level 5 for low-risk pull request -> merge in opted-in codebase areas; human attention boundary: exception-only.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The article documents agent auto-approve for low-risk pull requests in opted-in areas and risk classification that routes high-risk changes to stricter review; the run-time exception path is not described. The harness-engineering post corroborates agent automerge of low-friction pull requests in one repository but describes no risk tiering, so the routing mechanism itself stays single-sourced.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 159 (risk classification; low-risk areas can opt in to an agent that auto-approves pull requests)"
+        },
+        {
+          "source_id": "openai-harness-engineering-post",
+          "relation": "contextualizes",
+          "locator": "Preserved content.md, line 199 (background Codex tasks 'reviewed in under a minute and automerged' in one repository; no risk-tiered routing described)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--operating-models-1",
+      "approach_id": "openai-software-factory",
+      "field": "operating_models.1",
+      "text": "Level 3 for code change -> production rollout on the general path; human attention boundary: work-product-review.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "high",
+      "confidence_reason": "Pipeline step 6 states that a human approves a change to go to production before the deploy agent takes over.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 165-175 (after a human approves production, an assigned agent handholds the rollout)"
+        }
+      ]
+    },
+    {
+      "id": "openai-software-factory--operating-models-2",
+      "approach_id": "openai-software-factory",
+      "field": "operating_models.2",
+      "text": "Unclassified for production alert -> proposed performance fix; human attention boundary: unknown.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "unverified",
+      "confidence_reason": "The article documents Perf Factory only up to agents that de-duplicate signals, identify real latency regressions, root-cause them, and propose fixes; whether a human reviews, applies, or lands those proposals is not stated.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-factory-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 186 (Perf Factory proposes fixes)"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--summary",
+      "approach_id": "openai-sevbot",
+      "field": "summary",
+      "text": "OpenAI's internal incident-response agent, built on Codex. When an incident is detected, the bot wakes up, collects context, determines possible mitigations without executing any, and answers developers' questions in the incident Slack channel; an engineer can tell it to apply a chosen mitigation.",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 188-193 (pipeline step 9: respond to outages)"
+        },
+        {
+          "source_id": "crtsh-sevbot-certificates",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 13-41 (certificate table for sevbot.api.openai.com; earliest not-before 2025-11-20 at lines 37-41, with renewals through 2026-08-01; evidences a deployed OpenAI service under the Sevbot name, not its incident-response behavior)"
+        },
+        {
+          "source_id": "github-sevbot-pr",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 21-27 (initial commit '[SEVBot] Optionize initialized notification tolerance', 219a67a, 2026-03-24, authored by an OpenAI employee and co-authored by Codex; evidences internal Sevbot-branded engineering work)"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--architecture-sandbox",
+      "approach_id": "openai-sevbot",
+      "field": "architecture.sandbox",
+      "text": "unknown",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The article does not document an execution sandbox; unknown does not mean absent.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 188-195 describe Sevbot without documenting an execution sandbox"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--architecture-harness",
+      "approach_id": "openai-sevbot",
+      "field": "architecture.harness",
+      "text": "Built on top of Codex",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 188 (Sevbot is built on top of Codex)"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--architecture-model",
+      "approach_id": "openai-sevbot",
+      "field": "architecture.model",
+      "text": "unknown",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "medium",
+      "confidence_reason": "The article names no underlying models; unknown does not mean absent.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "The preserved article names no underlying models for Sevbot"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--architecture-interfaces",
+      "approach_id": "openai-sevbot",
+      "field": "architecture.interfaces",
+      "text": "slack",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 192 (it is part of the Slack channel and answers devs' questions)"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--primitives-0",
+      "approach_id": "openai-sevbot",
+      "field": "primitives.0",
+      "text": "The bot determines possible mitigations but never executes any; an engineer tells it to apply a specific mitigation",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 190-193 (mitigation bullet list)"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--lessons-learned-0",
+      "approach_id": "openai-sevbot",
+      "field": "lessons_learned.0",
+      "text": "OpenAI's stated goal is that Sevbot mitigates routine outages autonomously with humans reviewing its actions on return; as of the report, on-call duty remains",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "The stated goal and the current on-call state are reported directly.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 195 (goal of autonomous action on routine outages; oncall duty is not a thing of the past)"
+        }
+      ]
+    },
+    {
+      "id": "openai-sevbot--operating-models-0",
+      "approach_id": "openai-sevbot",
+      "field": "operating_models.0",
+      "text": "Level 3 for incident detected -> applied mitigation; human attention boundary: work-product-review.",
+      "kind": "inference",
+      "provenance": "catalog-judgment",
+      "confidence": "high",
+      "confidence_reason": "The article enumerates the boundary: Sevbot proposes mitigations and never executes any; an engineer commands the application.",
+      "valid_at": "2026-09",
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 190-193 (determines possible mitigations but never executes any; an engineer can tell it to apply a specific mitigation)"
+        }
+      ]
+    },
+    {
       "id": "plaid-ai-annotator--summary",
       "approach_id": "plaid-ai-annotator",
       "field": "summary",
-      "text": "Plaid's internal labeling agent for its own model training. AI Annotator automates large-scale labeling of anonymized transaction data, with human oversight on the labeled output. Plaid reports greater than 95% human alignment at a lower cost and time than manual labeling.",
+      "text": "Plaid's internal labeling agent for its own model training. AI Annotator automates large-scale labeling of anonymized transaction data, with targeted human validation when a product use case requires it. Plaid reports greater than 95% human alignment at a lower cost and time than manual labeling.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -7848,11 +8272,11 @@
       "id": "plaid-ai-annotator--operating-models-0",
       "approach_id": "plaid-ai-annotator",
       "field": "operating_models.0",
-      "text": "Level 3 for raw transactions → labeled training data; human attention boundary: work-product-review.",
+      "text": "Unclassified for raw transactions → labeled training data; human attention boundary: unknown.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The reported greater than 95% human alignment implies that people review the labeled output.",
+      "confidence": "unverified",
+      "confidence_reason": "The source describes targeted human validation when a product use case requires it; it does not document a person reviewing the labeled output of each run.",
       "valid_at": "2025-06",
       "evidence": [
         {
@@ -8940,7 +9364,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -8957,7 +9381,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -8974,7 +9398,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -8991,7 +9415,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9245,7 +9669,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9262,7 +9686,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9275,87 +9699,15 @@
       "id": "replit-manager-agent--operating-models-0",
       "approach_id": "replit-manager-agent",
       "field": "operating_models.0",
-      "text": "Level 3 for objective → verifiable multi-agent work product; human attention boundary: work-product-review.",
+      "text": "Level 5 for objective → verifiable multi-agent work product; human attention boundary: exception-only.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "high",
-      "confidence_reason": "The source describes autonomous parallel execution followed by human judgment on the resulting work.",
+      "confidence_reason": "The source describes the system performing and checking the work itself, with a human reviewer called in only when the agent deems it necessary and human judgment entering on escalation.",
       "valid_at": "2026",
       "evidence": [
         {
           "source_id": "replit-manager-agent-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "retool-retoolgpt--summary",
-      "approach_id": "retool-retoolgpt",
-      "field": "summary",
-      "text": "Retool's internal assistant, built as a version of ChatGPT with access to Retool's internal Confluence documents, Retool documentation, and Linear tickets. The team deployed it organization-wide in a read-only environment so the whole team could use it.",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "retool-retoolgpt-source-1",
-          "relation": "supports"
-        },
-        {
-          "source_id": "retool-retoolgpt-source-2",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "retool-retoolgpt--architecture-model",
-      "approach_id": "retool-retoolgpt",
-      "field": "architecture.model",
-      "text": "Built on ChatGPT",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "retool-retoolgpt-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "retool-retoolgpt--architecture-knowledge",
-      "approach_id": "retool-retoolgpt",
-      "field": "architecture.knowledge",
-      "text": "Retool Confluence documents, Retool documentation, and Linear tickets",
-      "kind": "fact",
-      "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
-      "valid_at": null,
-      "evidence": [
-        {
-          "source_id": "retool-retoolgpt-source-1",
-          "relation": "supports"
-        }
-      ]
-    },
-    {
-      "id": "retool-retoolgpt--operating-models-0",
-      "approach_id": "retool-retoolgpt",
-      "field": "operating_models.0",
-      "text": "Unclassified for internal question → sourced answer; human attention boundary: unknown.",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
-      "confidence": "unverified",
-      "confidence_reason": "The public evidence does not document where human attention returns in the question-and-answer flow.",
-      "valid_at": "2025-08",
-      "evidence": [
-        {
-          "source_id": "retool-retoolgpt-source-1",
           "relation": "supports"
         }
       ]
@@ -9402,16 +9754,17 @@
       "id": "salesforce-slackbot--architecture-model",
       "approach_id": "salesforce-slackbot",
       "field": "architecture.model",
-      "text": "Not specified",
+      "text": "Anthropic Claude (named via VentureBeat); additional providers planned within the year, with Google Gemini named and OpenAI possible",
       "kind": "fact",
       "provenance": "reported",
-      "confidence": "high",
-      "confidence_reason": "A linked first-party source states the claim.",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
       "valid_at": null,
       "evidence": [
         {
-          "source_id": "salesforce-slackbot-source-1",
-          "relation": "supports"
+          "source_id": "salesforce-slackbot-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 32, 34"
         }
       ]
     },
@@ -9508,7 +9861,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9525,7 +9878,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9833,10 +10186,10 @@
       "approach_id": "sentry-junior",
       "field": "lessons_learned.0",
       "text": "One general-purpose agent connected to many company systems beats several vendor-specific bots",
-      "kind": "inference",
-      "provenance": "catalog-judgment",
+      "kind": "opinion",
+      "provenance": "reported",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The author argues for one general-purpose agent from Sentry's experience; the source does not compare outcomes against several vendor bots.",
       "valid_at": null,
       "evidence": [
         {
@@ -9853,7 +10206,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9870,7 +10223,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9883,11 +10236,11 @@
       "id": "sentry-junior--lessons-learned-3",
       "approach_id": "sentry-junior",
       "field": "lessons_learned.3",
-      "text": "Unit tests are the wrong yardstick for agents; invest in evals and integration tests instead",
+      "text": "Sentry reports that agent-behavior evaluation needs evals and integration tests; deterministic components still benefit from unit tests",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The source contrasts tests for agent behavior with deterministic checks; the catalog narrows the statement so it does not dismiss unit tests for ordinary software components.",
       "valid_at": null,
       "evidence": [
         {
@@ -9904,7 +10257,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -9934,7 +10287,7 @@
       "id": "shopify-internal-agents--summary",
       "approach_id": "shopify-internal-agents",
       "field": "summary",
-      "text": "The Aquifer agent platform (session/harness/sandbox split) powers River, a Slack-native coding agent, plus research, migration, and app-security agents.",
+      "text": "The Aquifer agent platform (session/harness/sandbox split) powers River, a Slack-native coding agent, plus PR-review and headless Vanilla agent profiles; other teams have requested research, migration, and compliance-scan agents.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -10226,7 +10579,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10243,7 +10596,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10260,7 +10613,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10277,7 +10630,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10290,16 +10643,17 @@
       "id": "shopify-internal-agents--operating-models-0",
       "approach_id": "shopify-internal-agents",
       "field": "operating_models.0",
-      "text": "Level 3 for River coding request → reviewed pull request; human attention boundary: work-product-review.",
+      "text": "Unclassified for River coding request → River-opened, River-coauthored pull request; human attention boundary: unknown.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The source documents pull-request creation but does not establish outcome-only supervision.",
+      "confidence": "unverified",
+      "confidence_reason": "The source documents River-opened, River-coauthored pull requests that are later merged, but no passage establishes that a person reviews the work product on each run; PR review runs as a separate Aquifer profile and is described as often having no human in the loop.",
       "valid_at": "2026",
       "evidence": [
         {
           "source_id": "shopify-internal-agents-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 65, 83, 140"
         }
       ]
     },
@@ -10307,7 +10661,7 @@
       "id": "sierra-pinecone--summary",
       "approach_id": "sierra-pinecone",
       "field": "summary",
-      "text": "One company-wide agent that collapsed separate support, analytics, engineering, and sales agents into a single runtime with an MCP Gateway to 45 systems.",
+      "text": "One company-wide cloud agent; Sierra moved from per-employee laptop agents to one shared runtime (app server, Agency, runners) behind an MCP Gateway to 45 systems.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -10386,7 +10740,7 @@
       "id": "sierra-pinecone--architecture-model",
       "approach_id": "sierra-pinecone",
       "field": "architecture.model",
-      "text": "Claude Code + Codex; routes by intent (planning, coding, prose)",
+      "text": "Claude Code + Codex; a classifier routes by task intent to select repository, environment, harness, model, and reasoning budget",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -10592,7 +10946,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10609,7 +10963,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10630,7 +10984,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10651,7 +11005,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10903,7 +11257,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10924,7 +11278,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10945,7 +11299,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -10979,7 +11333,7 @@
       "id": "spotify-honk-xirp--summary",
       "approach_id": "spotify-honk-xirp",
       "field": "summary",
-      "text": "Honk is Spotify's background coding agent (high confidence); Xirp is the workspace/context/session layer around it (medium confidence). Honk runs on a Claude-Agent-SDK harness in Kubernetes, uses trusted CI tools, and combines formatting and linting with LLM-based diff evaluation.",
+      "text": "Honk is Spotify's background coding agent; it runs on a Claude-Agent-SDK harness in Kubernetes, uses trusted CI tools, and combines formatting and linting with LLM-based diff evaluation. Xirp is a related Spotify beta product: an agentic development environment connected to Portal for organizational context; its relationship to Honk is not documented in the captured sources.",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -11227,7 +11581,7 @@
       "id": "spotify-honk-xirp--primitives-2",
       "approach_id": "spotify-honk-xirp",
       "field": "primitives.2",
-      "text": "The session/context surface around the agent rather than an autonomous worker itself",
+      "text": "An agentic development environment connected to Portal for organizational context; its relationship to Honk is not documented in the captured sources",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -11310,7 +11664,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -11327,7 +11681,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -11344,7 +11698,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -11365,7 +11719,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -11677,7 +12031,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -11694,7 +12048,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -12041,11 +12395,11 @@
       "id": "strongdm-software-factory--operating-models-0",
       "approach_id": "strongdm-software-factory",
       "field": "operating_models.0",
-      "text": "Level 5 for natural-language seed → agents implement and validate against scenario harness → converged software; human attention boundary: exception-only.",
+      "text": "Unclassified for natural-language seed → agents implement and validate against scenario harness → converged software; human attention boundary: unknown.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "medium",
-      "confidence_reason": "The site documents zero human code-writing and review with automatic scenario validation, but not what happens when scenarios fail to converge; human authorship of seeds and scenarios sits before the run itself.",
+      "confidence": "unverified",
+      "confidence_reason": "The site documents zero human code-writing and review with automatic scenario validation, but no passage states that a person is summoned when scenarios fail to converge; what happens on non-convergence is undocumented.",
       "valid_at": "2026-09",
       "evidence": [
         {
@@ -12183,16 +12537,17 @@
       "id": "uber-coding-agent--operating-models-0",
       "approach_id": "uber-coding-agent",
       "field": "operating_models.0",
-      "text": "Unclassified for coding request → complete code change; human attention boundary: unknown.",
+      "text": "Level 3 for coding request → complete code change; human attention boundary: work-product-review.",
       "kind": "inference",
       "provenance": "catalog-judgment",
-      "confidence": "unverified",
-      "confidence_reason": "The available source reports output volume but does not document where human attention returns.",
+      "confidence": "medium",
+      "confidence_reason": "The CTO states there is zero human authoring and that engineers review and approve the agent-written code, which locates human attention at review of the work product.",
       "valid_at": "2026",
       "evidence": [
         {
           "source_id": "uber-coding-agent-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, line 26 (zero human authoring; engineers review and approve)"
         }
       ]
     },
@@ -12654,7 +13009,7 @@
       "id": "workos-project-horizon--architecture-model",
       "approach_id": "workos-project-horizon",
       "field": "architecture.model",
-      "text": "Swappable; the harness is the constant, not the model",
+      "text": "Not documented by name; the harness is the swappable layer (OpenCode in the core article, Claude Remote Routines in the showcase), and no source names the underlying model",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -12832,11 +13187,11 @@
       "id": "workos-project-horizon--lessons-learned-0",
       "approach_id": "workos-project-horizon",
       "field": "lessons_learned.0",
-      "text": "You need purpose-built agent infrastructure; a runtime you control end-to-end with lifecycle APIs and egress controls",
+      "text": "WorkOS built a controlled runtime with lifecycle APIs and egress controls for long-running code changes that use company systems",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The source ties the runtime to Horizon's long-running lifecycle, code execution, and controlled access; it does not establish that every agent workload needs a custom runtime.",
       "valid_at": null,
       "evidence": [
         {
@@ -12853,7 +13208,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -12870,7 +13225,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -12891,7 +13246,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -12908,7 +13263,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -12921,11 +13276,11 @@
       "id": "workos-project-horizon--operating-models-0",
       "approach_id": "workos-project-horizon",
       "field": "operating_models.0",
-      "text": "Level 4 for requirements and acceptance criteria → tested implementation; human attention boundary: outcome-review.",
+      "text": "Level 3 for requirements and acceptance criteria → tested implementation; human attention boundary: work-product-review.",
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "high",
-      "confidence_reason": "The source describes engineers focusing on requirements and acceptance testing while agents run the implementation loop.",
+      "confidence_reason": "The source states a human is always in the loop at PR handoff and no code merges without explicit human approval; humans also review each PM-generated issue before implementation starts.",
       "valid_at": "2026-05-06",
       "evidence": [
         {
@@ -13163,7 +13518,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -13180,7 +13535,7 @@
       "kind": "inference",
       "provenance": "catalog-judgment",
       "confidence": "medium",
-      "confidence_reason": "The catalog derives this observation from the linked sources.",
+      "confidence_reason": "The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.",
       "valid_at": null,
       "evidence": [
         {
@@ -13589,37 +13944,6 @@
       },
       "role": "evidence",
       "approach_id": "brex-agent-platform"
-    },
-    {
-      "id": "browserbase-bb-source-1",
-      "title": "How we build internal agents at Browserbase",
-      "url": "https://browserbase.com/blog/internal-agents",
-      "canonical_url": "https://browserbase.com/blog/internal-agents",
-      "kind": "engineering-blog",
-      "provenance_class": "first-party",
-      "accessed_at": "2026-08-12",
-      "last_verified_at": "2026-08-31",
-      "capture": {
-        "schema_version": 1,
-        "source_id": "browserbase-bb-source-1",
-        "original_url": "https://browserbase.com/blog/internal-agents",
-        "final_url": "https://www.browserbase.com/blog/internal-agents",
-        "captured_at": "2026-08-31T17:40:42Z",
-        "http_status": 200,
-        "tool": {
-          "name": "steel",
-          "version": "0.4.4"
-        },
-        "artifacts": {
-          "markdown": {
-            "path": "archive/sources/browserbase-bb-source-1/content.md",
-            "sha256": "sha256:dd3ad8521c55701e44595b24ddfdda6f15ed6a3d9c47b7fef4893ae8b92858e9",
-            "bytes": 21167
-          }
-        }
-      },
-      "role": "evidence",
-      "approach_id": "browserbase-bb"
     },
     {
       "id": "cloudflare-ai-stack-source-1",
@@ -14642,6 +14966,427 @@
       "approach_id": "notion-custom-agents"
     },
     {
+      "id": "openai-factory-article",
+      "title": "Inside OpenAI's agentic software factory",
+      "url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+      "canonical_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+      "kind": "news",
+      "provenance_class": "independent-secondary",
+      "role": "evidence",
+      "publisher": "The Pragmatic Engineer",
+      "authors": [
+        "Gergely Orosz"
+      ],
+      "published_at": "2026-09-15",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "openai-factory-article",
+        "original_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+        "final_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+        "captured_at": "2026-09-16T12:21:47Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/openai-factory-article/content.md",
+            "sha256": "sha256:a3705c812ee450b54a6e976a98901203f2f4f9a8415996da118ddb20f1ecef92",
+            "bytes": 22664
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "venturebeat-devday-codex",
+      "title": "The most important OpenAI announcement you probably missed at DevDay 2025",
+      "url": "https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025",
+      "canonical_url": "https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025",
+      "kind": "news",
+      "provenance_class": "independent-secondary",
+      "role": "evidence",
+      "publisher": "VentureBeat",
+      "authors": [
+        "Michael Nuñez"
+      ],
+      "published_at": "2025-10-09",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "venturebeat-devday-codex",
+        "original_url": "https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025",
+        "final_url": "https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025",
+        "captured_at": "2026-09-16T15:10:18Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/venturebeat-devday-codex/content.md",
+            "sha256": "sha256:f5c463b0be6380f11d6d9912de16213e91387db2c6359b2c25c14cc098d2e30b",
+            "bytes": 9219
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "openai-harness-engineering-post",
+      "title": "Harness engineering: leveraging Codex in an agent-first world",
+      "url": "https://openai.com/index/harness-engineering/",
+      "canonical_url": "https://openai.com/index/harness-engineering/",
+      "kind": "engineering-blog",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "OpenAI",
+      "authors": [
+        "Ryan Lopopolo"
+      ],
+      "published_at": "2026-02-11",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "openai-harness-engineering-post",
+        "original_url": "https://openai.com/index/harness-engineering/",
+        "final_url": "https://openai.com/index/harness-engineering/",
+        "captured_at": "2026-09-16T15:11:49Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/openai-harness-engineering-post/content.md",
+            "sha256": "sha256:27d44ea698136d81fea46787c9bc2847c0d45f4eb15574a2ed8ed21e637ec36d",
+            "bytes": 20859
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "hn-harness-engineering-thread",
+      "title": "Harness engineering: Leveraging Codex in an agent-first world (discussion)",
+      "url": "https://news.ycombinator.com/item?id=48416264",
+      "canonical_url": "https://news.ycombinator.com/item?id=48416264",
+      "kind": "hn-thread",
+      "provenance_class": "community",
+      "role": "commentary",
+      "publisher": "Hacker News",
+      "published_at": "2026-06-05",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "hn-harness-engineering-thread",
+        "original_url": "https://news.ycombinator.com/item?id=48416264",
+        "final_url": "https://news.ycombinator.com/item?id=48416264",
+        "captured_at": "2026-09-16T15:10:30Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/hn-harness-engineering-thread/content.md",
+            "sha256": "sha256:5110b2ca83b2215a5c3a99088026ff66fcb5339dd245918e80e40485d1f8c2fe",
+            "bytes": 107549
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "hn-zbrock-internal-prototype",
+      "title": "zbrock: the Codex app began as an internal prototype",
+      "url": "https://news.ycombinator.com/item?id=48435137",
+      "canonical_url": "https://news.ycombinator.com/item?id=48435137",
+      "kind": "hn-comment",
+      "provenance_class": "direct-participant",
+      "role": "evidence",
+      "publisher": "Hacker News",
+      "authors": [
+        "Zach Brock"
+      ],
+      "published_at": "2026-06-07",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "hn-zbrock-internal-prototype",
+        "original_url": "https://news.ycombinator.com/item?id=48435137",
+        "final_url": "https://news.ycombinator.com/item?id=48435137",
+        "captured_at": "2026-09-16T15:10:39Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/hn-zbrock-internal-prototype/content.md",
+            "sha256": "sha256:b14eb8324358af70ad6795c7e2ec21292596a5742879a09917dc2c5d60e6603d",
+            "bytes": 1117
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "hn-zbrock-internal-adoption",
+      "title": "zbrock: many internal teams adopted the same practices",
+      "url": "https://news.ycombinator.com/item?id=48435213",
+      "canonical_url": "https://news.ycombinator.com/item?id=48435213",
+      "kind": "hn-comment",
+      "provenance_class": "direct-participant",
+      "role": "evidence",
+      "publisher": "Hacker News",
+      "authors": [
+        "Zach Brock"
+      ],
+      "published_at": "2026-06-07",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "hn-zbrock-internal-adoption",
+        "original_url": "https://news.ycombinator.com/item?id=48435213",
+        "final_url": "https://news.ycombinator.com/item?id=48435213",
+        "captured_at": "2026-09-16T15:10:44Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/hn-zbrock-internal-adoption/content.md",
+            "sha256": "sha256:69d35a7d3ffafd0832b51a48aa5b5a6f87121f088b7d6896da9deb1906aacdba",
+            "bytes": 1569
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "openai-agents-api-post",
+      "title": "Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "canonical_url": "https://openai.com/index/introducing-the-agents-api/",
+      "kind": "corporate-article",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "OpenAI",
+      "published_at": "2026-09-10",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "openai-agents-api-post",
+        "original_url": "https://openai.com/index/introducing-the-agents-api/",
+        "final_url": "https://openai.com/index/introducing-the-agents-api/",
+        "captured_at": "2026-09-16T15:10:51Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/openai-agents-api-post/content.md",
+            "sha256": "sha256:f211a11e1d2b43bbc39daecb338280aff511387795ef42881f46d7e2e1471db5",
+            "bytes": 8304
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "openai-chatgpt-work-post",
+      "title": "ChatGPT is now a partner for your most ambitious work",
+      "url": "https://openai.com/index/chatgpt-for-your-most-ambitious-work/",
+      "canonical_url": "https://openai.com/index/chatgpt-for-your-most-ambitious-work/",
+      "kind": "corporate-article",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "OpenAI",
+      "published_at": "2026-09-10",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "openai-chatgpt-work-post",
+        "original_url": "https://openai.com/index/chatgpt-for-your-most-ambitious-work/",
+        "final_url": "https://openai.com/index/chatgpt-for-your-most-ambitious-work/",
+        "captured_at": "2026-09-16T15:10:56Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/openai-chatgpt-work-post/content.md",
+            "sha256": "sha256:cd2ab1a5e0e47b4d90e088fe95dad74f40024c0d90eef39ce0f2ebea697169a3",
+            "bytes": 13331
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "every-codex-team-interview",
+      "title": "Transcript: 'How OpenAI's Codex Team Uses Their Coding Agent'",
+      "url": "https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent",
+      "canonical_url": "https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent",
+      "kind": "transcript",
+      "provenance_class": "independent-secondary",
+      "role": "evidence",
+      "publisher": "Every",
+      "authors": [
+        "Thibault Sottiaux",
+        "Andrew Ambrosino",
+        "Dan Shipper"
+      ],
+      "published_at": "2026-02-18",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "every-codex-team-interview",
+        "original_url": "https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent",
+        "final_url": "https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent",
+        "captured_at": "2026-09-16T15:11:05Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/every-codex-team-interview/content.md",
+            "sha256": "sha256:88ee77d3479caf1350b928b3bd768bc62a19e7ef07652b8056f62542144369ee",
+            "bytes": 40222
+          }
+        }
+      },
+      "approach_id": "openai-software-factory"
+    },
+    {
+      "id": "openai-sevbot-article",
+      "title": "Inside OpenAI's agentic software factory",
+      "url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+      "canonical_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+      "kind": "news",
+      "provenance_class": "independent-secondary",
+      "role": "evidence",
+      "publisher": "The Pragmatic Engineer",
+      "authors": [
+        "Gergely Orosz"
+      ],
+      "published_at": "2026-09-15",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "openai-sevbot-article",
+        "original_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+        "final_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+        "captured_at": "2026-09-16T12:21:53Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/openai-sevbot-article/content.md",
+            "sha256": "sha256:6ebe65592f53faee2febcde3bbebc3a027c0d6a30b56810bca30ce2d528b1ddd",
+            "bytes": 22663
+          }
+        }
+      },
+      "approach_id": "openai-sevbot"
+    },
+    {
+      "id": "crtsh-sevbot-certificates",
+      "title": "Certificate Transparency records for sevbot.api.openai.com",
+      "url": "https://crt.sh/?q=sevbot.api.openai.com",
+      "canonical_url": "https://crt.sh/?q=sevbot.api.openai.com",
+      "kind": "other",
+      "provenance_class": "aggregator",
+      "role": "evidence",
+      "publisher": "crt.sh",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "crtsh-sevbot-certificates",
+        "original_url": "https://crt.sh/?q=sevbot.api.openai.com",
+        "final_url": "https://crt.sh/?q=sevbot.api.openai.com",
+        "captured_at": "2026-09-16T15:11:10Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/crtsh-sevbot-certificates/content.md",
+            "sha256": "sha256:12077bc72e023f48e691a14855799b7286484b322a36337b384d5ce19bfd808b",
+            "bytes": 20743
+          }
+        }
+      },
+      "approach_id": "openai-sevbot"
+    },
+    {
+      "id": "github-sevbot-pr",
+      "title": "[SEVBot] Optionize initialized notification tolerance (openai-agents-python pull 2765 commits)",
+      "url": "https://github.com/openai/openai-agents-python/pull/2765/commits",
+      "canonical_url": "https://github.com/openai/openai-agents-python/pull/2765/commits",
+      "kind": "source-code",
+      "provenance_class": "first-party",
+      "role": "evidence",
+      "publisher": "OpenAI",
+      "authors": [
+        "elainegan-openai"
+      ],
+      "published_at": "2026-03-24",
+      "accessed_at": "2026-09-16",
+      "last_verified_at": "2026-09-16",
+      "capture": {
+        "schema_version": 1,
+        "source_id": "github-sevbot-pr",
+        "original_url": "https://github.com/openai/openai-agents-python/pull/2765/commits",
+        "final_url": "https://github.com/openai/openai-agents-python/pull/2765/commits",
+        "captured_at": "2026-09-16T15:15:48Z",
+        "http_status": 200,
+        "tool": {
+          "name": "steel",
+          "version": "0.5.0-preview.5"
+        },
+        "artifacts": {
+          "markdown": {
+            "path": "archive/sources/github-sevbot-pr/content.md",
+            "sha256": "sha256:f34c82404bdc9ebb8fb1c62fda9b868a4e63d36e8be06dd9a64f7cf27a025431",
+            "bytes": 2430
+          }
+        }
+      },
+      "approach_id": "openai-sevbot"
+    },
+    {
       "id": "plaid-ai-annotator-source-1",
       "title": "AI agents at Plaid (June 2025)",
       "url": "https://plaid.com/blog/ai-agents-june-2025/",
@@ -15028,69 +15773,6 @@
       },
       "role": "evidence",
       "approach_id": "replit-manager-agent"
-    },
-    {
-      "id": "retool-retoolgpt-source-1",
-      "title": "How we built RetoolGPT",
-      "url": "https://retool.com/blog/how-we-built-retoolgpt",
-      "canonical_url": "https://retool.com/blog/how-we-built-retoolgpt",
-      "kind": "engineering-blog",
-      "provenance_class": "first-party",
-      "role": "evidence",
-      "published_at": "2025-08-05",
-      "accessed_at": "2026-08-13",
-      "last_verified_at": "2026-08-31",
-      "capture": {
-        "schema_version": 1,
-        "source_id": "retool-retoolgpt-source-1",
-        "original_url": "https://retool.com/blog/how-we-built-retoolgpt",
-        "final_url": "https://retool.com/blog/how-we-built-retoolgpt",
-        "captured_at": "2026-08-31T17:47:13Z",
-        "http_status": 200,
-        "tool": {
-          "name": "steel",
-          "version": "0.4.4"
-        },
-        "artifacts": {
-          "markdown": {
-            "path": "archive/sources/retool-retoolgpt-source-1/content.md",
-            "sha256": "sha256:ea0306fa05f826a3864b8fb86a421c31981b363440df166c5d88004a6ec27a97",
-            "bytes": 16758
-          }
-        }
-      },
-      "approach_id": "retool-retoolgpt"
-    },
-    {
-      "id": "retool-retoolgpt-source-2",
-      "title": "AI Build Week, Day 3: How we made RetoolGPT",
-      "url": "https://www.youtube.com/watch?v=8VTdYUBAZsY",
-      "canonical_url": "https://www.youtube.com/watch?v=8VTdYUBAZsY",
-      "kind": "talk",
-      "provenance_class": "first-party",
-      "role": "evidence",
-      "accessed_at": "2026-08-13",
-      "last_verified_at": "2026-08-31",
-      "capture": {
-        "schema_version": 1,
-        "source_id": "retool-retoolgpt-source-2",
-        "original_url": "https://www.youtube.com/watch?v=8VTdYUBAZsY",
-        "final_url": "https://www.youtube.com/watch?v=8VTdYUBAZsY",
-        "captured_at": "2026-08-31T17:47:24Z",
-        "http_status": 200,
-        "tool": {
-          "name": "steel",
-          "version": "0.4.4"
-        },
-        "artifacts": {
-          "markdown": {
-            "path": "archive/sources/retool-retoolgpt-source-2/content.md",
-            "sha256": "sha256:abb7d3c8ff3c0d99dfbf2d60f87d3951bdc8cdcc67e6679bb3e6dacc541db926",
-            "bytes": 1353
-          }
-        }
-      },
-      "approach_id": "retool-retoolgpt"
     },
     {
       "id": "salesforce-slackbot-source-1",
@@ -16402,21 +17084,6 @@
       }
     },
     {
-      "id": "browserbase",
-      "name": "Browserbase",
-      "homepage": "https://www.browserbase.com/",
-      "logo": {
-        "path": "logos/browserbase.svg",
-        "media_type": "image/svg+xml",
-        "width": 30,
-        "height": 30,
-        "bytes": 481,
-        "sha256": "sha256:e6d94a2a3e978b7eb2c70cbcf63c7445d0f9547dd145b9278aafa7bf836b0b89",
-        "source_url": "https://www.browserbase.com/",
-        "accessed_at": "2026-09-15"
-      }
-    },
-    {
       "id": "cloudflare",
       "name": "Cloudflare",
       "homepage": "https://www.cloudflare.com/",
@@ -16555,7 +17222,16 @@
       "id": "hubspot",
       "name": "HubSpot",
       "homepage": "https://www.hubspot.com/",
-      "logo": null
+      "logo": {
+        "path": "logos/hubspot.svg",
+        "media_type": "image/svg+xml",
+        "width": 1914,
+        "height": 543,
+        "bytes": 3298,
+        "sha256": "sha256:8928622997a5c203966d4d5e4a77826dbd913d4c9d097465f21dc0bac45d7ccc",
+        "source_url": "https://www.hubspot.com/hubfs/HubSpot_Logos/HSLogo_color.svg",
+        "accessed_at": "2026-09-16"
+      }
     },
     {
       "id": "linear",
@@ -16576,7 +17252,16 @@
       "id": "microsoft",
       "name": "Microsoft",
       "homepage": "https://www.microsoft.com/",
-      "logo": null
+      "logo": {
+        "path": "logos/microsoft.png",
+        "media_type": "image/png",
+        "width": 460,
+        "height": 460,
+        "bytes": 1669,
+        "sha256": "sha256:45b898f579d3e610f40533bf9183524bbe82c93460b37842d7fe851b55219328",
+        "source_url": "https://github.com/microsoft",
+        "accessed_at": "2026-09-16"
+      }
     },
     {
       "id": "monday-com",
@@ -16606,6 +17291,21 @@
         "sha256": "sha256:59462b4c554e9fd24059ecaedf686b9952a39ad4b73681899d8bec7128c1300b",
         "source_url": "https://www.notion.com/newsroom",
         "accessed_at": "2026-09-15"
+      }
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "homepage": "https://openai.com/",
+      "logo": {
+        "path": "logos/openai.png",
+        "media_type": "image/png",
+        "width": 200,
+        "height": 200,
+        "bytes": 4081,
+        "sha256": "sha256:6025a4347a8eaed17e31eaebf7834e33ec4af26cc7f59be586ac59ba5157fa1c",
+        "source_url": "https://github.com/openai",
+        "accessed_at": "2026-09-16"
       }
     },
     {
@@ -16669,21 +17369,6 @@
       }
     },
     {
-      "id": "retool",
-      "name": "Retool",
-      "homepage": "https://retool.com/",
-      "logo": {
-        "path": "logos/retool.svg",
-        "media_type": "image/svg+xml",
-        "width": 58,
-        "height": 61,
-        "bytes": 653,
-        "sha256": "sha256:bcb9254daa7e7fa6ef70e9a5d602e956401f3440264cb69521d2047f0e1d13d8",
-        "source_url": "https://retool.com/newsroom",
-        "accessed_at": "2026-09-15"
-      }
-    },
-    {
       "id": "salesforce",
       "name": "Salesforce",
       "homepage": "https://www.salesforce.com/",
@@ -16732,7 +17417,16 @@
       "id": "sierra",
       "name": "Sierra",
       "homepage": "https://sierra.ai/",
-      "logo": null
+      "logo": {
+        "path": "logos/sierra.svg",
+        "media_type": "image/svg+xml",
+        "width": 16,
+        "height": 16,
+        "bytes": 3339,
+        "sha256": "sha256:1d5f9a9a85bd0b769a228de2759e5180a0e586a25b31294f89ed8940271e2df4",
+        "source_url": "https://sierra.ai/icon.svg",
+        "accessed_at": "2026-09-16"
+      }
     },
     {
       "id": "slack",

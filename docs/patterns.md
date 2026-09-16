@@ -8,25 +8,24 @@ Most evidence comes from organizations that describe their own systems. Architec
 
 ## Catalog snapshot
 
-The catalog currently contains 40 approaches:
+The catalog currently contains 40 entries. These are catalog classifications, not independent deployments or industry shares:
 
 | Type | Count |
 | --- | ---: |
-| Task agent | 15 |
+| Agent | 20 |
 | Platform | 10 |
-| Background agent | 6 |
-| Agent system | 5 |
+| Agent system | 6 |
 | Orchestration system | 2 |
 | Supporting pattern | 2 |
 
-- 16 approaches document a concrete execution environment.
-- 20 approaches list Slack as an interface.
-- State duration is unknown for 34, durable-session for 4, cross-session-memory for 1, mixed for 0, and run-only for 1 approaches.
-- Autonomy is classified as drafts-reviewed for 23, human-in-loop for 8, autonomous for 4, assistive for 2, and unknown for 3 approaches.
+- 15 entries document a concrete execution environment.
+- 21 entries list Slack as an interface.
+- State duration is unknown for 25, durable-session for 7, cross-session-memory for 4, mixed for 3, and run-only for 1 approaches.
+- Autonomy is classified as drafts-reviewed for 21, human-in-loop for 9, autonomous for 5, assistive for 1, and unknown for 4 approaches.
 
 <!-- END PATTERNS SNAPSHOT -->
 
-Compare approaches of the same type and deployment stage before you draw a conclusion. A platform and a task agent have different responsibilities.
+Compare entries of the same type and deployment stage before you draw a conclusion. A platform and a narrow agent have different responsibilities.
 
 ## A common set of components
 
@@ -126,7 +125,7 @@ The catalog adapts [Dan Shapiro's five levels of AI-assisted software developmen
 
 The workflow is always the unit of assessment. For example, an autonomous pull-request approval step can use exception-only supervision without making the organization's complete software process a dark factory. Broad platforms remain unclassified when their sources do not identify one consistent attention boundary.
 
-The current sample is strongly Level 3-shaped: most documented workflows return work products, diffs, or pull requests to people for review. WorkOS Project Horizon and monday.com's Atlas/Morphex workflow are the clearest Level 4 candidates in the current evidence. PostHog StampHog reaches an exception-only boundary only within its narrowly scoped eligible-pull-request approval workflow.
+The current sample is strongly Level 3-shaped: most documented workflows return work products, diffs, or pull requests to people for review. monday.com's Atlas/Morphex workflow is the clearest Level 4 case in the current evidence. WorkOS Project Horizon returns work products for review, while PostHog StampHog reaches an exception-only boundary only within its narrowly scoped eligible-pull-request approval workflow.
 
 ## Metrics
 
@@ -146,7 +145,7 @@ The current evidence leaves several useful questions open:
 - Which controls stop a documented failure rather than a hypothetical one?
 - How much review time does generated work require?
 - Which metrics remain useful after adoption grows?
-- When does a shared platform outperform a narrow task agent?
+- When does a shared platform outperform a narrow agent?
 - Which systems were reduced or removed after deployment?
 
 Add conflicting evidence and reported failures when you find them. A complete map needs negative results as much as successful launches.

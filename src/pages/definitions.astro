@@ -8,6 +8,7 @@ import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell } from '../lib/definitions';
 import {
   ASSISTANT_REFERENCES,
+  APPROACH_TYPE_DEFINITIONS,
   DEFINITIONS_CHART,
   DEFINITIONS_DESCRIPTION,
   DEFINITIONS_EYEBROW,
@@ -16,9 +17,11 @@ import {
   DEFINITIONS_LEDE,
   DEFINITIONS_QUESTIONS,
   DEFINITIONS_SCOPE,
+  SUPERVISION_DEFINITIONS,
   DEFINITIONS_TERMS,
   DEFINITIONS_TITLE,
   DEFINITIONS_WORKFLOW,
+  INVOCATION_DEFINITIONS,
   READY_REFERENCES,
   REFERENCE_PLACEMENTS,
   inlineHref,
@@ -49,6 +52,7 @@ const workflow = DEFINITIONS_WORKFLOW;
 const chart = DEFINITIONS_CHART;
 const terms = DEFINITIONS_TERMS;
 const questions = DEFINITIONS_QUESTIONS;
+const supervision = SUPERVISION_DEFINITIONS;
 const [task, work, result] = workflow.steps;
 const [breadth, adaptation] = chart.dimensions;
 const [localFigure, cloudFigure] = terms.place.figures;
@@ -204,6 +208,33 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     </details>
     <h3>{chart.builtHeading}</h3>
     {chart.builtBody.map((block) => <p><Inline parts={block} /></p>)}
+  </section>
+  <section id="supervision">
+    <h2>{supervision.heading}</h2>
+    <p><Inline parts={supervision.intro} /></p>
+    <p><Inline parts={supervision.source} /></p>
+    <div class="classification-table" role="region" aria-label="Supervision levels" tabindex="0">
+      <table>
+        <thead><tr><th>Boundary</th><th>Level</th><th>Human attention</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          {supervision.rows.map((row) => (
+            <tr><th scope="row">{row.label}</th><td>{row.level}</td><td>{row.attention}</td><td>{row.meaning}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p><Inline parts={supervision.limits} /></p>
+    <p><Inline parts={supervision.scope} /></p>
+    <h3>Structural types</h3>
+    <p>Structural type answers what kind of system the entry describes. It is independent of how work starts.</p>
+    <dl class="term-definitions">
+      {APPROACH_TYPE_DEFINITIONS.map((item) => <div><dt>{item.label}</dt><dd>{item.meaning}</dd></div>)}
+    </dl>
+    <h3>Invocation modes</h3>
+    <p>Invocation answers how work starts or proceeds. One system can support several modes.</p>
+    <dl class="term-definitions">
+      {INVOCATION_DEFINITIONS.map((item) => <div><dt>{item.label}</dt><dd>{item.meaning}</dd></div>)}
+    </dl>
   </section>
   <section id="terminology">
     <h2>{terms.heading}</h2>

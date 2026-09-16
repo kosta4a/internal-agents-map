@@ -36,12 +36,17 @@ Optional identity fields include `aliases` and `family_id`. Use `relationships` 
 
 ### Approach types
 
-- `task-agent`: An agent that performs a bounded task.
-- `background-agent`: An agent that runs after delegation or an event.
-- `agent-system`: A set of related agents with shared infrastructure.
-- `platform`: Infrastructure that supports several agents or workflows.
-- `orchestration-system`: A system that coordinates other agents.
-- `supporting-pattern`: An implemented design that supports agent operation.
+- `agent`: One task-performing system. It may be invoked interactively, in the
+  background, on a schedule, or by an event. Internal subagents do not by themselves
+  turn an agent into an agent system.
+- `agent-system`: A documented family of related agents with shared infrastructure.
+- `platform`: Reusable infrastructure that supports several agents or workflows.
+- `orchestration-system`: A system whose primary responsibility is coordinating agents.
+- `supporting-pattern`: A narrower implemented component that enables agent operation.
+
+Classify a compound entry by its documented primary responsibility and explain its
+components. Invocation is independent of structural type; an event trigger does not
+by itself establish unattended execution.
 
 ### Autonomy values
 
@@ -72,6 +77,10 @@ The build derives the level from the attention boundary:
 
 Never render or interpret a level without its scope. Compound systems can have multiple scoped assessments. Use `unknown` rather than averaging different workflows or guessing from `autonomy`, invocation mode, output volume, or company identity.
 
+The boundary describes required human attention, not tool authority or elapsed unattended
+execution. Record permissions and publication controls in the supported claims. A Level 5
+workflow can still be unable to merge, deploy, spend, or act in production without approval.
+
 Each `operating_models.N` item is an evidence-linked inference with `catalog-judgment` provenance. Its claim metadata must include `confidence`, `confidence_reason`, and `valid_at`. The level itself is generated and is never authored as a reported company fact.
 
 ## Comparison rubric
@@ -86,6 +95,10 @@ The rubric organizes different definitions and designs. It does not determine wh
 | `evidence_strength` | `detailed-primary`, `limited-primary`, `secondary-only`, `mixed`, or `unknown`. |
 
 Evidence strength describes the available detail. It does not measure whether a claim is true. A company article can provide detailed architecture and still contain marketing claims.
+
+Structural type and invocation answer different questions. `approach_type` identifies what
+kind of system the record describes. `rubric.invocation` identifies how work starts or proceeds.
+Do not infer either field from the other, and use `unknown` when the source is silent.
 
 ## Optional description fields
 
@@ -115,7 +128,12 @@ The join runs both ways. Every `company` value in `data/agents/` must have a reg
 
 Logo files live in `public/logos/<id>.svg` or `public/logos/<id>.png`. The build rejects an SVG larger than 64 KiB and a PNG larger than 128 KiB or narrower than 128 pixels. An SVG needs a `viewBox`. It must not hold a DOCTYPE, an ENTITY declaration, a script, a `foreignObject`, an `on*` attribute, a `javascript:` value, or a non-fragment `href`. The intrinsic size comes from the `viewBox` or from the PNG header.
 
-The build derives the `companies` collection into `data/agents.json` (schema version 5) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
+The build derives the `companies` collection into `data/agents.json` (schema version 6) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
+
+Schema 6 replaces the old `task-agent` and `background-agent` approach types with
+`agent`. Consumers that used those values should filter structural type with
+`approach_type: agent` and use `rubric.invocation` to distinguish interactive,
+background, scheduled, and event-driven operation. The compact index schema is 2.
 
 ## Source records
 

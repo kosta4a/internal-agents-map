@@ -219,6 +219,7 @@ export function startDirectory(): void {
   const chips = element('chips', HTMLUListElement);
   const listbox = element('suggestions', HTMLUListElement);
   const vocabulary = readVocabulary();
+  const legacyNotice = document.getElementById('legacy-filter-notice');
 
   /** The selected facet terms, in the order they were chosen. */
   let selected: FacetTerm[] = [];
@@ -230,6 +231,7 @@ export function startDirectory(): void {
   const cardFacets = (card: HTMLElement) => ({
     work: (card.dataset.work ?? '').split(' '),
     type: (card.dataset.type ?? '').split(' '),
+    invocation: (card.dataset.invocation ?? '').split(' '),
     supervision: (card.dataset.supervision ?? '').split(' '),
   });
 
@@ -363,6 +365,7 @@ export function startDirectory(): void {
     if (input.value) url.searchParams.set('q', input.value);
     for (const term of selected) url.searchParams.append(term.key, term.id);
     if (url.href !== location.href) history.pushState(null, '', url);
+    if (legacyNotice) legacyNotice.hidden = true;
   };
 
   /** Read the state a shared or restored URL carries. Unknown values are dropped. */
@@ -370,12 +373,19 @@ export function startDirectory(): void {
     const params = new URLSearchParams(location.search);
     input.value = params.get('q') ?? '';
     selected = [];
+    let legacyBackground = false;
     for (const key of FACET_KEYS) {
       for (const id of params.getAll(key)) {
-        const term = findTerm(key, id, vocabulary);
+        const migrated = key === 'type' && id === 'task-agent' ? 'agent' : id;
+        if (key === 'type' && id === 'background-agent') {
+          legacyBackground = true;
+          continue;
+        }
+        const term = findTerm(key, migrated, vocabulary);
         if (term && !selected.some((item) => sameTerm(item, term))) selected.push(term);
       }
     }
+    if (legacyNotice) legacyNotice.hidden = !legacyBackground;
   };
 
   /** Record the current state in the address and on the page. */

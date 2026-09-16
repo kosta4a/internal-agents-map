@@ -20,12 +20,13 @@ const cards = directoryCards(catalog);
 const vocabulary = facetVocabulary(cards);
 
 describe('the facet vocabulary', () => {
-  it('holds every work, approach type, and supervision value of the cards once', () => {
+  it('holds every work, approach type, invocation, and supervision value once', () => {
     const seen = new Set(vocabulary.map((term) => `${term.key}:${term.id}`));
     expect(seen.size).toBe(vocabulary.length);
     for (const card of cards) {
       for (const domain of card.domains) expect(seen.has(`work:${domain.id}`)).toBe(true);
       expect(seen.has(`type:${card.approachType}`)).toBe(true);
+      for (const mode of card.invocation) expect(seen.has(`invocation:${mode.id}`)).toBe(true);
       for (const boundary of card.boundaries) expect(seen.has(`supervision:${boundary.id}`)).toBe(true);
     }
   });
@@ -53,7 +54,7 @@ describe('term resolution', () => {
   it('resolves an identifier, a label, or an alias regardless of case and spacing', () => {
     expect(resolveTerm('coding', vocabulary)?.id).toBe('coding');
     expect(resolveTerm('  Code Review ', vocabulary)?.id).toBe('code-review');
-    expect(resolveTerm('BACKGROUND agent', vocabulary)?.id).toBe('background-agent');
+    expect(resolveTerm('BACKGROUND', vocabulary)?.id).toBe('background');
     expect(resolveTerm('level 4', vocabulary)?.id).toBe('outcome-review');
     expect(resolveTerm('outcome review', vocabulary)?.key).toBe('supervision');
   });
@@ -105,13 +106,20 @@ describe('card matching', () => {
   });
 
   it('combines the values of one facet with OR and the facets with AND', () => {
-    const card = { work: ['coding', 'security'], type: ['task-agent'], supervision: ['outcome-review'] };
+    const card = {
+      work: ['coding', 'security'],
+      type: ['agent'],
+      invocation: ['interactive', 'background'],
+      supervision: ['outcome-review'],
+    };
     const none = toSelection([]);
     expect(matchesFacets(card, none)).toBe(true);
     expect(matchesFacets(card, { ...none, work: ['security'] })).toBe(true);
     expect(matchesFacets(card, { ...none, work: ['support', 'security'] })).toBe(true);
     expect(matchesFacets(card, { ...none, work: ['support'] })).toBe(false);
     expect(matchesFacets(card, { ...none, work: ['coding'], type: ['platform'] })).toBe(false);
+    expect(matchesFacets(card, { ...none, type: ['agent'], invocation: ['background'] })).toBe(true);
+    expect(matchesFacets(card, { ...none, type: ['agent'], invocation: ['scheduled'] })).toBe(false);
     expect(matchesFacets(card, { ...none, work: ['coding'], supervision: ['outcome-review'] })).toBe(true);
   });
 
@@ -124,6 +132,7 @@ describe('card matching', () => {
     expect(toSelection(selected)).toEqual({
       work: ['security', 'coding'],
       type: [],
+      invocation: [],
       supervision: ['outcome-review'],
     });
   });
@@ -133,6 +142,7 @@ describe('card matching', () => {
       const facets = {
         work: card.domains.map((domain) => domain.id),
         type: [card.approachType],
+        invocation: card.invocation.map((mode) => mode.id),
         supervision: card.boundaries.map((boundary) => boundary.id),
       };
       const selection = toSelection([

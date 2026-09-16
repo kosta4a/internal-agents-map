@@ -7,6 +7,7 @@ summary: DoorDash changed how its agents divide a code review. Each design expos
 readingTime: 2 min read
 order: 3
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - doordash-code-review
 sources:
@@ -20,11 +21,11 @@ sources:
 
 ## What DoorDash reports
 
-DoorDash first used specialist reviewers. They found local errors but missed problems across system boundaries.
+DoorDash first used specialist reviewers. They found local errors but missed problems across system boundaries because no reviewer held the wider change context.
 
-The next design used two reviewers with broader context. Each had too much to check, and some findings were lost.
+The next design gave two reviewers broader context and broad responsibilities. Each had too much to check, and some findings were lost.
 
-The third design added a scout. It identifies possible issues. Two reviewers then investigate those issues. [[1]](#source-doordash)
+The third design added a scout. It passes candidate issues and supporting context to two reviewers. The reviewers own investigation and verification; the scout does not. [[1]](#source-doordash)
 
 <blockquote cite="https://careersatdoordash.com/blog/doordash-built-an-ai-code-reviewer-engineers-actually-listen-to/"><p>“The lead scout's job isn't to verify anything.”</p></blockquote>
 
@@ -47,11 +48,11 @@ The third design added a scout. It identifies possible issues. Two reviewers the
 
 ## Each role needs a clear result
 
-A possible issue and a verified issue are different results. Separate roles can make that difference explicit.
+A candidate issue and a verified issue are different work products. Separate roles can make the handoff and responsibility explicit.
 
 This design may help when a broad search precedes a detailed check. It may add unnecessary work when one agent can complete both steps.
 
-This is one team’s report. It does not prove that three agents are better than two.
+The version sequence reports design changes, not a controlled comparison. It does not measure whether the third design improved review quality or cost.
 
 <p class="note-question"><strong>A question for your build</strong>What must each agent produce before the next agent can use its result?</p>
 

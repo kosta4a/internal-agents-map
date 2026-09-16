@@ -34,6 +34,8 @@ ADOPTION_LESSONS = ROOT / "docs" / "adoption-lessons.md"
 DATA_JSON = ROOT / "data" / "agents.json"
 OVERVIEW_BEGIN = "<!-- BEGIN OVERVIEW -->"
 OVERVIEW_END = "<!-- END OVERVIEW -->"
+README_FINDINGS_BEGIN = "<!-- BEGIN README FINDINGS -->"
+README_FINDINGS_END = "<!-- END README FINDINGS -->"
 PATTERNS_SNAPSHOT_BEGIN = "<!-- BEGIN PATTERNS SNAPSHOT -->"
 PATTERNS_SNAPSHOT_END = "<!-- END PATTERNS SNAPSHOT -->"
 ADOPTION_SNAPSHOT_BEGIN = "<!-- BEGIN ADOPTION SNAPSHOT -->"
@@ -111,8 +113,7 @@ CLAIM_METADATA_FIELDS = {
 AUTONOMY = {"assistive", "human-in-loop", "drafts-reviewed", "autonomous", "unknown"}
 STATUS = {"internal", "open-sourced", "commercialized", "mixed"}
 APPROACH_TYPES = {
-    "task-agent",
-    "background-agent",
+    "agent",
     "agent-system",
     "platform",
     "orchestration-system",
@@ -1129,38 +1130,94 @@ def documented_environment(value: Any) -> bool:
     )
 
 
+def catalog_statistics(records: list[dict]) -> dict[str, Any]:
+    """Return the shared entry and scoped-workflow counts used by generated summaries."""
+    operating_models = [model for record in records for model in record["operating_models"]]
+    return {
+        "entries": len(records),
+        "approach_types": Counter(record["approach_type"] for record in records),
+        "autonomy": Counter(record["autonomy"] for record in records),
+        "state": Counter(record["rubric"]["state"] for record in records),
+        "attention_boundaries": Counter(model["attention_boundary"] for model in operating_models),
+        "operating_models": len(operating_models),
+        "multi_workflow_entries": sum(len(record["operating_models"]) > 1 for record in records),
+        "supporting_entries": sum(
+            record["approach_type"] in {"platform", "supporting-pattern"} for record in records
+        ),
+        "slack": sum(
+            "slack" in ((record.get("architecture") or {}).get("interfaces") or [])
+            for record in records
+        ),
+        "sandbox": sum(
+            documented_environment((record.get("architecture") or {}).get("sandbox"))
+            for record in records
+        ),
+    }
+
+
+def render_readme_findings(records: list[dict]) -> str:
+    stats = catalog_statistics(records)
+    autonomy = stats["autonomy"]
+    boundaries = stats["attention_boundaries"]
+    return "\n".join(
+        [
+            README_FINDINGS_BEGIN,
+            "",
+            "## What the current map shows",
+            "",
+            f"These counts classify {stats['entries']} catalog entries. A platform and one of its "
+            "components can both appear, so the entries are not independent deployments, shares "
+            "of industry practice, or counts of successful runs.",
+            "",
+            "Entry autonomy is classified as "
+            f"{autonomy['drafts-reviewed']} drafts-reviewed, "
+            f"{autonomy['human-in-loop']} human-in-loop, "
+            f"{autonomy['autonomous']} autonomous, {autonomy['assistive']} assistive, and "
+            f"{autonomy['unknown']} unknown. Human-in-loop includes approval checkpoints; it does "
+            "not mean a person continuously steers the whole run.",
+            "",
+            f"The catalog contains {stats['operating_models']} scoped supervision assessments "
+            f"across those entries, including {boundaries['continuous-steering']} continuous-steering, "
+            f"{boundaries['work-product-review']} work-product-review, "
+            f"{boundaries['outcome-review']} outcome-review, {boundaries['exception-only']} "
+            f"exception-only, and {boundaries['unknown']} unknown assessments. "
+            f"{stats['multi_workflow_entries']} entries have more than one assessed workflow; the "
+            "counts therefore do not assign one level to each company.",
+            "",
+            f"{stats['supporting_entries']} entries are platforms or supporting patterns. State "
+            f"duration is undocumented for {stats['state']['unknown']} entries. Review cost, failure "
+            "rates, and retired systems remain rarely reported.",
+            "",
+            README_FINDINGS_END,
+        ]
+    )
+
+
 def render_patterns_snapshot(records: list[dict]) -> str:
     approach_labels = {
-        "task-agent": "Task agent",
+        "agent": "Agent",
         "platform": "Platform",
-        "background-agent": "Background agent",
         "agent-system": "Agent system",
         "orchestration-system": "Orchestration system",
         "supporting-pattern": "Supporting pattern",
     }
-    approach_counts = Counter(record["approach_type"] for record in records)
-    autonomy_counts = Counter(record["autonomy"] for record in records)
-    state_counts = Counter(record["rubric"]["state"] for record in records)
-    slack_count = sum(
-        "slack" in ((record.get("architecture") or {}).get("interfaces") or [])
-        for record in records
-    )
-    sandbox_count = sum(
-        documented_environment((record.get("architecture") or {}).get("sandbox"))
-        for record in records
-    )
+    stats = catalog_statistics(records)
+    approach_counts = stats["approach_types"]
+    autonomy_counts = stats["autonomy"]
+    state_counts = stats["state"]
     return "\n".join(
         [
             PATTERNS_SNAPSHOT_BEGIN,
             "",
             "## Catalog snapshot",
             "",
-            f"The catalog currently contains {len(records)} approaches:",
+            f"The catalog currently contains {stats['entries']} entries. These are catalog "
+            "classifications, not independent deployments or industry shares:",
             "",
             count_table(approach_counts, approach_labels),
             "",
-            f"- {sandbox_count} approaches document a concrete execution environment.",
-            f"- {slack_count} approaches list Slack as an interface.",
+            f"- {stats['sandbox']} entries document a concrete execution environment.",
+            f"- {stats['slack']} entries list Slack as an interface.",
             "- State duration is "
             f"unknown for {state_counts['unknown']}, durable-session for "
             f"{state_counts['durable-session']}, cross-session-memory for "
@@ -1178,21 +1235,19 @@ def render_patterns_snapshot(records: list[dict]) -> str:
 
 
 def render_adoption_snapshot(records: list[dict]) -> str:
-    autonomy_counts = Counter(record["autonomy"] for record in records)
-    slack_count = sum(
-        "slack" in ((record.get("architecture") or {}).get("interfaces") or [])
-        for record in records
-    )
+    stats = catalog_statistics(records)
+    autonomy_counts = stats["autonomy"]
     return "\n".join(
         [
             ADOPTION_SNAPSHOT_BEGIN,
             "",
             "## Catalog snapshot",
             "",
-            f"These observations draw on {len(records)} cataloged approaches. "
-            "The evidence is uneven, and most sources are company reports.",
+            f"These observations draw on {stats['entries']} catalog entries. The entry is the "
+            "counting unit; platforms and components can both appear. The evidence is uneven, "
+            "and most sources are company reports.",
             "",
-            f"{slack_count} approaches list Slack as an interface. The autonomy distribution is "
+            f"{stats['slack']} entries list Slack as an interface. The entry autonomy distribution is "
             f"{autonomy_counts['drafts-reviewed']} `drafts-reviewed`, "
             f"{autonomy_counts['human-in-loop']} `human-in-loop`, "
             f"{autonomy_counts['autonomous']} `autonomous`, "
@@ -1399,7 +1454,7 @@ def normalize(records: list[dict], companies: list[dict]) -> dict:
                 normalized_source["capture"] = manifest
             sources.append(normalized_source)
     return {
-        "schema_version": 5,
+        "schema_version": 6,
         "approaches": approaches,
         "claims": claims,
         "sources": sources,
@@ -1424,7 +1479,17 @@ def data_outputs(records: list[dict], catalog: dict) -> dict[Path, str | bytes]:
     adoption_lessons = ADOPTION_LESSONS.read_text(encoding="utf-8")
     return {
         README: replace_between_markers(
-            readme, OVERVIEW_BEGIN, OVERVIEW_END, render_overview(records, catalog), "README.md"
+            replace_between_markers(
+                readme,
+                OVERVIEW_BEGIN,
+                OVERVIEW_END,
+                render_overview(records, catalog),
+                "README.md",
+            ),
+            README_FINDINGS_BEGIN,
+            README_FINDINGS_END,
+            render_readme_findings(records),
+            "README.md",
         ),
         PATTERNS: replace_between_markers(
             patterns,

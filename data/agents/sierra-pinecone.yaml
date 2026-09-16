@@ -1,13 +1,13 @@
 id: sierra-pinecone
 company: Sierra
 agent_name: Pinecone
-approach_type: task-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: sierra-pinecone-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - coding
@@ -23,17 +23,19 @@ rubric:
   invocation:
   - event-driven
   - interactive
+  - scheduled
   state: durable-session
-  identity: unknown
+  identity: mixed
   evidence_strength: detailed-primary
-summary: One company-wide agent that collapsed separate support, analytics, engineering, and sales agents into a
-  single runtime with an MCP Gateway to 45 systems.
+summary: One company-wide cloud agent; Sierra moved from per-employee laptop agents to one shared runtime (app
+  server, Agency, runners) behind an MCP Gateway to 45 systems.
 headline_metric: More than 75,000 sessions created by 600 people in the month preceding the report
 architecture:
   sandbox: Agency layer reconciles recoverable Kubernetes runners; conversation/events/checkpoints stay durable
     separately
   harness: App server + Agency + runners; intent-based model/environment routing (Claude Code + Codex)
-  model: Claude Code + Codex; routes by intent (planning, coding, prose)
+  model: Claude Code + Codex; a classifier routes by task intent to select repository, environment, harness, model,
+    and reasoning budget
   interfaces:
   - slack
   - web
@@ -180,22 +182,22 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   headline_metric:
     metric_scope: Pinecone users and sessions in the month preceding the report; calendar month unspecified
   key_metrics.0:

@@ -1,13 +1,13 @@
 id: sentry-junior
 company: Sentry
 agent_name: Junior
-approach_type: task-agent
+approach_type: agent
 deployment_stage: deployed
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: sentry-junior-source-2
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: open-sourced
 domains:
 - coding
@@ -22,7 +22,7 @@ rubric:
   invocation:
   - event-driven
   - interactive
-  state: unknown
+  state: durable-session
   identity: unknown
   evidence_strength: detailed-primary
 summary: An open-source Slack agent built at Sentry that acts like an intern; takes tasks, retrieves context across
@@ -60,7 +60,7 @@ lessons_learned:
 - One general-purpose agent connected to many company systems beats several vendor-specific bots
 - Skills-as-runbooks encode operational knowledge the agent can follow
 - Stateless compute fights you; serverless functions time out and disappear; model the agent around interrupt/resume
-- Unit tests are the wrong yardstick for agents; invest in evals and integration tests instead
+- Sentry reports that agent-behavior evaluation needs evals and integration tests; deterministic components still benefit from unit tests
 - Writes need per-user authorization, not blanket trust
 sources:
 - id: sentry-junior-source-1
@@ -186,30 +186,30 @@ claim_metadata:
     confidence_reason: The source explicitly describes humans steering and reviewing the agent throughout its work.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The author argues for one general-purpose agent from Sentry's experience; the source does not compare outcomes against several vendor bots.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The source contrasts tests for agent behavior with deterministic checks; the catalog narrows the statement so it does not dismiss unit tests for ordinary software components.
   lessons_learned.4:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
   headline_metric:
     metric_scope: Junior codebase size and license in the author report
   key_metrics.0:

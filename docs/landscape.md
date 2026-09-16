@@ -11,45 +11,45 @@ The L2-L5 labels adapt [Dan Shapiro's five levels of AI-assisted software develo
 | Company | Approach | Type | Domains | Operating model | Autonomy | Stage | Status | Year |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Airbnb | [Airchat (airchat-cli)](#airbnb-airchat) | platform | coding, code-review | L3 · coding task → reviewed pull request | drafts-reviewed | scaled | internal | 2025 |
-| Atlassian | [Rovo Dev (RovoDev)](#atlassian-rovo-dev) | task-agent | coding, code-review | L3 · Jira issue → reviewed pull request | human-in-loop | scaled | commercialized | 2024 |
+| Atlassian | [Rovo Dev (RovoDev)](#atlassian-rovo-dev) | agent | coding, code-review | L3 · Jira issue → reviewed pull request | human-in-loop | scaled | commercialized | 2024 |
 | Block | [Builderbot](#block-builderbot) | orchestration-system | coding, code-review | L3 · ticket → reviewed pull request | drafts-reviewed | scaled | internal | 2026 |
-| Brex | [Internal Agent Platform](#brex-agent-platform) | platform | finance-ops, support, customer-success | L2 · internal operations request → completed operation | human-in-loop | scaled | internal | 2025 |
-| Browserbase | [bb](#browserbase-bb) | task-agent | coding, code-review, support, customer-success, research | L3 · coding request → reviewed pull request | drafts-reviewed | deployed | internal | 2026 |
-| Cloudflare | [Internal AI engineering stack](#cloudflare-ai-stack) | platform | coding, code-review | L3 · pull request → AI review findings | drafts-reviewed | scaled | internal | 2026 |
-| Coinbase | [Forge / Mux](#coinbase-forge-mux) | agent-system | coding, code-review | L3 · Slack, GitHub, or Linear request → reviewed pull request and build | drafts-reviewed | scaled | internal | 2026 |
+| Brex | [Internal Agent Platform](#brex-agent-platform) | platform | finance-ops, support, customer-success | L5 · high-confidence operations case (support first touch, fraud recommendation) → automated completion; low-confidence remainder → analyst review<br>L3 · KYC application → completed verification steps<br>L3 · collections follow-up interaction → drafted response options the servicing team selects, customizes, or sends | human-in-loop | scaled | internal | 2025 |
+| Cloudflare | [Internal AI engineering stack](#cloudflare-ai-stack) | platform | coding, code-review | Unknown · pull request → automated AI review findings posted as advisory comments<br>L3 · AGENTS.md generation → merge request the owning team reviews and refines | drafts-reviewed | scaled | internal | 2026 |
+| Coinbase | [Forge / Mux](#coinbase-forge-mux) | agent-system | coding, code-review | L3 · Slack, GitHub, or Linear request → drafted fix and pull request pushed back for review | drafts-reviewed | scaled | internal | 2026 |
 | Databricks | [coSTAR and internal engineering agents](#databricks-costar) | agent-system | coding, code-review, on-call | Unknown · internal engineering workflows → agent-produced changes | unknown | scaled | internal | 2025 |
-| Domu | [Clementino](#domu-clementino) | task-agent | support, finance-ops, coding, recruitment, customer-success | L3 · employee request → approved customer-impacting action | human-in-loop | deployed | internal | 2026 |
-| DoorDash | [AI Code Review Agent](#doordash-code-review) | background-agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2026 |
+| Domu | [Clementino](#domu-clementino) | agent | support, finance-ops, coding, recruitment, customer-success | L3 · employee request → approved customer-impacting action<br>L2 · individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting long emails)<br>Unknown · scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion) | human-in-loop | deployed | internal | 2026 |
+| DoorDash | [AI Code Review Agent](#doordash-code-review) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2026 |
 | DoorDash | [Flux / Agentic AI Platform](#doordash-flux) | platform | code-review, coding, ci-triage, on-call, maintenance, data | L3 · engineering task → reviewed agent output | drafts-reviewed | scaled | internal | 2025 |
 | Dropbox | [Nova](#dropbox-nova) | platform | coding, ci-triage, on-call, maintenance | Unknown · agent-assisted SDLC workflow → accepted change | human-in-loop | scaled | internal | 2026 |
-| Flex | [AI Investigation Agent](#flex-investigation-agent) | task-agent | finance-ops, on-call, coding | L3 · payment investigation → proposed code fix | drafts-reviewed | deployed | internal | 2026 |
-| GitHub | [Qubot](#github-qubot) | task-agent | data | Unknown · data question → warehouse answer | assistive | scaled | internal | 2026 |
-| Harvey | [Spectre](#harvey-spectre) | platform | coding, code-review, on-call, security | L3 · incident or request → reviewable diff or pull request | drafts-reviewed | deployed | internal | 2026 |
-| HubSpot | [Sidekick](#hubspot-sidekick) | task-agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2026 |
-| Linear | [Linear Agent](#linear-agent) | task-agent | support, customer-success, coding | L3 · assigned coding work → agent-created change | drafts-reviewed | scaled | commercialized | 2026 |
-| Microsoft | [PRAssistant](#microsoft-prassistant) | background-agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2025 |
+| Flex | [AI Investigation Agent](#flex-investigation-agent) | agent | finance-ops, on-call, coding | L3 · payment investigation → proposed code fix | drafts-reviewed | deployed | internal | 2026 |
+| GitHub | [Qubot](#github-qubot) | agent | data | Unknown · data question → warehouse answer | assistive | scaled | internal | 2026 |
+| Harvey | [Spectre](#harvey-spectre) | platform | coding, code-review, on-call, security | L3 · request from Slack, the web app, or an automation → reviewable diff or pull request | drafts-reviewed | deployed | internal | 2026 |
+| HubSpot | [Sidekick](#hubspot-sidekick) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2026 |
+| Linear | [Linear Agent](#linear-agent) | agent | support, customer-success, coding | L3 · assigned coding work → agent-created change | drafts-reviewed | scaled | commercialized | 2026 |
+| Microsoft | [PRAssistant](#microsoft-prassistant) | agent | code-review | L3 · pull request → AI review comments | drafts-reviewed | scaled | internal | 2025 |
 | monday.com | [Sphera / Atlas / Morphex](#monday-sphera-atlas-morphex) | agent-system | coding, code-review | L4 · Atlas or Morphex feature task → tested and merged pull request | autonomous | scaled | internal | 2026 |
 | Notion | [Custom Agents](#notion-custom-agents) | platform | support, finance-ops, recruitment, security | Unknown · cross-team internal tasks → Custom Agents output | unknown | scaled | internal | 2026 |
-| Plaid | [AI Annotator](#plaid-ai-annotator) | task-agent | data | L3 · raw transactions → labeled training data | drafts-reviewed | scaled | internal | 2025 |
-| Plaid | [Fix My Connection](#plaid-fix-my-connection) | task-agent | ops, maintenance | L4 · integration degradation → repaired connection | autonomous | scaled | internal | 2025 |
+| OpenAI | [Agentic software factory](#openai-software-factory) | agent-system | coding, code-review, ci-triage, ops | L5 · low-risk pull request -> merge in opted-in codebase areas<br>L3 · code change -> production rollout on the general path<br>Unknown · production alert -> proposed performance fix | human-in-loop | scaled | internal | 2026 |
+| OpenAI | [Sevbot](#openai-sevbot) | agent | on-call | L3 · incident detected -> applied mitigation | drafts-reviewed | deployed | internal | 2026 |
+| Plaid | [AI Annotator](#plaid-ai-annotator) | agent | data | Unknown · raw transactions → labeled training data | unknown | scaled | internal | 2025 |
+| Plaid | [Fix My Connection](#plaid-fix-my-connection) | agent | ops, maintenance | L4 · integration degradation → repaired connection | autonomous | scaled | internal | 2025 |
 | Plaid | [Internal MCP server](#plaid-internal-mcp-server) | supporting-pattern | coding | Unknown · engineer request → internal tool access | unknown | scaled | internal | 2025 |
-| PostHog | [StampHog](#posthog-stamphog) | background-agent | code-review | L5 · eligible pull request → approval decision | autonomous | scaled | open-sourced | 2026 |
-| Ramp | [Inspect](#ramp-inspect) | background-agent | coding, code-review, on-call | L3 · Inspect coding task → reviewed production merge | drafts-reviewed | scaled | internal | 2026 |
-| Replit | [Manager agent (agent-of-agents)](#replit-manager-agent) | orchestration-system | coding, code-review, support, research, data | L3 · objective → verifiable multi-agent work product | drafts-reviewed | scaled | internal | 2026 |
-| Retool | [RetoolGPT](#retool-retoolgpt) | task-agent | support, coding | Unknown · internal question → sourced answer | assistive | deployed | internal | 2025 |
-| Salesforce | [Slackbot](#salesforce-slackbot) | task-agent | support, customer-success, ops | L3 · employee request → drafted work | drafts-reviewed | scaled | commercialized | 2025 |
-| Sentry | [Junior](#sentry-junior) | task-agent | coding, code-review, support, on-call | L2 · assigned task → human-steered and reviewed output | human-in-loop | deployed | open-sourced | 2026 |
-| Shopify | [Aquifer / River](#shopify-internal-agents) | platform | coding, code-review, research, security | L3 · River coding request → reviewed pull request | drafts-reviewed | scaled | internal | 2026 |
-| Sierra | [Pinecone](#sierra-pinecone) | task-agent | coding, code-review, support, research, data | L3 · employee request → reviewed agent output | drafts-reviewed | scaled | internal | 2026 |
+| PostHog | [StampHog](#posthog-stamphog) | agent | code-review | L5 · eligible pull request → approval decision | autonomous | scaled | open-sourced | 2026 |
+| Ramp | [Inspect](#ramp-inspect) | agent | coding, code-review, on-call | L3 · Inspect coding task → reviewed production merge | drafts-reviewed | scaled | internal | 2026 |
+| Replit | [Manager agent (agent-of-agents)](#replit-manager-agent) | orchestration-system | coding, code-review, support, research, data | L5 · objective → verifiable multi-agent work product | autonomous | scaled | internal | 2026 |
+| Salesforce | [Slackbot](#salesforce-slackbot) | agent | support, customer-success, ops | L3 · employee request → drafted work | drafts-reviewed | scaled | commercialized | 2025 |
+| Sentry | [Junior](#sentry-junior) | agent | coding, code-review, support, on-call | L2 · assigned task → human-steered and reviewed output | human-in-loop | deployed | open-sourced | 2026 |
+| Shopify | [Aquifer / River](#shopify-internal-agents) | platform | coding, code-review | Unknown · River coding request → River-opened, River-coauthored pull request | drafts-reviewed | scaled | internal | 2026 |
+| Sierra | [Pinecone](#sierra-pinecone) | agent | coding, code-review, support, research, data | L3 · employee request → reviewed agent output | drafts-reviewed | scaled | internal | 2026 |
 | Slack | [Multi-agent context system](#slack-context-system) | supporting-pattern | research | Unknown · long-running investigation → synthesized report | human-in-loop | research | internal | 2026 |
 | Spotify | [Honk / Xirp](#spotify-honk-xirp) | agent-system | coding, migrations, code-review | L3 · Honk coding task → verified pull request | drafts-reviewed | scaled | mixed | 2025 |
-| Stripe | [Minions](#stripe-minions) | background-agent | coding, code-review | L3 · work context → merge-ready pull request | drafts-reviewed | scaled | internal | 2026 |
-| StrongDM | [Software Factory](#strongdm-software-factory) | agent-system | coding | L5 · natural-language seed → agents implement and validate against scenario harness → converged software | autonomous | deployed | mixed | 2026 |
-| Uber | [Internal coding agent (unnamed)](#uber-coding-agent) | task-agent | coding | Unknown · coding request → complete code change | drafts-reviewed | deployed | internal | 2026 |
-| Uber | [uReview](#uber-ureview) | background-agent | code-review | L3 · pull request → filtered AI review findings | drafts-reviewed | scaled | internal | 2025 |
-| WorkOS | [Project Horizon](#workos-project-horizon) | platform | coding, code-review, security | L4 · requirements and acceptance criteria → tested implementation | drafts-reviewed | deployed | internal | 2026 |
+| Stripe | [Minions](#stripe-minions) | agent | coding, code-review | L3 · work context → merge-ready pull request | drafts-reviewed | scaled | internal | 2026 |
+| StrongDM | [Software Factory](#strongdm-software-factory) | agent-system | coding | Unknown · natural-language seed → agents implement and validate against scenario harness → converged software | autonomous | deployed | mixed | 2026 |
+| Uber | [Internal coding agent (unnamed)](#uber-coding-agent) | agent | coding | L3 · coding request → complete code change | drafts-reviewed | deployed | internal | 2026 |
+| Uber | [uReview](#uber-ureview) | agent | code-review | L3 · pull request → filtered AI review findings | drafts-reviewed | scaled | internal | 2025 |
+| WorkOS | [Project Horizon](#workos-project-horizon) | platform | coding, code-review, security | L3 · requirements and acceptance criteria → tested implementation | drafts-reviewed | deployed | internal | 2026 |
 | Y Combinator | [Internal agent infrastructure](#ycombinator-agent-infra) | platform | coding, ops | Unknown · internal request → agent-assisted organizational work | human-in-loop | deployed | internal | 2026 |
-| Zup | [CodeGen](#zup-codegen) | task-agent | coding | L2 · constrained coding task → human-supervised edit | human-in-loop | research | internal | 2026 |
+| Zup | [CodeGen](#zup-codegen) | agent | coding | L2 · constrained coding task → human-supervised edit | human-in-loop | research | internal | 2026 |
 
 ## Terms and rubric
 
@@ -65,7 +65,7 @@ Operating levels are generated from scoped, evidence-backed human-attention boun
 
 ## Airbnb: Airchat (airchat-cli)
 
-> Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding agents such as Claude Code. The team first built its own orchestrator from scratch, never shipped it, and delegated to Airchat with a thin shim instead. <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2), [airbnb-airchat-source-3](#airbnb-airchat-source-3); Context: [airbnb-airchat-source-1](#airbnb-airchat-source-1).</small>
+> Airchat is Airbnb's internal agentic-coding harness, built by its Dev AI team as a wrapper over vendor coding agents such as Claude Code and Codex. The team first built its own orchestrator from scratch, never shipped it, and delegated to Airchat with a thin shim instead. <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2), [airbnb-airchat-source-3](#airbnb-airchat-source-3); Context: [airbnb-airchat-source-1](#airbnb-airchat-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -84,12 +84,12 @@ Operating levels are generated from scoped, evidence-backed human-attention boun
 
 ### Operating model
 
-- **Level 3 · work-product-review** — coding task → reviewed pull request (medium confidence; 2025) <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- **Level 3 · work-product-review** — coding task → reviewed pull request (medium confidence; 2025) <small>Sources: [airbnb-airchat-source-3](#airbnb-airchat-source-3); Context: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
 
 ### Architecture
 
-- Harness: Wrapper over Claude Code with a unified gateway, an internal plugin marketplace, and AirDev parallel workspaces <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
-- Model: Claude Code (a vendor agent), wrapped by Airbnb <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Harness: Wrapper over vendor coding agents with a unified gateway, an internal plugin marketplace, and AirDev parallel workspaces <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Model: Vendor coding agents (Claude Code and Codex are named in use), wrapped by Airbnb <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
 - Tool access: More than a dozen internal MCP servers connect agents to internal systems <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
 
 ### Reported metrics
@@ -102,7 +102,7 @@ Operating levels are generated from scoped, evidence-backed human-attention boun
 - <a id="airbnb-airchat-source-2"></a>[Beyond the CLI (DX podcast)](https://getdx.com/podcast/beyond-the-cli-agentic-ai-for-async-workloads-and-non-developers/) ([snapshot](../archive/sources/airbnb-airchat-source-2/content.md), captured 2026-08-31) (podcast; direct-participant; evidence)
 - <a id="airbnb-airchat-source-3"></a>[How to get your team past the AI (The AI Thinker)](https://www.theaithinker.com/p/how-to-get-your-team-past-the-ai) ([snapshot](../archive/sources/airbnb-airchat-source-3/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -114,7 +114,7 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2024-11 |
 | Deployment stage | scaled |
 | Availability | commercialized |
@@ -147,7 +147,7 @@ Last reviewed: 2026-09-15.
 - <a id="atlassian-rovo-dev-source-2"></a>[Developer productivity improved with Rovo Dev](https://www.atlassian.com/blog/atlassian-engineering/developer-productivity-improved-with-rovo-dev) ([snapshot](../archive/sources/atlassian-rovo-dev-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="atlassian-rovo-dev-source-3"></a>[HULA: Human-in-the-loop software development agents (arXiv 2411.12924)](https://arxiv.org/abs/2411.12924) ([snapshot](../archive/sources/atlassian-rovo-dev-source-3/content.md), captured 2026-08-31) (paper; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -210,7 +210,7 @@ Last reviewed: 2026-09-15.
 - <a id="block-builderbot-source-4"></a>[Hacker News discussion of the Builderbot announcement](https://news.ycombinator.com/item?id=48618973) ([snapshot](../archive/sources/block-builderbot-source-4/content.md), captured 2026-08-31) (hn-thread; community; commentary)
 - <a id="block-builderbot-source-5"></a>[Hacker News comment that points to the Builderbot repository](https://news.ycombinator.com/item?id=48619052) ([snapshot](../archive/sources/block-builderbot-source-5/content.md), captured 2026-08-31) (hn-comment; community; discovery)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -227,9 +227,9 @@ Last reviewed: 2026-09-09.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | finance-ops, support, customer-success |
-| Operating model | L2 · internal operations request → completed operation |
+| Operating model | L5 · high-confidence operations case (support first touch, fraud recommendation) → automated completion; low-confidence remainder → analyst review<br>L3 · KYC application → completed verification steps<br>L3 · collections follow-up interaction → drafted response options the servicing team selects, customizes, or sends |
 | Autonomy | human-in-loop |
-| Invocation | interactive |
+| Invocation | interactive, event-driven |
 | State | unknown |
 | Identity | unknown |
 | Evidence | secondary-only |
@@ -237,13 +237,15 @@ Last reviewed: 2026-09-09.
 
 ### Operating model
 
-- **Level 2 · continuous-steering** — internal operations request → completed operation (medium confidence; 2025-09-25) <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- **Level 5 · exception-only** — high-confidence operations case (support first touch, fraud recommendation) → automated completion; low-confidence remainder → analyst review (medium confidence; 2025-09-25) <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- **Level 3 · work-product-review** — KYC application → completed verification steps (low confidence; 2025-09-25) <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1); Context: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- **Level 3 · work-product-review** — collections follow-up interaction → drafted response options the servicing team selects, customizes, or sends (medium confidence; 2025-09-25) <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 
 ### Architecture
 
 - Sandbox: Retool-hosted runtime (no bespoke execution env described) <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 - Harness: Retool-based builder with prompt management and multi-model testing/evaluation; built by a ~25-person systems-engineering team <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
-- Model: Multi-model <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- Model: Not documented for deployed agents; the platform provides multi-model testing and evaluation at build time <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 - Interfaces: slack, internal-ui <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 - Tool access: An MCP server exposes external product features to the internal platform; new product tools become internally available immediately; invoked via Slack /c1 <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 - Knowledge: Standard operating procedures uploaded as a knowledge base, such as 100-page dispute guides; customer account data <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
@@ -273,69 +275,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="brex-agent-platform-source-1"></a>[Agent, Human, Ops: How Brex Is Changing Roles and Workflows](https://www.firstround.com/ai/brex) ([snapshot](../archive/sources/brex-agent-platform-source-1/content.md), captured 2026-08-31) (case-study; independent-secondary; evidence)
 
-Last reviewed: 2026-09-15.
-
----
-
-<a id="browserbase-bb"></a>
-
-## Browserbase: bb
-
-> One generalized agent in Slack that writes PRs, investigates sessions, queries the warehouse, logs feature requests, and runs browser agents across engineering, ops, sales, and support. <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-
-| Field | Value |
-| --- | --- |
-| Approach type | task-agent |
-| First public evidence | 2026 |
-| Deployment stage | deployed |
-| Availability | internal |
-| Domains | coding, code-review, support, customer-success, research |
-| Operating model | L3 · coding request → reviewed pull request |
-| Autonomy | drafts-reviewed |
-| Invocation | event-driven, interactive |
-| State | unknown |
-| Identity | unknown |
-| Evidence | detailed-primary |
-| Headline metric | Feature-request pipeline at 100% coverage with zero human effort <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small> |
-
-### Operating model
-
-- **Level 3 · work-product-review** — coding request → reviewed pull request (high confidence; 2026) <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-
-### Architecture
-
-- Sandbox: Ephemeral Linux VM; pre-warmed snapshot rebuilt every 30 min; idles out after 30 min <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Harness: OpenCode core loop with 6 tools (read/write/edit/exec/safebash/skill) <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Model: Frontier models <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Interfaces: slack, web, webhook <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Tool access: exec routes through a serverless integration proxy (Snowflake, HubSpot, Pylon, Grafana); the sandbox never sees real secrets <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Knowledge: Key repos cloned into /knowledge/; skills (markdown) loaded on demand <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Credentials: Credential brokering; the sandbox boots with references + rotating session tokens only; the proxy holds real creds; egress injection for a few hosts <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-
-### Primitives
-
-- Skills (progressive disclosure): Markdown playbooks lazy-loaded per task so the general agent stays small <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Integration proxy + RBAC/ABAC: Scoped permissions per session limit the actions available to the agent <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Credential brokering: The sandbox runs arbitrary code yet never touches a secret <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-
-### Reported metrics
-
-- Feature-request pipeline at 100% coverage, zero human effort <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- 99% of first-response times < 24 hrs <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Session investigation: 30–60 min of log-diving → one Slack message <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-
-### Catalog observations
-
-- One agent with good abstractions beats a fleet of narrow bots <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Separate capabilities from the core loop; domain logic lives in skills + service packages <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Don't trust the model, remove its ability to do wrong: scope tools and services per invocation source <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-- Meet people where they are; Slack is the highest-leverage surface because that's where work already happens <small>Sources: [browserbase-bb-source-1](#browserbase-bb-source-1).</small>
-
-### Sources
-
-- <a id="browserbase-bb-source-1"></a>[How we build internal agents at Browserbase](https://browserbase.com/blog/internal-agents) ([snapshot](../archive/sources/browserbase-bb-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
-
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -352,17 +292,18 @@ Last reviewed: 2026-09-09.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, code-review |
-| Operating model | L3 · pull request → AI review findings |
+| Operating model | Unknown · pull request → automated AI review findings posted as advisory comments<br>L3 · AGENTS.md generation → merge request the owning team reviews and refines |
 | Autonomy | drafts-reviewed |
 | Invocation | event-driven, interactive |
-| State | unknown |
+| State | mixed |
 | Identity | unknown |
 | Evidence | detailed-primary |
 | Headline metric | 47.95 million AI requests in 30 days across the internal AI engineering system <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small> |
 
 ### Operating model
 
-- **Level 3 · work-product-review** — pull request → AI review findings (medium confidence; 2026-04-20) <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
+- **Unclassified · unknown** — pull request → automated AI review findings posted as advisory comments (unverified confidence; 2026-04-20) <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
+- **Level 3 · work-product-review** — AGENTS.md generation → merge request the owning team reviews and refines (high confidence; 2026-04-20) <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 
 ### Architecture
 
@@ -401,7 +342,7 @@ Last reviewed: 2026-09-09.
 - <a id="cloudflare-ai-stack-source-1"></a>[The AI engineering stack we built internally](https://blog.cloudflare.com/internal-ai-engineering-stack/) ([snapshot](../archive/sources/cloudflare-ai-stack-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="cloudflare-ai-stack-source-2"></a>[Hacker News discussion of Cloudflare's internal AI engineering stack](https://news.ycombinator.com/item?id=47837240) ([snapshot](../archive/sources/cloudflare-ai-stack-source-2/content.md), captured 2026-08-31) (hn-thread; community; commentary)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -409,7 +350,7 @@ Last reviewed: 2026-09-15.
 
 ## Coinbase: Forge / Mux
 
-> Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and one-off build; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs merged company-wide come from these background agents. <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-3](#coinbase-forge-mux-source-3), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
+> Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, drafted fix, and pull request; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs merged come from these background agents. <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-3](#coinbase-forge-mux-source-3), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 
 | Field | Value |
 | --- | --- |
@@ -418,7 +359,7 @@ Last reviewed: 2026-09-15.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, code-review |
-| Operating model | L3 · Slack, GitHub, or Linear request → reviewed pull request and build |
+| Operating model | L3 · Slack, GitHub, or Linear request → drafted fix and pull request pushed back for review |
 | Autonomy | drafts-reviewed |
 | Invocation | event-driven, interactive |
 | State | unknown |
@@ -428,20 +369,20 @@ Last reviewed: 2026-09-15.
 
 ### Operating model
 
-- **Level 3 · work-product-review** — Slack, GitHub, or Linear request → reviewed pull request and build (high confidence; 2026) <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-3](#coinbase-forge-mux-source-3).</small>
+- **Level 3 · work-product-review** — Slack, GitHub, or Linear request → drafted fix and pull request pushed back for review (high confidence; 2026) <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-3](#coinbase-forge-mux-source-3).</small>
 
 ### Architecture
 
 - Sandbox: Mux gives each concurrent agent its own git worktree, branch, and terminal <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
 - Harness: Portfolio approach; Claude Code, OpenCode, Cursor, and Copilot rather than one harness; Forge is a custom Slack-native harness with the same tools and context as engineers, invokable from Slack, GitHub, and Linear; built in-house because security requirements blocked cloud background agents <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-3](#coinbase-forge-mux-source-3), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
-- Model: Portfolio across multiple providers; the Slack agent Claude bot can use multiple underlying models despite its name <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
+- Model: The Slack agent Claude bot can use multiple underlying models despite its name; the documented portfolio spans harnesses (Claude Code, OpenCode, Cursor, Copilot), and no source names the models' providers <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 - Interfaces: slack, github, linear <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
 - Tool access: Linear treated as the structured product context / source of truth <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 - Knowledge: Linear as the durable structured-context layer for product work <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2).</small>
 
 ### Primitives
 
-- Forge: Custom harness: Slack bug discussion → Linear issue → fix → PR → one-off build <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
+- Forge: Custom harness: Slack bug discussion → Linear issue → drafted fix → PR pushed back for review <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 - Mux: Concurrency layer; one human coordinates many isolated coding agents, each in its own worktree/branch/terminal <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
 
 ### Reported metrics
@@ -468,7 +409,7 @@ Last reviewed: 2026-09-15.
 - <a id="coinbase-forge-mux-source-4"></a>[How Coinbase scaled AI to 1,000+ engineers (How I AI, with Chintan Turakhia)](https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers) ([snapshot](../archive/sources/coinbase-forge-mux-source-4/content.md), captured 2026-09-15) (podcast; direct-participant; evidence)
 - <a id="coinbase-forge-mux-source-5"></a>[How I AI: Chintan Turakhia's playbook for AI adoption at Coinbase](https://www.chatprd.ai/how-i-ai/playbook-for-ai-engineering-adoption-at-coinbase) ([snapshot](../archive/sources/coinbase-forge-mux-source-5/content.md), captured 2026-09-15) (podcast; direct-participant; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -476,7 +417,7 @@ Last reviewed: 2026-09-15.
 
 ## Databricks: coSTAR and internal engineering agents
 
-> Databricks runs internal engineering agents for work such as on-call support and automated code review. coSTAR ships and tests them, using LLM judges as the test suite and a coding assistant to refine the agent until the judges pass. Databricks' open-source Omnigent is a separate product. <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1), [databricks-costar-source-2](#databricks-costar-source-2).</small>
+> Databricks runs internal engineering agents for work such as on-call support and automated code review. coSTAR ships and tests them, using LLM judges as the test suite and a coding assistant to refine the agent until the judges pass. Databricks' Omnigent is a separate product. <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1), [databricks-costar-source-2](#databricks-costar-source-2).</small>
 
 | Field | Value |
 | --- | --- |
@@ -503,7 +444,7 @@ Last reviewed: 2026-09-15.
 
 ### Reported metrics
 
-- Internal agents serve as daily coding drivers on the Databricks codebase <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
+- coSTAR reduced the time to verify agent changes from two weeks down to hours <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
 - Private benchmark built from a multi-million line codebase <small>Sources: [databricks-costar-source-2](#databricks-costar-source-2).</small>
 
 ### Sources
@@ -511,7 +452,7 @@ Last reviewed: 2026-09-15.
 - <a id="databricks-costar-source-1"></a>[coSTAR: how we ship AI agents at Databricks fast](https://www.databricks.com/blog/costar-how-we-ship-ai-agents-databricks-fast-without-breaking-things) ([snapshot](../archive/sources/databricks-costar-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="databricks-costar-source-2"></a>[Benchmarking coding agents on a multi-million line codebase](https://www.databricks.com/blog/benchmarking-coding-agents-databricks-multi-million-line-codebase) ([snapshot](../archive/sources/databricks-costar-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -523,15 +464,15 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | deployed |
 | Availability | internal |
 | Domains | support, finance-ops, coding, recruitment, customer-success |
-| Operating model | L3 · employee request → approved customer-impacting action |
+| Operating model | L3 · employee request → approved customer-impacting action<br>L2 · individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting long emails)<br>Unknown · scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion) |
 | Autonomy | human-in-loop |
-| Invocation | interactive |
-| State | unknown |
+| Invocation | interactive, scheduled |
+| State | cross-session-memory |
 | Identity | unknown |
 | Evidence | detailed-primary |
 | Headline metric | ~35 integrations organized into skills <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small> |
@@ -539,6 +480,8 @@ Last reviewed: 2026-09-15.
 ### Operating model
 
 - **Level 3 · work-product-review** — employee request → approved customer-impacting action (high confidence; 2026) <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
+- **Level 2 · continuous-steering** — individual works alongside the toolkit in Claude Cowork (client-review prep, spreadsheet cleanup, drafting long emails) (high confidence; 2026) <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
+- **Unclassified · unknown** — scheduled jobs (5am standup, invoice approvals, QA sampling, huddle ingestion) (unverified confidence; 2026) <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
 
 ### Architecture
 
@@ -569,7 +512,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="domu-clementino-source-1"></a>[Why we split our internal agent in two](https://domu.ai/blog/why-we-split-our-internal-agent-in-two) ([snapshot](../archive/sources/domu-clementino-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -581,7 +524,7 @@ Last reviewed: 2026-09-09.
 
 | Field | Value |
 | --- | --- |
-| Approach type | background-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -625,7 +568,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="doordash-code-review-source-1"></a>[How DoorDash built an AI code reviewer engineers actually listen to](https://careersatdoordash.com/blog/doordash-built-an-ai-code-reviewer-engineers-actually-listen-to/) ([snapshot](../archive/sources/doordash-code-review-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -633,7 +576,7 @@ Last reviewed: 2026-09-09.
 
 ## DoorDash: Flux / Agentic AI Platform
 
-> DoorDash's internal agentic AI platform; a unified cognitive layer over company data and operations, with an AI Marketplace of specialized agents and the Flux cloud-agent runtime for engineering tasks. <small>Sources: [doordash-flux-source-1](#doordash-flux-source-1), [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
+> DoorDash's internal agentic AI platform combines company-data access, an AI Marketplace of specialized agents, and the Flux cloud-agent runtime for engineering tasks. <small>Sources: [doordash-flux-source-1](#doordash-flux-source-1), [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
 
 | Field | Value |
 | --- | --- |
@@ -694,7 +637,7 @@ Last reviewed: 2026-09-09.
 - <a id="doordash-flux-source-2"></a>[Beyond single agents: DoorDash's collaborative AI ecosystem](https://careersatdoordash.com/blog/beyond-single-agents-doordash-building-collaborative-ai-ecosystem/) ([snapshot](../archive/sources/doordash-flux-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="doordash-flux-source-3"></a>[Delegating Engineering Work To Cloud-Based Agents](https://careersatdoordash.com/blog/delegating-engineering-work-to-cloud-based-agents/) ([snapshot](../archive/sources/doordash-flux-source-3/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -757,7 +700,7 @@ Last reviewed: 2026-09-09.
 - <a id="dropbox-nova-source-1"></a>[Introducing Nova, our internal platform for coding agents](https://dropbox.tech/machine-learning/introducing-nova-our-internal-platform-for-coding-agents) ([snapshot](../archive/sources/dropbox-nova-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="dropbox-nova-source-2"></a>[Hacker News submission for Nova](https://news.ycombinator.com/item?id=48235065) ([snapshot](../archive/sources/dropbox-nova-source-2/content.md), captured 2026-08-31) (hn-thread; community; discovery)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -769,7 +712,7 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | deployed |
 | Availability | internal |
@@ -788,8 +731,8 @@ Last reviewed: 2026-09-15.
 ### Architecture
 
 - Sandbox: unknown <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
-- Harness: Investigation-to-fix loop; underlying runtime not documented <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
-- Model: Not specified <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Harness: Investigation-to-fix loop running as a serverless application on Modal; Slack requests are acknowledged, the investigation runs in a spawned background function, and fixes come from a spawned coding sub-agent <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Model: Anthropic (named for the tool-calling investigation loop and the coding sub-agent); specific model version not named <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 - Interfaces: slack <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 - Tool access: Traces a payment end-to-end across payment systems; can open a PR with a proposed fix when a bug is found <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 
@@ -806,7 +749,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="flex-investigation-agent-source-1"></a>[The Flex AI Investigation Agent for HSA/FSA payments](https://www.withflex.com/blog/the-flex-ai-investigation-agent-for-hsa-fsa-payments) ([snapshot](../archive/sources/flex-investigation-agent-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -818,7 +761,7 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026-06 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -849,7 +792,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="github-qubot-source-1"></a>[How we built an internal data analytics agent](https://github.blog/ai-and-ml/github-copilot/how-we-built-an-internal-data-analytics-agent/) ([snapshot](../archive/sources/github-qubot-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -857,7 +800,7 @@ Last reviewed: 2026-09-09.
 
 ## Harvey: Spectre
 
-> Harvey's internal collaborative cloud agent platform; reacts to incidents, bug reports, and Slack messages and produces reviewable diffs, branches, and PRs. <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+> Harvey's internal collaborative cloud agent platform; turns requests from Slack, the web app, or automations into durable runs that return reviewable summaries, diffs, branches, and PRs. <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -866,16 +809,16 @@ Last reviewed: 2026-09-09.
 | Deployment stage | deployed |
 | Availability | internal |
 | Domains | coding, code-review, on-call, security |
-| Operating model | L3 · incident or request → reviewable diff or pull request |
+| Operating model | L3 · request from Slack, the web app, or an automation → reviewable diff or pull request |
 | Autonomy | drafts-reviewed |
-| Invocation | interactive |
-| State | unknown |
+| Invocation | interactive, background, scheduled |
+| State | durable-session |
 | Identity | unknown |
 | Evidence | detailed-primary |
 
 ### Operating model
 
-- **Level 3 · work-product-review** — incident or request → reviewable diff or pull request (high confidence; 2026) <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- **Level 3 · work-product-review** — request from Slack, the web app, or an automation → reviewable diff or pull request (high confidence; 2026) <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 
 ### Architecture
 
@@ -883,8 +826,8 @@ Last reviewed: 2026-09-09.
 - Harness: Collaborative cloud agent platform with explicit boundaries around GitHub, Datadog, Linear, and other connected systems <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Model: Not specified <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Interfaces: slack, web, automation <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
-- Tool access: Explicit tool boundaries; reacts to incidents, bug reports, customer feedback, and Slack messages <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
-- Credentials: Explicit tool boundaries; outputs are reviewable <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Tool access: Explicit tool boundaries; tool configuration injected at run start; requests start from Slack, the web app, or automations; connects to systems like GitHub, Datadog, and Linear <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Credentials: Short-lived, scoped credentials injected at run start; no ambient access to the control plane or a user's machine <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Context mgmt: Durable runs over disposable execution environments <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 
 ### Primitives
@@ -903,7 +846,7 @@ Last reviewed: 2026-09-09.
 - <a id="harvey-spectre-source-1"></a>[Building Spectre; internal collaborative cloud agent platform](https://www.harvey.ai/blog/building-spectre-internal-collaborative-cloud-agent-platform) ([snapshot](../archive/sources/harvey-spectre-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="harvey-spectre-source-2"></a>[Building an agentic security operations center](https://www.harvey.ai/blog/building-an-agentic-security-operations-center) ([snapshot](../archive/sources/harvey-spectre-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-08-31.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -915,7 +858,7 @@ Last reviewed: 2026-08-31.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026-03 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -950,7 +893,7 @@ Last reviewed: 2026-08-31.
 - <a id="hubspot-sidekick-source-1"></a>[Automated code review, the 6-month evolution](https://product.hubspot.com/blog/automated-code-review-the-6-month-evolution) ([snapshot](../archive/sources/hubspot-sidekick-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="hubspot-sidekick-source-2"></a>[Cloud coding agents at HubSpot](https://product.hubspot.com/blog/cloud-coding-agents-at-hubspot) ([snapshot](../archive/sources/hubspot-sidekick-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -958,11 +901,11 @@ Last reviewed: 2026-09-15.
 
 ## Linear: Linear Agent
 
-> A native agent that synthesizes workspace context, triages, creates follow-up work, runs coding sessions, and executes scheduled/event-driven 'Loops'; used by Linear's own CX, Product, and Engineering teams. <small>Sources: [linear-agent-source-1](#linear-agent-source-1), [linear-agent-source-2](#linear-agent-source-2), [linear-agent-source-6](#linear-agent-source-6).</small>
+> A native agent that synthesizes workspace context, scopes customer feedback into issues, creates follow-up work, runs coding sessions, and can be triggered automatically when issues enter triage; used by Linear's own CX, Product, and Engineering teams. <small>Sources: [linear-agent-source-1](#linear-agent-source-1), [linear-agent-source-2](#linear-agent-source-2), [linear-agent-source-6](#linear-agent-source-6).</small>
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | scaled |
 | Availability | commercialized |
@@ -970,8 +913,8 @@ Last reviewed: 2026-09-15.
 | Operating model | L3 · assigned coding work → agent-created change |
 | Autonomy | drafts-reviewed |
 | Invocation | event-driven, interactive |
-| State | unknown |
-| Identity | unknown |
+| State | durable-session |
+| Identity | dedicated-agent |
 | Evidence | detailed-primary |
 
 ### Operating model
@@ -1011,7 +954,7 @@ Last reviewed: 2026-09-15.
 - <a id="linear-agent-source-5"></a>[Hacker News submission for the Linear Agent public beta](https://news.ycombinator.com/item?id=48503334) ([snapshot](../archive/sources/linear-agent-source-5/content.md), captured 2026-08-31) (hn-thread; community; discovery)
 - <a id="linear-agent-source-6"></a>[Introducing Linear Agent](https://linear.app/changelog/2026-03-24-introducing-linear-agent) ([snapshot](../archive/sources/linear-agent-source-6/content.md), captured 2026-08-31) (release; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1023,7 +966,7 @@ Last reviewed: 2026-09-09.
 
 | Field | Value |
 | --- | --- |
-| Approach type | background-agent |
+| Approach type | agent |
 | First public evidence | 2025-07 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -1054,7 +997,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="microsoft-prassistant-source-1"></a>[Enhancing code quality at scale with AI-powered code reviews](https://devblogs.microsoft.com/engineering-at-microsoft/enhancing-code-quality-at-scale-with-ai-powered-code-reviews/) ([snapshot](../archive/sources/microsoft-prassistant-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1074,7 +1017,7 @@ Last reviewed: 2026-09-15.
 | Operating model | L4 · Atlas or Morphex feature task → tested and merged pull request |
 | Autonomy | autonomous |
 | Invocation | event-driven, interactive |
-| State | unknown |
+| State | cross-session-memory |
 | Identity | dedicated-agent |
 | Evidence | secondary-only |
 | Headline metric | Morphex: 19 of 20 PRs merge without human review <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small> |
@@ -1111,7 +1054,7 @@ Last reviewed: 2026-09-15.
 ### Catalog observations
 
 - Evals from day one; should have been day one, not month nine <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
-- Skip the vector store; file-based memory (MEMORY.md) was the right answer <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- monday.com chose file-based memory (MEMORY.md and daily diaries) instead of vector retrieval for these agents <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 - Remote-sandbox every PR before human review, with production-traffic replay <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 - The existing auth/identity/deploy pipeline applies to agents; reuse it <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 - AI engineering is building the feedback loops that let imperfect agents be trusted safely <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
@@ -1120,7 +1063,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="monday-sphera-atlas-morphex-source-1"></a>[AI Teammates: how monday.com runs production AI agents on Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/ai-teammates-how-monday-com-runs-production-ai-agents-on-amazon-bedrock/) ([snapshot](../archive/sources/monday-sphera-atlas-morphex-source-1/content.md), captured 2026-08-31) (case-study; independent-secondary; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1139,9 +1082,9 @@ Last reviewed: 2026-09-09.
 | Domains | support, finance-ops, recruitment, security |
 | Operating model | Unknown · cross-team internal tasks → Custom Agents output |
 | Autonomy | unknown |
-| Invocation | interactive |
-| State | unknown |
-| Identity | unknown |
+| Invocation | interactive, background, event-driven |
+| State | mixed |
+| Identity | dedicated-agent |
 | Evidence | detailed-primary |
 | Headline metric | More than 3,000 internal Custom Agents by end of alpha testing <small>Sources: [notion-custom-agents-source-2](#notion-custom-agents-source-2).</small> |
 
@@ -1160,7 +1103,128 @@ Last reviewed: 2026-09-09.
 - <a id="notion-custom-agents-source-1"></a>[Notion's Token Town: 5 Rebuilds, 100+ Tools (Latent Space)](https://latent.space/p/notion) ([snapshot](../archive/sources/notion-custom-agents-source-1/content.md), captured 2026-08-31) (podcast; direct-participant; evidence)
 - <a id="notion-custom-agents-source-2"></a>[How we built security into Custom Agents](https://www.notion.com/en-gb/blog/how-we-built-security-into-custom-agents) ([snapshot](../archive/sources/notion-custom-agents-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
+
+---
+
+<a id="openai-software-factory"></a>
+
+## OpenAI: Agentic software factory
+
+> An agent system built around OpenAI's internal Codex. A person defines the outcome; Codex implements the change and babysits CI until green; domain-specialist agents review each change behind risk-tiered routing; and a per-change deploy agent handholds approved changes to production and builds its own monitoring dashboards. <small>Sources: [openai-factory-article](#openai-factory-article); Context: [openai-harness-engineering-post](#openai-harness-engineering-post).</small>
+
+| Field | Value |
+| --- | --- |
+| Approach type | agent-system |
+| First public evidence | 2025-10-09 |
+| Deployment stage | scaled |
+| Availability | internal |
+| Domains | coding, code-review, ci-triage, ops |
+| Operating model | L5 · low-risk pull request -> merge in opted-in codebase areas<br>L3 · code change -> production rollout on the general path<br>Unknown · production alert -> proposed performance fix |
+| Autonomy | human-in-loop |
+| Invocation | interactive, background, scheduled, event-driven |
+| State | durable-session |
+| Identity | unknown |
+| Evidence | mixed |
+| Headline metric | Almost all OpenAI employees used Codex and ChatGPT Work weekly as of the September 2026 report (self-reported). <small>Sources: [openai-factory-article](#openai-factory-article), [openai-chatgpt-work-post](#openai-chatgpt-work-post); Context: [every-codex-team-interview](#every-codex-team-interview).</small> |
+
+### Operating model
+
+- **Level 5 · exception-only** — low-risk pull request -> merge in opted-in codebase areas (medium confidence; 2026-09) <small>Sources: [openai-factory-article](#openai-factory-article); Context: [openai-harness-engineering-post](#openai-harness-engineering-post).</small>
+- **Level 3 · work-product-review** — code change -> production rollout on the general path (high confidence; 2026-09) <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- **Unclassified · unknown** — production alert -> proposed performance fix (unverified confidence; 2026-09) <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+
+### Architecture
+
+- Sandbox: unknown <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Harness: Internal Codex, described as much more advanced than the external product because it is plugged into almost every OpenAI system; ChatGPT Work runs on the same harness <small>Sources: [openai-factory-article](#openai-factory-article), [openai-agents-api-post](#openai-agents-api-post), [hn-zbrock-internal-prototype](#hn-zbrock-internal-prototype).</small>
+- Model: unknown <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Interfaces: desktop, cli, slack, github, skill <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Tool access: Git repositories and GitHub, Slack, Notion, Databricks, Datadog, and internal logs and data sources <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Knowledge: OpenAI moved its documentation inside the source code; internal Codex skills, some maintained by Codex itself; new engineers are directed to ask Codex during onboarding <small>Sources: [openai-factory-article](#openai-factory-article), [openai-harness-engineering-post](#openai-harness-engineering-post), [every-codex-team-interview](#every-codex-team-interview).</small>
+- Context mgmt: The /goal setting lets an agent work until a goal is complete; threads run for days and spin off other agents <small>Sources: [openai-factory-article](#openai-factory-article); Context: [openai-harness-engineering-post](#openai-harness-engineering-post).</small>
+
+### Primitives
+
+- Domain-specialist review agents: Multiple agents, each configured as a domain specialist, review every change; the article compares this to a review by a domain expert from each relevant infrastructure team <small>Sources: [openai-factory-article](#openai-factory-article), [venturebeat-devday-codex](#venturebeat-devday-codex), [openai-harness-engineering-post](#openai-harness-engineering-post).</small>
+- Risk-tiered review routing: Changes are classified by risk; high-risk changes can trigger more agent reviews or a mandated human review, while opted-in low-risk areas use an agent that auto-approves pull requests <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Per-change deploy agent: After a human approves production, an assigned agent handholds the change to full rollout; it decides which signals mean success or failure, builds its own monitoring dashboard, and watches production signals <small>Sources: [openai-factory-article](#openai-factory-article); Context: [hn-zbrock-internal-adoption](#hn-zbrock-internal-adoption).</small>
+- Perf harness with Synthetics A/B: A perf harness sends problematic pull requests to the Synthetics A/B framework to evaluate performance implications <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Perf Factory: Agents sift through alerts and dashboards, de-duplicate signals, identify real latency regressions, root-cause them, and propose fixes <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+
+### Reported metrics
+
+- Non-engineering orgs such as finance, recruitment, and legal went from about 0% to 90% Codex usage within a four-month period (self-reported) <small>Sources: [openai-factory-article](#openai-factory-article); Context: [openai-chatgpt-work-post](#openai-chatgpt-work-post).</small>
+- Some build-test-deploy systems saw about a 10x load increase within roughly six months (self-reported) <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+
+### Catalog observations
+
+- Longer-running /goal tasks drove adoption; one long-running agent that spins off other agents reduces the surface a person manages <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Role-specific and team-specific plugins spread adoption beyond a generic coding agent <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+
+### Sources
+
+- <a id="openai-factory-article"></a>[Inside OpenAI's agentic software factory](https://newsletter.pragmaticengineer.com/p/openai-software-factory) ([snapshot](../archive/sources/openai-factory-article/content.md), captured 2026-09-16) (news; independent-secondary; evidence)
+- <a id="venturebeat-devday-codex"></a>[The most important OpenAI announcement you probably missed at DevDay 2025](https://venturebeat.com/infrastructure/the-most-important-openai-announcement-you-probably-missed-at-devday-2025) ([snapshot](../archive/sources/venturebeat-devday-codex/content.md), captured 2026-09-16) (news; independent-secondary; evidence)
+- <a id="openai-harness-engineering-post"></a>[Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) ([snapshot](../archive/sources/openai-harness-engineering-post/content.md), captured 2026-09-16) (engineering-blog; first-party; evidence)
+- <a id="hn-harness-engineering-thread"></a>[Harness engineering: Leveraging Codex in an agent-first world (discussion)](https://news.ycombinator.com/item?id=48416264) ([snapshot](../archive/sources/hn-harness-engineering-thread/content.md), captured 2026-09-16) (hn-thread; community; commentary)
+- <a id="hn-zbrock-internal-prototype"></a>[zbrock: the Codex app began as an internal prototype](https://news.ycombinator.com/item?id=48435137) ([snapshot](../archive/sources/hn-zbrock-internal-prototype/content.md), captured 2026-09-16) (hn-comment; direct-participant; evidence)
+- <a id="hn-zbrock-internal-adoption"></a>[zbrock: many internal teams adopted the same practices](https://news.ycombinator.com/item?id=48435213) ([snapshot](../archive/sources/hn-zbrock-internal-adoption/content.md), captured 2026-09-16) (hn-comment; direct-participant; evidence)
+- <a id="openai-agents-api-post"></a>[Introducing the Agents API](https://openai.com/index/introducing-the-agents-api/) ([snapshot](../archive/sources/openai-agents-api-post/content.md), captured 2026-09-16) (corporate-article; first-party; evidence)
+- <a id="openai-chatgpt-work-post"></a>[ChatGPT is now a partner for your most ambitious work](https://openai.com/index/chatgpt-for-your-most-ambitious-work/) ([snapshot](../archive/sources/openai-chatgpt-work-post/content.md), captured 2026-09-16) (corporate-article; first-party; evidence)
+- <a id="every-codex-team-interview"></a>[Transcript: 'How OpenAI's Codex Team Uses Their Coding Agent'](https://every.to/podcast/transcript-how-openai-s-codex-team-uses-their-coding-agent) ([snapshot](../archive/sources/every-codex-team-interview/content.md), captured 2026-09-16) (transcript; independent-secondary; evidence)
+
+Last reviewed: 2026-09-16.
+
+---
+
+<a id="openai-sevbot"></a>
+
+## OpenAI: Sevbot
+
+> OpenAI's internal incident-response agent, built on Codex. When an incident is detected, the bot wakes up, collects context, determines possible mitigations without executing any, and answers developers' questions in the incident Slack channel; an engineer can tell it to apply a chosen mitigation. <small>Sources: [openai-sevbot-article](#openai-sevbot-article), [crtsh-sevbot-certificates](#crtsh-sevbot-certificates), [github-sevbot-pr](#github-sevbot-pr).</small>
+
+| Field | Value |
+| --- | --- |
+| Approach type | agent |
+| First public evidence | 2025-11-20 |
+| Deployment stage | deployed |
+| Availability | internal |
+| Domains | on-call |
+| Operating model | L3 · incident detected -> applied mitigation |
+| Autonomy | drafts-reviewed |
+| Invocation | event-driven |
+| State | unknown |
+| Identity | dedicated-agent |
+| Evidence | secondary-only |
+| Relationships | component-of: [openai-software-factory](#openai-software-factory) |
+
+### Operating model
+
+- **Level 3 · work-product-review** — incident detected -> applied mitigation (high confidence; 2026-09) <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+
+### Architecture
+
+- Sandbox: unknown <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+- Harness: Built on top of Codex <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+- Model: unknown <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+- Interfaces: slack <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+
+### Primitives
+
+- Propose-only mitigation: The bot determines possible mitigations but never executes any; an engineer tells it to apply a specific mitigation <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+
+### Catalog observations
+
+- OpenAI's stated goal is that Sevbot mitigates routine outages autonomously with humans reviewing its actions on return; as of the report, on-call duty remains <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+
+### Sources
+
+- <a id="openai-sevbot-article"></a>[Inside OpenAI's agentic software factory](https://newsletter.pragmaticengineer.com/p/openai-software-factory) ([snapshot](../archive/sources/openai-sevbot-article/content.md), captured 2026-09-16) (news; independent-secondary; evidence)
+- <a id="crtsh-sevbot-certificates"></a>[Certificate Transparency records for sevbot.api.openai.com](https://crt.sh/?q=sevbot.api.openai.com) ([snapshot](../archive/sources/crtsh-sevbot-certificates/content.md), captured 2026-09-16) (other; aggregator; evidence)
+- <a id="github-sevbot-pr"></a>[[SEVBot] Optionize initialized notification tolerance (openai-agents-python pull 2765 commits)](https://github.com/openai/openai-agents-python/pull/2765/commits) ([snapshot](../archive/sources/github-sevbot-pr/content.md), captured 2026-09-16) (source-code; first-party; evidence)
+
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1168,18 +1232,18 @@ Last reviewed: 2026-09-15.
 
 ## Plaid: AI Annotator
 
-> Plaid's internal labeling agent for its own model training. AI Annotator automates large-scale labeling of anonymized transaction data, with human oversight on the labeled output. Plaid reports greater than 95% human alignment at a lower cost and time than manual labeling. <small>Sources: [plaid-ai-annotator-source-1](#plaid-ai-annotator-source-1).</small>
+> Plaid's internal labeling agent for its own model training. AI Annotator automates large-scale labeling of anonymized transaction data, with targeted human validation when a product use case requires it. Plaid reports greater than 95% human alignment at a lower cost and time than manual labeling. <small>Sources: [plaid-ai-annotator-source-1](#plaid-ai-annotator-source-1).</small>
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2025-06 |
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | data |
-| Operating model | L3 · raw transactions → labeled training data |
-| Autonomy | drafts-reviewed |
-| Invocation | background |
+| Operating model | Unknown · raw transactions → labeled training data |
+| Autonomy | unknown |
+| Invocation | unknown |
 | State | unknown |
 | Identity | unknown |
 | Evidence | detailed-primary |
@@ -1187,7 +1251,7 @@ Last reviewed: 2026-09-15.
 
 ### Operating model
 
-- **Level 3 · work-product-review** — raw transactions → labeled training data (medium confidence; 2025-06) <small>Sources: [plaid-ai-annotator-source-1](#plaid-ai-annotator-source-1).</small>
+- **Unclassified · unknown** — raw transactions → labeled training data (unverified confidence; 2025-06) <small>Sources: [plaid-ai-annotator-source-1](#plaid-ai-annotator-source-1).</small>
 
 ### Architecture
 
@@ -1202,7 +1266,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="plaid-ai-annotator-source-1"></a>[AI agents at Plaid (June 2025)](https://plaid.com/blog/ai-agents-june-2025/) ([snapshot](../archive/sources/plaid-ai-annotator-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1214,7 +1278,7 @@ Last reviewed: 2026-09-09.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2025-06 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -1244,7 +1308,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="plaid-fix-my-connection-source-1"></a>[AI agents at Plaid (June 2025)](https://plaid.com/blog/ai-agents-june-2025/) ([snapshot](../archive/sources/plaid-fix-my-connection-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1288,7 +1352,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="plaid-internal-mcp-server-source-1"></a>[The Plaid internal MCP server](https://engineering.plaid.com/the-plaid-internal-mcp-server-8eff08bb6bdb) ([snapshot](../archive/sources/plaid-internal-mcp-server-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1300,7 +1364,7 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | background-agent |
+| Approach type | agent |
 | First public evidence | 2026-07-09 |
 | Deployment stage | scaled |
 | Availability | open-sourced |
@@ -1351,7 +1415,7 @@ Last reviewed: 2026-09-15.
 - <a id="posthog-stamphog-source-2"></a>[10,000 PRs a month is easy: How devex is evolving at PostHog](https://posthog.com/blog/10k-prs-a-month) ([snapshot](../archive/sources/posthog-stamphog-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="posthog-stamphog-source-3"></a>[StampHog PR approval agent source code and documentation](https://github.com/PostHog/posthog/tree/988c9031bb93c74bafcdfb670c01497c79a4f644/tools/pr-approval-agent) ([snapshot](../archive/sources/posthog-stamphog-source-3/content.md), captured 2026-08-31) (source-code; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1363,7 +1427,7 @@ Last reviewed: 2026-09-09.
 
 | Field | Value |
 | --- | --- |
-| Approach type | background-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -1426,7 +1490,7 @@ Last reviewed: 2026-09-09.
 - <a id="ramp-inspect-source-4"></a>[Why We Built Our Own Background Agent (Inspect) (Ramp Builders URL)](https://builders.ramp.com/post/why-we-built-our-background-agent) ([snapshot](../archive/sources/ramp-inspect-source-4/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="ramp-inspect-source-5"></a>[Why Ramp built its own in-house coding agent, Inspect](https://newsletter.pragmaticengineer.com/p/why-ramp-built-inspect) ([snapshot](../archive/sources/ramp-inspect-source-5/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1443,8 +1507,8 @@ Last reviewed: 2026-09-09.
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, code-review, support, research, data |
-| Operating model | L3 · objective → verifiable multi-agent work product |
-| Autonomy | drafts-reviewed |
+| Operating model | L5 · objective → verifiable multi-agent work product |
+| Autonomy | autonomous |
 | Invocation | interactive |
 | State | unknown |
 | Identity | unknown |
@@ -1453,7 +1517,7 @@ Last reviewed: 2026-09-09.
 
 ### Operating model
 
-- **Level 3 · work-product-review** — objective → verifiable multi-agent work product (high confidence; 2026) <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- **Level 5 · exception-only** — objective → verifiable multi-agent work product (high confidence; 2026) <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 
 ### Architecture
 
@@ -1482,45 +1546,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="replit-manager-agent-source-1"></a>[The Self-Driving Company](https://ld.replit.com/blog/self-driving-company) ([snapshot](../archive/sources/replit-manager-agent-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
-
----
-
-<a id="retool-retoolgpt"></a>
-
-## Retool: RetoolGPT
-
-> Retool's internal assistant, built as a version of ChatGPT with access to Retool's internal Confluence documents, Retool documentation, and Linear tickets. The team deployed it organization-wide in a read-only environment so the whole team could use it. <small>Sources: [retool-retoolgpt-source-1](#retool-retoolgpt-source-1), [retool-retoolgpt-source-2](#retool-retoolgpt-source-2).</small>
-
-| Field | Value |
-| --- | --- |
-| Approach type | task-agent |
-| First public evidence | 2025-08 |
-| Deployment stage | deployed |
-| Availability | internal |
-| Domains | support, coding |
-| Operating model | Unknown · internal question → sourced answer |
-| Autonomy | assistive |
-| Invocation | interactive |
-| State | unknown |
-| Identity | unknown |
-| Evidence | detailed-primary |
-
-### Operating model
-
-- **Unclassified · unknown** — internal question → sourced answer (unverified confidence; 2025-08) <small>Sources: [retool-retoolgpt-source-1](#retool-retoolgpt-source-1).</small>
-
-### Architecture
-
-- Model: Built on ChatGPT <small>Sources: [retool-retoolgpt-source-1](#retool-retoolgpt-source-1).</small>
-- Knowledge: Retool Confluence documents, Retool documentation, and Linear tickets <small>Sources: [retool-retoolgpt-source-1](#retool-retoolgpt-source-1).</small>
-
-### Sources
-
-- <a id="retool-retoolgpt-source-1"></a>[How we built RetoolGPT](https://retool.com/blog/how-we-built-retoolgpt) ([snapshot](../archive/sources/retool-retoolgpt-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
-- <a id="retool-retoolgpt-source-2"></a>[AI Build Week, Day 3: How we made RetoolGPT](https://www.youtube.com/watch?v=8VTdYUBAZsY) ([snapshot](../archive/sources/retool-retoolgpt-source-2/content.md), captured 2026-08-31) (talk; first-party; evidence)
-
-Last reviewed: 2026-08-31.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1532,7 +1558,7 @@ Last reviewed: 2026-08-31.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2025-12-01 |
 | Deployment stage | scaled |
 | Availability | commercialized |
@@ -1551,7 +1577,7 @@ Last reviewed: 2026-08-31.
 ### Architecture
 
 - Harness: An employee agent intended as a front door to other agents <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
-- Model: Not specified <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
+- Model: Anthropic Claude (named via VentureBeat); additional providers planned within the year, with Google Gemini named and OpenAI possible <small>Sources: [salesforce-slackbot-source-3](#salesforce-slackbot-source-3).</small>
 - Interfaces: slack <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
 - Tool access: Finds company context, drafts work, manages meetings, connects Slack context with Salesforce data <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
 - Knowledge: Slack context joined with Salesforce CRM data <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
@@ -1573,7 +1599,7 @@ Last reviewed: 2026-08-31.
 - <a id="salesforce-slackbot-source-3"></a>[Salesforce rolls out new Slackbot AI agent](https://venturebeat.com/technology/salesforce-rolls-out-new-slackbot-ai-agent-as-it-battles-microsoft-and) ([snapshot](../archive/sources/salesforce-slackbot-source-3/content.md), captured 2026-08-31) (news; independent-secondary; commentary)
 - <a id="salesforce-slackbot-source-4"></a>[Hacker News submission for the Salesforce Slackbot rollout](https://news.ycombinator.com/item?id=46600760) ([snapshot](../archive/sources/salesforce-slackbot-source-4/content.md), captured 2026-08-31) (hn-thread; community; discovery)
 
-Last reviewed: 2026-08-31.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1585,7 +1611,7 @@ Last reviewed: 2026-08-31.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | deployed |
 | Availability | open-sourced |
@@ -1593,7 +1619,7 @@ Last reviewed: 2026-08-31.
 | Operating model | L2 · assigned task → human-steered and reviewed output |
 | Autonomy | human-in-loop |
 | Invocation | event-driven, interactive |
-| State | unknown |
+| State | durable-session |
 | Identity | unknown |
 | Evidence | detailed-primary |
 | Headline metric | Open-source (Apache-2.0) Slack agent (~100k lines of TS) used internally at Sentry <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1), [sentry-junior-source-4](#sentry-junior-source-4).</small> |
@@ -1629,7 +1655,7 @@ Last reviewed: 2026-08-31.
 - One general-purpose agent connected to many company systems beats several vendor-specific bots <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Skills-as-runbooks encode operational knowledge the agent can follow <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Stateless compute fights you; serverless functions time out and disappear; model the agent around interrupt/resume <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
-- Unit tests are the wrong yardstick for agents; invest in evals and integration tests instead <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- Sentry reports that agent-behavior evaluation needs evals and integration tests; deterministic components still benefit from unit tests <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Writes need per-user authorization, not blanket trust <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 
 ### Sources
@@ -1639,7 +1665,7 @@ Last reviewed: 2026-08-31.
 - <a id="sentry-junior-source-3"></a>[Sentry Labs](https://labs.sentry.dev/) ([snapshot](../archive/sources/sentry-junior-source-3/content.md), captured 2026-08-31) (documentation; first-party; evidence)
 - <a id="sentry-junior-source-4"></a>[getsentry/junior Apache 2.0 license](https://github.com/getsentry/junior/blob/main/LICENSE?plain=1) ([snapshot](../archive/sources/sentry-junior-source-4/content.md), captured 2026-08-31) (source-code; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1647,7 +1673,7 @@ Last reviewed: 2026-09-09.
 
 ## Shopify: Aquifer / River
 
-> The Aquifer agent platform (session/harness/sandbox split) powers River, a Slack-native coding agent, plus research, migration, and app-security agents. <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
+> The Aquifer agent platform (session/harness/sandbox split) powers River, a Slack-native coding agent, plus PR-review and headless Vanilla agent profiles; other teams have requested research, migration, and compliance-scan agents. <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1655,18 +1681,18 @@ Last reviewed: 2026-09-09.
 | First public evidence | 2026 |
 | Deployment stage | scaled |
 | Availability | internal |
-| Domains | coding, code-review, research, security |
-| Operating model | L3 · River coding request → reviewed pull request |
+| Domains | coding, code-review |
+| Operating model | Unknown · River coding request → River-opened, River-coauthored pull request |
 | Autonomy | drafts-reviewed |
 | Invocation | event-driven, interactive |
-| State | unknown |
+| State | durable-session |
 | Identity | unknown |
 | Evidence | detailed-primary |
 | Headline metric | 1 in 8 merged PRs company-wide coauthored by River <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small> |
 
 ### Operating model
 
-- **Level 3 · work-product-review** — River coding request → reviewed pull request (medium confidence; 2026) <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
+- **Unclassified · unknown** — River coding request → River-opened, River-coauthored pull request (unverified confidence; 2026) <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
 
 ### Architecture
 
@@ -1702,7 +1728,7 @@ Last reviewed: 2026-09-09.
 
 - <a id="shopify-internal-agents-source-1"></a>[Under the River](https://shopify.engineering/under-the-river) ([snapshot](../archive/sources/shopify-internal-agents-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1710,20 +1736,20 @@ Last reviewed: 2026-09-09.
 
 ## Sierra: Pinecone
 
-> One company-wide agent that collapsed separate support, analytics, engineering, and sales agents into a single runtime with an MCP Gateway to 45 systems. <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1), [sierra-pinecone-source-2](#sierra-pinecone-source-2).</small>
+> One company-wide cloud agent; Sierra moved from per-employee laptop agents to one shared runtime (app server, Agency, runners) behind an MCP Gateway to 45 systems. <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1), [sierra-pinecone-source-2](#sierra-pinecone-source-2).</small>
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | scaled |
 | Availability | internal |
 | Domains | coding, code-review, support, research, data |
 | Operating model | L3 · employee request → reviewed agent output |
 | Autonomy | drafts-reviewed |
-| Invocation | event-driven, interactive |
+| Invocation | event-driven, interactive, scheduled |
 | State | durable-session |
-| Identity | unknown |
+| Identity | mixed |
 | Evidence | detailed-primary |
 | Headline metric | More than 75,000 sessions created by 600 people in the month preceding the report <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small> |
 
@@ -1735,7 +1761,7 @@ Last reviewed: 2026-09-09.
 
 - Sandbox: Agency layer reconciles recoverable Kubernetes runners; conversation/events/checkpoints stay durable separately <small>Sources: [sierra-pinecone-source-3](#sierra-pinecone-source-3).</small>
 - Harness: App server + Agency + runners; intent-based model/environment routing (Claude Code + Codex) <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1), [sierra-pinecone-source-3](#sierra-pinecone-source-3).</small>
-- Model: Claude Code + Codex; routes by intent (planning, coding, prose) <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
+- Model: Claude Code + Codex; a classifier routes by task intent to select repository, environment, harness, model, and reasoning budget <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
 - Interfaces: slack, web, linear, mobile <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
 - Tool access: MCP Gateway connected to 45 systems; a network proxy decides whether privileged requests proceed and injects credentials after approval <small>Sources: [sierra-pinecone-source-2](#sierra-pinecone-source-2).</small>
 - Knowledge: Durable sessions over disposable environments; Redis Streams <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1), [sierra-pinecone-source-3](#sierra-pinecone-source-3).</small>
@@ -1766,7 +1792,7 @@ Last reviewed: 2026-09-09.
 - <a id="sierra-pinecone-source-2"></a>[Building Sierra's MCP Gateway](https://sierra.ai/blog/building-sierras-mcp-gateway-an-engineering-iceberg) ([snapshot](../archive/sources/sierra-pinecone-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="sierra-pinecone-source-3"></a>[Agency: secure, scalable sandboxes for agents](https://sierra.ai/es/blog/agency-secure-scalable-sandboxes-for-agents) ([snapshot](../archive/sources/sierra-pinecone-source-3/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1823,7 +1849,7 @@ Last reviewed: 2026-09-09.
 - <a id="slack-context-system-source-1"></a>[Managing context in long-running agentic applications](https://slack.engineering/managing-context-in-long-run-agentic-applications/) ([snapshot](../archive/sources/slack-context-system-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="slack-context-system-source-2"></a>[How Slack manages context in long-running multi-agent systems](https://www.infoq.com/news/2026/04/slack-agent-context-management/) ([snapshot](../archive/sources/slack-context-system-source-2/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1831,7 +1857,7 @@ Last reviewed: 2026-09-15.
 
 ## Spotify: Honk / Xirp
 
-> Honk is Spotify's background coding agent (high confidence); Xirp is the workspace/context/session layer around it (medium confidence). Honk runs on a Claude-Agent-SDK harness in Kubernetes, uses trusted CI tools, and combines formatting and linting with LLM-based diff evaluation. <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1), [spotify-honk-xirp-source-2](#spotify-honk-xirp-source-2), [spotify-honk-xirp-source-3](#spotify-honk-xirp-source-3).</small>
+> Honk is Spotify's background coding agent; it runs on a Claude-Agent-SDK harness in Kubernetes, uses trusted CI tools, and combines formatting and linting with LLM-based diff evaluation. Xirp is a related Spotify beta product: an agentic development environment connected to Portal for organizational context; its relationship to Honk is not documented in the captured sources. <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1), [spotify-honk-xirp-source-2](#spotify-honk-xirp-source-2), [spotify-honk-xirp-source-3](#spotify-honk-xirp-source-3).</small>
 
 | Field | Value |
 | --- | --- |
@@ -1842,8 +1868,8 @@ Last reviewed: 2026-09-15.
 | Domains | coding, migrations, code-review |
 | Operating model | L3 · Honk coding task → verified pull request |
 | Autonomy | drafts-reviewed |
-| Invocation | event-driven, interactive |
-| State | durable-session |
+| Invocation | interactive, background |
+| State | unknown |
 | Identity | unknown |
 | Evidence | detailed-primary |
 | Headline metric | 1,500+ merged pull requests generated by Honk <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1).</small> |
@@ -1867,7 +1893,7 @@ Last reviewed: 2026-09-15.
 
 - Deterministic and model-based verification: The harness combines build/test tools, formatting and linting, and LLM-based diff evaluation <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1).</small>
 - Fleet management: Target thousands of repos, run builds/tests, open and merge PRs at fleet scale <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1), [spotify-honk-xirp-source-2](#spotify-honk-xirp-source-2).</small>
-- Xirp (workspace/context layer): The session/context surface around the agent rather than an autonomous worker itself <small>Sources: [spotify-honk-xirp-source-3](#spotify-honk-xirp-source-3).</small>
+- Xirp (workspace/context layer): An agentic development environment connected to Portal for organizational context; its relationship to Honk is not documented in the captured sources <small>Sources: [spotify-honk-xirp-source-3](#spotify-honk-xirp-source-3).</small>
 
 ### Reported metrics
 
@@ -1888,7 +1914,7 @@ Last reviewed: 2026-09-15.
 - <a id="spotify-honk-xirp-source-2"></a>[Code with Claude: coding is no longer the constraint (Honk v2)](https://engineering.atspotify.com/2026/6/code-with-claude-coding-is-no-longer-the-constraint) ([snapshot](../archive/sources/spotify-honk-xirp-source-2/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="spotify-honk-xirp-source-3"></a>[Xirp - Powered by Spotify Portal](https://xirp.spotify.com/) ([snapshot](../archive/sources/spotify-honk-xirp-source-3/content.md), captured 2026-08-31) (documentation; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1900,7 +1926,7 @@ Last reviewed: 2026-09-09.
 
 | Field | Value |
 | --- | --- |
-| Approach type | background-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -1950,7 +1976,7 @@ Last reviewed: 2026-09-09.
 - <a id="stripe-minions-source-6"></a>[Hacker News comment asking about shipped and maintained output](https://news.ycombinator.com/item?id=47087114) ([snapshot](../archive/sources/stripe-minions-source-6/content.md), captured 2026-08-31) (hn-comment; community; commentary)
 - <a id="stripe-minions-source-7"></a>[Hacker News comment questioning the value of pull request counts](https://news.ycombinator.com/item?id=47111453) ([snapshot](../archive/sources/stripe-minions-source-7/content.md), captured 2026-08-31) (hn-comment; community; commentary)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -1967,7 +1993,7 @@ Last reviewed: 2026-09-09.
 | Deployment stage | deployed |
 | Availability | mixed |
 | Domains | coding |
-| Operating model | L5 · natural-language seed → agents implement and validate against scenario harness → converged software |
+| Operating model | Unknown · natural-language seed → agents implement and validate against scenario harness → converged software |
 | Autonomy | autonomous |
 | Invocation | background |
 | State | cross-session-memory |
@@ -1976,7 +2002,7 @@ Last reviewed: 2026-09-09.
 
 ### Operating model
 
-- **Level 5 · exception-only** — natural-language seed → agents implement and validate against scenario harness → converged software (medium confidence; 2026-09) <small>Sources: [strongdm-factory-overview](#strongdm-factory-overview), [strongdm-factory-techniques](#strongdm-factory-techniques), [strongdm-factory-principles](#strongdm-factory-principles).</small>
+- **Unclassified · unknown** — natural-language seed → agents implement and validate against scenario harness → converged software (unverified confidence; 2026-09) <small>Sources: [strongdm-factory-overview](#strongdm-factory-overview), [strongdm-factory-techniques](#strongdm-factory-techniques), [strongdm-factory-principles](#strongdm-factory-principles).</small>
 
 ### Architecture
 
@@ -2012,7 +2038,7 @@ Last reviewed: 2026-09-09.
 - <a id="strongdm-factory-weather-report"></a>[Weather Report](https://factory.strongdm.ai/weather-report) ([snapshot](../archive/sources/strongdm-factory-weather-report/content.md), captured 2026-09-15) (documentation; first-party; evidence)
 - <a id="strongdm-attractor-repo"></a>[strongdm/attractor](https://github.com/strongdm/attractor) ([snapshot](../archive/sources/strongdm-attractor-repo/content.md), captured 2026-09-15) (repository; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -2024,12 +2050,12 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | deployed |
 | Availability | internal |
 | Domains | coding |
-| Operating model | Unknown · coding request → complete code change |
+| Operating model | L3 · coding request → complete code change |
 | Autonomy | drafts-reviewed |
 | Invocation | unknown |
 | State | unknown |
@@ -2039,7 +2065,7 @@ Last reviewed: 2026-09-15.
 
 ### Operating model
 
-- **Unclassified · unknown** — coding request → complete code change (unverified confidence; 2026) <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+- **Level 3 · work-product-review** — coding request → complete code change (medium confidence; 2026) <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
 
 ### Architecture
 
@@ -2055,7 +2081,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="uber-coding-agent-source-1"></a>[Uber's CTO on AI coding agents (Business Insider)](https://www.businessinsider.com/uber-cto-ai-coding-agentic-software-engineers-2026-3) ([snapshot](../archive/sources/uber-coding-agent-source-1/content.md), captured 2026-08-31) (news; independent-secondary; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -2067,7 +2093,7 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | background-agent |
+| Approach type | agent |
 | First public evidence | 2025-08-12 |
 | Deployment stage | scaled |
 | Availability | internal |
@@ -2118,7 +2144,7 @@ Last reviewed: 2026-09-15.
 
 - <a id="uber-ureview-source-1"></a>[uReview: Scalable, Trustworthy GenAI for Code Review at Uber](https://www.uber.com/us/en/blog/ureview/) ([snapshot](../archive/sources/uber-ureview-source-1/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 
-Last reviewed: 2026-09-09.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -2135,22 +2161,22 @@ Last reviewed: 2026-09-09.
 | Deployment stage | deployed |
 | Availability | internal |
 | Domains | coding, code-review, security |
-| Operating model | L4 · requirements and acceptance criteria → tested implementation |
+| Operating model | L3 · requirements and acceptance criteria → tested implementation |
 | Autonomy | drafts-reviewed |
 | Invocation | event-driven, interactive |
-| State | durable-session |
-| Identity | unknown |
+| State | mixed |
+| Identity | user |
 | Evidence | detailed-primary |
 
 ### Operating model
 
-- **Level 4 · outcome-review** — requirements and acceptance criteria → tested implementation (high confidence; 2026-05-06) <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- **Level 3 · work-product-review** — requirements and acceptance criteria → tested implementation (high confidence; 2026-05-06) <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 
 ### Architecture
 
 - Sandbox: Cloudflare Containers + Sandbox SDK; disposable, tightly scoped sandboxes with explicit lifecycle APIs and egress controls; full monorepo stack in Docker dev containers <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 - Harness: Modular by design; the core article runs OpenCode in the sandbox; the Applied AI Showcase runs Claude Remote Routines. The harness is swappable as agent tech changes; separate PM, implementation, and prospective verification/security roles <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1), [workos-project-horizon-source-2](#workos-project-horizon-source-2).</small>
-- Model: Swappable; the harness is the constant, not the model <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1), [workos-project-horizon-source-2](#workos-project-horizon-source-2).</small>
+- Model: Not documented by name; the harness is the swappable layer (OpenCode in the core article, Claude Remote Routines in the showcase), and no source names the underlying model <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1), [workos-project-horizon-source-2](#workos-project-horizon-source-2).</small>
 - Interfaces: linear, github, slack, web <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 - Tool access: A custom MCP server stitches internal data sources (Datadog, Sentry, Slack, WorkOS Pipes); all outbound traffic proxied through Workers with allowlists, limits, logging, and token injection <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1), [workos-project-horizon-source-2](#workos-project-horizon-source-2).</small>
 - Knowledge: AGENTS.md and CLAUDE.md capture scripts, docs, conventions; MCP codifies the patterns engineers already follow; Notion + Figma for specs/mockups <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
@@ -2166,7 +2192,7 @@ Last reviewed: 2026-09-09.
 
 ### Catalog observations
 
-- You need purpose-built agent infrastructure; a runtime you control end-to-end with lifecycle APIs and egress controls <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- WorkOS built a controlled runtime with lifecycle APIs and egress controls for long-running code changes that use company systems <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 - Separate concerns: sandboxes are an execution primitive; the orchestrator is the control plane <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 - Build modularly so the harness can evolve; OpenCode today, Claude Remote Routines tomorrow, without rebuilding the platform <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1), [workos-project-horizon-source-2](#workos-project-horizon-source-2).</small>
 - Make autonomy a platform; the system gets faster and more reliable through use as fixes feed back in <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
@@ -2179,7 +2205,7 @@ Last reviewed: 2026-09-09.
 - <a id="workos-project-horizon-source-3"></a>[An autonomous UI-quality program](https://workos.com/blog/autonomous-ui-quality-program) ([snapshot](../archive/sources/workos-project-horizon-source-3/content.md), captured 2026-08-31) (engineering-blog; first-party; evidence)
 - <a id="workos-project-horizon-source-4"></a>[Hacker News submission for Project Horizon](https://news.ycombinator.com/item?id=48039227) ([snapshot](../archive/sources/workos-project-horizon-source-4/content.md), captured 2026-08-31) (hn-thread; community; discovery)
 
-Last reviewed: 2026-08-31.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -2198,8 +2224,8 @@ Last reviewed: 2026-08-31.
 | Domains | coding, ops |
 | Operating model | Unknown · internal request → agent-assisted organizational work |
 | Autonomy | human-in-loop |
-| Invocation | unknown |
-| State | unknown |
+| Invocation | interactive, scheduled |
+| State | cross-session-memory |
 | Identity | unknown |
 | Evidence | detailed-primary |
 
@@ -2221,7 +2247,7 @@ Last reviewed: 2026-08-31.
 
 - <a id="ycombinator-agent-infra-source-1"></a>[Inside YC's AI Playbook (Lightcone podcast, with Pete Koomen)](https://www.ycombinator.com/library/Qh-inside-yc-s-ai-playbook) ([snapshot](../archive/sources/ycombinator-agent-infra-source-1/content.md), captured 2026-08-31) (podcast; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---
 
@@ -2233,7 +2259,7 @@ Last reviewed: 2026-09-15.
 
 | Field | Value |
 | --- | --- |
-| Approach type | task-agent |
+| Approach type | agent |
 | First public evidence | 2026 |
 | Deployment stage | research |
 | Availability | internal |
@@ -2270,6 +2296,6 @@ Last reviewed: 2026-09-15.
 
 - <a id="zup-codegen-source-1"></a>[Building an Internal Coding Agent at Zup](https://arxiv.org/abs/2604.09805) ([snapshot](../archive/sources/zup-codegen-source-1/content.md), captured 2026-08-31) (paper; first-party; evidence)
 
-Last reviewed: 2026-09-15.
+Last reviewed: 2026-09-16.
 
 ---

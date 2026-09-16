@@ -590,6 +590,22 @@
   color: var(--sand-9);
 }
 .architecture-caveats span + span::before { content: " \00B7 "; }
+.classification-table {
+  overflow-x: auto;
+  margin: 20px 0;
+  border: .5px solid var(--sand-6);
+  border-radius: 4px;
+}
+.classification-table table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.classification-table th,
+.classification-table td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: .5px solid var(--sand-6); }
+.classification-table thead th { background: var(--sand-3); font-weight: 500; }
+.classification-table tbody tr:last-child > * { border-bottom: 0; }
+.classification-table tbody th { white-space: nowrap; font-weight: 500; }
+.term-definitions { max-width: 760px; }
+.term-definitions div { display: grid; grid-template-columns: minmax(130px, 180px) 1fr; border-bottom: .5px solid var(--sand-6); padding: 8px 0; }
+.term-definitions dt { font-weight: 500; }
+.term-definitions dd { margin: 0; }
 /* A metric turns the table: its qualifications head the columns, and the values
    sit under them. The rules move with the orientation. */
 .caveats-columns {
