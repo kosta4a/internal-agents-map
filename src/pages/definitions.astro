@@ -73,12 +73,12 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
       <p><Inline parts={scope.definition} /></p>
     </div>
     <figure class="scope-figure">
-      <svg viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel}>
+      <svg viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel} data-signals>
         <rect class="scope-frame" x="0.5" y="0.5" width="683" height="384" rx="15.5"/>
         <text class="scope-label" x="20" y="36">Organization</text>
-        <path class="scope-link" id="scope-link-0" d="M202 192 C 296 192, 340 106, 456 106"/>
-        <path class="scope-link" id="scope-link-1" d="M202 192 C 296 192, 340 192, 456 192"/>
-        <path class="scope-link" id="scope-link-2" d="M202 192 C 296 192, 340 278, 456 278"/>
+        <path class="scope-link signal-path" id="scope-link-0" d="M202 192 C 296 192, 340 106, 456 106"/>
+        <path class="scope-link signal-path" id="scope-link-1" d="M202 192 C 296 192, 340 192, 456 192"/>
+        <path class="scope-link signal-path" id="scope-link-2" d="M202 192 C 296 192, 340 278, 456 278"/>
         <circle class="scope-node scope-agent" cx="190" cy="192" r="10"/>
         <text class="scope-label" x="190" y="168" text-anchor="middle">Agent</text>
         <circle class="scope-node" cx="462" cy="106" r="6"/>
@@ -87,12 +87,12 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
         <text class="scope-label" x="484" y="111">Knowledge</text>
         <text class="scope-label" x="484" y="197">Tools</text>
         <text class="scope-label" x="484" y="283">Workflows</text>
-        <circle class="scope-signal" r="3" data-link="0" data-delay="0" opacity="0"/>
-        <circle class="scope-signal" r="3" data-link="1" data-delay=".5" opacity="0"/>
-        <circle class="scope-signal" r="3" data-link="2" data-delay="1" opacity="0"/>
-        <circle class="scope-signal" r="3" data-link="0" data-delay="1.6" data-return opacity="0"/>
-        <circle class="scope-signal" r="3" data-link="1" data-delay="2.1" data-return opacity="0"/>
-        <circle class="scope-signal" r="3" data-link="2" data-delay="2.6" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-0" data-delay="0" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-1" data-delay=".5" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-2" data-delay="1" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-0" data-delay="1.6" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-1" data-delay="2.1" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-2" data-delay="2.6" data-return opacity="0"/>
       </svg>
     </figure>
     {scope.body.map((block) => <p><Inline parts={block} /></p>)}
@@ -210,16 +210,78 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <p><Inline parts={terms.intro} /></p>
     <h3>{terms.place.heading}</h3>
     <p class="concept-definition"><Inline parts={terms.place.definition} /></p>
-    <div class="concept-pair">
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={localFigure.label}><rect x="70" y="25" width="160" height="92" rx="3"/><path d="M55 128 H245 M120 117 V128 M180 117 V128"/><circle class="agent-dot" cx="150" cy="65" r="9"/><text x="150" y="98" text-anchor="middle">Agent runs here</text></svg><figcaption><strong>{localFigure.term}</strong><span>{localFigure.caption}</span></figcaption></figure>
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={cloudFigure.label}><rect x="20" y="60" width="70" height="45" rx="2"/><path d="M12 114 H98 M90 82 H175"/><rect x="175" y="25" width="105" height="90" rx="3"/><circle class="agent-dot" cx="227" cy="55" r="9"/><text x="227" y="83" text-anchor="middle">Agent runs</text><text x="227" y="99" text-anchor="middle">here</text><text x="55" y="139" text-anchor="middle">Your device</text><text x="227" y="139" text-anchor="middle">Remote computer</text></svg><figcaption><strong>{cloudFigure.term}</strong><span>{cloudFigure.caption}</span></figcaption></figure>
+    <div class="place-panels">
+      <figure class="place-panel">
+        <figcaption><strong>{localFigure.term}</strong><span>{localFigure.caption}</span></figcaption>
+        <div class="place-scene" role="img" aria-label={localFigure.label}>
+          <div class="place-machine">
+            <span class="place-machine-title">Computer</span>
+            <div class="place-box"><span class="place-agent"><span>Agent runs here</span><i aria-hidden="true"></i></span></div>
+          </div>
+        </div>
+      </figure>
+      <figure class="place-panel">
+        <figcaption><strong>{cloudFigure.term}</strong><span>{cloudFigure.caption}</span></figcaption>
+        <div class="place-scene" role="img" aria-label={cloudFigure.label}>
+          <div class="place-machine">
+            <span class="place-machine-title">Computer</span>
+            <div class="place-box"></div>
+          </div>
+          <div class="place-link">
+            <span class="place-machine-title"></span>
+            <svg class="place-arrow" viewBox="0 0 64 12" aria-hidden="true"><path d="M7 6 H57 M7 6 L13 2 M7 6 L13 10 M57 6 L51 2 M57 6 L51 10"/></svg>
+          </div>
+          <div class="place-machine">
+            <span class="place-machine-title">Remote computer</span>
+            <div class="place-box"><span class="place-agent"><span>Agent runs here</span><i aria-hidden="true"></i></span></div>
+          </div>
+        </div>
+      </figure>
     </div>
     {terms.place.body.map((block) => <p><Inline parts={block} /></p>)}
     <h3>{terms.participation.heading}</h3>
     <p class="concept-definition"><Inline parts={terms.participation.definition} /></p>
-    <div class="concept-pair">
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={foregroundFigure.label}><circle cx="55" cy="32" r="8"/><path d="M40 57 Q55 37 70 57 M55 65 V125 M245 65 V125 M75 72 H225 L219 68 M225 91 H75 L81 87 M75 110 H225 L219 106"/><circle class="agent-dot" cx="245" cy="40" r="9"/><text x="55" y="145" text-anchor="middle">You</text><text x="245" y="145" text-anchor="middle">Agent</text></svg><figcaption><strong>{foregroundFigure.term}</strong><span>{foregroundFigure.caption}</span></figcaption></figure>
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={backgroundFigure.label}><path d="M65 65 H110 L104 61 M190 65 H235 L229 61"/><circle cx="40" cy="65" r="6"/><rect x="110" y="30" width="80" height="70" stroke-dasharray="3 4"/><circle class="agent-dot" cx="150" cy="65" r="9"/><rect x="235" y="50" width="28" height="30"/><path d="M241 65 L247 71 L257 59"/><text x="40" y="129" text-anchor="middle">Trigger</text><text x="150" y="129" text-anchor="middle">Agent works</text><text x="249" y="129" text-anchor="middle">Result</text></svg><figcaption><strong>{backgroundFigure.term}</strong><span>{backgroundFigure.caption}</span></figcaption></figure>
+    <div class="place-panels">
+      <figure class="place-panel">
+        <figcaption><strong>{foregroundFigure.term}</strong><span>{foregroundFigure.caption}</span></figcaption>
+        <div class="place-scene place-scene-wide" role="img" aria-label={foregroundFigure.label}>
+          <svg class="exchange-scene" viewBox="0 0 652 280" aria-hidden="true" data-signals="5">
+            <path class="exchange-strand" id="exchange-0" d="M66 130 H160 C 250 130, 250 50, 326 50 C 402 50, 402 130, 492 130 H586"/>
+            <path class="exchange-strand" id="exchange-1" d="M66 130 H586"/>
+            <path class="exchange-strand" id="exchange-2" d="M66 130 H160 C 250 130, 250 210, 326 210 C 402 210, 402 130, 492 130 H586"/>
+            <circle class="exchange-you" cx="56" cy="130" r="10"/>
+            <circle class="exchange-agent" cx="596" cy="130" r="10"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-0" data-delay="0" opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-1" data-delay=".5" opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-2" data-delay="1" opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-0" data-delay="1.6" data-return opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-1" data-delay="2.1" data-return opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-2" data-delay="2.6" data-return opacity="0"/>
+            <text class="scope-label" x="56" y="170" text-anchor="middle">You</text>
+            <text class="scope-label" x="596" y="170" text-anchor="middle">Agent</text>
+          </svg>
+        </div>
+      </figure>
+      <figure class="place-panel">
+        <figcaption><strong>{backgroundFigure.term}</strong><span>{backgroundFigure.caption}</span></figcaption>
+        <div class="place-scene place-scene-wide" role="img" aria-label={backgroundFigure.label}>
+          <svg class="cycle-scene" viewBox="0 0 652 280" aria-hidden="true">
+            <path class="cycle-link" id="cycle-in" d="M0 140 H126"/>
+            <path class="cycle-link" id="cycle-work" d="M154 140 H302"/>
+            <path class="cycle-link" id="cycle-out" d="M350 140 H574"/>
+            <circle class="cycle-trigger" cx="140" cy="140" r="12"/>
+            <circle class="cycle-trigger-on" cx="140" cy="140" r="12" opacity="0"/>
+            <circle class="cycle-agent" cx="326" cy="140" r="22"/>
+            <path class="cycle-spinner" d="M326 126 A14 14 0 0 1 340 140" opacity="0"/>
+            <circle class="cycle-result" cx="588" cy="140" r="12"/>
+            <circle class="cycle-result-dot" cx="588" cy="140" r="6" opacity="0"/>
+            <circle class="cycle-signal" r="4" opacity="0"/>
+            <text class="scope-label" x="140" y="186" text-anchor="middle">Trigger</text>
+            <text class="scope-label" x="326" y="186" text-anchor="middle">Agent</text>
+            <text class="scope-label" x="588" y="186" text-anchor="middle">Result</text>
+          </svg>
+        </div>
+      </figure>
     </div>
     {terms.participation.body.map((block) => <p><Inline parts={block} /></p>)}
     <aside class="concept-combination"><p class="combination-title">{terms.combination.label}<br /><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
@@ -239,7 +301,9 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
   </section>
 </ArticleLayout>
 <script>
-  import { startScopeDiagram } from '../scripts/scope-diagram';
+  import { startSignals } from '../scripts/signals';
+  import { startWorkCycle } from '../scripts/work-cycle';
 
-  startScopeDiagram();
+  startSignals();
+  startWorkCycle();
 </script>
