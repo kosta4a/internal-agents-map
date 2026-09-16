@@ -1,38 +1,45 @@
 ---
 // ABOUTME: Renders one normalized claim with its citations and its qualifications.
 // ABOUTME: Caveats and conflicts stay in the initial HTML, beside the statement.
+import Arrowed from './Arrowed.astro';
+import Icon from './Icon.astro';
 import type { ClaimView } from '../lib/entry-view';
+import { observedDate } from '../lib/labels';
 
 interface Props {
   claim: ClaimView;
+  /** A mark that leads the row, where a group of claims reads as a list. */
+  mark?: 'circle-check' | 'person';
   /** Hide the field label when a section heading already names the claim group. */
   showLabel?: boolean;
   /** Name the kind of the statement where a group holds more than one kind. */
   showKind?: boolean;
 }
 
-const { claim, showLabel = true, showKind = false } = Astro.props;
+const { claim, showLabel = true, showKind = false, mark } = Astro.props;
+/**
+ * The observation date reads as a sentence rather than a table row. It keeps the
+ * recorded value, which the site checker expects to find on the page verbatim.
+ */
+const OBSERVED = 'Observation date';
+const observed = claim.caveats.find((caveat) => caveat.label === OBSERVED) ?? null;
+/**
+ * The headline figure and the key observations lead their sections, a size
+ * above the rest. Only the headline is quoted.
+ */
+const isHeadline = claim.field === 'headline_metric';
+const tabled = claim.caveats.filter((caveat) => caveat.label !== OBSERVED);
 ---
-<article class="claim" id={claim.anchor} data-claim-id={claim.id}>
+<article class:list={['claim', mark && 'claim-marked']} id={claim.anchor} data-claim-id={claim.id}>
+  {mark && <Icon name={mark} />}
   {showLabel && (
     <span class="claim-label">
-      {claim.label}{showKind && <span class="claim-kind">{claim.kindLabel}</span>}
+      {claim.label}{showKind && <span class="claim-kind"> ({claim.kindLabel.toLowerCase()})</span>}
     </span>
   )}
-  <p>{claim.text}</p>
-  {claim.citations.length > 0 && (
-    <p class="citations">
-      {claim.citations.map((citation) => (
-        <a
-          class:list={['citation', citation.relation === 'contradicts' && 'citation-contradicts']}
-          href={`#${citation.anchor}`}
-        >
-          <strong>{citation.number}</strong>
-          {claim.showCitationRoles && <span> {citation.relationLabel}</span>}
-        </a>
-      ))}
-    </p>
-  )}
+  <p class="claim-text">
+    {isHeadline ? <>“<Arrowed text={claim.text} />”</> : <Arrowed text={claim.text} />}
+  </p>
   {claim.contradicting.length > 0 && (
     <div class="conflict">
       <strong>Conflicting evidence</strong>
@@ -45,15 +52,18 @@ const { claim, showLabel = true, showKind = false } = Astro.props;
       </p>
     </div>
   )}
-  {claim.qualification && <p class="qualification">{claim.qualification}</p>}
-  {claim.caveats.length > 0 && (
-    <dl class="caveats">
-      {claim.caveats.map((caveat) => (
+  {tabled.length > 0 && (claim.isMetric ? (
+    <dl class="caveats caveats-columns">
+      {tabled.map((caveat) => (
         <>
           <dt>{caveat.label}</dt>
           <dd>{caveat.value}</dd>
         </>
       ))}
     </dl>
-  )}
+  ) : (
+    tabled.map((caveat) => <p class="caveat-note">{caveat.value}</p>)
+  ))}
+  {claim.qualification && <p class="qualification">{claim.qualification}</p>}
+  {observed && <p class="observed">Observed in {observedDate(observed.value)}</p>}
 </article>

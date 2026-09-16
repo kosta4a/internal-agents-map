@@ -320,9 +320,7 @@ export interface AxisScale {
 
 /** One of the two questions the chart asks about an implementation. */
 export interface ChartDimension {
-  readonly axisLabel: string;
   readonly heading: string;
-  readonly scale: AxisScale;
   readonly description: TextBlock;
 }
 
@@ -431,7 +429,7 @@ export const DEFINITIONS_WORKFLOW = {
     'What makes this internal is its role in Stripe’s engineering work. Its cloud execution and unattended operation describe other aspects of the same system.',
   ] as TextBlock,
   catalogLink: {
-    text: 'Explore Minions in the catalog →',
+    text: 'Explore Minions in the catalog',
     path: MINIONS_PATH,
   } as InlineLink,
 } as const;
@@ -443,17 +441,13 @@ export const DEFINITIONS_CHART = {
   intro: ['Two questions help explain the different approaches in the map:'] as TextBlock,
   dimensions: [
     {
-      axisLabel: 'Horizontal axis · work breadth',
-      heading: 'How broad is the work?',
-      scale: { from: 'One workflow', to: 'Many workflows' },
+      heading: 'Horizontal axis indicates how broad the work is.',
       description: [
         'Focused agents follow one defined workflow. Broader agents support many kinds of work or provide a shared platform.',
       ],
     },
     {
-      axisLabel: 'Vertical axis · adaptation',
-      heading: 'How specific is it to the organization?',
-      scale: { from: 'Standard', to: 'Company-specific' },
+      heading: 'Vertical axis defines how organization specific it is.',
       description: [
         'Standard products arrive with common capabilities. Internal systems add company knowledge, tools, conventions, and processes.',
       ],

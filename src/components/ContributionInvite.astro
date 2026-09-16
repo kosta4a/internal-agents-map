@@ -1,0 +1,22 @@
+---
+// ABOUTME: The invitation to add or correct an entry, at the foot of the page body.
+// ABOUTME: It closes the reading, so it sits after the last section rather than in the footer.
+import Icon from './Icon.astro';
+
+const contribute =
+  'https://github.com/steel-experiments/internal-agents-map/issues/new?title=Catalog+suggestion';
+---
+<section class="contribution-invite" aria-labelledby="contribute-title">
+  <strong id="contribute-title">Know an internal agent?</strong>
+  <p>Share a resource or public mention, suggest an addition, or correct an existing entry.</p>
+  <div class="contribution-links">
+    <a class="button" href={contribute}>
+      <span>Suggest a resource or update</span>
+      <Icon name="arrow-upright" />
+    </a>
+    <a class="button" href="https://github.com/steel-experiments/internal-agents-map/compare">
+      <span>Open a pull request</span>
+      <Icon name="arrow-upright" />
+    </a>
+  </div>
+</section>

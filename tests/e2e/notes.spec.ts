@@ -96,7 +96,7 @@ test.describe('one note', () => {
 
   test('offers a way back and a way on', async ({ page }) => {
     await page.goto('/notes/stop-a-run');
-    await expect(page.locator('a.note-back[href="/notes"]')).toBeVisible();
+    await expect(page.locator('.note-next a[href="/notes"]')).toBeVisible();
     await page.locator('.note-next a[href="/notes/review-noise"]').click();
     await expect(page.locator('h1')).toHaveText('More comments can mean more work');
   });
@@ -138,7 +138,7 @@ test.describe('the Definitions guide', () => {
 
   test('keeps the diagrams in the initial HTML', async ({ page }) => {
     await page.goto('/definitions');
-    await expect(page.locator('.core-definition svg')).toHaveCount(1);
+    await expect(page.locator('.scope-diagram')).toHaveCount(1);
     await expect(page.locator('.concept-pair svg')).toHaveCount(4);
     await expect(page.locator('.workflow-figure')).toHaveCount(1);
     await assertFragmentsResolve(page);
@@ -158,6 +158,6 @@ test.describe('the Methodology guide', () => {
     );
     await expect(page.locator('a[href="/definitions"]')).not.toHaveCount(0);
     await expect(page.locator('a[href="/notes"]')).not.toHaveCount(0);
-    await expect(page.locator('section')).toHaveCount(7);
+    await expect(page.locator('section')).toHaveCount(8);
   });
 });

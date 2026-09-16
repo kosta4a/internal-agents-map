@@ -44,7 +44,7 @@ primitives:
 - name: Orchestration layer
   desc: Coordinates multiple agents over one codebase instead of running a single loop
 - name: Ticket-driven flow
-  desc: Linear/Jira ticket -> branch -> code -> PR -> CI watch, end to end
+  desc: Linear/Jira ticket → branch → code → PR → CI watch, end to end
 key_metrics:
 - 200,000+ operations per day
 - ~1,500 pull requests merged per week (~15% of all production code changes at Block)

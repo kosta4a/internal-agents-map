@@ -2,8 +2,8 @@
 // ABOUTME: The Definitions guide: the scope of the map, the chart, and the terms.
 // ABOUTME: Chart placements come from the catalog, so lost evidence removes a marker.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Icon from '../components/Icon.astro';
 import Inline from '../components/Inline.astro';
-import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell } from '../lib/definitions';
 import {
@@ -13,7 +13,6 @@ import {
   DEFINITIONS_EYEBROW,
   DEFINITIONS_HEADING,
   DEFINITIONS_INTRO,
-  DEFINITIONS_JUMP_LINKS,
   DEFINITIONS_LEDE,
   DEFINITIONS_QUESTIONS,
   DEFINITIONS_SCOPE,
@@ -63,26 +62,22 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
   structuredData={graph}
 >
   <header class="guide-header">
-    <Topography />
     <p class="eyebrow">{DEFINITIONS_EYEBROW}</p>
     <h1>{DEFINITIONS_HEADING}</h1>
     <p class="lede">{DEFINITIONS_LEDE}</p>
     {DEFINITIONS_INTRO.map((block) => <p><Inline parts={block} /></p>)}
-    <div class="resource-links">{DEFINITIONS_JUMP_LINKS.map((link) => <a href={`#${link.fragment}`}>{link.label}</a>)}</div>
   </header>
   <section id="terms">
-    <p class="eyebrow">{scope.eyebrow}</p>
     <h2>{scope.heading}</h2>
     <div class="core-definition">
-      <div><span class="definition-label">{scope.definitionLabel}</span><p><Inline parts={scope.definition} /></p></div>
-      <svg viewBox="0 0 300 210" role="img" aria-label={scope.diagramLabel}><rect x="12" y="12" width="276" height="186" rx="2"/><text x="30" y="38">Organization</text><path class="agent-links" pathLength="1" d="M150 94 L60 149 M150 94 L150 149 M150 94 L240 149"/><circle class="agent-dot" cx="150" cy="94" r="9"/><text x="150" y="72" text-anchor="middle">Agent</text><circle cx="60" cy="149" r="5"/><circle cx="150" cy="149" r="5"/><circle cx="240" cy="149" r="5"/><text x="60" y="177" text-anchor="middle">Knowledge</text><text x="150" y="177" text-anchor="middle">Tools</text><text x="240" y="177" text-anchor="middle">Workflows</text></svg>
+      <p><Inline parts={scope.definition} /></p>
     </div>
+    <svg class="scope-diagram" viewBox="0 0 300 210" role="img" aria-label={scope.diagramLabel}><rect x="12" y="12" width="276" height="186" rx="2"/><text x="30" y="38">Organization</text><path class="agent-links" pathLength="1" d="M150 94 L60 149 M150 94 L150 149 M150 94 L240 149"/><circle class="agent-dot" cx="150" cy="94" r="9"/><text x="150" y="72" text-anchor="middle">Agent</text><circle cx="60" cy="149" r="5"/><circle cx="150" cy="149" r="5"/><circle cx="240" cy="149" r="5"/><text x="60" y="177" text-anchor="middle">Knowledge</text><text x="150" y="177" text-anchor="middle">Tools</text><text x="240" y="177" text-anchor="middle">Workflows</text></svg>
     {scope.body.map((block) => <p><Inline parts={block} /></p>)}
     <h3>{scope.agentHeading}</h3>
     {scope.agentBody.map((block) => <p><Inline parts={block} /></p>)}
   </section>
   <section id="overlap">
-    <p class="eyebrow">{workflow.eyebrow}</p>
     <h2>{workflow.heading}</h2>
     <p><Inline parts={workflow.intro} /></p>
     <figure class="workflow-figure">
@@ -94,19 +89,14 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
       <figcaption><Inline parts={workflow.caption} /></figcaption>
     </figure>
     <p><Inline parts={workflow.closing} /></p>
-    <div class="resource-links"><a href={inlineHref(workflow.catalogLink)}>{workflow.catalogLink.text}</a></div>
+    <a class="button" href={inlineHref(workflow.catalogLink)}><span>{workflow.catalogLink.text}</span><Icon name="layers-two" /></a>
   </section>
   <section id="quadrant">
-    <p class="eyebrow">{chart.eyebrow}</p>
     <h2>{chart.heading}</h2>
     <p><Inline parts={chart.intro} /></p>
     <div class="dimension-intro">
-      <div><span class="dimension-axis-label">{breadth.axisLabel}</span><h3>{breadth.heading}</h3>
-        <div class="dimension-scale"><span>{breadth.scale.from}</span><span aria-hidden="true">→</span><span>{breadth.scale.to}</span></div>
-        <p><Inline parts={breadth.description} /></p></div>
-      <div><span class="dimension-axis-label">{adaptation.axisLabel}</span><h3>{adaptation.heading}</h3>
-        <div class="dimension-scale"><span>{adaptation.scale.from}</span><span aria-hidden="true">→</span><span>{adaptation.scale.to}</span></div>
-        <p><Inline parts={adaptation.description} /></p></div>
+      <div><h3>{breadth.heading}</h3><p><Inline parts={breadth.description} /></p></div>
+      <div><h3>{adaptation.heading}</h3><p><Inline parts={adaptation.description} /></p></div>
     </div>
     <figure class="quadrant-figure">
       <div class="quadrant-legend" aria-label="Marker legend"><span><i class="catalog-marker" aria-hidden="true"></i>{chart.legend.catalog}</span><span><i class="reference-marker-key" aria-hidden="true"></i>{chart.legend.reference}</span></div>
@@ -164,7 +154,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     </figure>
     {chart.body.map((block) => <p><Inline parts={block} /></p>)}
     <details class="placement-notes">
-      <summary>{chart.notesSummary}</summary>
+      <summary><span>{chart.notesSummary}</span><Icon name="chevron-down" /></summary>
       <ul>
         {placed.map((item) => (
           <li>
@@ -183,7 +173,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
             <p>{item.reason}</p>
             <div>
               {item.links.map((link, index) => (
-                <>{index > 0 && ' · '}<a href={link.url}>{link.label} <span class="link-arrow">↗</span></a></>
+                <>{index > 0 && ' · '}<a href={link.url}><Icon name="arrow-upright" />{link.label}</a></>
               ))}
             </div>
           </li>
@@ -194,7 +184,6 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     {chart.builtBody.map((block) => <p><Inline parts={block} /></p>)}
   </section>
   <section id="terminology">
-    <p class="eyebrow">{terms.eyebrow}</p>
     <h2>{terms.heading}</h2>
     <p><Inline parts={terms.intro} /></p>
     <h3>{terms.place.heading}</h3>
@@ -211,15 +200,19 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
       <figure><svg viewBox="0 0 300 150" role="img" aria-label={backgroundFigure.label}><path d="M65 65 H110 L104 61 M190 65 H235 L229 61"/><circle cx="40" cy="65" r="6"/><rect x="110" y="30" width="80" height="70" stroke-dasharray="3 4"/><circle class="agent-dot" cx="150" cy="65" r="9"/><rect x="235" y="50" width="28" height="30"/><path d="M241 65 L247 71 L257 59"/><text x="40" y="129" text-anchor="middle">Trigger</text><text x="150" y="129" text-anchor="middle">Agent works</text><text x="249" y="129" text-anchor="middle">Result</text></svg><figcaption><strong>{backgroundFigure.term}</strong><span>{backgroundFigure.caption}</span></figcaption></figure>
     </div>
     {terms.participation.body.map((block) => <p><Inline parts={block} /></p>)}
-    <aside class="concept-combination"><span class="definition-label">{terms.combination.label}</span><p><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
+    <aside class="concept-combination"><p class="combination-title">{terms.combination.label}<br /><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
     <h3 id={terms.autonomy.id}>{terms.autonomy.heading}</h3>
     {terms.autonomy.body.map((block) => <p><Inline parts={block} /></p>)}
     <blockquote>{terms.autonomy.quote}</blockquote>
     <p><Inline parts={terms.autonomy.closing} /></p>
   </section>
   <section id="faq" class="guide-faq">
-    <p class="eyebrow">{questions.eyebrow}</p>
     <h2>{questions.heading}</h2>
-    {questions.items.map((item) => <details><summary>{item.question}</summary><p><Inline parts={item.answer} /></p></details>)}
+    {questions.items.map((item) => (
+      <details>
+        <summary><span>{item.question}</span><Icon name="chevron-down" /></summary>
+        <p><Inline parts={item.answer} /></p>
+      </details>
+    ))}
   </section>
 </ArticleLayout>

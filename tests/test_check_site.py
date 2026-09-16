@@ -174,9 +174,8 @@ def build_artifact(root):
     files = {
         "favicon.ico": "icon",
         "og.png": "image",
-        STYLESHEET: '@font-face { src: url("/fonts/Geist.woff2"); }',
-        "fonts/Geist.woff2": "font",
-        "fonts/OFL.txt": "licence",
+        STYLESHEET: '@font-face { src: url("/fonts/Areal.woff2"); }',
+        "fonts/Areal.woff2": "font",
         "agents.json": json.dumps(CATALOG),
         "agents/index.json": "[]",
         "logos/first.svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40"/>',
@@ -372,7 +371,7 @@ class AstroArtifactTests(unittest.TestCase):
         self.assertTrue(any("Missing local target: /" + STYLESHEET in e for e in errors), errors)
 
     def test_css_asset_reference_is_checked(self):
-        self.rewrite(STYLESHEET, "/fonts/Geist.woff2", "/fonts/missing.woff2")
+        self.rewrite(STYLESHEET, "/fonts/Areal.woff2", "/fonts/missing.woff2")
         self.assertTrue(any("Missing local target" in e for e in self.validate()), self.validate())
 
     def test_srcset_candidate_is_checked(self):

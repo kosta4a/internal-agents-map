@@ -32,7 +32,7 @@ headline_metric: Open-source (Apache-2.0) Slack agent (~100k lines of TS) used i
 architecture:
   sandbox: Vercel serverless functions; Vercel agent-browser sandbox with an on-path proxy for traffic interception;
     ephemeral containers
-  harness: Custom harness on Pi's SDK; a task broker over Vercel Queues with an inbox -> worker-claim -> interrupt/resume
+  harness: Custom harness on Pi's SDK; a task broker over Vercel Queues with an inbox → worker-claim → interrupt/resume
     pattern to survive serverless timeouts; 'skills-as-runbooks'
   model: Claude Sonnet (faster); swappable (Opus as a more expensive option)
   interfaces:

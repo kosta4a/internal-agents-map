@@ -17,7 +17,7 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 
 # Files that public/ publishes exactly as they are authored.
-PUBLIC_FILES = {"favicon.ico", "og.png", "fonts/Geist.woff2", "fonts/OFL.txt"}
+PUBLIC_FILES = {"favicon.ico", "og.png", "fonts/Areal.woff2"}
 # Exports and discovery files that no page route serves.
 EXPORT_FILES = {
     "agents.json",
@@ -32,6 +32,7 @@ ERROR_PAGE = "404.html"
 DIRECTORIES = {"_astro", "fonts", "notes", "agents", "logos"}
 # A bundled stylesheet or script: a stem, which can hold dots, a content hash, and its type.
 BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_.-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
+CHUNK_IMPORT = re.compile(r"\./([A-Za-z0-9_.-]+\.[A-Za-z0-9_-]{8,}\.js)")
 CSS_URL = re.compile(r"url\(\s*['\"]?([^'\"\s)]+)['\"]?\s*\)")
 # The research fields that qualify a statement and must stay beside it.
 QUALIFIER_FIELDS = ("reported_by", "metric_scope", "denominator", "measurement_method", "valid_at")
@@ -199,6 +200,23 @@ def validate(
         for css_path in (root / "_astro").glob("*.css"):
             css = css_path.read_text(encoding="utf-8")
             referenced |= {match[1].lstrip("/") for match in CSS_URL.finditer(css)}
+        # A bundled script may import another chunk, which no document names.
+        pending = [name for name in referenced if name.endswith(".js")]
+        walked = set()
+        while pending:
+            script_name = pending.pop()
+            if script_name in walked:
+                continue
+            walked.add(script_name)
+            script_path = root / script_name
+            if not script_path.is_file():
+                continue
+            folder = script_name.rsplit("/", 1)[0] if "/" in script_name else ""
+            script = script_path.read_text(encoding="utf-8")
+            for match in CHUNK_IMPORT.finditer(script):
+                imported = f"{folder}/{match[1]}" if folder else match[1]
+                referenced.add(imported)
+                pending.append(imported)
         allowed = expected | {name for name in referenced if BUNDLED_ASSET.fullmatch(name)}
         extra = sorted(actual - allowed)
         if extra:

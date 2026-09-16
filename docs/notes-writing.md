@@ -40,7 +40,7 @@ Read the source again when its evidence or the associated catalog claims change.
 
 ## Illustrations
 
-Use the existing Geist type, white background, fine gray rules, and restrained teal
+Use the existing Areal type, white background, fine gray rules, and restrained teal
 accent. HTML/CSS diagrams keep labels readable and let the layout adapt to small
 screens. Mark arrows as decorative when the text already gives the order.
 

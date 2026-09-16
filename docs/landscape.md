@@ -44,7 +44,7 @@ The L2-L5 labels adapt [Dan Shapiro's five levels of AI-assisted software develo
 | Slack | [Multi-agent context system](#slack-context-system) | supporting-pattern | research | Unknown · long-running investigation → synthesized report | human-in-loop | research | internal | 2026 |
 | Spotify | [Honk / Xirp](#spotify-honk-xirp) | agent-system | coding, migrations, code-review | L3 · Honk coding task → verified pull request | drafts-reviewed | scaled | mixed | 2025 |
 | Stripe | [Minions](#stripe-minions) | background-agent | coding, code-review | L3 · work context → merge-ready pull request | drafts-reviewed | scaled | internal | 2026 |
-| StrongDM | [Software Factory](#strongdm-software-factory) | agent-system | coding | L5 · natural-language seed -> agents implement and validate against scenario harness -> converged software | autonomous | deployed | mixed | 2026 |
+| StrongDM | [Software Factory](#strongdm-software-factory) | agent-system | coding | L5 · natural-language seed → agents implement and validate against scenario harness → converged software | autonomous | deployed | mixed | 2026 |
 | Uber | [Internal coding agent (unnamed)](#uber-coding-agent) | task-agent | coding | Unknown · coding request → complete code change | drafts-reviewed | deployed | internal | 2026 |
 | Uber | [uReview](#uber-ureview) | background-agent | code-review | L3 · pull request → filtered AI review findings | drafts-reviewed | scaled | internal | 2025 |
 | WorkOS | [Project Horizon](#workos-project-horizon) | platform | coding, code-review, security | L4 · requirements and acceptance criteria → tested implementation | drafts-reviewed | deployed | internal | 2026 |
@@ -188,7 +188,7 @@ Last reviewed: 2026-09-15.
 ### Primitives
 
 - Orchestration layer: Coordinates multiple agents over one codebase instead of running a single loop <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
-- Ticket-driven flow: Linear/Jira ticket -> branch -> code -> PR -> CI watch, end to end <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
+- Ticket-driven flow: Linear/Jira ticket → branch → code → PR → CI watch, end to end <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
 
 ### Reported metrics
 
@@ -657,13 +657,13 @@ Last reviewed: 2026-09-09.
 ### Architecture
 
 - Sandbox: Firecracker microVMs; <5s p95 end-to-end setup (boot, clone repos, install tools, configure harness) <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
-- Harness: Maturity model: deterministic workflows -> ReAct agents -> hierarchical deep agents -> experimental swarms <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
+- Harness: Maturity model: deterministic workflows → ReAct agents → hierarchical deep agents → experimental swarms <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
 - Model: Model-agnostic platform primitives support third-party or in-house agent components <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Interfaces: slack, github, scheduled, cli, skill, cursor <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Tool access: In-house MCP gateway ('Agent Gateway'); LangGraph orchestration; prospective A2A; tools declared per playbook with scoped, logged permissions <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Knowledge: AI Marketplace of specialized agents; DataExplorer for grounded analytics; DoorDash-specific context in playbooks <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2), [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Credentials: Scoped per playbook; brokered through the gateway, never on the laptop; provenance on every action <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
-- Context mgmt: Hybrid retrieval: BM25 + dense semantic + reciprocal-rank fusion -> RAG; schema-aware SQL with EXPLAIN validation <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
+- Context mgmt: Hybrid retrieval: BM25 + dense semantic + reciprocal-rank fusion → RAG; schema-aware SQL with EXPLAIN validation <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
 
 ### Primitives
 
@@ -671,7 +671,7 @@ Last reviewed: 2026-09-09.
 - MCP Gateway: Governed, audited access to CI, observability, issue trackers, deploy, code search <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - Playbook: YAML unit of agentic work: task, inputs, skills, tools, permissions, validation, outputs <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - DataExplorer: Identifies schemas, generates grounded SQL, validates via EXPLAIN before execution <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
-- Maturity model: Workflows -> agents -> deep-agent hierarchies -> swarms; governance hardens as control decentralizes <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
+- Maturity model: Workflows → agents → deep-agent hierarchies → swarms; governance hardens as control decentralizes <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
 
 ### Reported metrics
 
@@ -1605,7 +1605,7 @@ Last reviewed: 2026-08-31.
 ### Architecture
 
 - Sandbox: Vercel serverless functions; Vercel agent-browser sandbox with an on-path proxy for traffic interception; ephemeral containers <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
-- Harness: Custom harness on Pi's SDK; a task broker over Vercel Queues with an inbox -> worker-claim -> interrupt/resume pattern to survive serverless timeouts; 'skills-as-runbooks' <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- Harness: Custom harness on Pi's SDK; a task broker over Vercel Queues with an inbox → worker-claim → interrupt/resume pattern to survive serverless timeouts; 'skills-as-runbooks' <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Model: Claude Sonnet (faster); swappable (Opus as a more expensive option) <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Interfaces: slack, web, github <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Tool access: Progressive discovery via MCP; by default Junior connects to no provider until the agent requests a tool lookup; plugins connect Sentry, GitHub, Linear, Notion <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
@@ -1967,7 +1967,7 @@ Last reviewed: 2026-09-09.
 | Deployment stage | deployed |
 | Availability | mixed |
 | Domains | coding |
-| Operating model | L5 · natural-language seed -> agents implement and validate against scenario harness -> converged software |
+| Operating model | L5 · natural-language seed → agents implement and validate against scenario harness → converged software |
 | Autonomy | autonomous |
 | Invocation | background |
 | State | cross-session-memory |
@@ -1976,7 +1976,7 @@ Last reviewed: 2026-09-09.
 
 ### Operating model
 
-- **Level 5 · exception-only** — natural-language seed -> agents implement and validate against scenario harness -> converged software (medium confidence; 2026-09) <small>Sources: [strongdm-factory-overview](#strongdm-factory-overview), [strongdm-factory-techniques](#strongdm-factory-techniques), [strongdm-factory-principles](#strongdm-factory-principles).</small>
+- **Level 5 · exception-only** — natural-language seed → agents implement and validate against scenario harness → converged software (medium confidence; 2026-09) <small>Sources: [strongdm-factory-overview](#strongdm-factory-overview), [strongdm-factory-techniques](#strongdm-factory-techniques), [strongdm-factory-principles](#strongdm-factory-principles).</small>
 
 ### Architecture
 

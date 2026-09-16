@@ -109,9 +109,7 @@ function document(): string {
     `## ${chart.heading}`,
     inlineMarkdown(chart.intro),
     ...chart.dimensions.flatMap((dimension) => [
-      dimension.axisLabel,
       `### ${dimension.heading}`,
-      `${dimension.scale.from} ${dimension.scale.to}`,
       inlineMarkdown(dimension.description),
     ]),
     `${chart.legend.catalog} ${chart.legend.reference}`,

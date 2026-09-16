@@ -3,157 +3,98 @@
 
 /* Directory introduction */
 .intro {
-  position: relative;
-  isolation: isolate;
-  padding: 0 0 40px;
-  border-bottom: 1px solid var(--rule);
+  padding: 0 0 32px;
+  margin-bottom: 32px;
 }
 
-/* Contour lines behind a page header: the hatched mark, extended into terrain. */
-.topography {
-  position: absolute;
-  inset: 0 0 1px;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  fill: none;
-  stroke: #e8e8eb;
-  stroke-width: 1;
-  pointer-events: none;
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, .4), #000 65%);
-}
-.topography .agent-dot {
-  fill: var(--blue);
-  stroke: var(--blue);
-}
-.topography .mark {
-  stroke: var(--blue);
-  stroke-width: 1.1;
-}
-/* The terrain surveys itself in, outer contour first; the agent dot arrives last. */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-  @keyframes appear { from { opacity: 0; } }
-  @keyframes breathe {
-    0% { stroke-width: 0; stroke-opacity: .5; }
-    70%, 100% { stroke-width: 14; stroke-opacity: 0; }
-  }
-  .topography .contour {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: draw 1.8s cubic-bezier(.3, .7, .3, 1) both;
-    animation-delay: calc(.2s + var(--ring, 0) * .12s);
-  }
-  .topography .agent-dot {
-    paint-order: stroke;
-    animation: appear .6s ease-out 3s both, breathe 4s ease-out 3.6s infinite;
-  }
-  .topography .mark {
-    animation: appear .5s ease-out both;
-    animation-delay: calc(2.6s + var(--k, 0) * .07s);
-  }
-}
-.intro h1 { margin-top: 18px; }
-.intro > .lede + p {
+.intro h1 { margin-top: 0; }
+.intro > h1 + p {
   max-width: 670px;
+  font-size: 14px;
   color: var(--muted);
 }
 .stats {
   display: flex;
-  gap: 40px;
+  gap: 32px;
   flex-wrap: wrap;
   margin-top: 32px;
 }
+/* The same hairline the table draws, between each figure and the next. */
+.stat + .stat {
+  border-left: .5px solid var(--sand-6);
+  padding-left: 32px;
+}
 .stat strong {
   display: block;
-  font-size: 28px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: -.04em;
 }
 .stat span {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
-}
-.review-date {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 20px;
-}
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: center;
-  padding: 32px 0 24px;
-}
-.section-heading .eyebrow { font-size: 12px; }
-.result-count {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 20px 0 8px;
 }
 
-/* Search box. It stays hidden until the script that makes it work runs. */
-#filters .search-label {
-  display: block;
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 7px;
+/* Search form. It stays hidden until the script that makes it work runs. */
+#filters input {
+  font-size: 14px;
+  max-width: 100%;
+  min-width: 0;
 }
-.search-row {
+#filters input::placeholder { color: rgba(255, 255, 255, .72); }
+/* The search field floats over the catalog near the bottom of the window. */
+#filters {
+  position: fixed;
+  z-index: 10;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: min(396px, calc(100% - 32px));
+}
+#filters .search-row {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: start;
+  grid-template-columns: 1fr;
+  width: 100%;
 }
-.search-field {
+#filters .search-field {
   position: relative;
   min-width: 0;
 }
-.search-box {
+/* The box is the pill: icon, any chips, and the field, on one dark ground. */
+#filters .search-box {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid #d5d5d8;
-  border-radius: 4px;
-  padding: 4px 6px;
-  min-height: 42px;
+  gap: 8px;
+  width: 100%;
   min-width: 0;
-}
-.search-box:focus-within {
-  outline: 2px solid var(--blue);
-  outline-offset: 1px;
-}
-#filters input {
-  flex: 1 1 200px;
-  min-width: 0;
+  padding: 8px 16px 8px 12px;
   border: 0;
-  background: none;
-  padding: 6px;
-  font-size: 14px;
-  min-height: 32px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(33, 32, 28, .72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 14px rgba(33, 32, 28, .1);
 }
-#filters input:focus { outline: none; }
-#filters input::placeholder { color: #737373; }
-#filters button[type='reset'] {
-  background: #fff;
-  border: 1px solid #d5d5d8;
-  border-radius: 4px;
-  padding: 9px 12px;
-  font-size: 14px;
-  min-height: 42px;
+#filters .search-box:focus-within {
+  background: rgba(33, 32, 28, .88);
+  box-shadow: 0 6px 18px rgba(33, 32, 28, .18);
 }
-#filters button[type='reset']:hover { background: var(--surface); }
-.search-help {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 8px 0 0;
+#filters .search-label {
+  display: flex;
+  align-items: center;
 }
+/* Announced through aria-describedby; the pill has no room to show it. */
+.search-help { font-size: 12px; color: var(--sand-10); }
 
-/* Selected facet terms inside the search box. */
+/* A selected facet term, inside the pill. */
 .chips {
   display: contents;
   list-style: none;
@@ -164,108 +105,74 @@
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: var(--surface);
-  border-radius: 3px;
-  padding: 4px 4px 4px 8px;
-  font-size: 13px;
-  color: var(--ink);
+  gap: 8px;
   max-width: 100%;
+  padding: 3px 8px 3px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .16);
+  font-size: 12px;
+  color: #fff;
 }
 .chip-key {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--muted);
+  font-size: 12px;
+  color: rgba(255, 255, 255, .7);
   white-space: nowrap;
 }
 .chip-remove {
-  background: none;
-  border: 0;
   padding: 0 4px;
   min-height: 0;
-  font-size: 16px;
+  border: 0;
+  background: none;
+  font-size: 14px;
   line-height: 1;
-  color: var(--muted);
+  color: rgba(255, 255, 255, .7);
   cursor: pointer;
 }
 .chip-remove:hover,
-.chip-remove:focus-visible { color: var(--ink); }
+.chip-remove:focus-visible { color: #fff; }
 
-/* Facet suggestions under the search box. */
+/* Suggestions open upward, since the bar sits at the bottom of the window. */
 .suggestions {
   position: absolute;
-  top: calc(100% + 4px);
+  z-index: 2;
+  bottom: calc(100% + 8px);
   left: 0;
   right: 0;
-  z-index: 2;
-  list-style: none;
-  margin: 0;
-  padding: 4px;
-  background: #fff;
-  border: 1px solid #d5d5d8;
-  border-radius: 4px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  max-height: 320px;
+  max-height: 40vh;
   overflow-y: auto;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(33, 32, 28, .72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 14px rgba(33, 32, 28, .1);
 }
+.suggestions[hidden] { display: none; }
 .suggestion {
   display: flex;
   align-items: baseline;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 3px;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
   font-size: 14px;
   cursor: pointer;
 }
 .suggestion .chip-key { min-width: 120px; }
 .suggestion:hover,
-.suggestion[aria-selected='true'] { background: var(--surface); }
-.empty-state {
-  background: var(--surface);
-  padding: 24px;
-  margin: 20px 0;
-}
-.text-button {
-  background: none;
-  border: 0;
-  padding: 0;
-  min-height: 0;
-  color: var(--link);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
-.text-button:hover {
-  background: none;
-  text-decoration-thickness: 2px;
-}
-@media (max-width: 420px) {
-  .search-row { grid-template-columns: 1fr; }
-  #filters button[type='reset'] { width: 100%; }
-  .suggestion .chip-key { min-width: 0; }
-}
+.suggestion[aria-selected='true'] { background: rgba(0, 0, 0, .32); }
 
-/* Directory cards */
-.entry {
-  border-top: 1px solid var(--rule);
-  padding: 26px 0 24px;
-}
-.entry-top {
+/* The company mark, in a card and at the top of an entry. */
+.entry-heading {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 9px;
-}
-.company {
-  display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
-  font-weight: 550;
   min-width: 0;
 }
+/* Hidden for now. The mark stays in the markup, so this is one line to undo. */
+.entry-heading .company-logo { display: none; }
 .company-logo {
   display: inline-flex;
   align-items: center;
@@ -286,114 +193,266 @@
   justify-content: center;
   height: var(--logo-size, 20px);
   width: var(--logo-size, 20px);
-  background: var(--surface);
+  border-radius: 999px;
+  background: var(--sand-3);
   color: var(--ink);
-  border-radius: 3px;
-  font-size: calc(var(--logo-size, 20px) * 0.55);
-  font-weight: 550;
+  font-size: calc(var(--logo-size, 20px) * .55);
+  font-weight: 400;
   line-height: 1;
+}
+.entry-header > .company-logo { margin-bottom: 16px; }
+#filters .search-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+/* The pill itself draws the field, so the control inside stays bare. */
+#filters .search-box input {
+  flex: 1;
+  color: #fff;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+#filters .search-box input:focus { outline: none; }
+.empty-state {
+  background: var(--surface);
+  padding: 24px;
+  margin: 24px 0;
+}
+.text-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  min-height: 0;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.text-button:hover {
+  background: none;
+  text-decoration-thickness: 2px;
+}
+@media (max-width: 1050px) {
+}
+@media (max-width: 420px) {
+}
+
+/* Directory cards */
+.entry {
+  margin-bottom: 40px;
+}
+.entry-box {
+  position: relative;
+  cursor: pointer;
+}
+/* No container to shade: hovering lightens everything the card says by a step. */
+.entry-box:hover h3 a { color: var(--sand-11); }
+.entry-box:hover .entry-summary { color: var(--sand-9); }
+.entry-box:hover .tag { color: var(--sand-9); }
+/* The heading link covers the container, so the whole card opens the entry. */
+.entry-box h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+.entry-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.company {
+  font-size: 12px;
+  font-weight: 400;
 }
 .entry-type {
   font-size: 12px;
   color: var(--muted);
 }
-.entry h3 { margin-bottom: 12px; }
+.entry h3 { margin-bottom: 0; font-size: 16px; }
 .entry h3 a {
   color: var(--ink);
   text-decoration: none;
 }
-.entry h3 a:hover {
-  color: var(--link);
-  text-decoration: underline;
-}
+
 .entry-summary {
+  font-size: 14px;
   line-height: 1.65;
   max-width: 740px;
+  color: var(--sand-10);
 }
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 16px 0 12px;
+  gap: 8px;
+  margin: 10px 0 12px;
 }
 .tag {
-  background: var(--surface);
-  font-size: 12px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  color: #555;
-}
-.entry-end {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  font-size: 12px;
-  margin-top: 16px;
-  color: var(--muted);
+  background: var(--sand-3);
+  font-size: 14px;
+  line-height: 16px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  color: var(--sand-10);
 }
 
 /* Entry page */
 .entry-page { padding-bottom: 8px; }
 .page-back {
-  display: inline-block;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
   margin-bottom: 24px;
+  border-radius: 10px;
+  background: var(--sand-3);
+  font-size: 14px;
+  color: var(--sand-12);
+  text-decoration: none;
 }
-.entry-header { padding-bottom: 32px; }
-.entry-header > .company-logo { margin-bottom: 14px; }
+/* The invitation that closes the page body. */
+.contribution-invite {
+  margin-top: 32px;
+}
+.contribution-invite strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.contribution-invite p {
+  margin-top: 8px;
+  color: var(--sand-10);
+}
+.contribution-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+/* One button: a bar with its label at one end and its mark at the other. */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--sand-3);
+  color: var(--sand-12);
+  text-decoration: none;
+}
+.button .icon { flex: none; }
+.button:hover { background: var(--sand-4); }
+/* The action that carries the reader onward. */
+.button-solid {
+  background: var(--sand-12);
+  color: var(--sand-1);
+}
+/* Already dark, so this one lifts toward the page instead of away from it. */
+.button-solid:hover { background: var(--sand-11); }
+
+.page-back:hover { background: var(--sand-4); }
+/* The bar that closes an entry sits below the last section, not above one. */
+.page-back-end {
+  margin: 24px 0 0;
+  background: var(--sand-12);
+  color: var(--sand-1);
+}
+/* Already dark, so this one lifts toward the page instead of away from it. */
+.page-back-end:hover { background: var(--sand-11); }
+.entry-header { padding-bottom: 8px; }
 .entry-header h1 {
-  margin-top: 10px;
+  margin-top: 12px;
   max-width: 700px;
 }
-.entry-header .eyebrow span { text-transform: none; }
 .entry-header .lede {
-  font-size: 20px;
+  font-size: 14px;
   line-height: 1.5;
 }
 .notice {
-  border-left: 2px solid var(--blue);
-  padding: 4px 0 4px 18px;
+  padding: 20px;
   margin-top: 24px;
   max-width: 680px;
   font-size: 14px;
+  background: var(--sand-3);
+  border-radius: 16px;
 }
 .notice strong {
   display: block;
-  font-weight: 550;
+  font-weight: 400;
   color: var(--link);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .entry-facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px 24px;
-  margin-top: 28px;
-  border-block: 1px solid var(--rule);
-  padding: 20px 0;
+  margin-top: 8px;
+  padding: 24px 0;
 }
 .entry-facts dt {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
 }
 .entry-facts dd {
-  margin-top: 4px;
-  font-size: 14px;
-  font-weight: 550;
+  margin-top: 8px;
+  font-weight: 400;
 }
 .entry-section {
-  border-top: 1px solid var(--rule);
-  padding: 32px 0;
+  padding: 24px 0;
 }
 .entry-section > h2 { margin-bottom: 8px; }
+/* The workflow steps: one panel, its rows divided. */
+.step-panel {
+  margin-top: 16px;
+  background: var(--sand-3);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.step-panel .claim {
+  padding: 16px;
+  border-bottom: .5px solid var(--sand-6);
+}
+.step-panel .claim:last-child { border-bottom: 0; }
+.step-panel .claim-text {
+  margin: 0;
+  line-height: 20px;
+  max-width: none;
+}
+/* The mark reads as a bullet for the whole item, so it sits at its first line. */
+.step-panel .claim-marked { align-items: start; }
+.step-panel .claim-marked > .icon { width: 20px; height: 20px; }
 .entry-section > .section-note {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
   max-width: 680px;
   margin-top: 8px;
 }
+/* An arrow inside a sentence steps back from the words it joins. */
+.arrow { color: var(--sand-10); }
+/* A marked row holds its mark on the centre line of the text beside it. */
+.claim-marked {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+.claim-marked > .icon { flex: none; }
+/* The observation takes its own row, starting at the icon's edge. */
+.claim-marked > .observed { grid-column: 1 / -1; margin-top: 0; }
 .entry-section h3 {
-  font-size: 17px;
-  margin: 28px 0 12px;
+  font-size: 16px;
+  margin: 32px 0 12px;
 }
 .scope-list {
   list-style: none;
@@ -401,19 +460,29 @@
   margin: 16px 0 0;
 }
 .scope-list li {
-  border-top: 1px solid var(--rule);
   padding: 12px 0;
-  font-size: 14px;
 }
+.scope-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.scope-line .icon { flex: none; }
+.scope-line strong { min-width: 0; }
 .scope-list strong {
-  display: block;
-  font-weight: 550;
+  font-weight: 400;
 }
-.scope-list span { color: var(--muted); }
+.scope-list li > span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
 .term-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   margin: 12px 0 0;
   padding: 0;
   list-style: none;
@@ -421,172 +490,313 @@
 .term-list li { margin: 0; }
 .term-list span {
   display: inline-block;
-  background: var(--surface);
+  background: var(--sand-3);
   font-size: 12px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  color: #555;
+  line-height: 14px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  color: var(--sand-12);
 }
 
 /* Claims */
 .claim {
-  padding: 18px 0;
-  border-top: 1px solid var(--rule);
+  padding: 16px 0;
   font-size: 14px;
 }
-.claim:first-of-type { border-top: 0; }
 .claim-label {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: .04em;
+  margin-bottom: 8px;
 }
-.claim-kind {
-  margin-left: 8px;
-  padding: 1px 6px;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  letter-spacing: .03em;
-}
-.claim > p {
-  font-size: 15px;
+/* The kind sits inside the label, so it inherits its size and colour. */
+.claim-kind { color: inherit; }
+.claim-text {
+  font-size: 14px;
   line-height: 1.6;
   max-width: 680px;
 }
 .citations {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 10px;
-  margin-top: 10px;
+  gap: 8px 12px;
+  margin-top: 12px;
   font-size: 12px;
+  color: var(--sand-10);
+}
+.citations-label {
+  color: var(--sand-10);
+  text-decoration: underline;
 }
 .citation {
-  color: var(--muted);
-  text-decoration: none;
+  color: var(--sand-10);
+  text-decoration: underline;
 }
+/* The number is the link; it no longer shouts from inside the footnote. */
 .citation strong {
+  color: inherit;
+  font-weight: 400;
+}
+.citation:hover strong {
   color: var(--link);
-  font-weight: 550;
 }
 .citation-contradicts strong { color: #a1392d; }
-.caveats {
+.caveats,
+.architecture {
+  /* Row flow puts each dt beside its own dd, so the labels read as a header column. */
   display: grid;
-  grid-template-columns: 135px minmax(0, 1fr);
-  gap: 6px 12px;
+  grid-template-columns: auto minmax(0, 1fr);
   margin-top: 12px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
-  border-left: 2px solid var(--rule);
-  padding-left: 14px;
+  border: .5px solid var(--sand-6);
+  border-radius: 14px;
+  /* The header fill is square and would paint over the rounded corners. */
+  overflow: hidden;
 }
-.caveats dt {
-  font-weight: 550;
+.caveats dt,
+.caveats dd,
+.architecture dt,
+.architecture dd {
+  margin: 0;
+  /* 20px of line plus 10px either side: a 40px row. */
+  padding: 10px 12px;
+  line-height: 20px;
+  border-bottom: .5px solid var(--sand-6);
+}
+.caveats dt,
+.architecture dt {
+  background: var(--sand-3);
+  font-weight: 400;
   color: var(--ink);
+  /* The one divider between the header column and its values. */
+  border-right: .5px solid var(--sand-6);
+}
+.caveats dt:last-of-type,
+.caveats dd:last-of-type,
+.architecture dt:last-of-type,
+.architecture dd:last-of-type {
+  border-bottom: 0;
+}
+/* The architecture table keeps its label column on one line, and marks the
+   fields the sources do not report. */
+.architecture { margin-top: 16px; }
+.architecture dt { white-space: nowrap; }
+.architecture .is-unreported { color: var(--sand-9); }
+.architecture-caveats {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--sand-9);
+}
+.architecture-caveats span + span::before { content: " \00B7 "; }
+/* A metric turns the table: its qualifications head the columns, and the values
+   sit under them. The rules move with the orientation. */
+.caveats-columns {
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  grid-template-columns: minmax(0, 33.333%);
+  grid-auto-columns: minmax(0, 1fr);
+}
+.caveats-columns dt,
+.caveats-columns dd {
+  border-bottom: 0;
+  border-right: .5px solid var(--sand-6);
+}
+.caveats-columns dt { border-bottom: .5px solid var(--sand-6); }
+.caveats-columns dt:last-of-type,
+.caveats-columns dd:last-of-type { border-right: 0; }
+/* The shared rule clears the last row's underline; turned on its side, that is
+   the last header cell, which still needs one. */
+.caveats-columns dt:last-of-type { border-bottom: .5px solid var(--sand-6); }
+.caveat-note {
+  margin-top: 12px;
+  color: var(--sand-12);
+  max-width: 680px;
+}
+.observed {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--sand-10);
 }
 .qualification {
   margin-top: 12px;
-  font-size: 13px;
+  font-size: 12px;
   max-width: 680px;
-  border-left: 2px solid var(--muted);
-  padding-left: 14px;
+
 }
 .conflict {
   margin-top: 12px;
-  font-size: 13px;
-  border-left: 2px solid #a1392d;
-  padding-left: 14px;
+  font-size: 14px;
+
 }
 .conflict strong {
   display: block;
   color: #a1392d;
-  font-weight: 550;
+  font-weight: 400;
 }
 .claim-details {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
   margin-top: 12px;
 }
 .claim-details summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   width: fit-content;
+  font-size: 14px;
 }
+.claim-details summary::before { content: none; }
+.claim-details summary .icon { flex: none; }
+.claim-details[open] > summary .icon { transform: rotate(180deg); }
 .claim-details dl {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 135px minmax(0, 1fr);
-  gap: 8px 12px;
-  margin: 12px 0 0;
+  grid-template-columns: subgrid;
+  gap: 0;
+  margin: 0;
 }
 .claim-details dt {
-  font-weight: 550;
+  font-weight: 400;
   color: var(--ink);
+  padding: 12px 12px 12px 16px;
 }
+.claim-details dd { padding: 12px 16px 12px 0; }
+/* One rule between rows: the two cells of a row carry half of it each. */
+.claim-details dt ~ dt, .claim-details dd ~ dd { border-top: .5px solid var(--sand-6); }
 .evidence {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: 8px;
   list-style: none;
-  padding: 0;
-  margin: 12px 0 0;
+  padding: 12px 16px 16px;
+  margin: 0;
+  border-top: .5px solid var(--sand-6);
 }
 .evidence li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--rule);
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  gap: 8px 0;
 }
 .relation {
-  font-weight: 550;
+  font-weight: 400;
   color: var(--ink);
-  margin-right: 6px;
 }
+/* The locator belongs under its source, not back in the label column. */
+.evidence .locator { grid-column: 2; }
 .relation-contradicts { color: #a1392d; }
 .locator {
   display: block;
   white-space: pre-wrap;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 /* Sources */
 .sources {
-  padding-left: 18px;
-  font-size: 12px;
+  padding-left: 16px;
+  font-size: 14px;
   margin: 16px 0 0;
 }
-.sources li { padding: 10px 0; }
-.source-title { font-size: 14px; }
+.sources li { padding: 12px 0; }
+.source-title { font-size: inherit; }
 .source-url {
   display: block;
-  font-size: 12px;
-  margin: 5px 0;
+  margin: 8px 0;
 }
 .source-meta { color: var(--muted); }
 .source-archives {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 /* Related reading */
 .related-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px;
   list-style: none;
   padding: 0;
   margin: 16px 0 0;
 }
-.related-list li {
-  border-top: 1px solid var(--rule);
-  padding: 12px 0;
+.related-card {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--sand-3);
   font-size: 14px;
+  line-height: 20px;
 }
-.related-list span {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 4px;
+.related-kind {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sand-10);
 }
+.related-kind .icon { flex: none; }
+.related-card a {
+  color: var(--sand-12);
+  text-decoration: none;
+}
+/* The title's link covers its card, so anywhere on it opens the page. */
+.related-card a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+.related-card:hover a { color: var(--sand-11); }
+.doc-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+}
+.doc-card {
+  position: relative;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  align-content: start;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--sand-3);
+  font-size: 14px;
+  line-height: 20px;
+}
+.doc-card .icon { color: var(--sand-10); }
+.doc-card a {
+  color: var(--sand-12);
+  text-decoration: none;
+}
+/* The label's link covers its card, so anywhere on it opens the document. */
+.doc-card a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+.doc-card:hover a { color: var(--sand-11); }
 .resource-links {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 24px;
   margin-top: 24px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .entry-summary, .source-url, dd, .locator, .claim > p {
@@ -594,27 +804,30 @@
 }
 
 @media (max-width: 800px) {
-  .intro h1 { font-size: 32px; }
-  .intro > .lede + p, .topography { display: none; }
+  .related-list, .doc-links { grid-template-columns: minmax(0, 1fr); }
+  .intro > h1 + p { display: none; }
   .intro { padding-bottom: 24px; }
-  .stats { gap: 28px; margin-top: 24px; }
-  .review-date { margin-top: 16px; }
-  .section-heading {
-    align-items: start;
-    flex-direction: column;
-    padding: 24px 0 16px;
-    gap: 8px;
-  }
-  .entry h3 { font-size: 21px; }
+  .stats { gap: 32px; margin-top: 24px; }
   .entry-top { align-items: start; }
-  .entry-end { flex-wrap: wrap; }
-  .entry-header h1 { font-size: 30px; }
-  .entry-header .lede { font-size: 18px; }
-  .entry-section { padding: 24px 0; }
+  .entry-header .lede { font-size: 16px; }
   /* A narrow screen runs each field into one wrapped line instead of two rows. */
   .caveats, .claim-details dl {
     display: block;
-    margin-top: 10px;
+    margin-top: 12px;
+  }
+  .ledger, .ledger > li, .evidence, .evidence li { display: block; }
+  .ledger > li + li { margin-top: 16px; }
+  .claim-details dl { margin: 0; padding: 16px; }
+  .claim-details dt, .claim-details dd { padding: 0; border-top: 0; }
+  /* Stacked fields are no longer a grid, so the table's rules would be stray lines. */
+  .caveats {
+    border: 0;
+    border-radius: 0;
+  }
+  .caveats dt, .caveats dd {
+    padding: 0;
+    border: 0;
+    background: none;
   }
   .caveats dt, .claim-details dt { display: inline; }
   .caveats dt::after, .claim-details dt::after { content: ": "; }
@@ -624,28 +837,43 @@
     display: block;
     height: 5px;
   }
-  .claim { padding: 14px 0; }
-  .claim > p { font-size: 14px; }
+  .claim { padding: 16px 0; }
   .sources li { padding: 8px 0; }
 }
 @media (max-width: 420px) {
-  .stats { gap: 22px; }
-  .stat strong { font-size: 26px; }
+  .stats { gap: 24px; }
 }
 
 /* Research ledger */
 .ledger {
+  display: grid;
+  grid-template-columns: fit-content(220px) minmax(0, 1fr);
+  gap: 16px 0;
   list-style: none;
   padding: 0;
   margin: 16px 0 0;
 }
 .ledger > li {
-  border-top: 1px solid var(--rule);
-  padding: 14px 0;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-content: start;
+  background: var(--sand-3);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+}
+.ledger > li + li {
+  margin-top: 0;
 }
 .ledger-title {
+  grid-column: 1 / -1;
   display: block;
-  font-weight: 550;
+  font-size: 14px;
+  font-weight: 400;
   color: var(--ink);
-  margin-bottom: 8px;
+  text-decoration: none;
+  background: var(--sand-4);
+  border-bottom: .5px solid var(--sand-6);
+  padding: 16px;
 }

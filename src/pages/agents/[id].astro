@@ -2,7 +2,9 @@
 // ABOUTME: The page of one catalog implementation, in the order the contract sets.
 // ABOUTME: Every section is built from normalized claims, never from stored HTML.
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import Arrowed from '../../components/Arrowed.astro';
 import Claim from '../../components/Claim.astro';
+import Icon from '../../components/Icon.astro';
 import CompanyLogo from '../../components/CompanyLogo.astro';
 import ResearchDetails from '../../components/ResearchDetails.astro';
 import SourceList from '../../components/SourceList.astro';
@@ -49,29 +51,14 @@ const hasResults =
   entry.lessonClaims.length > 0;
 const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length > 0;
 ---
-<SiteLayout title={title} description={description} path={entry.path} current="catalog" structuredData={graph}>
+<SiteLayout title={title} description={description} path={entry.path} structuredData={graph}>
   <article class="entry-page" data-approach-id={entry.id}>
-    <a class="page-back" href="/">← All implementations</a>
     <header class="entry-header">
       <CompanyLogo company={entry.companyView} size={40} eager />
-      <p class="eyebrow">{entry.company} · {entry.approachTypeLabel}</p>
       <h1>{entry.agentName}</h1>
       {entry.summary ? (
         <>
           <p class="lede" id={entry.summary.anchor} data-claim-id={entry.summary.id}>{entry.summary.text}</p>
-          {entry.summary.citations.length > 0 && (
-            <p class="citations">
-              {entry.summary.citations.map((citation) => (
-                <a
-                  class:list={['citation', citation.relation === 'contradicts' && 'citation-contradicts']}
-                  href={`#${citation.anchor}`}
-                >
-                  <strong>{citation.number}</strong>
-                  {entry.summary!.showCitationRoles && <span> {citation.relationLabel}</span>}
-                </a>
-              ))}
-            </p>
-          )}
         </>
       ) : (
         <p class="lede">This entry has no summary claim yet.</p>
@@ -83,6 +70,10 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
         </div>
       )}
       <dl class="entry-facts">
+        <div>
+          <dt>Company</dt>
+          <dd>{entry.company}</dd>
+        </div>
         <div>
           <dt>Approach type</dt>
           <dd>{entry.approachTypeLabel}</dd>
@@ -126,7 +117,9 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       <section class="entry-section" id="how-it-works" aria-labelledby="how-it-works-title">
         <h2 id="how-it-works-title">How it works</h2>
         <p class="section-note">The workflow the sources report for this implementation.</p>
-        {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+        <div class="step-panel">
+          {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+        </div>
       </section>
     )}
 
@@ -142,19 +135,44 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
         <ul class="scope-list">
           {entry.operatingModels.map((model) => (
             <li>
-              <strong>{model.scope}</strong>
+              <p class="scope-line">
+                <Icon name="person" />
+                <strong><Arrowed text={model.scope} /></strong>
+              </p>
               <span>{model.boundaryLabel} · {model.levelLabel}</span>
             </li>
           ))}
         </ul>
       )}
-      {entry.supervisionClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+      {entry.supervisionClaims.map((claim) => (
+        <Claim claim={claim} showLabel={false} mark="person" />
+      ))}
     </section>
 
     {hasImplementation && (
       <section class="entry-section" id="implementation" aria-labelledby="implementation-title">
         <h2 id="implementation-title">Implementation details</h2>
-        {entry.architectureClaims.map((claim) => <Claim claim={claim} />)}
+        <dl class="architecture">
+          {entry.architectureRows.map((row) => (
+            <>
+              <dt>{row.label}</dt>
+              {row.claim ? (
+                <dd id={row.claim.anchor} data-claim-id={row.claim.id}>
+                  {row.claim.text}
+                  {row.claim.caveats.length > 0 && (
+                    <span class="architecture-caveats">
+                      {row.claim.caveats.map((caveat) => (
+                        <span>{caveat.label}: {caveat.value}</span>
+                      ))}
+                    </span>
+                  )}
+                </dd>
+              ) : (
+                <dd class="is-unreported">N/A</dd>
+              )}
+            </>
+          ))}
+        </dl>
         {entry.otherClaims.length > 0 && (
           <>
             <h3>Other reported details</h3>
@@ -171,12 +189,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
           The catalog records what the sources report, with the scope and the denominator of every
           figure. A qualification below limits the figure it sits under.
         </p>
-        {entry.metricClaims.length > 0 && (
-          <>
-            <h3>Reported metrics</h3>
-            {entry.metricClaims.map((claim) => <Claim claim={claim} />)}
-          </>
-        )}
+        {entry.metricClaims.map((claim) => <Claim claim={claim} />)}
         {entry.resultStatementClaims.length > 0 && (
           <>
             <h3>Reported outcomes and statements</h3>
@@ -186,7 +199,11 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
         {entry.lessonClaims.length > 0 && (
           <>
             <h3>Lessons and interpretation</h3>
-            {entry.lessonClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+            <div class="step-panel">
+              {entry.lessonClaims.map((claim) => (
+                <Claim claim={claim} showLabel={false} mark="circle-check" />
+              ))}
+            </div>
           </>
         )}
       </section>
@@ -207,14 +224,14 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       {hasRelated ? (
         <ul class="related-list">
           {entry.relatedEntries.map((related) => (
-            <li>
-              <span>{related.relationLabel}</span>
+            <li class="related-card">
+              <span class="related-kind"><Icon name="layers-two" />{related.relationLabel}</span>
               <a href={related.path}>{related.company} — {related.agentName}</a>
             </li>
           ))}
           {entry.relatedNotes.map((note) => (
-            <li>
-              <span>Note</span>
+            <li class="related-card">
+              <span class="related-kind"><Icon name="note-text" />Note</span>
               <a href={note.path}>{note.title}</a>
             </li>
           ))}
@@ -222,9 +239,10 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       ) : (
         <p class="section-note">The catalog records no related implementation for this entry yet.</p>
       )}
-      <div class="resource-links">
-        <a href="/">Back to the directory →</a>
-      </div>
+      <a class="page-back page-back-end" href="/">
+        <span>Back to the directory</span>
+        <Icon name="layers-two" />
+      </a>
     </section>
   </article>
 </SiteLayout>
