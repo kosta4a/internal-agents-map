@@ -113,7 +113,7 @@ function document(): string {
       inlineMarkdown(dimension.description),
     ]),
     `${chart.legend.catalog} ${chart.legend.reference}`,
-    chart.verticalAxis,
+    `${chart.verticalAxis.from} ${chart.verticalAxis.to}`,
     ...cell(chart.cells.specialized, cells.specialized.map(marker)),
     ...cell(chart.cells.shared, cells.shared.map(marker)),
     ...cell(chart.cells.ready, [

@@ -28,6 +28,8 @@ html {
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   --hover-in: 120ms;
   --hover-out: 220ms;
+  /* A five-pointed star, for the markers that are not catalog entries. */
+  --star: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
   font-family: Areal, Arial, Helvetica, sans-serif;
   color: var(--ink);
   background: #fff;

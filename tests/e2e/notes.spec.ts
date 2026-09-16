@@ -138,8 +138,8 @@ test.describe('the Definitions guide', () => {
 
   test('keeps the diagrams in the initial HTML', async ({ page }) => {
     await page.goto('/definitions');
-    await expect(page.locator('.scope-diagram')).toHaveCount(1);
-    await expect(page.locator('.concept-pair svg')).toHaveCount(4);
+    await expect(page.locator('.scope-figure svg')).toHaveCount(1);
+    await expect(page.locator('.place-panel')).toHaveCount(4);
     await expect(page.locator('.workflow-figure')).toHaveCount(1);
     await assertFragmentsResolve(page);
   });

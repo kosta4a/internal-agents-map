@@ -65,31 +65,77 @@ const {
 .diagram-number { display: block; color: var(--link); font-size: 12px; }
 
 /* The chart shows two questions about an implementation, not a score. */
-.quadrant-chart { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
-.quadrant-y-axis { writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-size: 12px; color: var(--muted); }
-.quadrant-plot { aspect-ratio: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); border: 1px solid var(--sand-10); }
+.quadrant-chart { position: relative; display: grid; gap: 12px; }
+/* Standard sits at the foot of the scale, company-specific at its head. */
+.quadrant-y-axis {
+  position: absolute;
+  top: 0;
+  bottom: 30px;
+  right: calc(100% + 12px);
+  width: 1.2em;
+  font-size: 12px;
+  color: var(--muted);
+}
+.quadrant-y-axis span {
+  position: absolute;
+  left: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+.quadrant-y-axis span:first-child { bottom: 0; }
+.quadrant-y-axis span:last-child { top: 0; }
+.quadrant-plot {
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+  background: var(--sand-3);
+  overflow: hidden;
+}
 .quadrant-cell { position: relative; min-width: 0; }
-.quadrant-cell:nth-child(odd) { border-right: 1px solid var(--sand-7); }
-.quadrant-cell:nth-child(-n+2) { border-bottom: 1px solid var(--sand-7); background: var(--sand-2); }
-.quadrant-cell:nth-child(n+3) { background: var(--sand-2); }
-.quadrant-cell h3 { position: absolute; top: 12px; left: 14px; right: 14px; margin: 0; font-size: 12px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
-.quadrant-cell h3 span { display: block; margin-bottom: 8px; color: var(--link); font-size: 12px; line-height: 1.3; font-weight: 400; }
-.quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: 12px; }
+/* The two axes are a reading aid inside the square, not edges of it. */
+.quadrant-cell:nth-child(odd) { border-right: 1px dotted var(--sand-7); }
+.quadrant-cell:nth-child(-n+2) { border-bottom: 1px dotted var(--sand-7); }
+.quadrant-cell h3 { position: absolute; top: 20px; left: 20px; right: 20px; margin: 0; font-size: 12px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
+.quadrant-cell h3 span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 12px; line-height: 1.35; font-weight: 400; }
+.quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: 20px; }
+/* The two right-hand cells read from the edge they sit against. */
+.quadrant-cell:nth-child(2) h3, .quadrant-cell:nth-child(4) h3 { text-align: right; }
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
-.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 16px; }
+.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 12px; padding-left: 18px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
 .quadrant-cell:nth-child(4) li { left: 12%; top: 15%; }
 .quadrant-cell:nth-child(4) li:nth-child(2) { left: 33%; top: 37%; }
 .quadrant-cell:nth-child(4) li:nth-child(3) { left: 20%; top: 60%; }
-.quadrant-cell li::before { content: ""; position: absolute; width: 8px; height: 8px; background: var(--accent); border: 2px solid #fff; border-radius: 50%; left: 0; top: 5px; }
+.quadrant-cell li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc((1.35em - 10px) / 2);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--blue-9);
+}
 .quadrant-cell a { display: block; line-height: 1.35; text-decoration: none; }
-.quadrant-cell a:hover { text-decoration: underline; }
-.quadrant-cell a strong { font-weight: 400; }
-.quadrant-cell a span { display: block; font-size: 12px; margin-top: 8px; }
-.quadrant-cell li > strong { display: block; font-weight: 400; line-height: 1.35; }
-.quadrant-cell li > span { display: block; font-size: 12px; line-height: 1.35; margin-top: 8px; }
-.quadrant-cell .reference-marker { color: var(--sand-10); }
-.quadrant-cell .reference-marker::before { background: #fff; border-color: var(--sand-10); }
+.quadrant-cell a:hover { color: var(--sand-10); }
+.quadrant-cell li strong { display: block; font-size: 12px; font-weight: 500; line-height: 1.35; }
+.quadrant-cell li span { display: block; font-size: 12px; line-height: 1.35; margin-top: 4px; }
+.quadrant-cell .reference-marker { color: var(--sand-10); padding-left: 24px; }
+.quadrant-cell .reference-marker strong { color: var(--sand-12); }
+/* A reference names a class of product: breaking it reads as two of them. */
+.quadrant-cell .reference-marker { max-width: none; white-space: nowrap; }
+.quadrant-cell .reference-marker::before {
+  top: calc((1.35em - 16px) / 2);
+  border-radius: 0;
+  width: 16px;
+  height: 16px;
+  background: var(--pink-9);
+  clip-path: var(--star);
+}
 .quadrant-cell li[data-chart-reference="deep-research"] { left: 5%; top: 42%; max-width: 40%; }
 .quadrant-cell li[data-chart-reference="ready-made-task"] { left: 49%; top: 42%; max-width: 48%; }
 .quadrant-cell li[data-chart-reference="general-assistant"] { left: 28%; top: 34%; max-width: 66%; }
@@ -101,13 +147,14 @@ const {
 .quadrant-cell li[data-chart-approach-id="brex-agent-platform"] { left: 10%; top: 30%; max-width: 58%; }
 .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: 56%; top: 50%; max-width: 38%; }
 .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 17%; top: 72%; max-width: 52%; }
-.quadrant-x-axis { grid-column: 2; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
-.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px 32px; color: var(--muted); font-size: 12px; }
+.quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
+.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: 14px; }
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.quadrant-legend i { width: 10px; height: 10px; border-radius: 50%; }
-.quadrant-legend .catalog-marker { background: var(--accent); border: 2px solid var(--accent); }
-.quadrant-legend .reference-marker-key { background: #fff; border: 2px solid var(--sand-10); }
-.guide .quadrant-figure { max-width: 680px; }
+.quadrant-legend i { width: 10px; height: 10px; }
+.quadrant-legend .catalog-marker { border-radius: 50%; background: var(--blue-9); }
+.quadrant-legend .reference-marker-key { width: 16px; height: 16px; background: var(--pink-9); clip-path: var(--star); }
+/* The plot is the body's own width, so its scale label has room outside it. */
+.guide .quadrant-figure { max-width: none; }
 .guide-faq details {
   background: var(--sand-3);
   border-radius: 10px;
@@ -138,7 +185,9 @@ const {
 .workflow-node { background: var(--sand-3); border-radius: 16px; padding: 24px; text-align: center; }
 .workflow-node strong { display: block; font-weight: 400; margin-top: 12px; }
 .workflow-context { background: var(--sand-3); }
-.workflow-connector { text-align: center; color: var(--sand-10); font-size: 20px; line-height: 38px; }
+/* A drawn arrow, clear of the panel above it and the one below. */
+.workflow-connector { display: flex; justify-content: center; padding: 4px 0; }
+.workflow-connector svg { display: block; width: 12px; height: 32px; fill: none; stroke: var(--sand-9); stroke-width: .5; }
 .placement-notes { padding: 24px 0; margin-top: 24px; }
 .placement-notes summary {
   display: flex;
@@ -148,7 +197,7 @@ const {
   cursor: pointer;
 }
 .placement-notes summary::before { content: none; }
-.placement-notes summary .icon { flex: none; color: var(--sand-10); }
+.placement-notes summary .icon { flex: none; width: 20px; height: 20px; color: var(--sand-10); }
 .placement-notes[open] > summary .icon { transform: rotate(180deg); }
 .placement-notes ul { list-style: none; padding: 0; }
 .placement-notes li { margin-top: 24px; font-size: 14px; }
@@ -158,17 +207,126 @@ const {
 
 /* Definition illustrations share one visual vocabulary: a teal dot is the agent. */
 .core-definition { padding: 64px 24px; margin: 24px 0; background: var(--sand-3); border-radius: 14px; text-align: center; }
-.combination-title { font-size: 16px; line-height: 1.45; }
+.combination-title { font-size: 14px; line-height: 1.5; }
 .combination-title strong { font-weight: 400; }
 .guide .core-definition p { font-size: 16px; font-weight: 500; line-height: 1.4; margin: 0 auto; max-width: 440px; }
 .guide .core-definition strong { font-weight: 500; }
 /* A call to action stands clear of the paragraph that leads into it. */
 .guide section > .button { margin-top: 16px; }
-.scope-diagram { max-width: 360px; margin: 24px auto 0; }
-.scope-diagram, .concept-pair svg { display: block; width: 100%; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
-.scope-diagram text, .concept-pair svg text { fill: var(--muted); stroke: none; font: 12px Areal, sans-serif; }
-.scope-diagram .agent-dot, .concept-pair svg .agent-dot { fill: var(--accent); stroke: var(--accent); }
+/* The illustration keeps a 16:9 field of its own, on the page's own ground. */
+.scope-figure {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 24px 0 0;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scope-figure svg { display: block; width: 100%; height: 100%; }
+.scope-frame { fill: none; stroke: var(--sand-6); stroke-width: .5; }
+/* The viewBox is the body's own width, so a label reads at its stated size. */
+.scope-label { fill: var(--muted); font-size: 14px; letter-spacing: -.01em; }
+.scope-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
+/* The agent, what it reaches, and what passes between them share one colour. */
+.scope-node { fill: var(--blue-9); stroke: var(--blue-9); stroke-width: 1.2; }
+.scope-agent { fill: var(--blue-9); stroke: var(--blue-9); }
+.scope-signal { fill: var(--blue-9); }
+.concept-pair svg { display: block; width: 100%; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
+.concept-pair svg text { fill: var(--muted); stroke: none; font: 12px Areal, sans-serif; }
+.concept-pair svg .agent-dot { fill: var(--accent); stroke: var(--accent); }
 .guide .concept-definition { font-size: 14px; line-height: 1.5; max-width: 610px; }
+/* Where an agent runs: one panel per answer, each a field of its own. */
+.place-panels { display: grid; gap: 16px; margin: 24px 0; }
+.guide .place-panel { margin: 0; }
+.place-panel {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  aspect-ratio: 16 / 9;
+  padding: 16px;
+  margin: 0;
+  background: #fff;
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+}
+.guide .place-panel figcaption { margin: 0; font-size: 14px; line-height: 1.4; }
+.place-panel figcaption strong { display: block; color: var(--ink); font-weight: 500; }
+.place-panel figcaption span { display: block; margin-top: 10px; color: var(--muted); }
+.place-scene { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.place-scene-wide { display: block; }
+/* Every column carries a title row, so the boxes line up whether or not it is filled. */
+.place-machine, .place-link {
+  --title-row: 20px;
+  --title-gap: 8px;
+  --box-height: 160px;
+  --dot-size: 18px;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: var(--title-gap);
+}
+.place-machine { flex: 0 0 156px; min-width: 0; }
+.place-machine-title { display: block; min-height: var(--title-row); font-size: 14px; line-height: 20px; text-align: center; color: var(--sand-12); }
+.place-box { position: relative; height: var(--box-height); background: var(--sand-3); border-radius: 12px; }
+/* The mark holds the centre of the machine. */
+.place-agent-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-8);
+}
+/*
+ * The label stands outside the machine and points back in at the mark.
+ * The arrow starts six below the mark and the label six below the arrow,
+ * which carries it past the box's own edge.
+ */
+.place-callout {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(var(--title-row) + var(--title-gap) + var(--box-height) / 2 + var(--dot-size) / 2 + 6px);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--blue-9);
+}
+.place-callout svg { display: block; width: 12px; height: 74px; fill: none; stroke: var(--blue-9); stroke-width: 1; }
+/* A running agent is not a still one, so its mark breathes. */
+@keyframes place-pulse {
+  from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: .65; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .place-agent-dot { animation: place-pulse 2.4s ease-in-out infinite; }
+}
+.place-link { flex: none; }
+.exchange-scene { display: block; width: 100%; height: 100%; }
+.exchange-scene, .exchange-strand { fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
+.exchange-you { fill: #fff; stroke: var(--sand-10); stroke-width: 1.2; }
+.exchange-agent { fill: var(--blue-9); stroke: var(--blue-9); }
+.exchange-scene text { fill: var(--muted); stroke: none; }
+.exchange-signal { fill: var(--blue-9); stroke: none; }
+/* A trigger arrives, the agent works, a result lands, and it begins again. */
+.cycle-scene { display: block; width: calc(100% + 16px); height: 100%; margin-left: -16px; }
+.cycle-scene text { fill: var(--muted); stroke: none; }
+.cycle-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
+.cycle-trigger { fill: #fff; stroke: var(--sand-6); stroke-width: 1.2; }
+/* The lit state is its own circle, so it can rise and fall on top of the first. */
+.cycle-trigger-on { fill: var(--blue-9); stroke: var(--blue-9); stroke-width: 1.2; }
+.cycle-agent { fill: var(--blue-9); }
+.cycle-spinner { fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; }
+.cycle-result { fill: #fff; stroke: var(--sand-6); stroke-width: 1.2; }
+.cycle-result-dot { fill: var(--blue-9); }
+.cycle-signal { fill: var(--blue-9); }
+.place-arrow { align-self: center; width: 64px; fill: none; stroke: var(--sand-9); stroke-width: 1.2; }
 .concept-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 680px; margin: 24px 0; }
 .guide .concept-pair figure { margin: 0; padding: 24px 16px; min-width: 0; }
 .concept-pair figure + figure { border-left: 1px solid var(--sand-6); }
@@ -176,23 +334,35 @@ const {
 .concept-pair figcaption strong { display: block; color: var(--ink); font-size: 16px; margin-bottom: 8px; }
 .concept-pair figcaption span { display: block; font-size: 14px; }
 .concept-combination { max-width: 680px; margin: 32px 0; }
-.guide .concept-combination > p { font-size: 16px; line-height: 1.45; margin: 0; }
-/* The three questions read down the page as a table, one row each. */
+.guide .concept-combination > p { font-size: 14px; line-height: 1.5; margin: 0; }
+/* The three questions read as the table a catalog entry states its caveats in. */
 .concept-combination dl {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 0;
   margin: 16px 0;
-  border-top: .5px solid var(--sand-6);
+  font-size: 14px;
+  color: var(--muted);
+  border: .5px solid var(--sand-6);
+  border-radius: 14px;
+  /* The header fill is square and would paint over the rounded corners. */
+  overflow: hidden;
 }
 .concept-combination dl > div { display: contents; }
 .concept-combination dt, .concept-combination dd {
-  padding: 12px 0;
+  margin: 0;
+  padding: 10px 12px;
+  line-height: 20px;
   border-bottom: .5px solid var(--sand-6);
-  font-size: 14px;
 }
-.concept-combination dt { color: var(--muted); padding-right: 24px; }
-.concept-combination dd { margin: 0; }
+.concept-combination dt {
+  background: var(--sand-3);
+  color: var(--ink);
+  border-right: .5px solid var(--sand-6);
+}
+/* Each row is its own element, so the last row is what drops the rule. */
+.concept-combination dl > div:last-child dt,
+.concept-combination dl > div:last-child dd { border-bottom: 0; }
 .guide .concept-combination .combination-note { font-size: 14px; color: var(--muted); }
 
 /* Notes use the same fine rules, type, and restrained diagram accents. */
@@ -290,21 +460,31 @@ const {
   .guide-header h1 { font-size: 32px; }
   .guide-header { padding-bottom: 32px; }
   .guide section { padding: 32px 0; }
-  .quadrant-chart { grid-template-columns: 18px minmax(0, 1fr); gap: 8px; }
+  .quadrant-chart { gap: 8px; }
+  /* A narrow screen has no margin to hang the scale label in, so it leads the plot. */
+  .quadrant-y-axis {
+    position: static;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .quadrant-y-axis span { position: static; writing-mode: horizontal-tb; transform: none; }
   .quadrant-plot { aspect-ratio: .82; }
   .quadrant-cell h3 { font-size: 12px; left: 6px; right: 6px; top: 6px; }
   .quadrant-cell h3 span { display: none; }
   .quadrant-cell:nth-child(n+3) h3 { bottom: 6px; }
-  .quadrant-cell li { font-size: 12px; padding-left: 12px; }
-  .quadrant-cell a span, .quadrant-cell li > span { font-size: 12px; }
-  .quadrant-cell li::before { width: 6px; height: 6px; border-width: 1px; top: 4px; }
+  .quadrant-cell li { font-size: 12px; padding-left: 14px; }
+  .quadrant-cell li span { font-size: 12px; }
+  .quadrant-cell li::before { width: 8px; height: 8px; top: calc((1.35em - 8px) / 2); }
+  .quadrant-cell .reference-marker { padding-left: 20px; }
+  .quadrant-cell .reference-marker::before { width: 14px; height: 14px; top: calc((1.35em - 14px) / 2); }
   .quadrant-cell li:nth-child(2) { left: 22%; }
   .quadrant-cell:nth-child(4) li:nth-child(2) { left: 28%; }
-  .quadrant-cell:nth-child(3) li > span { display: none; }
+  .quadrant-cell:nth-child(3) li span { display: none; }
   .quadrant-x-axis, .quadrant-y-axis { font-size: 12px; }
-  .quadrant-legend { margin-left: 24px; gap: 8px 16px; }
+  .quadrant-legend { gap: 8px 16px; }
   .core-definition { padding: 40px 20px; }
-  .scope-diagram { max-width: 300px; }
   .concept-pair { grid-template-columns: 1fr; }
   .concept-pair figure + figure { border-left: 0; border-top: 1px solid var(--sand-6); }
   .concept-pair svg { max-width: 320px; margin: auto; }
