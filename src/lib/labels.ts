@@ -32,46 +32,6 @@ export function levelLabel(level: number | null): string {
   return level === null ? 'Level unknown' : `Level ${level}`;
 }
 
-/** The badge colours available to a category. */
-const BADGE_TONES = ['blue', 'indigo', 'purple', 'pink', 'crimson', 'orange', 'green', 'cyan'] as const;
-
-type BadgeTone = (typeof BADGE_TONES)[number];
-
-/**
- * The colour each category wears. Categories are listed by how often the
- * catalog uses them, and a colour only repeats far down that order, so the
- * categories that share a card are the ones least likely to share a colour.
- * Coding and code review lead the catalog together, so they sit apart.
- */
-const CATEGORY_TONES: Readonly<Record<string, BadgeTone>> = {
-  coding: 'blue',
-  'code-review': 'orange',
-  support: 'green',
-  'on-call': 'crimson',
-  'customer-success': 'pink',
-  research: 'purple',
-  data: 'cyan',
-  'finance-ops': 'indigo',
-  security: 'purple',
-  maintenance: 'green',
-  ops: 'cyan',
-  recruitment: 'pink',
-  'ci-triage': 'orange',
-  migrations: 'indigo',
-};
-
-/**
- * The colour a category badge wears. A category the map does not name still
- * gets a stable colour, so a new one needs no edit here to look right.
- */
-export function badgeTone(id: string): BadgeTone {
-  const named = CATEGORY_TONES[id];
-  if (named) return named;
-  let sum = 0;
-  for (const character of id) sum = (sum * 31 + character.charCodeAt(0)) % 100003;
-  return BADGE_TONES[sum % BADGE_TONES.length]!;
-}
-
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',

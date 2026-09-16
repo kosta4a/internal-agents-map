@@ -3,7 +3,6 @@
 // ABOUTME: It keeps the approach id, so older fragment links still find the card.
 import CompanyLogo from './CompanyLogo.astro';
 import type { DirectoryCard } from '../lib/entry-view';
-import { badgeTone } from '../lib/labels';
 
 interface Props {
   card: DirectoryCard;
@@ -31,7 +30,7 @@ const { card } = Astro.props;
     <p class="entry-summary">{card.excerpt}</p>
     <div class="tags">
       {card.domains.map((domain) => (
-        <span class="tag" data-tone={badgeTone(domain.id)}>{domain.label}</span>
+        <span class="tag">{domain.label}</span>
       ))}
     </div>
   </div>

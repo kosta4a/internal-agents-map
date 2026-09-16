@@ -253,7 +253,7 @@
 /* No container to shade: hovering lightens everything the card says by a step. */
 .entry-box:hover h3 a { color: var(--sand-11); }
 .entry-box:hover .entry-summary { color: var(--sand-9); }
-.entry-box:hover .tag { color: var(--sand-11); }
+.entry-box:hover .tag { color: var(--sand-9); }
 /* The heading link covers the container, so the whole card opens the entry. */
 .entry-box h3 a::after {
   content: "";
@@ -296,11 +296,11 @@
 }
 .tag {
   background: var(--sand-3);
-  font-size: 12px;
-  line-height: 14px;
-  padding: 3px 9px;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 2px 9px;
   border-radius: 999px;
-  color: var(--sand-12);
+  color: var(--sand-10);
 }
 
 /* Entry page */
