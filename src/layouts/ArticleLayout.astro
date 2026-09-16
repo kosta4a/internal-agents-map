@@ -187,7 +187,7 @@ const {
 .workflow-context { background: var(--sand-3); }
 /* A drawn arrow, clear of the panel above it and the one below. */
 .workflow-connector { display: flex; justify-content: center; padding: 4px 0; }
-.workflow-connector svg { display: block; width: 12px; height: 24px; fill: none; stroke: var(--sand-6); stroke-width: .5; }
+.workflow-connector svg { display: block; width: 12px; height: 32px; fill: none; stroke: var(--sand-9); stroke-width: .5; }
 .placement-notes { padding: 24px 0; margin-top: 24px; }
 .placement-notes summary {
   display: flex;
@@ -197,7 +197,7 @@ const {
   cursor: pointer;
 }
 .placement-notes summary::before { content: none; }
-.placement-notes summary .icon { flex: none; color: var(--sand-10); }
+.placement-notes summary .icon { flex: none; width: 20px; height: 20px; color: var(--sand-10); }
 .placement-notes[open] > summary .icon { transform: rotate(180deg); }
 .placement-notes ul { list-style: none; padding: 0; }
 .placement-notes li { margin-top: 24px; font-size: 14px; }
@@ -326,7 +326,7 @@ const {
 .cycle-result { fill: #fff; stroke: var(--sand-6); stroke-width: 1.2; }
 .cycle-result-dot { fill: var(--blue-9); }
 .cycle-signal { fill: var(--blue-9); }
-.place-arrow { align-self: center; width: 64px; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
+.place-arrow { align-self: center; width: 64px; fill: none; stroke: var(--sand-9); stroke-width: 1.2; }
 .concept-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 680px; margin: 24px 0; }
 .guide .concept-pair figure { margin: 0; padding: 24px 16px; min-width: 0; }
 .concept-pair figure + figure { border-left: 1px solid var(--sand-6); }
