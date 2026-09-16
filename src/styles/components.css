@@ -429,6 +429,9 @@
   line-height: 20px;
   max-width: none;
 }
+/* The mark reads as a bullet for the whole item, so it sits at its first line. */
+.step-panel .claim-marked { align-items: start; }
+.step-panel .claim-marked > .icon { width: 20px; height: 20px; }
 .entry-section > .section-note {
   color: var(--muted);
   font-size: 14px;
