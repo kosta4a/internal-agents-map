@@ -5,6 +5,10 @@
 > all nine findings, dependency synchronization, checkpoint commits on an
 > isolated branch, and complete local verification.
 >
+> Publication, checkout reconciliation, and release cleanup were subsequently
+> authorized on the same date. The workflow and scope limits below describe the
+> original implementation phase; the release follow-up records the later work.
+>
 > The user separately authorized removing Browserbase's bb entry. That removal
 > is implemented locally and recorded below; it is not pending plan work.
 >
@@ -22,8 +26,9 @@
 - Status: DONE on 2026-09-16. All seven phases were implemented and committed on the
   isolated `codex/plan-008-reconcile` branch, then squash-merged into `main` as
   `15bacb9` after PR #2 (`bcaff15`). The initial release passed local verification
-  and 371 production response checks. Later Phase 1 corrections from the shared
-  checkout are retained in the follow-up reconciliation described below.
+  and 371 production response checks. The later Phase 1 corrections from the shared
+  checkout were released as `b6ae5c4`, with successful GitHub CI and another 371
+  passing production response checks.
 
 ### Parallel-execution reconciliation record
 
@@ -511,6 +516,27 @@ removal: a fixed chart-marker count and two links to the retired active record. 
 marker assertion now follows the rendered placements, and the historical reviews link
 to the preserved source capture. Ruff also applied its required formatting to the new
 statistics expressions. The complete ordered gate passed after those corrections.
+
+## Release follow-up — 2026-09-16
+
+The initial release `15bacb9` included the isolated execution branch after PR #2.
+Comparison with the original shared checkout found fourteen later evidence
+corrections and an expanded review that had not reached that release. Commit
+`b6ae5c4` preserves those corrections, regenerates their catalog summaries, and
+retains `plans/agent-page-content-audit.html` unchanged as a historical artifact.
+
+The same follow-up repairs the Playwright preview lifecycle. The synchronous CLI
+startup had prevented GitHub's runner from reaching browser tests; the managed
+server now uses Astro's API and enforces readiness, shutdown, and run time limits.
+The full local gate passed (147 Vitest, 14 Node, 196 Python, 283 browser tests,
+38 expected skips), followed by successful GitHub run
+[35149597395](https://github.com/steel-experiments/internal-agents-map/actions/runs/35149597395).
+Production deployment `dpl_G5XMQcKkCc4B2CDuidVYUFQ7FYg5` passed all 371 delivery checks.
+
+The original checkout now follows released `main`; temporary worktrees, release
+branches, and redundant stashes were retired after verification. Their original
+state and Git history remain in verified local recovery bundles. The Areal/Sand
+design, `DESIGN.md`, and PR #2's illustrations are retained.
 
 ## Evidence gaps and scope limits
 

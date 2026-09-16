@@ -15,7 +15,7 @@ verification gate, and update the status row when finished.
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
 | [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
 | [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
-| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; initial release `15bacb9` published 2026-09-16; later Phase 1 corrections retained in the release follow-up |
+| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; initial release `15bacb9` and reconciled follow-up `b6ae5c4` published 2026-09-16; CI and production checks passed |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -124,6 +124,27 @@ with the expanded [content review](../docs/content-review-2026-09.md).
 [The original page audit](agent-page-content-audit.html) is kept unchanged as a
 historical report: its published-site baseline predates Plan 008 and is not the
 current catalog inventory.
+
+The follow-up was published as `b6ae5c4` on 2026-09-16. The full verification suite
+passed locally and on the GitHub Linux runner:
+[Validate catalog run 35149597395](https://github.com/steel-experiments/internal-agents-map/actions/runs/35149597395).
+It includes 147 Vitest, 14 Node, 196 Python, and 283 Playwright tests, with 38
+expected browser-project skips. The revised catalog contains 40 approaches,
+35 organizations, 591 claims, and 107 preserved source captures; Astro built
+52 pages and 51 canonical routes.
+
+Vercel deployment `dpl_G5XMQcKkCc4B2CDuidVYUFQ7FYg5`
+(`internal-agents-f3v0me4iw-nen-labs.vercel.app`) became production, and the complete
+delivery audit again passed all 371 checks. The missing-build error and preview
+process cleanup were also checked locally, including cleanup after failed tests.
+Rollback to the initial Plan 008 release is available through deployment
+`dpl_GXqrAs68W3N13poDbZYxCT8J6RuM`.
+
+The original checkout was fast-forwarded to the released `main`. All four temporary
+worktrees and both release branches were removed after confirming that their work
+was integrated or preserved in verified local recovery bundles. Both redundant
+stashes were retired after the successful CI and production checks. `DESIGN.md`
+and the original audit HTML were verified byte-identical to the backed-up originals.
 
 ## Verification history
 
