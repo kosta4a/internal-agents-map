@@ -185,7 +185,9 @@ const {
 .workflow-node { background: var(--sand-3); border-radius: 16px; padding: 24px; text-align: center; }
 .workflow-node strong { display: block; font-weight: 400; margin-top: 12px; }
 .workflow-context { background: var(--sand-3); }
-.workflow-connector { text-align: center; color: var(--sand-10); font-size: 20px; line-height: 38px; }
+/* A drawn arrow, clear of the panel above it and the one below. */
+.workflow-connector { display: flex; justify-content: center; padding: 4px 0; }
+.workflow-connector svg { display: block; width: 12px; height: 24px; fill: none; stroke: var(--sand-6); stroke-width: .5; }
 .placement-notes { padding: 24px 0; margin-top: 24px; }
 .placement-notes summary {
   display: flex;
@@ -257,14 +259,31 @@ const {
 .place-machine, .place-link { display: grid; grid-template-rows: auto auto; gap: 8px; }
 .place-machine { flex: 0 0 156px; min-width: 0; }
 .place-machine-title { display: block; min-height: 20px; font-size: 14px; line-height: 20px; text-align: center; color: var(--sand-12); }
-.place-box { height: 160px; background: var(--sand-3); border-radius: 12px; display: grid; place-items: center; }
-.place-agent { display: grid; justify-items: center; gap: 8px; font-size: 14px; color: var(--blue-8); }
-.place-agent i { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-8); }
+.place-box { position: relative; height: 160px; background: var(--sand-3); border-radius: 12px; }
+/* The mark holds the centre of the machine, and its label sits above it. */
+.place-agent { position: absolute; inset: 0; font-size: 14px; color: var(--blue-8); }
+.place-agent i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-8);
+}
+.place-agent span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(50% + 17px);
+  text-align: center;
+}
 /* A running agent is not a still one, so its mark breathes. */
 @keyframes place-pulse {
-  from { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: .65; }
-  to { transform: scale(1); opacity: 1; }
+  from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: .65; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .place-agent i { animation: place-pulse 2.4s ease-in-out infinite; }

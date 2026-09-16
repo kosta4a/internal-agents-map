@@ -104,9 +104,9 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <p><Inline parts={workflow.intro} /></p>
     <figure class="workflow-figure">
       <div class="workflow-node"><span class="eyebrow">{task.label}</span><strong>{task.value}</strong></div>
-      <div class="workflow-connector" aria-hidden="true">↓</div>
+      <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 24"><path d="M6 0 V23 M1.5 18 L6 23 L10.5 18"/></svg></div>
       <div class="workflow-node workflow-context"><span class="eyebrow">{work.label}</span><strong>{work.value}</strong></div>
-      <div class="workflow-connector" aria-hidden="true">↓</div>
+      <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 24"><path d="M6 0 V23 M1.5 18 L6 23 L10.5 18"/></svg></div>
       <div class="workflow-node"><span class="eyebrow">{result.label}</span><strong>{result.value}</strong></div>
       <figcaption><Inline parts={workflow.caption} /></figcaption>
     </figure>
