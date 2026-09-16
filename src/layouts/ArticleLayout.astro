@@ -164,10 +164,26 @@ const {
 .guide .core-definition strong { font-weight: 500; }
 /* A call to action stands clear of the paragraph that leads into it. */
 .guide section > .button { margin-top: 16px; }
-.scope-diagram { max-width: 360px; margin: 24px auto 0; }
-.scope-diagram, .concept-pair svg { display: block; width: 100%; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
-.scope-diagram text, .concept-pair svg text { fill: var(--muted); stroke: none; font: 12px Areal, sans-serif; }
-.scope-diagram .agent-dot, .concept-pair svg .agent-dot { fill: var(--accent); stroke: var(--accent); }
+/* The illustration keeps a 16:9 field of its own, on the page's own ground. */
+.scope-figure {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 24px 0 0;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scope-figure svg { display: block; width: 100%; height: 100%; }
+.scope-frame { fill: none; stroke: var(--sand-6); stroke-width: 1; }
+/* The viewBox is the body's own width, so a label reads at its stated size. */
+.scope-label { fill: var(--muted); font-size: 14px; letter-spacing: -.01em; }
+.scope-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
+.scope-node { fill: #fff; stroke: var(--sand-10); stroke-width: 1.2; }
+.scope-agent { fill: var(--accent); stroke: var(--accent); }
+.scope-signal { fill: var(--accent); }
+.concept-pair svg { display: block; width: 100%; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
+.concept-pair svg text { fill: var(--muted); stroke: none; font: 12px Areal, sans-serif; }
+.concept-pair svg .agent-dot { fill: var(--accent); stroke: var(--accent); }
 .guide .concept-definition { font-size: 14px; line-height: 1.5; max-width: 610px; }
 .concept-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 680px; margin: 24px 0; }
 .guide .concept-pair figure { margin: 0; padding: 24px 16px; min-width: 0; }
@@ -304,7 +320,6 @@ const {
   .quadrant-x-axis, .quadrant-y-axis { font-size: 12px; }
   .quadrant-legend { margin-left: 24px; gap: 8px 16px; }
   .core-definition { padding: 40px 20px; }
-  .scope-diagram { max-width: 300px; }
   .concept-pair { grid-template-columns: 1fr; }
   .concept-pair figure + figure { border-left: 0; border-top: 1px solid var(--sand-6); }
   .concept-pair svg { max-width: 320px; margin: auto; }

@@ -72,7 +72,29 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <div class="core-definition">
       <p><Inline parts={scope.definition} /></p>
     </div>
-    <svg class="scope-diagram" viewBox="0 0 300 210" role="img" aria-label={scope.diagramLabel}><rect x="12" y="12" width="276" height="186" rx="2"/><text x="30" y="38">Organization</text><path class="agent-links" pathLength="1" d="M150 94 L60 149 M150 94 L150 149 M150 94 L240 149"/><circle class="agent-dot" cx="150" cy="94" r="9"/><text x="150" y="72" text-anchor="middle">Agent</text><circle cx="60" cy="149" r="5"/><circle cx="150" cy="149" r="5"/><circle cx="240" cy="149" r="5"/><text x="60" y="177" text-anchor="middle">Knowledge</text><text x="150" y="177" text-anchor="middle">Tools</text><text x="240" y="177" text-anchor="middle">Workflows</text></svg>
+    <figure class="scope-figure">
+      <svg viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel}>
+        <rect class="scope-frame" x="24" y="24" width="636" height="337" rx="12"/>
+        <text class="scope-label" x="44" y="56">Organization</text>
+        <path class="scope-link" id="scope-link-0" d="M202 192 C 296 192, 340 106, 456 106"/>
+        <path class="scope-link" id="scope-link-1" d="M202 192 C 296 192, 340 192, 456 192"/>
+        <path class="scope-link" id="scope-link-2" d="M202 192 C 296 192, 340 278, 456 278"/>
+        <circle class="scope-node scope-agent" cx="190" cy="192" r="10"/>
+        <text class="scope-label" x="190" y="168" text-anchor="middle">Agent</text>
+        <circle class="scope-node" cx="462" cy="106" r="6"/>
+        <circle class="scope-node" cx="462" cy="192" r="6"/>
+        <circle class="scope-node" cx="462" cy="278" r="6"/>
+        <text class="scope-label" x="484" y="111">Knowledge</text>
+        <text class="scope-label" x="484" y="197">Tools</text>
+        <text class="scope-label" x="484" y="283">Workflows</text>
+        <circle class="scope-signal" r="3" data-link="0" data-delay="0" opacity="0"/>
+        <circle class="scope-signal" r="3" data-link="1" data-delay=".5" opacity="0"/>
+        <circle class="scope-signal" r="3" data-link="2" data-delay="1" opacity="0"/>
+        <circle class="scope-signal" r="3" data-link="0" data-delay="1.6" data-return opacity="0"/>
+        <circle class="scope-signal" r="3" data-link="1" data-delay="2.1" data-return opacity="0"/>
+        <circle class="scope-signal" r="3" data-link="2" data-delay="2.6" data-return opacity="0"/>
+      </svg>
+    </figure>
     {scope.body.map((block) => <p><Inline parts={block} /></p>)}
     <h3>{scope.agentHeading}</h3>
     {scope.agentBody.map((block) => <p><Inline parts={block} /></p>)}
@@ -216,3 +238,8 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     ))}
   </section>
 </ArticleLayout>
+<script>
+  import { startScopeDiagram } from '../scripts/scope-diagram';
+
+  startScopeDiagram();
+</script>
