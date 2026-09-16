@@ -1,6 +1,7 @@
 ---
 // ABOUTME: Holds the per-claim research ledger behind one native disclosure.
 // ABOUTME: It keeps provenance, confidence, and source locators available on the page.
+import Icon from './Icon.astro';
 import type { ClaimView } from '../lib/entry-view';
 
 interface Props {
@@ -10,7 +11,10 @@ interface Props {
 const { claims } = Astro.props;
 ---
 <details class="claim-details">
-  <summary>Research details for every claim on this page</summary>
+  <summary>
+    <span>Research details for every claim on this page</span>
+    <Icon name="chevron-down" />
+  </summary>
   <ol class="ledger">
     {claims.map((claim) => (
       <li>

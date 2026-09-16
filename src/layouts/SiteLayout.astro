@@ -2,7 +2,8 @@
 // ABOUTME: The shared page frame: head metadata, sidebar navigation, and footer.
 // ABOUTME: Every page passes its own title, description, and structured data.
 import '../styles/site.css';
-import { loadCatalog } from '../lib/catalog';
+import ContributionInvite from '../components/ContributionInvite.astro';
+import Icon from '../components/Icon.astro';
 import { canonicalUrl, guidePath, homePath, markdownPath, notesIndexPath } from '../lib/routes';
 import {
   OG_IMAGE,
@@ -41,11 +42,6 @@ const {
 const url = canonicalUrl(path);
 const contribute =
   'https://github.com/steel-experiments/internal-agents-map/issues/new?title=Catalog+suggestion';
-// The newest entry review, shown once in the footer of every page.
-const reviewed = loadCatalog()
-  .approaches.map((approach) => approach.last_reviewed_at)
-  .sort()
-  .at(-1);
 ---
 <!doctype html>
 <html lang="en">
@@ -80,45 +76,44 @@ const reviewed = loadCatalog()
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href={homePath()}>Internal Agents Map</a>
+</header>
 <div class="page-shell">
   <aside class="sidebar">
     <nav aria-label="Main navigation">
-      <a class="brand" href={homePath()}><span class="brand-mark" aria-hidden="true">▧</span> Internal <br />Agents Map</a>
       <div class="nav-links">
-        <a href={homePath()} aria-current={current === 'catalog' ? 'page' : undefined}>Catalog</a>
-        <a href={guidePath('definitions')} aria-current={current === 'definitions' ? 'page' : undefined}>Definitions</a>
-        <a href={notesIndexPath()} aria-current={current === 'notes' ? 'page' : undefined}>Notes</a>
-        <a href={guidePath('methodology')} aria-current={current === 'methodology' ? 'page' : undefined}>Methodology</a>
-        <a href="https://github.com/steel-experiments/internal-agents-map">Repository <span class="link-arrow">↗</span></a>
-        <a href="/agents.json" download>Download JSON ↓</a>
-        <a href="/data-guide.md">Data guide <span class="link-arrow">↗</span></a>
-        <a class="contribute-link" href={contribute}>Suggest a resource <span class="link-arrow">↗</span></a>
+        <a href={homePath()} aria-current={current === 'catalog' ? 'page' : undefined}><Icon name="layers-two" />Agent catalog</a>
+        <a href={guidePath('definitions')} aria-current={current === 'definitions' ? 'page' : undefined}><Icon name="book" />Definitions</a>
+        <a href={notesIndexPath()} aria-current={current === 'notes' ? 'page' : undefined}><Icon name="note-text" />Notes</a>
+        <a href={guidePath('methodology')} aria-current={current === 'methodology' ? 'page' : undefined}><Icon name="compass-round" />Methodology</a>
+        <a class="nav-external" href="https://github.com/steel-experiments/internal-agents-map"><span class="nav-label"><Icon name="github" />Repository</span><Icon name="arrow-upright" /></a>
+        <a class="nav-external" href="/data-guide.md"><span class="nav-label"><Icon name="file-text" />Data guide</span><Icon name="arrow-upright" /></a>
+        <a class="contribute-link nav-external" href={contribute}><span class="nav-label"><Icon name="circle-plus" />Suggest a resource</span><Icon name="arrow-upright" /></a>
+        <a href="/agents.json" download><Icon name="folder-download" />Download JSON</a>
       </div>
       <p class="sidebar-note">An open catalog.<br />Built from public evidence.</p>
     </nav>
   </aside>
   <main id="main">
     <slot />
+    <ContributionInvite />
   </main>
+  {path !== homePath() && (
+    <aside id="contents" class="contents" aria-label="Table of contents" hidden></aside>
+  )}
 </div>
 <footer>
   <div class="footer-inner">
-    <div class="footer-brand">
-      <span>{SITE_NAME}</span>
-      <small>Compiled by <a href="https://steel.dev/?utm_source=internal-agents-map&utm_medium=website&utm_content=footer">Steel</a>, browser infrastructure for AI agents.</small>
-      {reviewed && (
-        <small>Latest entry review: <time datetime={reviewed}>{reviewed}</time>. Individual source dates vary.</small>
-      )}
-    </div>
-    <div class="contribution-invite">
-      <strong>Know an internal agent?</strong>
-      <p>Share a resource or public mention, suggest an addition, or correct an existing entry.</p>
-      <div class="contribution-links">
-        <a href={contribute}>Suggest a resource or update <span class="link-arrow">↗</span></a>
-        <a href="https://github.com/steel-experiments/internal-agents-map/compare">Open a pull request <span class="link-arrow">↗</span></a>
-      </div>
-    </div>
+    <small>{SITE_NAME}, compiled by <a href="https://steel.dev/?utm_source=internal-agents-map&utm_medium=website&utm_content=footer">Steel</a>, browser infrastructure for AI agents.</small>
   </div>
 </footer>
+<script>
+  import { startContents } from '../scripts/contents';
+  import { startDisclosures } from '../scripts/disclosures';
+
+  startContents();
+  startDisclosures();
+</script>
 </body>
 </html>

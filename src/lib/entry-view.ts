@@ -40,6 +40,29 @@ export interface CitationView {
   readonly title: string;
 }
 
+/**
+ * Every architecture field an entry can report, in the order the table shows
+ * them. The list is fixed so the table reads the same on every entry, and a
+ * field the sources do not report still gets a row.
+ */
+export const ARCHITECTURE_FIELDS = [
+  'model',
+  'harness',
+  'sandbox',
+  'tool_access',
+  'knowledge',
+  'context_mgmt',
+  'credentials',
+  'interfaces',
+] as const;
+
+/** One row of the architecture table: its label, and the claim if there is one. */
+export interface ArchitectureRowView {
+  readonly field: string;
+  readonly label: string;
+  readonly claim: ClaimView | null;
+}
+
 export interface ClaimView {
   readonly id: string;
   readonly anchor: string;
@@ -145,6 +168,8 @@ export interface EntryView {
   readonly workflowClaims: readonly ClaimView[];
   readonly supervisionClaims: readonly ClaimView[];
   readonly architectureClaims: readonly ClaimView[];
+  /** The architecture table: one row per field, reported or not. */
+  readonly architectureRows: readonly ArchitectureRowView[];
   /** Claims of a metric field whose kind is a metric. */
   readonly metricClaims: readonly ClaimView[];
   /** Claims of a metric field that state a fact, an inference, or an opinion. */
@@ -410,6 +435,14 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     workflowClaims,
     supervisionClaims,
     architectureClaims,
+    architectureRows: ARCHITECTURE_FIELDS.map((key) => {
+      const field = `architecture.${key}`;
+      return {
+        field,
+        label: fieldLabel(field),
+        claim: architectureClaims.find((claim) => claim.field === field) ?? null,
+      };
+    }),
     metricClaims,
     resultStatementClaims,
     lessonClaims,

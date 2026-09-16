@@ -7,6 +7,8 @@ import { publicationIntegration } from './scripts/site-publication.ts';
 export default defineConfig({
   site: 'https://internal-agents.com',
   output: 'static',
+  // The dev toolbar overlaps the floating search bar at the foot of the window.
+  devToolbar: { enabled: false },
   trailingSlash: 'never',
   build: {
     // One file per page, so /agents/<id> is served from agents/<id>.html.

@@ -15,7 +15,7 @@ domains:
 - coding
 autonomy: autonomous
 operating_models:
-- scope: "natural-language seed -> agents implement and validate against scenario harness -> converged software"
+- scope: "natural-language seed → agents implement and validate against scenario harness → converged software"
   attention_boundary: exception-only
 rubric:
   invocation:

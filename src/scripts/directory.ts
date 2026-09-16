@@ -31,6 +31,12 @@ function reducedMotion(): boolean {
 }
 /** What each card is animating toward, so a repeated pass does not restart it. */
 const desired = new WeakMap<HTMLElement, boolean>();
+/**
+ * The first pass only states where the cards already are. Animating it would
+ * measure across the font swap and walk every card to its own height, which
+ * reads as the list settling into place after the page has drawn.
+ */
+let settled = false;
 
 /**
  * Show or hide one card, collapsing its height so the list closes smoothly.
@@ -41,7 +47,7 @@ function reveal(card: HTMLElement, visible: boolean): void {
   if (desired.get(card) === visible) return;
   desired.set(card, visible);
 
-  if (reducedMotion()) {
+  if (!settled || reducedMotion()) {
     card.hidden = !visible;
     return;
   }
@@ -437,4 +443,6 @@ export function startDirectory(): void {
   readUrl();
   renderChips();
   apply();
+  // Everything after this first pass is a change the reader made.
+  settled = true;
 }

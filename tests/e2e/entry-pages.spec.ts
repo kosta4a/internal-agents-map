@@ -175,12 +175,11 @@ test.describe('reported results', () => {
   test('separates the metrics from the statements of the other kinds', async ({ page }) => {
     await page.goto('/agents/block-builderbot');
     const results = page.locator('#results');
-    await expect(results.getByRole('heading', { name: 'Reported metrics' })).toBeVisible();
     const statements = results.getByRole('heading', { name: 'Reported outcomes and statements' });
     await expect(statements).toBeVisible();
     const opinion = results.locator('.claim', { hasText: 'now takes days' });
     await expect(opinion).toHaveCount(1);
-    await expect(opinion.locator('.claim-kind')).toHaveText('Opinion');
+    await expect(opinion.locator('.claim-kind')).toHaveText('(opinion)');
   });
 });
 

@@ -33,7 +33,7 @@ summary: DoorDash's internal agentic AI platform; a unified cognitive layer over
 headline_metric: 130,000 engineering tasks automated in one month
 architecture:
   sandbox: Firecracker microVMs; <5s p95 end-to-end setup (boot, clone repos, install tools, configure harness)
-  harness: 'Maturity model: deterministic workflows -> ReAct agents -> hierarchical deep agents -> experimental
+  harness: 'Maturity model: deterministic workflows → ReAct agents → hierarchical deep agents → experimental
     swarms'
   model: Model-agnostic platform primitives support third-party or in-house agent components
   interfaces:
@@ -48,7 +48,7 @@ architecture:
   knowledge: AI Marketplace of specialized agents; DataExplorer for grounded analytics; DoorDash-specific context
     in playbooks
   credentials: Scoped per playbook; brokered through the gateway, never on the laptop; provenance on every action
-  context_mgmt: 'Hybrid retrieval: BM25 + dense semantic + reciprocal-rank fusion -> RAG; schema-aware SQL with
+  context_mgmt: 'Hybrid retrieval: BM25 + dense semantic + reciprocal-rank fusion → RAG; schema-aware SQL with
     EXPLAIN validation'
 primitives:
 - name: Sandbox
@@ -60,7 +60,7 @@ primitives:
 - name: DataExplorer
   desc: Identifies schemas, generates grounded SQL, validates via EXPLAIN before execution
 - name: Maturity model
-  desc: Workflows -> agents -> deep-agent hierarchies -> swarms; governance hardens as control decentralizes
+  desc: Workflows → agents → deep-agent hierarchies → swarms; governance hardens as control decentralizes
 key_metrics:
 - 130,000 engineering tasks automated in one month
 - 25,000+ automated code reviews per week

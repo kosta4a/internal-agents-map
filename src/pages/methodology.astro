@@ -2,6 +2,7 @@
 // ABOUTME: The Methodology guide: how the catalog records evidence and its limits.
 // ABOUTME: Its text comes from guide-content, which the Markdown export also reads.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Icon from '../components/Icon.astro';
 import Inline from '../components/Inline.astro';
 import { guidePath, canonicalUrl } from '../lib/routes';
 import { structuredData, webPageNode } from '../lib/metadata';
@@ -37,9 +38,14 @@ const graph = structuredData([
       <h2 id={section.titleId}>{section.heading}</h2>
       {section.body.map((block) => <p><Inline parts={block} /></p>)}
       {section.links && (
-        <div class="resource-links">
-          {section.links.map((link) => <a href={link.url}>{link.label}</a>)}
-        </div>
+        <ul class="doc-links">
+          {section.links.map((link) => (
+            <li class="doc-card">
+              <Icon name="github" />
+              <a href={link.url}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
       )}
     </section>
   ))}

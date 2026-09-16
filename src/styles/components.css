@@ -10,6 +10,7 @@
 .intro h1 { margin-top: 0; }
 .intro > h1 + p {
   max-width: 670px;
+  font-size: 14px;
   color: var(--muted);
 }
 .stats {
@@ -25,25 +26,13 @@
 }
 .stat strong {
   display: block;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: -.04em;
 }
 .stat span {
   font-size: 14px;
-  color: var(--muted);
-}
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: center;
-  padding: 12px 0 24px;
-}
-.section-heading .eyebrow { font-size: 12px; }
-.result-count {
-  font-size: 20px;
   color: var(--muted);
 }
 
@@ -66,7 +55,7 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  width: min(348px, calc(100% - 32px));
+  width: min(396px, calc(100% - 32px));
 }
 #filters .search-row {
   display: grid;
@@ -182,6 +171,8 @@
   gap: 8px;
   min-width: 0;
 }
+/* Hidden for now. The mark stays in the markup, so this is one line to undo. */
+.entry-heading .company-logo { display: none; }
 .company-logo {
   display: inline-flex;
   align-items: center;
@@ -206,7 +197,7 @@
   background: var(--sand-3);
   color: var(--ink);
   font-size: calc(var(--logo-size, 20px) * .55);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
 }
 .entry-header > .company-logo { margin-bottom: 16px; }
@@ -253,38 +244,22 @@
 
 /* Directory cards */
 .entry {
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 .entry-box {
   position: relative;
   cursor: pointer;
 }
-/* No container to shade, so hovering the item highlights its title instead. */
-.entry-box:hover h3 a { color: var(--link); }
+/* No container to shade: hovering lightens everything the card says by a step. */
+.entry-box:hover h3 a { color: var(--sand-11); }
+.entry-box:hover .entry-summary { color: var(--sand-9); }
+.entry-box:hover .tag { color: var(--sand-11); }
 /* The heading link covers the container, so the whole card opens the entry. */
 .entry-box h3 a::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 14px;
-}
-.entry-go {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: var(--sand-3);
-}
-.entry-go-chevron {
-  width: 8px;
-  height: 8px;
-  margin-left: -2px;
-  border-top: 1.5px solid var(--ink);
-  border-right: 1.5px solid var(--ink);
-  transform: rotate(45deg);
 }
 .entry-top {
   display: flex;
@@ -295,33 +270,35 @@
 }
 .company {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
 }
 .entry-type {
   font-size: 12px;
   color: var(--muted);
 }
-.entry h3 { margin-bottom: 12px; }
+.entry h3 { margin-bottom: 0; font-size: 16px; }
 .entry h3 a {
   color: var(--ink);
   text-decoration: none;
 }
 
 .entry-summary {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.65;
   max-width: 740px;
+  color: var(--sand-10);
 }
 .tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 16px 0 12px;
+  margin: 10px 0 12px;
 }
 .tag {
-  background: var(--sand-5);
-  font-size: 14px;
-  padding: 3px 11px;
+  background: var(--sand-3);
+  font-size: 12px;
+  line-height: 14px;
+  padding: 3px 9px;
   border-radius: 999px;
   color: var(--sand-12);
 }
@@ -329,60 +306,147 @@
 /* Entry page */
 .entry-page { padding-bottom: 8px; }
 .page-back {
-  display: inline-block;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
   margin-bottom: 24px;
-  color: var(--sand-10);
+  border-radius: 10px;
+  background: var(--sand-3);
+  font-size: 14px;
+  color: var(--sand-12);
   text-decoration: none;
 }
-.entry-header { padding-bottom: 32px; }
+/* The invitation that closes the page body. */
+.contribution-invite {
+  margin-top: 32px;
+}
+.contribution-invite strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.contribution-invite p {
+  margin-top: 8px;
+  color: var(--sand-10);
+}
+.contribution-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+/* One button: a bar with its label at one end and its mark at the other. */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--sand-3);
+  color: var(--sand-12);
+  text-decoration: none;
+}
+.button .icon { flex: none; }
+.button:hover { background: var(--sand-4); }
+/* The action that carries the reader onward. */
+.button-solid {
+  background: var(--sand-12);
+  color: var(--sand-1);
+}
+/* Already dark, so this one lifts toward the page instead of away from it. */
+.button-solid:hover { background: var(--sand-11); }
+
+.page-back:hover { background: var(--sand-4); }
+/* The bar that closes an entry sits below the last section, not above one. */
+.page-back-end {
+  margin: 24px 0 0;
+  background: var(--sand-12);
+  color: var(--sand-1);
+}
+/* Already dark, so this one lifts toward the page instead of away from it. */
+.page-back-end:hover { background: var(--sand-11); }
+.entry-header { padding-bottom: 8px; }
 .entry-header h1 {
   margin-top: 12px;
   max-width: 700px;
 }
 .entry-header .lede {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
 }
 .notice {
-  padding: 8px 0;
+  padding: 20px;
   margin-top: 24px;
   max-width: 680px;
   font-size: 14px;
+  background: var(--sand-3);
+  border-radius: 16px;
 }
 .notice strong {
   display: block;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--link);
   margin-bottom: 8px;
 }
 .entry-facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px 24px;
-  margin-top: 32px;
-  border-block: 1px solid var(--rule);
+  margin-top: 8px;
   padding: 24px 0;
 }
 .entry-facts dt {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
 }
 .entry-facts dd {
   margin-top: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
 }
 .entry-section {
-  padding: 32px 0;
+  padding: 24px 0;
 }
 .entry-section > h2 { margin-bottom: 8px; }
+/* The workflow steps: one panel, its rows divided. */
+.step-panel {
+  margin-top: 16px;
+  background: var(--sand-3);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.step-panel .claim {
+  padding: 16px;
+  border-bottom: .5px solid var(--sand-6);
+}
+.step-panel .claim:last-child { border-bottom: 0; }
+.step-panel .claim-text {
+  margin: 0;
+  line-height: 20px;
+  max-width: none;
+}
 .entry-section > .section-note {
   color: var(--muted);
   font-size: 14px;
   max-width: 680px;
   margin-top: 8px;
 }
+/* An arrow inside a sentence steps back from the words it joins. */
+.arrow { color: var(--sand-10); }
+/* A marked row holds its mark on the centre line of the text beside it. */
+.claim-marked {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+.claim-marked > .icon { flex: none; }
+/* The observation takes its own row, starting at the icon's edge. */
+.claim-marked > .observed { grid-column: 1 / -1; margin-top: 0; }
 .entry-section h3 {
   font-size: 16px;
   margin: 32px 0 12px;
@@ -394,13 +458,24 @@
 }
 .scope-list li {
   padding: 12px 0;
-  font-size: 14px;
 }
+.scope-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.scope-line .icon { flex: none; }
+.scope-line strong { min-width: 0; }
 .scope-list strong {
-  display: block;
-  font-weight: 500;
+  font-weight: 400;
 }
-.scope-list span { color: var(--muted); }
+.scope-list li > span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
 .term-list {
   display: flex;
   flex-wrap: wrap;
@@ -412,9 +487,10 @@
 .term-list li { margin: 0; }
 .term-list span {
   display: inline-block;
-  background: var(--sand-5);
-  font-size: 14px;
-  padding: 3px 11px;
+  background: var(--sand-3);
+  font-size: 12px;
+  line-height: 14px;
+  padding: 3px 9px;
   border-radius: 999px;
   color: var(--sand-12);
 }
@@ -426,21 +502,14 @@
 }
 .claim-label {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
   margin-bottom: 8px;
-
-  letter-spacing: .04em;
 }
-.claim-kind {
-  margin-left: 8px;
-  padding: 8px 8px;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  letter-spacing: .03em;
-}
-.claim > p:not(.citations) {
-  font-size: 16px;
+/* The kind sits inside the label, so it inherits its size and colour. */
+.claim-kind { color: inherit; }
+.claim-text {
+  font-size: 14px;
   line-height: 1.6;
   max-width: 680px;
 }
@@ -463,13 +532,14 @@
 /* The number is the link; it no longer shouts from inside the footnote. */
 .citation strong {
   color: inherit;
-  font-weight: 500;
+  font-weight: 400;
 }
 .citation:hover strong {
   color: var(--link);
 }
 .citation-contradicts strong { color: #a1392d; }
-.caveats {
+.caveats,
+.architecture {
   /* Row flow puts each dt beside its own dd, so the labels read as a header column. */
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -482,27 +552,73 @@
   overflow: hidden;
 }
 .caveats dt,
-.caveats dd {
+.caveats dd,
+.architecture dt,
+.architecture dd {
   margin: 0;
   /* 20px of line plus 10px either side: a 40px row. */
   padding: 10px 12px;
   line-height: 20px;
   border-bottom: .5px solid var(--sand-6);
 }
-.caveats dt {
+.caveats dt,
+.architecture dt {
   background: var(--sand-3);
-  font-weight: 500;
+  font-weight: 400;
   color: var(--ink);
   /* The one divider between the header column and its values. */
   border-right: .5px solid var(--sand-6);
 }
 .caveats dt:last-of-type,
-.caveats dd:last-of-type {
+.caveats dd:last-of-type,
+.architecture dt:last-of-type,
+.architecture dd:last-of-type {
   border-bottom: 0;
+}
+/* The architecture table keeps its label column on one line, and marks the
+   fields the sources do not report. */
+.architecture { margin-top: 16px; }
+.architecture dt { white-space: nowrap; }
+.architecture .is-unreported { color: var(--sand-9); }
+.architecture-caveats {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--sand-9);
+}
+.architecture-caveats span + span::before { content: " \00B7 "; }
+/* A metric turns the table: its qualifications head the columns, and the values
+   sit under them. The rules move with the orientation. */
+.caveats-columns {
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  grid-template-columns: minmax(0, 33.333%);
+  grid-auto-columns: minmax(0, 1fr);
+}
+.caveats-columns dt,
+.caveats-columns dd {
+  border-bottom: 0;
+  border-right: .5px solid var(--sand-6);
+}
+.caveats-columns dt { border-bottom: .5px solid var(--sand-6); }
+.caveats-columns dt:last-of-type,
+.caveats-columns dd:last-of-type { border-right: 0; }
+/* The shared rule clears the last row's underline; turned on its side, that is
+   the last header cell, which still needs one. */
+.caveats-columns dt:last-of-type { border-bottom: .5px solid var(--sand-6); }
+.caveat-note {
+  margin-top: 12px;
+  color: var(--sand-12);
+  max-width: 680px;
+}
+.observed {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--sand-10);
 }
 .qualification {
   margin-top: 12px;
-  font-size: 14px;
+  font-size: 12px;
   max-width: 680px;
 
 }
@@ -514,40 +630,61 @@
 .conflict strong {
   display: block;
   color: #a1392d;
-  font-weight: 500;
+  font-weight: 400;
 }
 .claim-details {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted);
   margin-top: 12px;
 }
 .claim-details summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   width: fit-content;
+  font-size: 14px;
 }
+.claim-details summary::before { content: none; }
+.claim-details summary .icon { flex: none; }
+.claim-details[open] > summary .icon { transform: rotate(180deg); }
 .claim-details dl {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 135px minmax(0, 1fr);
-  gap: 8px 12px;
-  margin: 12px 0 0;
+  grid-template-columns: subgrid;
+  gap: 0;
+  margin: 0;
 }
 .claim-details dt {
-  font-weight: 500;
+  font-weight: 400;
   color: var(--ink);
+  padding: 12px 12px 12px 16px;
 }
+.claim-details dd { padding: 12px 16px 12px 0; }
+/* One rule between rows: the two cells of a row carry half of it each. */
+.claim-details dt ~ dt, .claim-details dd ~ dd { border-top: .5px solid var(--sand-6); }
 .evidence {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: 8px;
   list-style: none;
-  padding: 0;
-  margin: 12px 0 0;
+  padding: 12px 16px 16px;
+  margin: 0;
+  border-top: .5px solid var(--sand-6);
 }
 .evidence li {
-  padding: 8px 0;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  gap: 8px 0;
 }
 .relation {
-  font-weight: 500;
+  font-weight: 400;
   color: var(--ink);
-  margin-right: 8px;
 }
+/* The locator belongs under its source, not back in the label column. */
+.evidence .locator { grid-column: 2; }
 .relation-contradicts { color: #a1392d; }
 .locator {
   display: block;
@@ -558,14 +695,13 @@
 /* Sources */
 .sources {
   padding-left: 16px;
-  font-size: 12px;
+  font-size: 14px;
   margin: 16px 0 0;
 }
 .sources li { padding: 12px 0; }
-.source-title { font-size: 14px; }
+.source-title { font-size: inherit; }
 .source-url {
   display: block;
-  font-size: 12px;
   margin: 8px 0;
 }
 .source-meta { color: var(--muted); }
@@ -578,20 +714,80 @@
 
 /* Related reading */
 .related-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px;
   list-style: none;
   padding: 0;
   margin: 16px 0 0;
 }
-.related-list li {
-  padding: 12px 0;
+.related-card {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--sand-3);
   font-size: 14px;
+  line-height: 20px;
 }
-.related-list span {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 8px;
+.related-kind {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sand-10);
 }
+.related-kind .icon { flex: none; }
+.related-card a {
+  color: var(--sand-12);
+  text-decoration: none;
+}
+/* The title's link covers its card, so anywhere on it opens the page. */
+.related-card a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+.related-card:hover a { color: var(--sand-11); }
+.doc-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+}
+.doc-card {
+  position: relative;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  align-content: start;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--sand-3);
+  font-size: 14px;
+  line-height: 20px;
+}
+.doc-card .icon { color: var(--sand-10); }
+.doc-card a {
+  color: var(--sand-12);
+  text-decoration: none;
+}
+/* The label's link covers its card, so anywhere on it opens the document. */
+.doc-card a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+.doc-card:hover a { color: var(--sand-11); }
 .resource-links {
   display: flex;
   flex-wrap: wrap;
@@ -605,26 +801,21 @@
 }
 
 @media (max-width: 800px) {
-  .intro h1 { font-size: 32px; }
+  .related-list, .doc-links { grid-template-columns: minmax(0, 1fr); }
   .intro > h1 + p { display: none; }
   .intro { padding-bottom: 24px; }
   .stats { gap: 32px; margin-top: 24px; }
-  .section-heading {
-    align-items: start;
-    flex-direction: column;
-    padding: 24px 0 16px;
-    gap: 8px;
-  }
-  .entry h3 { font-size: 20px; }
   .entry-top { align-items: start; }
-  .entry-header h1 { font-size: 32px; }
   .entry-header .lede { font-size: 16px; }
-  .entry-section { padding: 24px 0; }
   /* A narrow screen runs each field into one wrapped line instead of two rows. */
   .caveats, .claim-details dl {
     display: block;
     margin-top: 12px;
   }
+  .ledger, .ledger > li, .evidence, .evidence li { display: block; }
+  .ledger > li + li { margin-top: 16px; }
+  .claim-details dl { margin: 0; padding: 16px; }
+  .claim-details dt, .claim-details dd { padding: 0; border-top: 0; }
   /* Stacked fields are no longer a grid, so the table's rules would be stray lines. */
   .caveats {
     border: 0;
@@ -644,26 +835,42 @@
     height: 5px;
   }
   .claim { padding: 16px 0; }
-  .claim > p:not(.citations) { font-size: 14px; }
   .sources li { padding: 8px 0; }
 }
 @media (max-width: 420px) {
   .stats { gap: 24px; }
-  .stat strong { font-size: 20px; }
 }
 
 /* Research ledger */
 .ledger {
+  display: grid;
+  grid-template-columns: fit-content(220px) minmax(0, 1fr);
+  gap: 16px 0;
   list-style: none;
   padding: 0;
   margin: 16px 0 0;
 }
 .ledger > li {
-  padding: 16px 0;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-content: start;
+  background: var(--sand-3);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+}
+.ledger > li + li {
+  margin-top: 0;
 }
 .ledger-title {
+  grid-column: 1 / -1;
   display: block;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   color: var(--ink);
-  margin-bottom: 8px;
+  text-decoration: none;
+  background: var(--sand-4);
+  border-bottom: .5px solid var(--sand-6);
+  padding: 16px;
 }

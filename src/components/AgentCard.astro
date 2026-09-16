@@ -27,7 +27,6 @@ const { card } = Astro.props;
         <CompanyLogo company={card.companyView} size={20} />
         <h3><a href={card.path}>{card.company}'s {card.agentName}</a></h3>
       </div>
-      <span class="entry-go" aria-hidden="true"><span class="entry-go-chevron"></span></span>
     </div>
     <p class="entry-summary">{card.excerpt}</p>
     <div class="tags">
