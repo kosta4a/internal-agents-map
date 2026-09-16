@@ -223,7 +223,7 @@ const {
   overflow: hidden;
 }
 .scope-figure svg { display: block; width: 100%; height: 100%; }
-.scope-frame { fill: none; stroke: var(--sand-6); stroke-width: 1; }
+.scope-frame { fill: none; stroke: var(--sand-6); stroke-width: .5; }
 /* The viewBox is the body's own width, so a label reads at its stated size. */
 .scope-label { fill: var(--muted); font-size: 14px; letter-spacing: -.01em; }
 .scope-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
@@ -256,13 +256,21 @@ const {
 .place-scene { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 4px; }
 .place-scene-wide { display: block; }
 /* Every column carries a title row, so the boxes line up whether or not it is filled. */
-.place-machine, .place-link { display: grid; grid-template-rows: auto auto; gap: 8px; }
+.place-machine, .place-link {
+  --title-row: 20px;
+  --title-gap: 8px;
+  --box-height: 160px;
+  --dot-size: 18px;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: var(--title-gap);
+}
 .place-machine { flex: 0 0 156px; min-width: 0; }
-.place-machine-title { display: block; min-height: 20px; font-size: 14px; line-height: 20px; text-align: center; color: var(--sand-12); }
-.place-box { position: relative; height: 160px; background: var(--sand-3); border-radius: 12px; }
-/* The mark holds the centre of the machine, and its label sits above it. */
-.place-agent { position: absolute; inset: 0; font-size: 14px; color: var(--blue-8); }
-.place-agent i {
+.place-machine-title { display: block; min-height: var(--title-row); font-size: 14px; line-height: 20px; text-align: center; color: var(--sand-12); }
+.place-box { position: relative; height: var(--box-height); background: var(--sand-3); border-radius: 12px; }
+/* The mark holds the centre of the machine. */
+.place-agent-dot {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -272,13 +280,24 @@ const {
   border-radius: 50%;
   background: var(--blue-8);
 }
-.place-agent span {
+/*
+ * The label stands outside the machine and points back in at the mark.
+ * The arrow starts six below the mark and the label six below the arrow,
+ * which carries it past the box's own edge.
+ */
+.place-callout {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(50% + 17px);
-  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(var(--title-row) + var(--title-gap) + var(--box-height) / 2 + var(--dot-size) / 2 + 6px);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--blue-8);
 }
+.place-callout svg { display: block; width: 12px; height: 74px; fill: none; stroke: var(--blue-9); stroke-width: 1; }
 /* A running agent is not a still one, so its mark breathes. */
 @keyframes place-pulse {
   from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
@@ -286,7 +305,7 @@ const {
   to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .place-agent i { animation: place-pulse 2.4s ease-in-out infinite; }
+  .place-agent-dot { animation: place-pulse 2.4s ease-in-out infinite; }
 }
 .place-link { flex: none; }
 .exchange-scene { display: block; width: 100%; height: 100%; }
