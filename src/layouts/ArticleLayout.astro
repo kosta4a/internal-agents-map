@@ -65,12 +65,13 @@ const {
 .diagram-number { display: block; color: var(--link); font-size: 12px; }
 
 /* The chart shows two questions about an implementation, not a score. */
-.quadrant-chart { position: relative; display: grid; gap: 12px; }
+/* The scale row's height is stated, so the vertical scale can span the plot exactly. */
+.quadrant-chart { --scale-row: 20px; --scale-gap: 12px; position: relative; display: grid; gap: var(--scale-gap); }
 /* Standard sits at the foot of the scale, company-specific at its head. */
 .quadrant-y-axis {
   position: absolute;
   top: 0;
-  bottom: 30px;
+  bottom: calc(var(--scale-row) + var(--scale-gap));
   right: calc(100% + 12px);
   width: 1.2em;
   font-size: 12px;
@@ -83,8 +84,8 @@ const {
   transform: rotate(180deg);
   white-space: nowrap;
 }
-.quadrant-y-axis span:first-child { bottom: 0; }
-.quadrant-y-axis span:last-child { top: 0; }
+.quadrant-y-axis span:first-child { bottom: 16px; }
+.quadrant-y-axis span:last-child { top: 16px; }
 .quadrant-plot {
   aspect-ratio: 1;
   display: grid;
@@ -147,7 +148,7 @@ const {
 .quadrant-cell li[data-chart-approach-id="brex-agent-platform"] { left: 10%; top: 30%; max-width: 58%; }
 .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: 56%; top: 50%; max-width: 38%; }
 .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 17%; top: 72%; max-width: 52%; }
-.quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
+.quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; padding: 0 16px; font-size: 12px; line-height: var(--scale-row); color: var(--muted); }
 .quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: 14px; }
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
 .quadrant-legend i { width: 12.5px; height: 12.5px; }
@@ -485,6 +486,7 @@ const {
     display: flex;
     justify-content: space-between;
     gap: 12px;
+    padding: 0 16px;
   }
   .quadrant-y-axis span { position: static; writing-mode: horizontal-tb; transform: none; }
   .quadrant-plot { aspect-ratio: .82; }
