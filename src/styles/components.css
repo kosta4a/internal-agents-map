@@ -80,7 +80,6 @@
   color: #fff;
   background: rgba(33, 32, 28, .72);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 4px 14px rgba(33, 32, 28, .1);
 }
 #filters .search-box:focus-within {
@@ -147,7 +146,6 @@
   color: #fff;
   background: rgba(33, 32, 28, .72);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 4px 14px rgba(33, 32, 28, .1);
 }
 .suggestions[hidden] { display: none; }
@@ -979,7 +977,6 @@
   color: #fff;
   background: rgba(33, 32, 28, .72);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 4px 14px rgba(33, 32, 28, .1);
   font-size: 14px;
   text-align: left;
@@ -1012,7 +1009,6 @@
   border: .5px solid rgba(255, 255, 255, .14);
   background: rgba(20, 19, 17, .72);
   backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
   color: rgba(255, 255, 255, .92);
   box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
 }
@@ -1081,7 +1077,6 @@
   border: .5px solid rgba(255, 255, 255, .14);
   background: rgba(28, 27, 24, .92);
   backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
 }
 .palette-menu li + li { margin-top: 2px; }
