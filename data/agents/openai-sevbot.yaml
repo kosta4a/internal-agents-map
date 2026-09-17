@@ -36,6 +36,9 @@ architecture:
 primitives:
 - name: Propose-only mitigation
   desc: Proposes mitigations in the incident channel; an engineer can instruct it to apply a specific mitigation
+- {name: Wake on a detected incident, desc: When an incident is detected, the bot wakes up}
+- {name: Collect incident context, desc: Collects context about the incident}
+- {name: Answer developers' questions, desc: Answers developers' questions as part of the incident Slack channel}
 key_metrics: []
 lessons_learned:
 - OpenAI describes autonomous mitigation of routine outages as a goal for Sevbot; on-call duty still exists
@@ -122,6 +125,12 @@ evidence:
   - source_id: openai-sevbot-article
     relation: supports
     locator: Preserved content.md, lines 191-193
+  primitives.1:
+  - {source_id: openai-sevbot-article, relation: supports, locator: 'Preserved content.md, line 188'}
+  primitives.2:
+  - {source_id: openai-sevbot-article, relation: supports, locator: 'Preserved content.md, line 190'}
+  primitives.3:
+  - {source_id: openai-sevbot-article, relation: supports, locator: 'Preserved content.md, line 192'}
   lessons_learned.0:
   - source_id: openai-sevbot-article
     relation: supports
@@ -150,3 +159,37 @@ claim_metadata:
     confidence_reason: The source explicitly contrasts the hoped-for autonomous response with the continuing
       on-call requirement, so the goal must not read as current behavior.
     valid_at: 2026-09
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [openai-sevbot-article, crtsh-sevbot-certificates, github-sevbot-pr]
+  workflow_scope: Detected incident to engineer-directed mitigation in the incident Slack channel
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.1, primitives.2, primitives.0, primitives.3], note: 'The
+      article lists the run in order: wake, collect, propose, answer, and the engineer instruction. The
+      propose-only primitive spans the proposal and the instruction the article states separately.'}
+    human_involvement: {state: reported, claim_paths: [primitives.0, operating_models.0], note: 'The engineer-controlled
+      mitigation instruction is the documented checkpoint; the article states Sevbot never executes a
+      mitigation on its own.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.interfaces]}
+    validation: {state: unreported, claim_paths: [], note: 'The article documents no check of Sevbot''s proposals
+      or answers; the propose-only limit is a behavior boundary, not a validation mechanism.'}
+    observations: {state: unreported, claim_paths: [], note: 'No outcome measurement for Sevbot appears in the
+      reviewed captures. The certificate and commit records evidence a deployed service, not results.'}
+    lessons: {state: reported, claim_paths: [lessons_learned.0]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'The article names no underlying model for Sevbot; the legacy
+      unknown placeholder stays in research details.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'The article describes no execution or isolation boundary;
+      the legacy unknown placeholder stays in research details.'}
+    tool_access: {state: unreported, claim_paths: [], note: 'The article documents no tools used for context
+      collection.'}
+    knowledge: {state: unreported, claim_paths: [], note: 'No knowledge source is named for Sevbot; the article''s
+      factory-wide Codex context access is not attributed to Sevbot.'}
+    context_mgmt: {state: unreported, claim_paths: [], note: 'Not documented in the reviewed captures.'}
+    credentials: {state: unreported, claim_paths: [], note: 'Not documented in the reviewed captures.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow, primitives.2: workflow, primitives.3: workflow}
+  observations: {}

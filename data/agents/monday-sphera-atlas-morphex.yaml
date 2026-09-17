@@ -57,6 +57,15 @@ primitives:
   desc: MEMORY.md + daily diary instead of vector retrieval
 - name: Builders CoWORK
   desc: monday boards as the shared-state layer for human/agent collaboration
+- {name: Receive a task from one of three inboxes, desc: 'A Slack @mention, monday item assignment, or GitHub PR
+    review request lands in the same agent session through SNS and a per-team SQS queue'}
+- {name: Implement the feature task, desc: 'The agent picks up tickets, writes the PR, and ships the feature from
+    the same backlog as human teammates'}
+- {name: Auto-deploy the PR to a remote sandbox, desc: 'Every PR auto-deploys to a per-session remote sandbox; tests,
+    checks, and replayed production traffic run before any human review'}
+- {name: Merge above the confidence threshold, desc: 'PRs above the confidence-score threshold merge automatically
+    after passing every gate and ship to production with no human in the loop; below-threshold PRs route to a human
+    with the failing signal named'}
 key_metrics:
 - 'Morphex: 19 of 20 PRs merge automatically without human review'
 - 90% of Builders use AI coding tools monthly; adoption nearly doubled year over year
@@ -136,6 +145,16 @@ evidence:
   primitives.3:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+  primitives.4:
+  - {source_id: monday-sphera-atlas-morphex-source-1, relation: supports, locator: 'Preserved content.md, lines 40,
+    46, 50'}
+  primitives.5:
+  - {source_id: monday-sphera-atlas-morphex-source-1, relation: supports, locator: 'Preserved content.md, line 28'}
+  primitives.6:
+  - {source_id: monday-sphera-atlas-morphex-source-1, relation: supports, locator: 'Preserved content.md, line 124'}
+  primitives.7:
+  - {source_id: monday-sphera-atlas-morphex-source-1, relation: supports, locator: 'Preserved content.md, lines 150,
+    169'}
   key_metrics.0:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
@@ -239,3 +258,50 @@ claim_metadata:
     metric_scope: Recent cut of top PR-generating agents; Guardrails rejection before review and reverts among merged
       PRs
     denominator: Agent PRs for Guardrails rejection; merged PRs for revert rate
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [monday-sphera-atlas-morphex-source-1]
+  workflow_scope: 'Sphera agent feature task from an inbox trigger to production ship; Morphex merges autonomously
+    above the confidence threshold while Atlas requests human review after the sandbox gate'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.4, primitives.5, primitives.6, primitives.7], note: 'The
+      four run steps describe the shared Sphera pipeline; the final gate differs by agent as the scope states.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1], note: 'Morphex runs
+      exception-only: a below-threshold PR routes to a human and an approved PR ships with none. Atlas runs sandbox
+      checks before asking for human review; the source calls threshold auto-merge a following-two-quarters goal
+      for that population.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.sandbox,
+      architecture.tool_access, architecture.knowledge, architecture.context_mgmt, architecture.credentials,
+      architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.1, primitives.6, lessons_learned.4], note: 'Validation is
+      the blocking Guardrails reviewers, the remote-sandbox tests with replayed production traffic, and the
+      deterministic and LLM-scored evals fed back into the harness.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
+      key_metrics.3]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3,
+      lessons_learned.4]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials]}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: mechanism,
+    primitives.4: workflow, primitives.5: workflow, primitives.6: workflow, primitives.7: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'Morphex pull requests merging
+      automatically after passing every gate, with approved PRs shipping to production without a human'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Same nineteen-in-twenty automatic-merge figure as the
+      headline with the same denominator and unset period; the word automatically adds nothing the headline scope
+      does not already state.'}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: 'Monthly AI coding-tool use
+      among monday Builders, including engineers, PMs, analysts, and designers'}
+    key_metrics.2: {category: adoption-output, basis: reported-measurement, subject: 'Per-engineer pull-request
+      throughput'}
+    key_metrics.3: {category: effectiveness, basis: reported-measurement, subject: 'Guardrails pre-review rejection
+      of agent PRs and the revert rate among merged agent PRs'}

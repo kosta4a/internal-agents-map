@@ -39,8 +39,16 @@ primitives:
   desc: A model critiques submitted findings, inspects cited evidence, and assigns credibility scores
 - name: Critic's Timeline
   desc: A model consolidates a timeline, removes duplicate events, and weighs conflicting findings between rounds
+- name: Pose the round's questions
+  desc: The Director decides what questions to ask and which Experts to engage; investigations run in rounds
+    until the Director concludes them
+- name: Gather evidence and submit findings
+  desc: Experts interrogate their data sources and produce findings that cite investigation artifacts
+- name: Conclude the investigation
+  desc: The Director summarizes the root cause and the recommended actions, and ends the investigation
 key_metrics:
 - Handles multi-agent runs spanning hundreds of requests and megabytes of output
+- Over 170,000 findings scored by the Critic; slightly over a quarter fell below the plausible threshold
 lessons_learned:
 - Slack passes a director journal, reviewed findings, and a consolidated timeline between investigation rounds
   instead of forwarding the full message history.
@@ -118,6 +126,12 @@ evidence:
   - source_id: slack-context-system-source-1
     relation: supports
     locator: Preserved content.md, lines 196-226
+  primitives.3:
+  - {source_id: slack-context-system-source-1, relation: supports, locator: 'Preserved content.md, lines 24, 54'}
+  primitives.4:
+  - {source_id: slack-context-system-source-1, relation: supports, locator: 'Preserved content.md, line 119'}
+  primitives.5:
+  - {source_id: slack-context-system-source-1, relation: supports, locator: 'Preserved content.md, lines 24, 115'}
   key_metrics.0:
   - source_id: slack-context-system-source-1
     relation: supports
@@ -125,6 +139,8 @@ evidence:
   - source_id: slack-context-system-source-2
     relation: supports
     locator: Preserved content.md, lines 22
+  key_metrics.1:
+  - {source_id: slack-context-system-source-1, relation: supports, locator: 'Preserved content.md, lines 162–170'}
   lessons_learned.0:
   - source_id: slack-context-system-source-1
     relation: supports
@@ -167,3 +183,49 @@ claim_metadata:
     metric_scope: Complex security investigations requiring tailored multi-agent context; qualitative workload scale
   key_metrics.0:
     metric_scope: Complex security investigations requiring tailored multi-agent context; qualitative workload scale
+  key_metrics.1:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Slack reported the score distribution from its own review pipeline without independent
+      verification or a stated measurement window.
+    valid_at: '2026'
+    metric_scope: Critic credibility scores of Expert findings across all reviewed investigations
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [slack-context-system-source-1, slack-context-system-source-2]
+  workflow_scope: Director-led investigation rounds from a security alert to a concluded report
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.3, primitives.4, primitives.5]}
+    human_involvement: {state: unreported, claim_paths: [], note: 'The captures describe agent coordination only;
+      no human checkpoint inside a run is documented, and the attention boundary remains unknown.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.tool_access,
+      architecture.context_mgmt]}
+    validation: {state: reported, claim_paths: [primitives.1], note: 'The Critic Review scores each finding for
+      credibility against the cited evidence; the Timeline additionally prunes findings that break narrative
+      coherence.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'No model is named; the capture states only that a stronger
+      model runs the Critic (source-1, line 174).'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'The captures document no execution or isolation boundary.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: unreported, claim_paths: [], note: 'No separate knowledge store is documented; evidence
+      lives in investigation artifacts and the channels cited under context management.'}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: unreported, claim_paths: [], note: 'Credential handling is not documented in either capture.'}
+    interfaces: {state: unreported, claim_paths: [], note: 'No human-facing surface is named; the service reacts
+      to security alerts.'}
+  primitive_roles: {primitives.0: mechanism, primitives.1: validation, primitives.2: mechanism, primitives.3: workflow,
+    primitives.4: workflow, primitives.5: workflow}
+  observations:
+    headline_metric: {category: runtime-capacity, basis: qualitative, subject: 'Security-investigation workload
+      scale that the context channels are built to handle'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Same workload statement, figures, locators, and
+      qualitative scope as the headline; the multi-agent framing adds no separate observation.'}
+    key_metrics.1: {category: effectiveness, basis: reported-measurement, subject: 'Critic credibility scores
+      across over 170,000 reviewed Expert findings'}

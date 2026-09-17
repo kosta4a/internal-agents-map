@@ -398,11 +398,13 @@ Last reviewed: 2026-09-16.
 - Interfaces: slack, github, linear <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
 - Tool access: Linear treated as the structured product context / source of truth <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 - Knowledge: Linear as the durable structured-context layer for product work <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2).</small>
+- Context mgmt: Slack discussions become labelled, sized Linear issues that carry the work context; the feedback pipeline summarizes recordings into a reviewable issue before an agent acts <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 
 ### Primitives
 
 - Forge: Custom harness: Slack bug discussion → Linear issue → drafted fix → PR pushed back for review <small>Sources: [coinbase-forge-mux-source-2](#coinbase-forge-mux-source-2), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
 - Mux: One person coordinates coding agents with separate worktrees, branches, and terminals <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
+- Orchestrate concurrent agents: An engineer runs several agents in parallel, each on its own worktree, and reviews, gives feedback, and merges as each finishes <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
 
 ### Reported metrics
 
@@ -410,6 +412,8 @@ Last reviewed: 2026-09-16.
 - 5% of all PRs merged come from in-house background agents (Feb 2026) <small>Sources: [coinbase-forge-mux-source-3](#coinbase-forge-mux-source-3).</small>
 - Wallet rewrite PR review times reduced from 150 hours to 15 hours (self-reported; period and method not documented) <small>Sources: [coinbase-forge-mux-source-4](#coinbase-forge-mux-source-4).</small>
 - Speed run: about 100 participants opened about 70 PRs in 15 minutes (opened, not merged; single event) <small>Sources: [coinbase-forge-mux-source-4](#coinbase-forge-mux-source-4), [coinbase-forge-mux-source-5](#coinbase-forge-mux-source-5).</small>
+- Mux: 5,068 merged PRs across 461 repositories and 10 orgs <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
+- Mux users show 3.5x more merged PRs per engineer than baseline (39.6 vs 11.4); the post cautions users may skew toward already-high-output engineers <small>Sources: [coinbase-forge-mux-source-1](#coinbase-forge-mux-source-1).</small>
 
 ### Catalog observations
 
@@ -1126,6 +1130,10 @@ Last reviewed: 2026-09-16.
 - PR Guardrails: Automated review against monday standards (metrics, feature flags, security) <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 - Memory as files: MEMORY.md + daily diary instead of vector retrieval <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 - Builders CoWORK: monday boards as the shared-state layer for human/agent collaboration <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- Receive a task from one of three inboxes: A Slack @mention, monday item assignment, or GitHub PR review request lands in the same agent session through SNS and a per-team SQS queue <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- Implement the feature task: The agent picks up tickets, writes the PR, and ships the feature from the same backlog as human teammates <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- Auto-deploy the PR to a remote sandbox: Every PR auto-deploys to a per-session remote sandbox; tests, checks, and replayed production traffic run before any human review <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
+- Merge above the confidence threshold: PRs above the confidence-score threshold merge automatically after passing every gate and ship to production with no human in the loop; below-threshold PRs route to a human with the failing signal named <small>Sources: [monday-sphera-atlas-morphex-source-1](#monday-sphera-atlas-morphex-source-1).</small>
 
 ### Reported metrics
 
@@ -1314,6 +1322,9 @@ Last reviewed: 2026-09-16.
 ### Primitives
 
 - Propose-only mitigation: Proposes mitigations in the incident channel; an engineer can instruct it to apply a specific mitigation <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+- Wake on a detected incident: When an incident is detected <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+- Collect incident context: Collects context about the incident <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
+- Answer developers' questions: Answers developers' questions as part of the incident Slack channel <small>Sources: [openai-sevbot-article](#openai-sevbot-article).</small>
 
 ### Catalog observations
 
@@ -1973,10 +1984,14 @@ Last reviewed: 2026-09-16.
 - Director's Journal: Structured working memory: findings, decisions, questions, hypotheses <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1), [slack-context-system-source-2](#slack-context-system-source-2).</small>
 - Critic's Review: A model critiques submitted findings, inspects cited evidence, and assigns credibility scores <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1).</small>
 - Critic's Timeline: A model consolidates a timeline, removes duplicate events, and weighs conflicting findings between rounds <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1).</small>
+- Pose the round's questions: The Director decides what questions to ask and which Experts to engage; investigations run in rounds until the Director concludes them <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1).</small>
+- Gather evidence and submit findings: Experts interrogate their data sources and produce findings that cite investigation artifacts <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1).</small>
+- Conclude the investigation: The Director summarizes the root cause and the recommended actions, and ends the investigation <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1).</small>
 
 ### Reported metrics
 
 - Handles multi-agent runs spanning hundreds of requests and megabytes of output <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1), [slack-context-system-source-2](#slack-context-system-source-2).</small>
+- Over 170,000 findings scored by the Critic; slightly over a quarter fell below the plausible threshold <small>Sources: [slack-context-system-source-1](#slack-context-system-source-1).</small>
 
 ### Catalog observations
 
@@ -2169,6 +2184,9 @@ Last reviewed: 2026-09-16.
 - Digital Twin Universe: Behavioral clones of third-party services that replicate APIs, edge cases, and observable behaviors, so thousands of scenarios can run per hour without rate limits, abuse detection, or live-API cost <small>Sources: [strongdm-factory-overview](#strongdm-factory-overview), [strongdm-factory-techniques](#strongdm-factory-techniques).</small>
 - Shift Work: Splitting work into interactive and fully specified classes; when specs, tests, and the existing app fully express intent, an agent runs end-to-end without back-and-forth <small>Sources: [strongdm-factory-techniques](#strongdm-factory-techniques).</small>
 - Attractor: Non-interactive coding agent structured as a graph of work phases with natural-language edges evaluated by the LLM; execution traverses the graph until convergence or termination, and the spec is open source <small>Sources: [strongdm-attractor-spec](#strongdm-attractor-spec), [strongdm-attractor-repo](#strongdm-attractor-repo).</small>
+- Seed the work: A natural-language seed — a few sentences, a screenshot, or an existing codebase — starts the run <small>Sources: [strongdm-factory-principles](#strongdm-factory-principles).</small>
+- Implement and validate in the loop: Agents write code and run the end-to-end scenario harness; a sample of the output feeds back into the inputs so the system self-corrects <small>Sources: [strongdm-factory-principles](#strongdm-factory-principles), [strongdm-factory-overview](#strongdm-factory-overview).</small>
+- Converge on the holdout scenarios: The loop runs until the holdout scenarios pass and stay passing, and the code ships without human review <small>Sources: [strongdm-factory-principles](#strongdm-factory-principles), [strongdm-factory-overview](#strongdm-factory-overview).</small>
 
 ### Catalog observations
 

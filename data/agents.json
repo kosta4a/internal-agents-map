@@ -814,6 +814,175 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "coinbase-forge-mux-source-1",
+          "coinbase-forge-mux-source-2",
+          "coinbase-forge-mux-source-3",
+          "coinbase-forge-mux-source-4",
+          "coinbase-forge-mux-source-5"
+        ],
+        "workflow_scope": "Two documented runs: a Slack bug discussion through Forge to a reviewed pull request, and an engineer orchestrating parallel agents through Mux",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.2"
+            ],
+            "note": "The Mux worktree separation is the substrate, not a run; the two runs are the Forge fix flow and the parallel-agent orchestration loop."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "primitives.2"
+            ],
+            "note": "The documented checkpoint is the pull-request review: Forge pushes the PR back to Slack for review, and the orchestrating engineer reviews, gives feedback, and merges each parallel result."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No automated check of agent output is documented; the documented check is the human pull-request review cited with human involvement."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2",
+              "key_metrics.3",
+              "key_metrics.4",
+              "key_metrics.5"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4",
+              "lessons_learned.5"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ],
+            "note": "Multiple underlying models are stated; the documented portfolio spans harnesses, and no source names model providers."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ],
+            "note": "Separate worktrees, branches, and terminals separate concurrent edits; the record keeps the explicit statement that this is not a security sandbox."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No capture documents credential handling for the agents; the security requirements that blocked cloud background agents are described without their mechanism."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "Slack, GitHub, and Linear are named as invocation surfaces for Forge."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "mechanism",
+          "primitives.2": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Share of all merged pull requests produced by in-house background agents"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Registered Mux users including engineers, PMs, and designers, with active and power-user counts"
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Identical statement, period, scope, and denominator as the headline: the same 5% share of merged PRs from the same tweet."
+          },
+          "key_metrics.2": {
+            "category": "cost-latency",
+            "basis": "reported-measurement",
+            "subject": "PR review times for the wallet rewrite effort"
+          },
+          "key_metrics.3": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Pull requests opened during one speed-run session"
+          },
+          "key_metrics.4": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Mux merged pull requests across repositories and organizations"
+          },
+          "key_metrics.5": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Merged pull requests per engineer for Mux users compared with non-user baseline"
+          }
+        }
+      },
       "company_id": "coinbase",
       "claim_ids": [
         "coinbase-forge-mux--summary",
@@ -824,12 +993,16 @@
         "coinbase-forge-mux--architecture-interfaces",
         "coinbase-forge-mux--architecture-tool-access",
         "coinbase-forge-mux--architecture-knowledge",
+        "coinbase-forge-mux--architecture-context-mgmt",
         "coinbase-forge-mux--primitives-0",
         "coinbase-forge-mux--primitives-1",
+        "coinbase-forge-mux--primitives-2",
         "coinbase-forge-mux--key-metrics-0",
         "coinbase-forge-mux--key-metrics-1",
         "coinbase-forge-mux--key-metrics-2",
         "coinbase-forge-mux--key-metrics-3",
+        "coinbase-forge-mux--key-metrics-4",
+        "coinbase-forge-mux--key-metrics-5",
         "coinbase-forge-mux--lessons-learned-0",
         "coinbase-forge-mux--lessons-learned-1",
         "coinbase-forge-mux--lessons-learned-2",
@@ -2560,6 +2733,168 @@
         "identity": "dedicated-agent",
         "evidence_strength": "secondary-only"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "monday-sphera-atlas-morphex-source-1"
+        ],
+        "workflow_scope": "Sphera agent feature task from an inbox trigger to production ship; Morphex merges autonomously above the confidence threshold while Atlas requests human review after the sandbox gate",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.4",
+              "primitives.5",
+              "primitives.6",
+              "primitives.7"
+            ],
+            "note": "The four run steps describe the shared Sphera pipeline; the final gate differs by agent as the scope states."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "operating_models.1"
+            ],
+            "note": "Morphex runs exception-only: a below-threshold PR routes to a human and an approved PR ships with none. Atlas runs sandbox checks before asking for human review; the source calls threshold auto-merge a following-two-quarters goal for that population."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1",
+              "primitives.6",
+              "lessons_learned.4"
+            ],
+            "note": "Validation is the blocking Guardrails reviewers, the remote-sandbox tests with replayed production traffic, and the deterministic and LLM-scored evals fed back into the harness."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2",
+              "key_metrics.3"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "mechanism",
+          "primitives.4": "workflow",
+          "primitives.5": "workflow",
+          "primitives.6": "workflow",
+          "primitives.7": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Morphex pull requests merging automatically after passing every gate, with approved PRs shipping to production without a human"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Same nineteen-in-twenty automatic-merge figure as the headline with the same denominator and unset period; the word automatically adds nothing the headline scope does not already state."
+          },
+          "key_metrics.1": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Monthly AI coding-tool use among monday Builders, including engineers, PMs, analysts, and designers"
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Per-engineer pull-request throughput"
+          },
+          "key_metrics.3": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Guardrails pre-review rejection of agent PRs and the revert rate among merged agent PRs"
+          }
+        }
+      },
       "company_id": "monday-com",
       "claim_ids": [
         "monday-sphera-atlas-morphex--summary",
@@ -2576,6 +2911,10 @@
         "monday-sphera-atlas-morphex--primitives-1",
         "monday-sphera-atlas-morphex--primitives-2",
         "monday-sphera-atlas-morphex--primitives-3",
+        "monday-sphera-atlas-morphex--primitives-4",
+        "monday-sphera-atlas-morphex--primitives-5",
+        "monday-sphera-atlas-morphex--primitives-6",
+        "monday-sphera-atlas-morphex--primitives-7",
         "monday-sphera-atlas-morphex--key-metrics-0",
         "monday-sphera-atlas-morphex--key-metrics-1",
         "monday-sphera-atlas-morphex--key-metrics-2",
@@ -3084,6 +3423,116 @@
         "identity": "dedicated-agent",
         "evidence_strength": "secondary-only"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "openai-sevbot-article",
+          "crtsh-sevbot-certificates",
+          "github-sevbot-pr"
+        ],
+        "workflow_scope": "Detected incident to engineer-directed mitigation in the incident Slack channel",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1",
+              "primitives.2",
+              "primitives.0",
+              "primitives.3"
+            ],
+            "note": "The article lists the run in order: wake, collect, propose, answer, and the engineer instruction. The propose-only primitive spans the proposal and the instruction the article states separately."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "operating_models.0"
+            ],
+            "note": "The engineer-controlled mitigation instruction is the documented checkpoint; the article states Sevbot never executes a mitigation on its own."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The article documents no check of Sevbot's proposals or answers; the propose-only limit is a behavior boundary, not a validation mechanism."
+          },
+          "observations": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No outcome measurement for Sevbot appears in the reviewed captures. The certificate and commit records evidence a deployed service, not results."
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The article names no underlying model for Sevbot; the legacy unknown placeholder stays in research details."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The article describes no execution or isolation boundary; the legacy unknown placeholder stays in research details."
+          },
+          "tool_access": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The article documents no tools used for context collection."
+          },
+          "knowledge": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No knowledge source is named for Sevbot; the article's factory-wide Codex context access is not attributed to Sevbot."
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Not documented in the reviewed captures."
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Not documented in the reviewed captures."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow",
+          "primitives.3": "workflow"
+        },
+        "observations": {}
+      },
       "company_id": "openai",
       "claim_ids": [
         "openai-sevbot--summary",
@@ -3092,6 +3541,9 @@
         "openai-sevbot--architecture-model",
         "openai-sevbot--architecture-interfaces",
         "openai-sevbot--primitives-0",
+        "openai-sevbot--primitives-1",
+        "openai-sevbot--primitives-2",
+        "openai-sevbot--primitives-3",
         "openai-sevbot--lessons-learned-0",
         "openai-sevbot--operating-models-0"
       ],
@@ -4937,6 +5389,136 @@
         "identity": "unknown",
         "evidence_strength": "mixed"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "slack-context-system-source-1",
+          "slack-context-system-source-2"
+        ],
+        "workflow_scope": "Director-led investigation rounds from a security alert to a concluded report",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.4",
+              "primitives.5"
+            ]
+          },
+          "human_involvement": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures describe agent coordination only; no human checkpoint inside a run is documented, and the attention boundary remains unknown."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.tool_access",
+              "architecture.context_mgmt"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1"
+            ],
+            "note": "The Critic Review scores each finding for credibility against the cited evidence; the Timeline additionally prunes findings that break narrative coherence."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No model is named; the capture states only that a stronger model runs the Critic (source-1, line 174)."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures document no execution or isolation boundary."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No separate knowledge store is documented; evidence lives in investigation artifacts and the channels cited under context management."
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Credential handling is not documented in either capture."
+          },
+          "interfaces": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No human-facing surface is named; the service reacts to security alerts."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "validation",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "runtime-capacity",
+            "basis": "qualitative",
+            "subject": "Security-investigation workload scale that the context channels are built to handle"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Same workload statement, figures, locators, and qualitative scope as the headline; the multi-agent framing adds no separate observation."
+          },
+          "key_metrics.1": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Critic credibility scores across over 170,000 reviewed Expert findings"
+          }
+        }
+      },
       "company_id": "slack",
       "claim_ids": [
         "slack-context-system--summary",
@@ -4948,7 +5530,11 @@
         "slack-context-system--primitives-0",
         "slack-context-system--primitives-1",
         "slack-context-system--primitives-2",
+        "slack-context-system--primitives-3",
+        "slack-context-system--primitives-4",
+        "slack-context-system--primitives-5",
         "slack-context-system--key-metrics-0",
+        "slack-context-system--key-metrics-1",
         "slack-context-system--lessons-learned-0",
         "slack-context-system--lessons-learned-1",
         "slack-context-system--lessons-learned-2",
@@ -5427,6 +6013,135 @@
         "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "strongdm-factory-overview",
+          "strongdm-factory-principles",
+          "strongdm-factory-techniques",
+          "strongdm-factory-products",
+          "strongdm-attractor-spec",
+          "strongdm-factory-weather-report",
+          "strongdm-attractor-repo"
+        ],
+        "workflow_scope": "Natural-language seed through the validation-feedback loop to converged software",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5",
+              "primitives.6",
+              "primitives.7"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ],
+            "note": "The standing rules exclude humans from writing or reviewing code; what happens when a run fails to converge is not documented, and the unknown attention-boundary judgment stays in research details."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.credentials",
+              "architecture.context_mgmt"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.1"
+            ],
+            "note": "End-to-end holdout scenarios scored by satisfaction; the Digital Twin Universe carries the validation load and stays under implementation as a reusable mechanism."
+          },
+          "observations": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures state principles, techniques, and model configuration; they report no measured outcomes of the factory's software. The token-spend figure is a stated operating principle kept under lessons."
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No execution or isolation boundary is documented; the legacy unknown claim stays in research details."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "StrongDM ID covers identity for humans, workloads, and agents; secret handling inside runs is not further documented."
+          },
+          "interfaces": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No human-facing surface is named; the factory is non-interactive and work starts from natural-language seeds."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "validation",
+          "primitives.1": "validation",
+          "primitives.2": "mechanism",
+          "primitives.3": "mechanism",
+          "primitives.4": "mechanism",
+          "primitives.5": "workflow",
+          "primitives.6": "workflow",
+          "primitives.7": "workflow"
+        },
+        "observations": {}
+      },
       "company_id": "strongdm",
       "claim_ids": [
         "strongdm-software-factory--summary",
@@ -5442,6 +6157,9 @@
         "strongdm-software-factory--primitives-2",
         "strongdm-software-factory--primitives-3",
         "strongdm-software-factory--primitives-4",
+        "strongdm-software-factory--primitives-5",
+        "strongdm-software-factory--primitives-6",
+        "strongdm-software-factory--primitives-7",
         "strongdm-software-factory--lessons-learned-0",
         "strongdm-software-factory--lessons-learned-1",
         "strongdm-software-factory--lessons-learned-2",
@@ -8028,6 +8746,29 @@
       ]
     },
     {
+      "id": "coinbase-forge-mux--architecture-context-mgmt",
+      "approach_id": "coinbase-forge-mux",
+      "field": "architecture.context_mgmt",
+      "text": "Slack discussions become labelled, sized Linear issues that carry the work context; the feedback pipeline summarizes recordings into a reviewable issue before an agent acts",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 34"
+        },
+        {
+          "source_id": "coinbase-forge-mux-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 102–110"
+        }
+      ]
+    },
+    {
       "id": "coinbase-forge-mux--primitives-0",
       "approach_id": "coinbase-forge-mux",
       "field": "primitives.0",
@@ -8068,6 +8809,25 @@
         }
       ],
       "display_name": "Mux"
+    },
+    {
+      "id": "coinbase-forge-mux--primitives-2",
+      "approach_id": "coinbase-forge-mux",
+      "field": "primitives.2",
+      "text": "An engineer runs several agents in parallel, each on its own worktree, and reviews, gives feedback, and merges as each finishes",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 20"
+        }
+      ],
+      "display_name": "Orchestrate concurrent agents"
     },
     {
       "id": "coinbase-forge-mux--key-metrics-0",
@@ -8154,6 +8914,47 @@
       ],
       "reported_by": "Coinbase",
       "metric_scope": "Pull requests opened during one speed-run session"
+    },
+    {
+      "id": "coinbase-forge-mux--key-metrics-4",
+      "approach_id": "coinbase-forge-mux",
+      "field": "key_metrics.4",
+      "text": "Mux: 5,068 merged PRs across 461 repositories and 10 orgs",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Coinbase reported the aggregate in its own engineering blog without independent verification or a measurement window.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 31"
+        }
+      ],
+      "reported_by": "Coinbase",
+      "metric_scope": "Mux merged pull requests across repositories and organizations"
+    },
+    {
+      "id": "coinbase-forge-mux--key-metrics-5",
+      "approach_id": "coinbase-forge-mux",
+      "field": "key_metrics.5",
+      "text": "Mux users show 3.5x more merged PRs per engineer than baseline (39.6 vs 11.4); the post cautions users may skew toward already-high-output engineers",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Self-reported comparison whose own text cautions that Mux users likely skew toward engineers who were already high-output and AI-forward; no cohort method is documented.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "coinbase-forge-mux-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 32–34"
+        }
+      ],
+      "reported_by": "Coinbase",
+      "metric_scope": "Merged pull requests per engineer for Mux users compared with a baseline of non-users",
+      "denominator": "Engineers not using Mux at the time of the comparison (11.4 merged PRs)"
     },
     {
       "id": "coinbase-forge-mux--lessons-learned-0",
@@ -12072,6 +12873,82 @@
       "display_name": "Builders CoWORK"
     },
     {
+      "id": "monday-sphera-atlas-morphex--primitives-4",
+      "approach_id": "monday-sphera-atlas-morphex",
+      "field": "primitives.4",
+      "text": "A Slack @mention, monday item assignment, or GitHub PR review request lands in the same agent session through SNS and a per-team SQS queue",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "monday-sphera-atlas-morphex-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 40, 46, 50"
+        }
+      ],
+      "display_name": "Receive a task from one of three inboxes"
+    },
+    {
+      "id": "monday-sphera-atlas-morphex--primitives-5",
+      "approach_id": "monday-sphera-atlas-morphex",
+      "field": "primitives.5",
+      "text": "The agent picks up tickets, writes the PR, and ships the feature from the same backlog as human teammates",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "monday-sphera-atlas-morphex-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 28"
+        }
+      ],
+      "display_name": "Implement the feature task"
+    },
+    {
+      "id": "monday-sphera-atlas-morphex--primitives-6",
+      "approach_id": "monday-sphera-atlas-morphex",
+      "field": "primitives.6",
+      "text": "Every PR auto-deploys to a per-session remote sandbox; tests, checks, and replayed production traffic run before any human review",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "monday-sphera-atlas-morphex-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 124"
+        }
+      ],
+      "display_name": "Auto-deploy the PR to a remote sandbox"
+    },
+    {
+      "id": "monday-sphera-atlas-morphex--primitives-7",
+      "approach_id": "monday-sphera-atlas-morphex",
+      "field": "primitives.7",
+      "text": "PRs above the confidence-score threshold merge automatically after passing every gate and ship to production with no human in the loop; below-threshold PRs route to a human with the failing signal named",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "monday-sphera-atlas-morphex-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 150, 169"
+        }
+      ],
+      "display_name": "Merge above the confidence threshold"
+    },
+    {
       "id": "monday-sphera-atlas-morphex--key-metrics-0",
       "approach_id": "monday-sphera-atlas-morphex",
       "field": "key_metrics.0",
@@ -13200,6 +14077,63 @@
         }
       ],
       "display_name": "Propose-only mitigation"
+    },
+    {
+      "id": "openai-sevbot--primitives-1",
+      "approach_id": "openai-sevbot",
+      "field": "primitives.1",
+      "text": "When an incident is detected",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 188"
+        }
+      ],
+      "display_name": "Wake on a detected incident"
+    },
+    {
+      "id": "openai-sevbot--primitives-2",
+      "approach_id": "openai-sevbot",
+      "field": "primitives.2",
+      "text": "Collects context about the incident",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 190"
+        }
+      ],
+      "display_name": "Collect incident context"
+    },
+    {
+      "id": "openai-sevbot--primitives-3",
+      "approach_id": "openai-sevbot",
+      "field": "primitives.3",
+      "text": "Answers developers' questions as part of the incident Slack channel",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "openai-sevbot-article",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 192"
+        }
+      ],
+      "display_name": "Answer developers' questions"
     },
     {
       "id": "openai-sevbot--lessons-learned-0",
@@ -16923,6 +17857,63 @@
       "display_name": "Critic's Timeline"
     },
     {
+      "id": "slack-context-system--primitives-3",
+      "approach_id": "slack-context-system",
+      "field": "primitives.3",
+      "text": "The Director decides what questions to ask and which Experts to engage; investigations run in rounds until the Director concludes them",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "slack-context-system-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 24, 54"
+        }
+      ],
+      "display_name": "Pose the round's questions"
+    },
+    {
+      "id": "slack-context-system--primitives-4",
+      "approach_id": "slack-context-system",
+      "field": "primitives.4",
+      "text": "Experts interrogate their data sources and produce findings that cite investigation artifacts",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "slack-context-system-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 119"
+        }
+      ],
+      "display_name": "Gather evidence and submit findings"
+    },
+    {
+      "id": "slack-context-system--primitives-5",
+      "approach_id": "slack-context-system",
+      "field": "primitives.5",
+      "text": "The Director summarizes the root cause and the recommended actions, and ends the investigation",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "slack-context-system-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 24, 115"
+        }
+      ],
+      "display_name": "Conclude the investigation"
+    },
+    {
       "id": "slack-context-system--key-metrics-0",
       "approach_id": "slack-context-system",
       "field": "key_metrics.0",
@@ -16946,6 +17937,26 @@
       ],
       "reported_by": "Slack",
       "metric_scope": "Complex security investigations requiring tailored multi-agent context; qualitative workload scale"
+    },
+    {
+      "id": "slack-context-system--key-metrics-1",
+      "approach_id": "slack-context-system",
+      "field": "key_metrics.1",
+      "text": "Over 170,000 findings scored by the Critic; slightly over a quarter fell below the plausible threshold",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Slack reported the score distribution from its own review pipeline without independent verification or a stated measurement window.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "slack-context-system-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 162–170"
+        }
+      ],
+      "reported_by": "Slack",
+      "metric_scope": "Critic credibility scores of Expert findings across all reviewed investigations"
     },
     {
       "id": "slack-context-system--lessons-learned-0",
@@ -18206,6 +19217,73 @@
         }
       ],
       "display_name": "Attractor"
+    },
+    {
+      "id": "strongdm-software-factory--primitives-5",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.5",
+      "text": "A natural-language seed — a few sentences, a screenshot, or an existing codebase — starts the run",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-principles",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 16–18"
+        }
+      ],
+      "display_name": "Seed the work"
+    },
+    {
+      "id": "strongdm-software-factory--primitives-6",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.6",
+      "text": "Agents write code and run the end-to-end scenario harness; a sample of the output feeds back into the inputs so the system self-corrects",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-principles",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 22–32"
+        },
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 10"
+        }
+      ],
+      "display_name": "Implement and validate in the loop"
+    },
+    {
+      "id": "strongdm-software-factory--primitives-7",
+      "approach_id": "strongdm-software-factory",
+      "field": "primitives.7",
+      "text": "The loop runs until the holdout scenarios pass and stay passing, and the code ships without human review",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "strongdm-factory-principles",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 34"
+        },
+        {
+          "source_id": "strongdm-factory-overview",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 10"
+        }
+      ],
+      "display_name": "Converge on the holdout scenarios"
     },
     {
       "id": "strongdm-software-factory--lessons-learned-0",

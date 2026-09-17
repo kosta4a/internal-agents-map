@@ -65,6 +65,12 @@ primitives:
   desc: Non-interactive coding agent structured as a graph of work phases with natural-language
     edges evaluated by the LLM; execution traverses the graph until convergence or
     termination, and the spec is open source
+- {name: Seed the work, desc: 'A natural-language seed — a few sentences, a screenshot, or an existing
+    codebase — starts the run'}
+- {name: Implement and validate in the loop, desc: 'Agents write code and run the end-to-end scenario
+    harness; a sample of the output feeds back into the inputs so the system self-corrects'}
+- {name: Converge on the holdout scenarios, desc: 'The loop runs until the holdout scenarios pass and
+    stay passing, and the code ships without human review'}
 key_metrics: []
 lessons_learned:
 - StrongDM advocates evaluating generated code through observable behavior while treating its internal structure
@@ -239,6 +245,24 @@ evidence:
   - source_id: strongdm-attractor-repo
     relation: supports
     locator: "Repository description"
+  primitives.5:
+  - source_id: strongdm-factory-principles
+    relation: supports
+    locator: Preserved content.md, lines 16–18
+  primitives.6:
+  - source_id: strongdm-factory-principles
+    relation: supports
+    locator: Preserved content.md, lines 22–32
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: Preserved content.md, line 10
+  primitives.7:
+  - source_id: strongdm-factory-principles
+    relation: supports
+    locator: Preserved content.md, line 34
+  - source_id: strongdm-factory-overview
+    relation: supports
+    locator: Preserved content.md, line 10
   lessons_learned.0:
   - source_id: strongdm-factory-techniques
     relation: supports
@@ -288,3 +312,39 @@ claim_metadata:
     confidence_reason: The overview presents the amount as a principle, without cost-benefit measurements that
       would justify it as a target for other teams.
     valid_at: 2026-02
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [strongdm-factory-overview, strongdm-factory-principles, strongdm-factory-techniques,
+    strongdm-factory-products, strongdm-attractor-spec, strongdm-factory-weather-report, strongdm-attractor-repo]
+  workflow_scope: 'Natural-language seed through the validation-feedback loop to converged software'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.5, primitives.6, primitives.7]}
+    human_involvement: {state: reported, claim_paths: [summary], note: 'The standing rules exclude humans
+      from writing or reviewing code; what happens when a run fails to converge is not documented, and the
+      unknown attention-boundary judgment stays in research details.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.tool_access,
+      architecture.knowledge, architecture.credentials, architecture.context_mgmt]}
+    validation: {state: reported, claim_paths: [primitives.0, primitives.1], note: 'End-to-end holdout scenarios
+      scored by satisfaction; the Digital Twin Universe carries the validation load and stays under
+      implementation as a reusable mechanism.'}
+    observations: {state: unreported, claim_paths: [], note: 'The captures state principles, techniques, and
+      model configuration; they report no measured outcomes of the factory''s software. The token-spend
+      figure is a stated operating principle kept under lessons.'}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'No execution or isolation boundary is documented;
+      the legacy unknown claim stays in research details.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'StrongDM ID covers identity
+      for humans, workloads, and agents; secret handling inside runs is not further documented.'}
+    interfaces: {state: unreported, claim_paths: [], note: 'No human-facing surface is named; the factory is
+      non-interactive and work starts from natural-language seeds.'}
+  primitive_roles: {primitives.0: validation, primitives.1: validation, primitives.2: mechanism, primitives.3: mechanism,
+    primitives.4: mechanism, primitives.5: workflow, primitives.6: workflow, primitives.7: workflow}
+  observations: {}
