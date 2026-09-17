@@ -105,7 +105,7 @@ const {
 /* The two right-hand cells read from the edge they sit against. */
 .quadrant-cell:nth-child(2) h3, .quadrant-cell:nth-child(4) h3 { text-align: right; }
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
-.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 12px; padding-left: 18px; }
+.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 12px; padding-left: 20px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
 .quadrant-cell:nth-child(4) li { left: 12%; top: 15%; }
 .quadrant-cell:nth-child(4) li:nth-child(2) { left: 33%; top: 37%; }
@@ -114,9 +114,9 @@ const {
   content: "";
   position: absolute;
   left: 0;
-  top: calc((1.35em - 10px) / 2);
-  width: 10px;
-  height: 10px;
+  top: calc((1.35em - 12.5px) / 2);
+  width: 12.5px;
+  height: 12.5px;
   border-radius: 50%;
   background: var(--blue-9);
 }
@@ -129,10 +129,10 @@ const {
 /* A reference names a class of product: breaking it reads as two of them. */
 .quadrant-cell .reference-marker { max-width: none; white-space: nowrap; }
 .quadrant-cell .reference-marker::before {
-  top: calc((1.35em - 11px) / 2);
+  top: calc((1.35em - 13.75px) / 2);
   border-radius: 0;
-  width: 11px;
-  height: 11px;
+  width: 13.75px;
+  height: 13.75px;
   background: var(--green-9);
   clip-path: var(--hexagon);
 }
@@ -150,9 +150,9 @@ const {
 .quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
 .quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: 14px; }
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.quadrant-legend i { width: 10px; height: 10px; }
+.quadrant-legend i { width: 12.5px; height: 12.5px; }
 .quadrant-legend .catalog-marker { border-radius: 50%; background: var(--blue-9); }
-.quadrant-legend .reference-marker-key { width: 11px; height: 11px; background: var(--green-9); clip-path: var(--hexagon); }
+.quadrant-legend .reference-marker-key { width: 13.75px; height: 13.75px; background: var(--green-9); clip-path: var(--hexagon); }
 /* The plot is the body's own width, so its scale label has room outside it. */
 .guide .quadrant-figure { max-width: none; }
 .guide-faq details {
@@ -474,10 +474,10 @@ const {
   .quadrant-cell h3 { font-size: 12px; left: 6px; right: 6px; top: 6px; }
   .quadrant-cell h3 span { display: none; }
   .quadrant-cell:nth-child(n+3) h3 { bottom: 6px; }
-  .quadrant-cell li { font-size: 12px; padding-left: 14px; }
+  .quadrant-cell li { font-size: 12px; padding-left: 16px; }
   .quadrant-cell li span { font-size: 12px; }
-  .quadrant-cell li::before { width: 8px; height: 8px; top: calc((1.35em - 8px) / 2); }
-  .quadrant-cell .reference-marker::before { width: 9px; height: 9px; top: calc((1.35em - 9px) / 2); }
+  .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
+  .quadrant-cell .reference-marker::before { width: 11.25px; height: 11.25px; top: calc((1.35em - 11.25px) / 2); }
   .quadrant-cell li:nth-child(2) { left: 22%; }
   .quadrant-cell:nth-child(4) li:nth-child(2) { left: 28%; }
   .quadrant-cell:nth-child(3) li span { display: none; }
