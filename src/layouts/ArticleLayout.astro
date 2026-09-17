@@ -181,8 +181,23 @@ const {
 .dimension-intro p { font-size: 14px; color: var(--muted); }
 
 /* A company workflow supplies the context around model-directed work. */
-.workflow-node { background: var(--sand-3); border-radius: 16px; padding: 24px; text-align: center; }
-.workflow-node strong { display: block; font-weight: 400; margin-top: 12px; }
+.workflow-stack {
+  display: grid;
+  justify-items: center;
+  padding: 24px;
+  background: #fff;
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+}
+.workflow-node {
+  width: fit-content;
+  max-width: 100%;
+  background: var(--sand-3);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+.workflow-node strong { display: block; font-weight: 400; margin-top: 6px; }
 .workflow-context { background: var(--sand-3); }
 /* A drawn arrow, clear of the panel above it and the one below. */
 .workflow-connector { display: flex; justify-content: center; padding: 4px 0; }
