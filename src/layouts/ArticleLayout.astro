@@ -200,7 +200,7 @@ const {
   text-align: center;
 }
 .workflow-node .eyebrow { font-size: 12px; }
-.workflow-node strong { display: block; font-weight: 400; margin-top: 4px; }
+.workflow-node strong { display: block; font-weight: 400; margin-top: 2px; }
 .workflow-context { background: var(--sand-3); }
 /* A drawn arrow, clear of the panel above it and the one below. */
 .workflow-connector { display: flex; justify-content: center; padding: 4px 0; }
@@ -423,7 +423,21 @@ const {
 .notes .note-branches { list-style: none; margin: 0 0 0 16px; padding: 16px 0 0 20px; border-left: 1px solid var(--sand-6); }
 .note-branches li { position: relative; padding: 12px 16px; background: var(--sand-3); border-radius: 14px; }
 .note-branches li + li { margin-top: 12px; }
-.note-branches li::before { content: ""; position: absolute; top: 24px; left: -20px; width: 20px; border-top: 1px solid var(--sand-6); }
+/* A branch meets its container at the middle of its side, whatever its height. */
+.note-branches li::before { content: ""; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 1px solid var(--sand-6); }
+/* The junction sits astride that edge: half on the line, half on the container. */
+.note-branches li::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: var(--sand-3);
+  border: 1px solid var(--sand-6);
+}
 .note-branches strong, .note-shared-state strong { display: block; font-weight: 500; }
 .note-branches span, .note-shared-state span { display: block; margin-top: 6px; color: var(--sand-10); }
 .note-shared-state { position: relative; margin-top: 16px; padding: 16px; border: 1px solid var(--sand-6); border-radius: 14px; text-align: center; }
