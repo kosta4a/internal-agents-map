@@ -59,6 +59,10 @@ evidence:
   architecture.tool_access:
   - source_id: plaid-fix-my-connection-source-1
     relation: supports
+  primitives.0:
+  - {source_id: plaid-fix-my-connection-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
+  primitives.1:
+  - {source_id: plaid-fix-my-connection-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
   key_metrics.0:
   - source_id: plaid-fix-my-connection-source-1
     relation: supports
@@ -99,3 +103,41 @@ claim_metadata:
     metric_scope: Automated repair of bank connections and the successful user-permissioned logins enabled by those
       repairs
     denominator: Average degradation-repair time before automated repairs; no baseline duration provided
+primitives:
+- {name: Detect an access issue, desc: The system proactively detects bank-integration access issues}
+- {name: Repair the connection, desc: It automatically repairs the detected issue to restore user-permissioned access}
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [plaid-fix-my-connection-source-1]
+  workflow_scope: Proactive detection to automatic repair of bank-integration access issues
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.0, primitives.1], note: 'The capture describes the run in one
+      sentence; the two steps carry exactly that content.'}
+    human_involvement: {state: unreported, claim_paths: [], note: 'The capture reports aggregate impact only; no human
+      checkpoint is documented.'}
+    implementation: {state: reported, claim_paths: [architecture.tool_access]}
+    validation: {state: unreported, claim_paths: [], note: 'No check of repairs or failure behavior is documented.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1]}
+    lessons: {state: unreported, claim_paths: [], note: 'The capture states impact and future plans; no evaluated
+      transferable lesson.'}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'Described as AI-powered; no model is specified.'}
+    harness: {state: unreported, claim_paths: [], note: 'The capture names no execution environment.'}
+    sandbox: {state: unreported, claim_paths: [], note: 'No isolation boundary is documented.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: unreported, claim_paths: [], note: 'Integration knowledge is implied by the repair behavior; no
+      knowledge store is documented.'}
+    context_mgmt: {state: unreported, claim_paths: [], note: 'Not documented in the capture.'}
+    credentials: {state: unreported, claim_paths: [], note: 'User-permissioned data access is named, but credential
+      handling for the agent is not documented.'}
+    interfaces: {state: unreported, claim_paths: [], note: 'No human-facing surface is named.'}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow}
+  observations:
+    headline_metric: {category: effectiveness, basis: reported-measurement, subject: 'Automated bank-connection
+      repairs, the successful logins they enable, and average repair time'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same
+      over-2-million login figure with the same scope.'}
+    key_metrics.1: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same 90%
+      repair-time reduction against an unprovided baseline.'}

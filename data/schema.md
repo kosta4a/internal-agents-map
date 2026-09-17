@@ -253,7 +253,10 @@ next research action. A reported workflow also requires `workflow_scope`.
 `subject`. A duplicate representation instead has `duplicate_of` and `reason`.
 Targets must be same-entry canonical observations; self references, cycles, and chains
 are invalid. Confirm equal subject, statement/value, period, scope, and qualifications
-before marking a duplicate.
+before marking a duplicate. The working criterion: an alias must add nothing the
+canonical lacks. A component of a compound observation can alias the compound;
+an observation carrying an extra qualification or absence note cannot, however
+similar its number.
 
 Run `uv run --locked python scripts/content_coverage.py --check` to validate the
 coverage view, or add `--output <path>` to write deterministic JSON. Records without

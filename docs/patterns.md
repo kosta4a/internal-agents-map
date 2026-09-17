@@ -18,7 +18,7 @@ The catalog currently contains 40 entries. These are catalog classifications, no
 | Orchestration system | 2 |
 | Supporting pattern | 2 |
 
-- 15 entries document a concrete execution environment.
+- 16 entries document a concrete execution environment.
 - 24 entries list Slack as an interface.
 - State duration is unknown for 24, durable-session for 8, cross-session-memory for 3, mixed for 4, and run-only for 1 approaches.
 - Autonomy is classified as drafts-reviewed for 21, human-in-loop for 7, autonomous for 7, assistive for 1, and unknown for 4 approaches.

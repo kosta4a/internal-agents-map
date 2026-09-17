@@ -27,6 +27,7 @@ summary: Plaid's internal labeling agent for its own model training. AI Annotato
 headline_metric: Greater than 95% human alignment at lower cost and time than manual labeling
 architecture:
   knowledge: Anonymized Plaid transaction data
+  harness: Internally hosted platform
   interfaces: []
 key_metrics:
 - Greater than 95% human alignment with labeled data
@@ -58,6 +59,8 @@ evidence:
   architecture.knowledge:
   - source_id: plaid-ai-annotator-source-1
     relation: supports
+  architecture.harness:
+  - {source_id: plaid-ai-annotator-source-1, relation: supports, locator: 'Preserved content.md, line 18'}
   key_metrics.0:
   - source_id: plaid-ai-annotator-source-1
     relation: supports
@@ -96,3 +99,36 @@ claim_metadata:
     confidence: medium
     confidence_reason: Qualitative company comparison; neither actual costs nor elapsed-time measurements are supplied.
     metric_scope: AI transaction annotation cost and time relative to manual labeling
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [plaid-ai-annotator-source-1]
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: unreported, claim_paths: [], note: 'The capture names no run. The "Key capabilities" sentence
+      introduces no list, and the voting and feedback mechanisms are future work only.'}
+    human_involvement: {state: reported, claim_paths: [summary], note: 'Targeted human validation is applied when a
+      product use case requires it; no default review of every labeling run is stated.'}
+    implementation: {state: reported, claim_paths: [architecture.knowledge, architecture.harness]}
+    validation: {state: reported, claim_paths: [summary], note: 'The documented check is the targeted human validation
+      cited with the human-involvement answer; no separate automated check is documented.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1]}
+    lessons: {state: unreported, claim_paths: [], note: 'The capture states impact and future plans; no evaluated
+      transferable lesson.'}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'LLMs are named as the enabling technology; no model is specified.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'The capture documents no isolation boundary.'}
+    tool_access: {state: unreported, claim_paths: [], note: 'No tools are named; labeling runs on internal transaction data.'}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: unreported, claim_paths: [], note: 'Not documented; richer context signals are future work.'}
+    credentials: {state: unreported, claim_paths: [], note: 'Not documented in the capture.'}
+    interfaces: {state: unreported, claim_paths: [], note: 'No human-facing surface is named.'}
+  primitive_roles: {}
+  observations:
+    headline_metric: {category: effectiveness, basis: reported-measurement, subject: 'AI Annotator label agreement
+      with human judgments in early use'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same over-95%
+      alignment figure with the same early-use scope and unspecified sample.'}
+    key_metrics.1: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same cost-and-time
+      comparison without measured values.'}

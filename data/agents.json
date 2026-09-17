@@ -35,6 +35,137 @@
         "identity": "unknown",
         "evidence_strength": "mixed"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "airbnb-airchat-source-1",
+          "airbnb-airchat-source-2",
+          "airbnb-airchat-source-3"
+        ],
+        "workflow_scope": "Engineer-written spec to reviewed pull request on the AirChat platform",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.1",
+              "primitives.2"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "primitives.2"
+            ]
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.sandbox",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2"
+            ],
+            "note": "The documented check is the human line-by-line diff review before merge; no separate automated gate is described for coding runs."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures describe internal context through MCP servers and configuration files, not a separate knowledge store."
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "The CLI is the stated core surface and the Remote web UI is a live internal EAP; AirChat began as JetBrains and Xcode IDE plugins, which the captures describe as history."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Share of Airbnb pull requests materialized through agentic coding by the October 2025 talk"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Identical text, scope, period, denominator, and confidence as the headline; adds nothing the canonical lacks."
+          }
+        }
+      },
       "company_id": "airbnb",
       "claim_ids": [
         "airbnb-airchat--summary",
@@ -42,7 +173,15 @@
         "airbnb-airchat--architecture-harness",
         "airbnb-airchat--architecture-model",
         "airbnb-airchat--architecture-tool-access",
+        "airbnb-airchat--architecture-interfaces",
+        "airbnb-airchat--architecture-sandbox",
+        "airbnb-airchat--architecture-credentials",
+        "airbnb-airchat--architecture-context-mgmt",
+        "airbnb-airchat--primitives-0",
+        "airbnb-airchat--primitives-1",
+        "airbnb-airchat--primitives-2",
         "airbnb-airchat--key-metrics-0",
+        "airbnb-airchat--lessons-learned-0",
         "airbnb-airchat--operating-models-0"
       ],
       "source_ids": [
@@ -50,7 +189,10 @@
         "airbnb-airchat-source-2",
         "airbnb-airchat-source-3"
       ],
-      "interfaces": []
+      "interfaces": [
+        "cli",
+        "web"
+      ]
     },
     {
       "id": "atlassian-rovo-dev",
@@ -744,13 +886,143 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "databricks-costar-source-1",
+          "databricks-costar-source-2"
+        ],
+        "workflow_scope": "coSTAR scenario run — execute the agent, score with judges, refine until pass",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.1",
+              "primitives.2"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2"
+            ]
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.knowledge",
+              "architecture.tool_access"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.4"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "key_metrics.0",
+              "key_metrics.1"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Neither capture states the models behind the internal engineering agents; the benchmark evaluates third-party models and harnesses, which is separate from the shipped agents."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No runtime isolation boundary is documented for the agents; the benchmark seals git history during evaluation runs, which is not a production sandbox."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "MLflow traces record execution for scoring, but no capture describes how agent context is maintained or organized over time."
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Credential handling is not documented in either capture."
+          },
+          "interfaces": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The interfaces list is empty; captures name harnesses only as benchmark evaluation subjects, not as surfaces of the internal agents."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow",
+          "primitives.3": "mechanism",
+          "primitives.4": "validation"
+        },
+        "observations": {
+          "key_metrics.0": {
+            "category": "cost-latency",
+            "basis": "reported-measurement",
+            "subject": "Time to verify agent changes under coSTAR, previously manual review cycles"
+          },
+          "key_metrics.1": {
+            "category": "implementation-scale",
+            "basis": "qualitative",
+            "subject": "Codebase scale behind the private coding benchmark"
+          }
+        }
+      },
       "company_id": "databricks",
       "claim_ids": [
         "databricks-costar--summary",
         "databricks-costar--architecture-harness",
         "databricks-costar--architecture-knowledge",
+        "databricks-costar--architecture-tool-access",
+        "databricks-costar--primitives-0",
+        "databricks-costar--primitives-1",
+        "databricks-costar--primitives-2",
+        "databricks-costar--primitives-3",
+        "databricks-costar--primitives-4",
         "databricks-costar--key-metrics-0",
         "databricks-costar--key-metrics-1",
+        "databricks-costar--lessons-learned-0",
         "databricks-costar--operating-models-0"
       ],
       "source_ids": [
@@ -806,6 +1078,138 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "domu-clementino-source-1"
+        ],
+        "workflow_scope": "Two named workflows: scheduled team jobs in Slack, and client-review preparation in the desktop toolkit",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2",
+              "primitives.3"
+            ],
+            "note": "The post names exactly two workflows; the memory layers and the toolkit split are reusable mechanisms, not runs."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "operating_models.1"
+            ],
+            "note": "Customer-impacting actions run through team-visible Slack approvals; desktop work proceeds under continuous user steering."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No check of the agent's own work is documented beyond the approval gates cited with human involvement; QA sampling is a task the agent performs."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No execution or isolation boundary is documented."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ],
+            "note": "The prompt-size reduction that followed the split is a reported consequence, not a management mechanism."
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "Approval gates govern customer-impacting actions; other credential handling is not documented."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "workflow",
+          "primitives.3": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "implementation-scale",
+            "basis": "reported-measurement",
+            "subject": "Clementino toolkit integration modules organized into skills"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Identical statement, scope, and locator as the headline: the same about-35 integration count."
+          }
+        }
+      },
       "company_id": "domu",
       "claim_ids": [
         "domu-clementino--summary",
@@ -819,6 +1223,8 @@
         "domu-clementino--architecture-context-mgmt",
         "domu-clementino--primitives-0",
         "domu-clementino--primitives-1",
+        "domu-clementino--primitives-2",
+        "domu-clementino--primitives-3",
         "domu-clementino--key-metrics-0",
         "domu-clementino--lessons-learned-0",
         "domu-clementino--lessons-learned-1",
@@ -1550,6 +1956,138 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "hubspot-sidekick-source-1",
+          "hubspot-sidekick-source-2"
+        ],
+        "workflow_scope": "Pull request opened → Sidekick draft review → judge-gated comments posted to GitHub",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.1",
+              "primitives.3"
+            ]
+          },
+          "human_involvement": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The review flow is automated end to end. The captures document post-hoc emoji and thread feedback on comments (source 1, lines 103–108) and continued human review for system design and architecture (line 12), but no required human checkpoint inside the review flow."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No capture states which model the review runs on. Multi-model support (Claude, GPT, Gemini) is a capability of the Aviator framework (source 1, line 45), not a statement about this reviewer."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Execution isolation of the Aviator runtime is not documented. The Kubernetes sandboxing described in source 2 (lines 30–37) covers the earlier Crucible implementation."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures describe no mechanism that maintains or organizes context for the reviewer over time."
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Credential handling for the review agent is not documented in either capture."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "workflow",
+          "primitives.2": "validation",
+          "primitives.3": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "cost-latency",
+            "basis": "reported-measurement",
+            "subject": "Sidekick review coverage of HubSpot pull requests and the time engineers wait for feedback"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Restates the every-pull-request coverage component of the compound headline; same passage, scope, and period."
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Restates the 90 percent feedback-time component of the compound headline; same passage and metric scope."
+          },
+          "key_metrics.2": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Developer thumbs-up share of reactions on Sidekick review comments over the preceding couple of months"
+          }
+        }
+      },
       "company_id": "hubspot",
       "claim_ids": [
         "hubspot-sidekick--summary",
@@ -1558,9 +2096,15 @@
         "hubspot-sidekick--architecture-sandbox",
         "hubspot-sidekick--architecture-tool-access",
         "hubspot-sidekick--architecture-interfaces",
+        "hubspot-sidekick--architecture-knowledge",
+        "hubspot-sidekick--primitives-0",
+        "hubspot-sidekick--primitives-1",
+        "hubspot-sidekick--primitives-2",
+        "hubspot-sidekick--primitives-3",
         "hubspot-sidekick--key-metrics-0",
         "hubspot-sidekick--key-metrics-1",
         "hubspot-sidekick--key-metrics-2",
+        "hubspot-sidekick--lessons-learned-0",
         "hubspot-sidekick--operating-models-0"
       ],
       "source_ids": [
@@ -2285,11 +2829,126 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "plaid-ai-annotator-source-1"
+        ],
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture names no run. The \"Key capabilities\" sentence introduces no list, and the voting and feedback mechanisms are future work only."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ],
+            "note": "Targeted human validation is applied when a product use case requires it; no default review of every labeling run is stated."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge",
+              "architecture.harness"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ],
+            "note": "The documented check is the targeted human validation cited with the human-involvement answer; no separate automated check is documented."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1"
+            ]
+          },
+          "lessons": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture states impact and future plans; no evaluated transferable lesson."
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "LLMs are named as the enabling technology; no model is specified."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture documents no isolation boundary."
+          },
+          "tool_access": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No tools are named; labeling runs on internal transaction data."
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Not documented; richer context signals are future work."
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Not documented in the capture."
+          },
+          "interfaces": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No human-facing surface is named."
+          }
+        },
+        "primitive_roles": {},
+        "observations": {
+          "headline_metric": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "AI Annotator label agreement with human judgments in early use"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Component of the compound headline: the same over-95% alignment figure with the same early-use scope and unspecified sample."
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Component of the compound headline: the same cost-and-time comparison without measured values."
+          }
+        }
+      },
       "company_id": "plaid",
       "claim_ids": [
         "plaid-ai-annotator--summary",
         "plaid-ai-annotator--headline-metric",
         "plaid-ai-annotator--architecture-knowledge",
+        "plaid-ai-annotator--architecture-harness",
         "plaid-ai-annotator--key-metrics-0",
         "plaid-ai-annotator--key-metrics-1",
         "plaid-ai-annotator--operating-models-0"
@@ -2332,11 +2991,128 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "plaid-fix-my-connection-source-1"
+        ],
+        "workflow_scope": "Proactive detection to automatic repair of bank-integration access issues",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.1"
+            ],
+            "note": "The capture describes the run in one sentence; the two steps carry exactly that content."
+          },
+          "human_involvement": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture reports aggregate impact only; no human checkpoint is documented."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "validation": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No check of repairs or failure behavior is documented."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1"
+            ]
+          },
+          "lessons": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture states impact and future plans; no evaluated transferable lesson."
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Described as AI-powered; no model is specified."
+          },
+          "harness": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture names no execution environment."
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No isolation boundary is documented."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Integration knowledge is implied by the repair behavior; no knowledge store is documented."
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Not documented in the capture."
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "User-permissioned data access is named, but credential handling for the agent is not documented."
+          },
+          "interfaces": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No human-facing surface is named."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Automated bank-connection repairs, the successful logins they enable, and average repair time"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Component of the compound headline: the same over-2-million login figure with the same scope."
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Component of the compound headline: the same 90% repair-time reduction against an unprovided baseline."
+          }
+        }
+      },
       "company_id": "plaid",
       "claim_ids": [
         "plaid-fix-my-connection--summary",
         "plaid-fix-my-connection--headline-metric",
         "plaid-fix-my-connection--architecture-tool-access",
+        "plaid-fix-my-connection--primitives-0",
+        "plaid-fix-my-connection--primitives-1",
         "plaid-fix-my-connection--key-metrics-0",
         "plaid-fix-my-connection--key-metrics-1",
         "plaid-fix-my-connection--operating-models-0"
@@ -4057,7 +4833,8 @@
       "evidence": [
         {
           "source_id": "airbnb-airchat-source-2",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 114, 214"
         }
       ]
     },
@@ -4075,8 +4852,152 @@
         {
           "source_id": "airbnb-airchat-source-2",
           "relation": "supports"
+        },
+        {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 166"
         }
       ]
+    },
+    {
+      "id": "airbnb-airchat--architecture-interfaces",
+      "approach_id": "airbnb-airchat",
+      "field": "architecture.interfaces",
+      "text": "cli, web",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "The CLI is the stated core abstraction and the Remote web UI is live as an internal early-access program.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 188–192, 214"
+        }
+      ]
+    },
+    {
+      "id": "airbnb-airchat--architecture-sandbox",
+      "approach_id": "airbnb-airchat",
+      "field": "architecture.sandbox",
+      "text": "AirDev remote workspaces run agent sessions network-isolated from production services and user data",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "An Airbnb engineering manager described the workspace isolation in the podcast transcript.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 232"
+        }
+      ]
+    },
+    {
+      "id": "airbnb-airchat--architecture-credentials",
+      "approach_id": "airbnb-airchat",
+      "field": "architecture.credentials",
+      "text": "AirChat handles authentication and permissioning for internal agent use",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "An Airbnb product lead stated that AirChat handles authentication and permissioning.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 118"
+        }
+      ]
+    },
+    {
+      "id": "airbnb-airchat--architecture-context-mgmt",
+      "approach_id": "airbnb-airchat",
+      "field": "architecture.context_mgmt",
+      "text": "AirChat loads default MCP servers into sessions, and the agent loop reads configuration files such as AGENTS.md and CLAUDE.md",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Both direct-participant captures describe default MCP loading and configuration files the loop reads.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 118"
+        },
+        {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 82"
+        }
+      ]
+    },
+    {
+      "id": "airbnb-airchat--primitives-0",
+      "approach_id": "airbnb-airchat",
+      "field": "primitives.0",
+      "text": "An engineer writes a short spec or prompt that starts an autonomous coding session through AirChat",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "The reviewed talk defines the agentic loop as starting from an engineer-written spec or prompt.",
+      "valid_at": "2025-10",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 82, 104"
+        },
+        {
+          "source_id": "airbnb-airchat-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 118"
+        }
+      ],
+      "display_name": "Start an agentic coding session"
+    },
+    {
+      "id": "airbnb-airchat--primitives-1",
+      "approach_id": "airbnb-airchat",
+      "field": "primitives.1",
+      "text": "The session calls LLMs and internal tools in a loop until it produces a complete code change",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "The reviewed talk's loop diagram states repeated LLM and tool calls produce the materialized change.",
+      "valid_at": "2025-10",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 82"
+        }
+      ],
+      "display_name": "Materialize the code change"
+    },
+    {
+      "id": "airbnb-airchat--primitives-2",
+      "approach_id": "airbnb-airchat",
+      "field": "primitives.2",
+      "text": "The loop ends at the diff; a human reviews every line of the change before it merges as a pull request",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A speaker quote states that every line is reviewed by a human before merge.",
+      "valid_at": "2025-10",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 178–182"
+        }
+      ],
+      "display_name": "Review every line before merge"
     },
     {
       "id": "airbnb-airchat--key-metrics-0",
@@ -4098,6 +5019,24 @@
       "reported_by": "Airbnb",
       "metric_scope": "Airbnb PRs materialized through agentic coding by the October 2025 talk",
       "denominator": "Airbnb pull requests; exact count not supplied"
+    },
+    {
+      "id": "airbnb-airchat--lessons-learned-0",
+      "approach_id": "airbnb-airchat",
+      "field": "lessons_learned.0",
+      "text": "Wrap vendor coding agents with a thin shim instead of building a full orchestrator from scratch; Airbnb's own orchestrator never shipped",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A direct participant described the pivot from an unshipped orchestrator to a thin shim as the team's choice, not a measured comparison.",
+      "valid_at": "2025-10",
+      "evidence": [
+        {
+          "source_id": "airbnb-airchat-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 202–210"
+        }
+      ]
     },
     {
       "id": "airbnb-airchat--operating-models-0",
@@ -6039,6 +6978,119 @@
       ]
     },
     {
+      "id": "databricks-costar--architecture-tool-access",
+      "approach_id": "databricks-costar",
+      "field": "architecture.tool_access",
+      "text": "Internal agents call MCP tools for data access, code execution, and environment setup",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 133"
+        }
+      ]
+    },
+    {
+      "id": "databricks-costar--primitives-0",
+      "approach_id": "databricks-costar",
+      "field": "primitives.0",
+      "text": "The coSTAR test harness sends each scenario prompt to the agent under test and captures the execution as an MLflow trace",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 62–64"
+        }
+      ],
+      "display_name": "Run the scenario against the agent under test"
+    },
+    {
+      "id": "databricks-costar--primitives-1",
+      "approach_id": "databricks-costar",
+      "field": "primitives.1",
+      "text": "Agentic judges inspect the trace for properties such as code validity, best-practice adherence, and tool sequencing instead of asserting exact outputs",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 70–74"
+        }
+      ],
+      "display_name": "Score the trace with aligned judges"
+    },
+    {
+      "id": "databricks-costar--primitives-2",
+      "approach_id": "databricks-costar",
+      "field": "primitives.2",
+      "text": "A coding assistant reads judge failures, diagnoses root causes, and patches the agent while the engineer remains the reviewer and final arbiter of the proposed changes",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 119–121"
+        }
+      ],
+      "display_name": "Refine the agent until the judges pass"
+    },
+    {
+      "id": "databricks-costar--primitives-3",
+      "approach_id": "databricks-costar",
+      "field": "primitives.3",
+      "text": "Judge alignment refines the judges against a Golden Set of engineer-assessed outputs using MLflow alignment techniques",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 113–117"
+        }
+      ],
+      "display_name": "Align judges against a human-graded Golden Set"
+    },
+    {
+      "id": "databricks-costar--primitives-4",
+      "approach_id": "databricks-costar",
+      "field": "primitives.4",
+      "text": "The same judges run on production traffic, in CI/CD pipelines, and on nightly builds to catch regressions from agent or infrastructure changes",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 12, 135"
+        }
+      ],
+      "display_name": "Run the judges in production and CI"
+    },
+    {
       "id": "databricks-costar--key-metrics-0",
       "approach_id": "databricks-costar",
       "field": "key_metrics.0",
@@ -6072,6 +7124,24 @@
         {
           "source_id": "databricks-costar-source-2",
           "relation": "supports"
+        }
+      ]
+    },
+    {
+      "id": "databricks-costar--lessons-learned-0",
+      "approach_id": "databricks-costar",
+      "field": "lessons_learned.0",
+      "text": "Give judges tools, not traces: Databricks reports that agentic judges which call targeted tools on a trace scale better than feeding the full trace into a model",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Databricks authors attribute the recommendation to their own testing experience; it is an attributed preference rather than an independently verified result.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "databricks-costar-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 72–74, 180"
         }
       ]
     },
@@ -6283,6 +7353,44 @@
         }
       ],
       "display_name": "Reusable toolkit split"
+    },
+    {
+      "id": "domu-clementino--primitives-2",
+      "approach_id": "domu-clementino",
+      "field": "primitives.2",
+      "text": "Scheduled jobs such as the 5am sales standup, invoice approvals, QA sampling, and huddle ingestion post to Slack for team visibility",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "domu-clementino-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 70, 78"
+        }
+      ],
+      "display_name": "Post the scheduled team jobs"
+    },
+    {
+      "id": "domu-clementino--primitives-3",
+      "approach_id": "domu-clementino",
+      "field": "primitives.3",
+      "text": "In Claude Cowork, the agent pulls call data from the warehouse and notes from the document store, then drafts the slides beside the user",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "domu-clementino-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 80"
+        }
+      ],
+      "display_name": "Prepare a client review in the desktop toolkit"
     },
     {
       "id": "domu-clementino--key-metrics-0",
@@ -8477,6 +9585,105 @@
       ]
     },
     {
+      "id": "hubspot-sidekick--architecture-knowledge",
+      "approach_id": "hubspot-sidekick",
+      "field": "architecture.knowledge",
+      "text": "Optional repo-specific custom instructions can be incorporated into the review prompt; the feature recently launched",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "hubspot-sidekick-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 129"
+        }
+      ]
+    },
+    {
+      "id": "hubspot-sidekick--primitives-0",
+      "approach_id": "hubspot-sidekick",
+      "field": "primitives.0",
+      "text": "Review runs automatically when a pull request is created or marked ready for review, or when Sidekick is requested as a reviewer",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "hubspot-sidekick-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 57"
+        },
+        {
+          "source_id": "hubspot-sidekick-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 14"
+        }
+      ],
+      "display_name": "Trigger review"
+    },
+    {
+      "id": "hubspot-sidekick--primitives-1",
+      "approach_id": "hubspot-sidekick",
+      "field": "primitives.1",
+      "text": "Sidekick produces the initial review of the pull request",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "hubspot-sidekick-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 65, 79"
+        }
+      ],
+      "display_name": "Draft the review"
+    },
+    {
+      "id": "hubspot-sidekick--primitives-2",
+      "approach_id": "hubspot-sidekick",
+      "field": "primitives.2",
+      "text": "A second Judge Agent evaluates every draft comment for succinctness, accuracy, and actionability",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "hubspot-sidekick-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 79–83"
+        }
+      ],
+      "display_name": "Judge each draft comment"
+    },
+    {
+      "id": "hubspot-sidekick--primitives-3",
+      "approach_id": "hubspot-sidekick",
+      "field": "primitives.3",
+      "text": "Only comments that pass the judge evaluation are posted to GitHub; the rest are filtered out",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "hubspot-sidekick-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 85"
+        }
+      ],
+      "display_name": "Post passing comments"
+    },
+    {
       "id": "hubspot-sidekick--key-metrics-0",
       "approach_id": "hubspot-sidekick",
       "field": "key_metrics.0",
@@ -8538,6 +9745,24 @@
       "metric_scope": "Developer emoji reactions on review comments during the preceding couple of months",
       "denominator": "Thumbs-up and thumbs-down reactions; not all developers or all reviews",
       "measurement_method": "Emoji reactions and replies on review comments"
+    },
+    {
+      "id": "hubspot-sidekick--lessons-learned-0",
+      "approach_id": "hubspot-sidekick",
+      "field": "lessons_learned.0",
+      "text": "Unhelpful rather than incorrect feedback was the most common failure mode; prompt tuning alone could not eliminate it, and a second judge agent filtering draft comments was the single most important factor in review effectiveness",
+      "kind": "opinion",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "HubSpot attributed the improvement chiefly to the judge gate in its own engineering blog; no independent evaluation exists.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "hubspot-sidekick-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 71–87"
+        }
+      ]
     },
     {
       "id": "hubspot-sidekick--operating-models-0",
@@ -10528,6 +11753,24 @@
       ]
     },
     {
+      "id": "plaid-ai-annotator--architecture-harness",
+      "approach_id": "plaid-ai-annotator",
+      "field": "architecture.harness",
+      "text": "Internally hosted platform",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-ai-annotator-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 18"
+        }
+      ]
+    },
+    {
       "id": "plaid-ai-annotator--key-metrics-0",
       "approach_id": "plaid-ai-annotator",
       "field": "key_metrics.0",
@@ -10638,6 +11881,44 @@
           "relation": "supports"
         }
       ]
+    },
+    {
+      "id": "plaid-fix-my-connection--primitives-0",
+      "approach_id": "plaid-fix-my-connection",
+      "field": "primitives.0",
+      "text": "The system proactively detects bank-integration access issues",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-fix-my-connection-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 30"
+        }
+      ],
+      "display_name": "Detect an access issue"
+    },
+    {
+      "id": "plaid-fix-my-connection--primitives-1",
+      "approach_id": "plaid-fix-my-connection",
+      "field": "primitives.1",
+      "text": "It automatically repairs the detected issue to restore user-permissioned access",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-fix-my-connection-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 30"
+        }
+      ],
+      "display_name": "Repair the connection"
     },
     {
       "id": "plaid-fix-my-connection--key-metrics-0",

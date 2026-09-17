@@ -90,11 +90,25 @@ Operating levels are generated from scoped, evidence-backed human-attention boun
 
 - Harness: Wrapper over vendor coding agents with a unified gateway, an internal plugin marketplace, and AirDev parallel workspaces <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
 - Model: Vendor coding agents (Claude Code and Codex are named in use), wrapped by Airbnb <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
-- Tool access: More than a dozen internal MCP servers connect agents to internal systems <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Tool access: More than a dozen internal MCP servers connect agents to internal systems <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2), [airbnb-airchat-source-3](#airbnb-airchat-source-3).</small>
+- Interfaces: cli, web <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Sandbox: AirDev remote workspaces run agent sessions network-isolated from production services and user data <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Credentials: AirChat handles authentication and permissioning for internal agent use <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Context mgmt: AirChat loads default MCP servers into sessions, and the agent loop reads configuration files such as AGENTS.md and CLAUDE.md <small>Sources: [airbnb-airchat-source-2](#airbnb-airchat-source-2), [airbnb-airchat-source-3](#airbnb-airchat-source-3).</small>
+
+### Primitives
+
+- Start an agentic coding session: An engineer writes a short spec or prompt that starts an autonomous coding session through AirChat <small>Sources: [airbnb-airchat-source-3](#airbnb-airchat-source-3), [airbnb-airchat-source-2](#airbnb-airchat-source-2).</small>
+- Materialize the code change: The session calls LLMs and internal tools in a loop until it produces a complete code change <small>Sources: [airbnb-airchat-source-3](#airbnb-airchat-source-3).</small>
+- Review every line before merge: The loop ends at the diff; a human reviews every line of the change before it merges as a pull request <small>Sources: [airbnb-airchat-source-3](#airbnb-airchat-source-3).</small>
 
 ### Reported metrics
 
 - About 64% of pull requests materialized through agentic coding <small>Sources: [airbnb-airchat-source-3](#airbnb-airchat-source-3).</small>
+
+### Catalog observations
+
+- Wrap vendor coding agents with a thin shim instead of building a full orchestrator from scratch; Airbnb's own orchestrator never shipped <small>Sources: [airbnb-airchat-source-3](#airbnb-airchat-source-3).</small>
 
 ### Sources
 
@@ -446,11 +460,24 @@ Last reviewed: 2026-09-16.
 
 - Harness: coSTAR framework for shipping and testing internal agents <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
 - Knowledge: Private benchmark built from the Databricks multi-million line codebase <small>Sources: [databricks-costar-source-2](#databricks-costar-source-2).</small>
+- Tool access: Internal agents call MCP tools for data access, code execution, and environment setup <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
+
+### Primitives
+
+- Run the scenario against the agent under test: The coSTAR test harness sends each scenario prompt to the agent under test and captures the execution as an MLflow trace <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
+- Score the trace with aligned judges: Agentic judges inspect the trace for properties such as code validity, best-practice adherence, and tool sequencing instead of asserting exact outputs <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
+- Refine the agent until the judges pass: A coding assistant reads judge failures, diagnoses root causes, and patches the agent while the engineer remains the reviewer and final arbiter of the proposed changes <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
+- Align judges against a human-graded Golden Set: Judge alignment refines the judges against a Golden Set of engineer-assessed outputs using MLflow alignment techniques <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
+- Run the judges in production and CI: The same judges run on production traffic, in CI/CD pipelines, and on nightly builds to catch regressions from agent or infrastructure changes <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
 
 ### Reported metrics
 
 - coSTAR reduced the time to verify agent changes from two weeks down to hours <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
 - Private benchmark built from a multi-million line codebase <small>Sources: [databricks-costar-source-2](#databricks-costar-source-2).</small>
+
+### Catalog observations
+
+- Give judges tools, not traces: Databricks reports that agentic judges which call targeted tools on a trace scale better than feeding the full trace into a model <small>Sources: [databricks-costar-source-1](#databricks-costar-source-1).</small>
 
 ### Sources
 
@@ -502,6 +529,8 @@ Last reviewed: 2026-09-16.
 
 - Four memory layers: Transient conversation, persistent facts, knowledge RAG, and live system state; kept separate <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
 - Reusable toolkit split: Capabilities separated from the interface layer so they power multiple surfaces <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
+- Post the scheduled team jobs: Scheduled jobs such as the 5am sales standup, invoice approvals, QA sampling, and huddle ingestion post to Slack for team visibility <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
+- Prepare a client review in the desktop toolkit: In Claude Cowork, the agent pulls call data from the warehouse and notes from the document store, then drafts the slides beside the user <small>Sources: [domu-clementino-source-1](#domu-clementino-source-1).</small>
 
 ### Reported metrics
 
@@ -907,12 +936,24 @@ Last reviewed: 2026-09-16.
 - Sandbox: unknown <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
 - Tool access: Aviator framework for precise tool control <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
 - Interfaces: github <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
+- Knowledge: Optional repo-specific custom instructions can be incorporated into the review prompt; the feature recently launched <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
+
+### Primitives
+
+- Trigger review: Review runs automatically when a pull request is created or marked ready for review, or when Sidekick is requested as a reviewer <small>Sources: [hubspot-sidekick-source-2](#hubspot-sidekick-source-2), [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
+- Draft the review: Sidekick produces the initial review of the pull request <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
+- Judge each draft comment: A second Judge Agent evaluates every draft comment for succinctness, accuracy, and actionability <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
+- Post passing comments: Only comments that pass the judge evaluation are posted to GitHub; the rest are filtered out <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
 
 ### Reported metrics
 
 - Reviews every pull request <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
 - Engineer feedback time cut by 90% <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
 - Over 80% thumbs-up reaction rate on review feedback during the preceding couple of months <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
+
+### Catalog observations
+
+- Unhelpful rather than incorrect feedback was the most common failure mode; prompt tuning alone could not eliminate it, and a second judge agent filtering draft comments was the single most important factor in review effectiveness <small>Sources: [hubspot-sidekick-source-1](#hubspot-sidekick-source-1).</small>
 
 ### Sources
 
@@ -1307,6 +1348,7 @@ Last reviewed: 2026-09-16.
 ### Architecture
 
 - Knowledge: Anonymized Plaid transaction data <small>Sources: [plaid-ai-annotator-source-1](#plaid-ai-annotator-source-1).</small>
+- Harness: Internally hosted platform <small>Sources: [plaid-ai-annotator-source-1](#plaid-ai-annotator-source-1).</small>
 
 ### Reported metrics
 
@@ -1349,6 +1391,11 @@ Last reviewed: 2026-09-16.
 ### Architecture
 
 - Tool access: Plaid bank-integration infrastructure <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
+
+### Primitives
+
+- Detect an access issue: The system proactively detects bank-integration access issues <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
+- Repair the connection: It automatically repairs the detected issue to restore user-permissioned access <small>Sources: [plaid-fix-my-connection-source-1](#plaid-fix-my-connection-source-1).</small>
 
 ### Reported metrics
 

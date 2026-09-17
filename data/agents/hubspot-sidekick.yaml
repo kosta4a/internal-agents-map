@@ -32,10 +32,20 @@ architecture:
   tool_access: Aviator framework for precise tool control
   interfaces:
   - github
+  knowledge: Optional repo-specific custom instructions can be incorporated into the review prompt; the feature
+    recently launched
+primitives:
+- {name: Trigger review, desc: "Review runs automatically when a pull request is created or marked ready for review, or when Sidekick is requested as a reviewer"}
+- {name: Draft the review, desc: "Sidekick produces the initial review of the pull request"}
+- {name: Judge each draft comment, desc: "A second Judge Agent evaluates every draft comment for succinctness, accuracy, and actionability"}
+- {name: Post passing comments, desc: "Only comments that pass the judge evaluation are posted to GitHub; the rest are filtered out"}
 key_metrics:
 - Reviews every pull request
 - Engineer feedback time cut by 90%
 - Over 80% thumbs-up reaction rate on review feedback during the preceding couple of months
+lessons_learned:
+- Unhelpful rather than incorrect feedback was the most common failure mode; prompt tuning alone could not eliminate
+  it, and a second judge agent filtering draft comments was the single most important factor in review effectiveness
 sources:
 - id: hubspot-sidekick-source-1
   title: Automated code review, the 6-month evolution
@@ -89,6 +99,29 @@ evidence:
   architecture.interfaces:
   - source_id: hubspot-sidekick-source-1
     relation: supports
+  architecture.knowledge:
+  - source_id: hubspot-sidekick-source-1
+    relation: supports
+    locator: Preserved content.md, line 129
+  primitives.0:
+  - source_id: hubspot-sidekick-source-2
+    relation: supports
+    locator: Preserved content.md, line 57
+  - source_id: hubspot-sidekick-source-1
+    relation: supports
+    locator: Preserved content.md, line 14
+  primitives.1:
+  - source_id: hubspot-sidekick-source-1
+    relation: supports
+    locator: Preserved content.md, lines 65, 79
+  primitives.2:
+  - source_id: hubspot-sidekick-source-1
+    relation: supports
+    locator: Preserved content.md, lines 79–83
+  primitives.3:
+  - source_id: hubspot-sidekick-source-1
+    relation: supports
+    locator: Preserved content.md, line 85
   key_metrics.0:
   - source_id: hubspot-sidekick-source-1
     relation: supports
@@ -101,6 +134,10 @@ evidence:
   - source_id: hubspot-sidekick-source-1
     relation: supports
     locator: Preserved content.md, lines 99–116
+  lessons_learned.0:
+  - source_id: hubspot-sidekick-source-1
+    relation: supports
+    locator: Preserved content.md, lines 71–87
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -144,3 +181,49 @@ claim_metadata:
     confidence: medium
     confidence_reason: Current review runs on Aviator; its execution isolation is not specified. Crucible Kubernetes
       workloads describe the predecessor implementation.
+  lessons_learned.0:
+    kind: opinion
+    provenance: reported
+    confidence: medium
+    confidence_reason: HubSpot attributed the improvement chiefly to the judge gate in its own engineering blog;
+      no independent evaluation exists.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [hubspot-sidekick-source-1, hubspot-sidekick-source-2]
+  workflow_scope: Pull request opened → Sidekick draft review → judge-gated comments posted to GitHub
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.0, primitives.1, primitives.3]}
+    human_involvement: {state: unreported, claim_paths: [], note: 'The review flow is automated end to end. The
+      captures document post-hoc emoji and thread feedback on comments (source 1, lines 103–108) and continued human
+      review for system design and architecture (line 12), but no required human checkpoint inside the review flow.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.tool_access, architecture.knowledge,
+      architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.2]}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'No capture states which model the review runs on. Multi-model
+      support (Claude, GPT, Gemini) is a capability of the Aviator framework (source 1, line 45), not a statement
+      about this reviewer.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'Execution isolation of the Aviator runtime is not documented.
+      The Kubernetes sandboxing described in source 2 (lines 30–37) covers the earlier Crucible implementation.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: unreported, claim_paths: [], note: 'The captures describe no mechanism that maintains or
+      organizes context for the reviewer over time.'}
+    credentials: {state: unreported, claim_paths: [], note: 'Credential handling for the review agent is not documented
+      in either capture.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow, primitives.2: validation, primitives.3: workflow}
+  observations:
+    headline_metric: {category: cost-latency, basis: reported-measurement, subject: 'Sidekick review coverage of
+      HubSpot pull requests and the time engineers wait for feedback'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Restates the every-pull-request coverage component of
+      the compound headline; same passage, scope, and period.'}
+    key_metrics.1: {duplicate_of: headline_metric, reason: 'Restates the 90 percent feedback-time component of the
+      compound headline; same passage and metric scope.'}
+    key_metrics.2: {category: effectiveness, basis: reported-measurement, subject: 'Developer thumbs-up share of
+      reactions on Sidekick review comments over the preceding couple of months'}

@@ -51,6 +51,10 @@ primitives:
   desc: Transient conversation, persistent facts, knowledge RAG, and live system state; kept separate
 - name: Reusable toolkit split
   desc: Capabilities separated from the interface layer so they power multiple surfaces
+- {name: Post the scheduled team jobs, desc: 'Scheduled jobs such as the 5am sales standup, invoice approvals, QA
+    sampling, and huddle ingestion post to Slack for team visibility'}
+- {name: Prepare a client review in the desktop toolkit, desc: 'In Claude Cowork, the agent pulls call data from the
+    warehouse and notes from the document store, then drafts the slides beside the user'}
 key_metrics:
 - ~35 integrations organized into skills
 lessons_learned:
@@ -114,6 +118,10 @@ evidence:
   primitives.1:
   - source_id: domu-clementino-source-1
     relation: supports
+  primitives.2:
+  - {source_id: domu-clementino-source-1, relation: supports, locator: 'Preserved content.md, lines 70, 78'}
+  primitives.3:
+  - {source_id: domu-clementino-source-1, relation: supports, locator: 'Preserved content.md, line 80'}
   key_metrics.0:
   - source_id: domu-clementino-source-1
     relation: supports
@@ -176,3 +184,37 @@ claim_metadata:
     metric_scope: Clementino toolkit integration modules organized into skills
   key_metrics.0:
     metric_scope: Clementino toolkit integration modules organized into skills
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [domu-clementino-source-1]
+  workflow_scope: 'Two named workflows: scheduled team jobs in Slack, and client-review preparation in the desktop toolkit'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.2, primitives.3], note: 'The post names exactly two workflows;
+      the memory layers and the toolkit split are reusable mechanisms, not runs.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1], note: 'Customer-impacting
+      actions run through team-visible Slack approvals; desktop work proceeds under continuous user steering.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.tool_access,
+      architecture.knowledge, architecture.context_mgmt, architecture.credentials, architecture.interfaces]}
+    validation: {state: unreported, claim_paths: [], note: 'No check of the agent''s own work is documented beyond the
+      approval gates cited with human involvement; QA sampling is a task the agent performs.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'No execution or isolation boundary is documented.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt], note: 'The prompt-size reduction that
+      followed the split is a reported consequence, not a management mechanism.'}
+    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'Approval gates govern
+      customer-impacting actions; other credential handling is not documented.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: workflow, primitives.3: workflow}
+  observations:
+    headline_metric: {category: implementation-scale, basis: reported-measurement, subject: 'Clementino toolkit
+      integration modules organized into skills'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Identical statement, scope, and locator as the headline:
+      the same about-35 integration count.'}
