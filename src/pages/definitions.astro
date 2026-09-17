@@ -103,11 +103,13 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <h2>{workflow.heading}</h2>
     <p><Inline parts={workflow.intro} /></p>
     <figure class="workflow-figure">
-      <div class="workflow-node"><span class="eyebrow">{task.label}</span><strong>{task.value}</strong></div>
-      <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 32"><path d="M6 0 V31 M2 26.5 L6 31 L10 26.5"/></svg></div>
-      <div class="workflow-node workflow-context"><span class="eyebrow">{work.label}</span><strong>{work.value}</strong></div>
-      <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 32"><path d="M6 0 V31 M2 26.5 L6 31 L10 26.5"/></svg></div>
-      <div class="workflow-node"><span class="eyebrow">{result.label}</span><strong>{result.value}</strong></div>
+      <div class="workflow-stack">
+        <div class="workflow-node"><span class="eyebrow">{task.label}</span><strong>{task.value}</strong></div>
+        <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 32"><path d="M6 0 V31 M2 26.5 L6 31 L10 26.5"/></svg></div>
+        <div class="workflow-node workflow-context"><span class="eyebrow">{work.label}</span><strong>{work.value}</strong></div>
+        <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 32"><path d="M6 0 V31 M2 26.5 L6 31 L10 26.5"/></svg></div>
+        <div class="workflow-node"><span class="eyebrow">{result.label}</span><strong>{result.value}</strong></div>
+      </div>
       <figcaption><Inline parts={workflow.caption} /></figcaption>
     </figure>
     <p><Inline parts={workflow.closing} /></p>
