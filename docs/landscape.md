@@ -996,6 +996,7 @@ Last reviewed: 2026-09-16.
 - Interfaces: slack, intercom, linear, github <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
 - Tool access: Triage Intelligence (auto-route, dedup, label); GitHub; testing Code Intelligence + custom MCP servers <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
 - Knowledge: Semantic/vector search evolved into agentic context acquisition across the workspace; Datadog/Sentry customer context <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
+- Context mgmt: System skills are progressively disclosed per run; relevant skills load before the task and the agent loads further skills on demand <small>Sources: [linear-agent-source-1](#linear-agent-source-1).</small>
 - Credentials: The Agent SDK gives agents explicit identities, scoped OAuth tokens, assignable/mentionable handles, and visible human delegation; issues stay assigned to a human; 'an agent cannot be held accountable' <small>Sources: [linear-agent-source-3](#linear-agent-source-3).</small>
 
 ### Primitives
@@ -1003,6 +1004,11 @@ Last reviewed: 2026-09-16.
 - Triage Intelligence: Auto-routes issues, flags duplicates, suggests labels <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
 - Agent SDK identities: Agents get identities, scoped team access, and visible delegation alongside humans <small>Sources: [linear-agent-source-3](#linear-agent-source-3).</small>
 - Loops: Scheduled or event-driven agent runs that execute recurring work <small>Sources: [linear-agent-source-1](#linear-agent-source-1).</small>
+- Scope customer feedback into an issue: From the Intercom inbox, the agent picks up the full conversation, metadata, and attachments, and creates a scoped issue <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
+- Take a first pass at the coding work: A delegated coding agent drafts the change or opens the pull request while the issue stays assigned to the human engineer <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
+- Review the pull request: A coding agent reviews every pull request and a human engineer makes the final approval <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
+- Pause for confirmation on risky actions: When an action is risky or hard to undo, the agent pauses mid-run and asks the user for confirmation <small>Sources: [linear-agent-source-1](#linear-agent-source-1).</small>
+- Close the loop with the customer: When the issue is done, related requests reopen in Intercom or the originating Slack thread is notified, and a person follows up with the customer <small>Sources: [linear-agent-source-2](#linear-agent-source-2).</small>
 
 ### Catalog observations
 
@@ -1565,6 +1571,7 @@ Last reviewed: 2026-09-16.
 - Interfaces: slack, web, chrome-extension, github <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
 - Tool access: Wired into Sentry, Datadog, LaunchDarkly, Braintrust, GitHub, Slack, Buildkite; monitors production, triages issues, proposes fixes; debugging queries a sanitized read-only production DB replica and Snowflake <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
 - Knowledge: Skills that encode how Ramp ships; repo images with the full dev env (Vite, Postgres, Redis, RabbitMQ, Temporal, Chromium, VS Code Server) <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
+- Context mgmt: Sandbox snapshots persist session state for follow-ups, and every client change syncs to the session <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
 - Credentials: GitHub auth per user; the sandbox pushes the branch, an API opens the PR with the user's token (no self-approval); production merges retain human review <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
 
 ### Primitives
@@ -1572,6 +1579,8 @@ Last reviewed: 2026-09-16.
 - Modal sandbox + snapshots: Repository images and snapshots prepare dependencies and build state before sessions start <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
 - OpenCode runtime: OpenCode runs as a server with a typed SDK and plugin interfaces <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
 - Multiplayer sessions: Any number of people in one session; each change attributed to its author <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1).</small>
+- Fix a bug from a Slack thread: An @inspect mention in Slack reads the thread context, works in its sandbox, and raises a pull request with the fix <small>Sources: [ramp-inspect-source-5](#ramp-inspect-source-5), [ramp-inspect-source-2](#ramp-inspect-source-2).</small>
+- Verify its own changes: Inspect runs tests, reviews telemetry and feature flags for backend changes, and visually verifies frontend changes with screenshots and live previews <small>Sources: [ramp-inspect-source-1](#ramp-inspect-source-1), [ramp-inspect-source-5](#ramp-inspect-source-5).</small>
 
 ### Reported metrics
 
@@ -1700,6 +1709,13 @@ Last reviewed: 2026-09-16.
 ### Primitives
 
 - Permission-aware context: Agent visibility is bounded by the invoking employee's permissions <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
+- Prepare a customer-meeting briefing: Pulls recent discussions, relevant documents, and customer history into a single, clear briefing before a critical customer conversation <small>Sources: [salesforce-slackbot-source-1](#salesforce-slackbot-source-1).</small>
+- Turn scattered analysis into a shared Canvas: In a documented demonstration, it correlated pilot feedback with an uploaded dashboard image, queried Salesforce for candidate accounts, and wrote the plan into a shared Canvas <small>Sources: [salesforce-slackbot-source-3](#salesforce-slackbot-source-3).</small>
+
+### Reported metrics
+
+- Two-thirds of Salesforce's roughly 80,000 employees tried the new Slackbot, and 80% of those users continued using it regularly <small>Sources: [salesforce-slackbot-source-3](#salesforce-slackbot-source-3).</small>
+- Internal satisfaction reached 96%, and employees report saving between two and 20 hours per week <small>Sources: [salesforce-slackbot-source-3](#salesforce-slackbot-source-3).</small>
 
 ### Catalog observations
 
@@ -1892,11 +1908,16 @@ Last reviewed: 2026-09-16.
 - MCP Gateway (45 systems): One gateway spanning 45 systems, enforcing employee permissions at call time <small>Sources: [sierra-pinecone-source-2](#sierra-pinecone-source-2).</small>
 - Agency sandbox layer: Recoverable K8s runners with a network proxy for credential injection <small>Sources: [sierra-pinecone-source-3](#sierra-pinecone-source-3).</small>
 - Intent-based routing: Routes model and environment by request intent, independent of the tool layer <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
+- Start a session from a prompt: A prompt creates an isolated pod with a checked-out repository, warm build cache, sidecars, and a harness; the session streams its work back for watching, interrupting, or redirecting <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
+- Broker its own pull requests: A session opens its own pull requests and watches its own checks <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
+- Babysit the pull request: A monitor sub-agent answers machine-review comments, fixes failing tests, rebases on conflicts, and pings a person in Slack when a decision needs a human <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
 
 ### Reported metrics
 
 - More than 75,000 sessions created by 600 people in the month preceding the report <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
 - 70% of company PRs opened through Pinecone in the month preceding the report <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
+- 96% of engineering uses Pinecone; the majority of the company works in it every day <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
+- Usage has tripled every month since April while costs fell <small>Sources: [sierra-pinecone-source-1](#sierra-pinecone-source-1).</small>
 
 ### Catalog observations
 
@@ -2073,10 +2094,16 @@ Last reviewed: 2026-09-17.
 - Tool access: Curated subsets of Toolshed MCP tools for internal documentation, tickets, build status, and code intelligence; security controls constrain destructive actions <small>Sources: [stripe-minions-source-2](#stripe-minions-source-2).</small>
 - Knowledge: Repository-scoped rule files shared with human-operated coding agents, plus internal context fetched through MCP <small>Sources: [stripe-minions-source-2](#stripe-minions-source-2).</small>
 - Credentials: Full permissions inside quarantined devboxes; MCP security controls limit destructive actions, and production pull requests require human review <small>Sources: [stripe-minions-source-2](#stripe-minions-source-2).</small>
+- Context mgmt: Subdirectory-scoped rule files attach as the agent traverses the filesystem, relevant MCP tools run over links before the run starts, and blueprint nodes can constrain tools or simplify each subagent's context <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1), [stripe-minions-source-2](#stripe-minions-source-2).</small>
 
 ### Primitives
 
 - One-shot end-to-end agent: Prepares a branch for human review and returns after a limited number of CI repair attempts <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1), [stripe-minions-source-2](#stripe-minions-source-2).</small>
+- Start a run from Slack or an internal app: An engineer tags the Slack app from the thread discussing a change, or starts a minion from the CLI, the web interface, or an integrated internal tool such as the flaky-test ticketing UI <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1).</small>
+- Hydrate context before the run: Relevant MCP tools run deterministically over likely-looking links before the run starts, and rule files scoped to subdirectories attach as the agent traverses the filesystem <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1), [stripe-minions-source-2](#stripe-minions-source-2).</small>
+- Implement the task in a prewarmed devbox: The blueprint's agent nodes implement the change in an isolated devbox, interleaved with deterministic lint, git, and push nodes <small>Sources: [stripe-minions-source-2](#stripe-minions-source-2).</small>
+- Repair CI failures within a bounded loop: After a push, CI applies autofixes and sends unfixable failures back once for local repair; after at most two CI rounds the branch returns to its human operator <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1), [stripe-minions-source-2](#stripe-minions-source-2).</small>
+- Open the pull request for human review: The minion prepares a pull request following Stripe's PR template; the engineer opens it and requests review, or sends further instructions that push updated code <small>Sources: [stripe-minions-source-1](#stripe-minions-source-1).</small>
 
 ### Reported metrics
 

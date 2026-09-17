@@ -2150,6 +2150,146 @@
         "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "linear-agent-source-1",
+          "linear-agent-source-2",
+          "linear-agent-source-3",
+          "linear-agent-source-4",
+          "linear-agent-source-5",
+          "linear-agent-source-6"
+        ],
+        "workflow_scope": "Customer email to shipped feature: Intercom conversation scoped into an issue, routed by Triage Intelligence, first-pass change by a delegated coding agent, reviewed pull request, and customer follow-up",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.0",
+              "primitives.4",
+              "primitives.7"
+            ],
+            "note": "The capture documents two further workflows (a Slack thread becoming a pull request, and a PM filing and shipping a fix); the email-to-feature run is the representative one because it spans all five stages."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "primitives.5",
+              "primitives.6"
+            ],
+            "note": "A human engineer makes the final pull-request approval, risky actions pause for confirmation, and the delegated issue stays assigned to its human owner."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5",
+              "primitives.6"
+            ],
+            "note": "The coding-agent review pass with human final approval, and the mid-run confirmation gate for risky actions, are the documented checks."
+          },
+          "observations": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The reviewed captures report no usage or outcome measurements for Linear Agent; statements about effectiveness are qualitative."
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ],
+            "note": "Codex is named for internal pull-request review; the captures say only frontier language models elsewhere."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures describe a custom owned stack but no execution or isolation boundary; the placeholder claim stays in research details."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ],
+            "note": "Code Intelligence and custom MCP servers are named as internal tests with a planned launch."
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ],
+            "note": "The Datadog and Sentry customer context is verified; the semantic-search history clause could not be located in the captures and is flagged in the source review."
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "The Agent SDK model gives agents scoped OAuth identities; accountability stays with the human assignee."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "GitHub is a system the agent acts on through pull requests; the conversational surfaces are Slack, Intercom, and Linear."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "validation",
+          "primitives.6": "validation",
+          "primitives.7": "workflow"
+        },
+        "observations": {}
+      },
       "company_id": "linear",
       "claim_ids": [
         "linear-agent--summary",
@@ -2159,10 +2299,16 @@
         "linear-agent--architecture-interfaces",
         "linear-agent--architecture-tool-access",
         "linear-agent--architecture-knowledge",
+        "linear-agent--architecture-context-mgmt",
         "linear-agent--architecture-credentials",
         "linear-agent--primitives-0",
         "linear-agent--primitives-1",
         "linear-agent--primitives-2",
+        "linear-agent--primitives-3",
+        "linear-agent--primitives-4",
+        "linear-agent--primitives-5",
+        "linear-agent--primitives-6",
+        "linear-agent--primitives-7",
         "linear-agent--lessons-learned-0",
         "linear-agent--lessons-learned-1",
         "linear-agent--lessons-learned-2",
@@ -3718,6 +3864,205 @@
         "identity": "mixed",
         "evidence_strength": "mixed"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "ramp-inspect-source-1",
+          "ramp-inspect-source-2",
+          "ramp-inspect-source-3",
+          "ramp-inspect-source-4",
+          "ramp-inspect-source-5"
+        ],
+        "workflow_scope": "Slack bug report to raised pull request",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3"
+            ],
+            "note": "The captures document the @inspect Slack bugfix run end to end; larger builds are kicked off the same way but the thread fix is the one complete run."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0"
+            ],
+            "note": "Sessions open pull requests with the user token, self-approval is blocked, and production merges keep human review; multiplayer sessions add live human collaboration."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox",
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.4"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2",
+              "key_metrics.3",
+              "key_metrics.4",
+              "key_metrics.5",
+              "key_metrics.6",
+              "key_metrics.7",
+              "key_metrics.8",
+              "key_metrics.9",
+              "key_metrics.10"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ],
+            "note": "Fully documented: Modal images rebuilt every 30 minutes, snapshots, warm-on-keystroke, and a warm pool."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "validation"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Ramp merged PRs raised by Inspect sessions by May 2026"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Ramp PRs authored by Inspect in the adoption history through January 2026"
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Same 75% merged-PR share, same May 2026 period, and the same merged-PR denominator; adds nothing the headline lacks."
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Merged PRs in Ramp frontend and backend repositories in the earlier first-party report"
+          },
+          "key_metrics.3": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "PRs merged into the Inspect repository itself, as distinct from all Ramp PRs"
+          },
+          "key_metrics.4": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Cumulative Inspect sessions since launch, crossing one million in July 2026"
+          },
+          "key_metrics.5": {
+            "category": "cost-latency",
+            "basis": "reported-measurement",
+            "subject": "Spin-up time of a fully provisioned remote development environment"
+          },
+          "key_metrics.6": {
+            "category": "implementation-scale",
+            "basis": "qualitative",
+            "subject": "Named internal agents built on the Inspect platform, from ReviewBuddy to error automations"
+          },
+          "key_metrics.7": {
+            "category": "implementation-scale",
+            "basis": "reported-measurement",
+            "subject": "Engineers who contributed to the Inspect codebase"
+          },
+          "key_metrics.8": {
+            "category": "implementation-scale",
+            "basis": "reported-measurement",
+            "subject": "Inspect team staffing of four engineers, a director, and a part-time PM"
+          },
+          "key_metrics.9": {
+            "category": "implementation-scale",
+            "basis": "reported-measurement",
+            "subject": "Share of the Inspect codebase written in Inspect sessions"
+          },
+          "key_metrics.10": {
+            "category": "cost-latency",
+            "basis": "target",
+            "subject": "Session startup speed relative to model-provider time-to-first-token"
+          }
+        }
+      },
       "company_id": "ramp",
       "claim_ids": [
         "ramp-inspect--summary",
@@ -3728,10 +4073,13 @@
         "ramp-inspect--architecture-interfaces",
         "ramp-inspect--architecture-tool-access",
         "ramp-inspect--architecture-knowledge",
+        "ramp-inspect--architecture-context-mgmt",
         "ramp-inspect--architecture-credentials",
         "ramp-inspect--primitives-0",
         "ramp-inspect--primitives-1",
         "ramp-inspect--primitives-2",
+        "ramp-inspect--primitives-3",
+        "ramp-inspect--primitives-4",
         "ramp-inspect--key-metrics-0",
         "ramp-inspect--key-metrics-1",
         "ramp-inspect--key-metrics-2",
@@ -3864,6 +4212,137 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "salesforce-slackbot-source-1",
+          "salesforce-slackbot-source-2",
+          "salesforce-slackbot-source-3",
+          "salesforce-slackbot-source-4"
+        ],
+        "workflow_scope": "Employee request to a drafted briefing or shared Canvas in Slack",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1",
+              "primitives.2"
+            ],
+            "note": "The briefing run is from the launch post; the Canvas run is the documented product demonstration. Both are employee-initiated."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0"
+            ],
+            "note": "Drafts are refined through conversation with the requesting employee; no approval gate beyond that user is documented."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The staged interview self-describes citing sources and admitting unknowns; no systematic check of outputs is documented."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "key_metrics.0",
+              "key_metrics.1"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The interview describes an LLM with a robust search layer; no execution or isolation boundary is documented."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ],
+            "note": "Meeting booking was announced as arriving a few weeks after general availability; calendar availability checking shipped at launch."
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Grounding in Slack context and conversation continuity are described; how context is maintained or organized over time is not."
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "The documented mechanism is data-access authorization bounded by the employee's permissions; credential storage is not described."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow"
+        },
+        "observations": {
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Salesforce employees trying the new Slackbot during the internal rollout and continuing to use it"
+          },
+          "key_metrics.1": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Internal satisfaction rating and self-reported weekly hours saved"
+          }
+        }
+      },
       "company_id": "salesforce",
       "claim_ids": [
         "salesforce-slackbot--summary",
@@ -3874,6 +4353,10 @@
         "salesforce-slackbot--architecture-knowledge",
         "salesforce-slackbot--architecture-credentials",
         "salesforce-slackbot--primitives-0",
+        "salesforce-slackbot--primitives-1",
+        "salesforce-slackbot--primitives-2",
+        "salesforce-slackbot--key-metrics-0",
+        "salesforce-slackbot--key-metrics-1",
         "salesforce-slackbot--lessons-learned-0",
         "salesforce-slackbot--lessons-learned-1",
         "salesforce-slackbot--operating-models-0"
@@ -4225,6 +4708,163 @@
         "identity": "mixed",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "sierra-pinecone-source-1",
+          "sierra-pinecone-source-2",
+          "sierra-pinecone-source-3"
+        ],
+        "workflow_scope": "Employee prompt to a streamed cloud session with brokered pull requests",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.4"
+            ],
+            "note": "The three pre-existing primitives are reusable mechanisms; the run is prompt to session to brokered pull request."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "primitives.5"
+            ],
+            "note": "Sessions stream to the requester, who can watch, interrupt, or redirect; PR babysitting escalates to a person only when judgment is required."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model",
+              "architecture.harness",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5"
+            ],
+            "note": "The documented check is the babysitting loop: watched CI checks, fixed failing tests, and answered machine-review comments."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2",
+              "key_metrics.3"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "validation"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Pinecone sessions created by Sierra employees in the month preceding the report"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Identical statement, figure, period, and scope as the headline; both cite the same passage."
+          },
+          "key_metrics.1": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Sierra pull requests opened through Pinecone in the month preceding the report"
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Engineering adoption of Pinecone and company-wide daily use"
+          },
+          "key_metrics.3": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Pinecone usage growth since April with reported falling costs"
+          }
+        }
+      },
       "company_id": "sierra",
       "claim_ids": [
         "sierra-pinecone--summary",
@@ -4240,8 +4880,13 @@
         "sierra-pinecone--primitives-0",
         "sierra-pinecone--primitives-1",
         "sierra-pinecone--primitives-2",
+        "sierra-pinecone--primitives-3",
+        "sierra-pinecone--primitives-4",
+        "sierra-pinecone--primitives-5",
         "sierra-pinecone--key-metrics-0",
         "sierra-pinecone--key-metrics-1",
+        "sierra-pinecone--key-metrics-2",
+        "sierra-pinecone--key-metrics-3",
         "sierra-pinecone--lessons-learned-0",
         "sierra-pinecone--lessons-learned-1",
         "sierra-pinecone--lessons-learned-2",
@@ -4564,6 +5209,149 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "stripe-minions-source-1",
+          "stripe-minions-source-2",
+          "stripe-minions-source-3",
+          "stripe-minions-source-4",
+          "stripe-minions-source-5",
+          "stripe-minions-source-6",
+          "stripe-minions-source-7"
+        ],
+        "workflow_scope": "Slack or internal-app request to a minion-produced pull request ready for human review",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1",
+              "primitives.2",
+              "primitives.3",
+              "primitives.5"
+            ],
+            "note": "The one-shot characterization and the bounded CI repair loop sit under mechanism and validation; the four steps above are the run in reading order."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "primitives.5"
+            ],
+            "note": "Runs are unattended; the engineer opens the prepared pull request for review or returns it with further instructions."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.4"
+            ],
+            "note": "A deterministic local lint node and one or two CI rounds with autofixes check the work before the branch returns to its human operator."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Neither part names a model; the legacy Not-specified claim stays in research details."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "Slack, CLI, web, and internal tools are named; the pull-request host is implied by the branch-and-PR flow but never named in the captures."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow",
+          "primitives.3": "workflow",
+          "primitives.4": "validation",
+          "primitives.5": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Weekly merged minion-produced PRs at Stripe, human-reviewed, per the Part 2 report"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Weekly merged minion-produced PRs at Stripe, per the earlier Part 1 report"
+          }
+        }
+      },
       "company_id": "stripe",
       "claim_ids": [
         "stripe-minions--summary",
@@ -4575,7 +5363,13 @@
         "stripe-minions--architecture-tool-access",
         "stripe-minions--architecture-knowledge",
         "stripe-minions--architecture-credentials",
+        "stripe-minions--architecture-context-mgmt",
         "stripe-minions--primitives-0",
+        "stripe-minions--primitives-1",
+        "stripe-minions--primitives-2",
+        "stripe-minions--primitives-3",
+        "stripe-minions--primitives-4",
+        "stripe-minions--primitives-5",
         "stripe-minions--key-metrics-0",
         "stripe-minions--lessons-learned-0",
         "stripe-minions--lessons-learned-1",
@@ -10487,6 +11281,24 @@
       ]
     },
     {
+      "id": "linear-agent--architecture-context-mgmt",
+      "approach_id": "linear-agent",
+      "field": "architecture.context_mgmt",
+      "text": "System skills are progressively disclosed per run; relevant skills load before the task and the agent loads further skills on demand",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "linear-agent-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 62–72"
+        }
+      ]
+    },
+    {
       "id": "linear-agent--architecture-credentials",
       "approach_id": "linear-agent",
       "field": "architecture.credentials",
@@ -10556,6 +11368,101 @@
         }
       ],
       "display_name": "Loops"
+    },
+    {
+      "id": "linear-agent--primitives-3",
+      "approach_id": "linear-agent",
+      "field": "primitives.3",
+      "text": "From the Intercom inbox, the agent picks up the full conversation, metadata, and attachments, and creates a scoped issue",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "linear-agent-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 28–34"
+        }
+      ],
+      "display_name": "Scope customer feedback into an issue"
+    },
+    {
+      "id": "linear-agent--primitives-4",
+      "approach_id": "linear-agent",
+      "field": "primitives.4",
+      "text": "A delegated coding agent drafts the change or opens the pull request while the issue stays assigned to the human engineer",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "linear-agent-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 60, 114"
+        }
+      ],
+      "display_name": "Take a first pass at the coding work"
+    },
+    {
+      "id": "linear-agent--primitives-5",
+      "approach_id": "linear-agent",
+      "field": "primitives.5",
+      "text": "A coding agent reviews every pull request and a human engineer makes the final approval",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "linear-agent-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 66"
+        }
+      ],
+      "display_name": "Review the pull request"
+    },
+    {
+      "id": "linear-agent--primitives-6",
+      "approach_id": "linear-agent",
+      "field": "primitives.6",
+      "text": "When an action is risky or hard to undo, the agent pauses mid-run and asks the user for confirmation",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "linear-agent-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 94–96"
+        }
+      ],
+      "display_name": "Pause for confirmation on risky actions"
+    },
+    {
+      "id": "linear-agent--primitives-7",
+      "approach_id": "linear-agent",
+      "field": "primitives.7",
+      "text": "When the issue is done, related requests reopen in Intercom or the originating Slack thread is notified, and a person follows up with the customer",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "linear-agent-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 70, 102"
+        }
+      ],
+      "display_name": "Close the loop with the customer"
     },
     {
       "id": "linear-agent--lessons-learned-0",
@@ -13464,6 +14371,24 @@
       ]
     },
     {
+      "id": "ramp-inspect--architecture-context-mgmt",
+      "approach_id": "ramp-inspect",
+      "field": "architecture.context_mgmt",
+      "text": "Sandbox snapshots persist session state for follow-ups, and every client change syncs to the session",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "ramp-inspect-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 20, 44"
+        }
+      ]
+    },
+    {
       "id": "ramp-inspect--architecture-credentials",
       "approach_id": "ramp-inspect",
       "field": "architecture.credentials",
@@ -13535,6 +14460,54 @@
         }
       ],
       "display_name": "Multiplayer sessions"
+    },
+    {
+      "id": "ramp-inspect--primitives-3",
+      "approach_id": "ramp-inspect",
+      "field": "primitives.3",
+      "text": "An @inspect mention in Slack reads the thread context, works in its sandbox, and raises a pull request with the fix",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "ramp-inspect-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 109"
+        },
+        {
+          "source_id": "ramp-inspect-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 22"
+        }
+      ],
+      "display_name": "Fix a bug from a Slack thread"
+    },
+    {
+      "id": "ramp-inspect--primitives-4",
+      "approach_id": "ramp-inspect",
+      "field": "primitives.4",
+      "text": "Inspect runs tests, reviews telemetry and feature flags for backend changes, and visually verifies frontend changes with screenshots and live previews",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "ramp-inspect-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 10–12"
+        },
+        {
+          "source_id": "ramp-inspect-source-5",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 51–54"
+        }
+      ],
+      "display_name": "Verify its own changes"
     },
     {
       "id": "ramp-inspect--key-metrics-0",
@@ -14179,7 +15152,8 @@
       "evidence": [
         {
           "source_id": "salesforce-slackbot-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 22-24, 38"
         }
       ]
     },
@@ -14286,6 +15260,84 @@
         }
       ],
       "display_name": "Permission-aware context"
+    },
+    {
+      "id": "salesforce-slackbot--primitives-1",
+      "approach_id": "salesforce-slackbot",
+      "field": "primitives.1",
+      "text": "Pulls recent discussions, relevant documents, and customer history into a single, clear briefing before a critical customer conversation",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "salesforce-slackbot-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 64–66"
+        }
+      ],
+      "display_name": "Prepare a customer-meeting briefing"
+    },
+    {
+      "id": "salesforce-slackbot--primitives-2",
+      "approach_id": "salesforce-slackbot",
+      "field": "primitives.2",
+      "text": "In a documented demonstration, it correlated pilot feedback with an uploaded dashboard image, queried Salesforce for candidate accounts, and wrote the plan into a shared Canvas",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "salesforce-slackbot-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 52–58"
+        }
+      ],
+      "display_name": "Turn scattered analysis into a shared Canvas"
+    },
+    {
+      "id": "salesforce-slackbot--key-metrics-0",
+      "approach_id": "salesforce-slackbot",
+      "field": "key_metrics.0",
+      "text": "Two-thirds of Salesforce's roughly 80,000 employees tried the new Slackbot, and 80% of those users continued using it regularly",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Salesforce internal adoption figures relayed by VentureBeat without a measurement method or window.",
+      "valid_at": "2026-01",
+      "evidence": [
+        {
+          "source_id": "salesforce-slackbot-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 42–44"
+        }
+      ],
+      "reported_by": "Salesforce",
+      "metric_scope": "Salesforce employees during the internal rollout; continuation measured among those who tried it"
+    },
+    {
+      "id": "salesforce-slackbot--key-metrics-1",
+      "approach_id": "salesforce-slackbot",
+      "field": "key_metrics.1",
+      "text": "Internal satisfaction reached 96%, and employees report saving between two and 20 hours per week",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Salesforce internal satisfaction and self-reported time savings relayed by VentureBeat; no survey method or baseline is given.",
+      "valid_at": "2026-01",
+      "evidence": [
+        {
+          "source_id": "salesforce-slackbot-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 44"
+        }
+      ],
+      "reported_by": "Salesforce",
+      "metric_scope": "Internal satisfaction rating and employee-reported weekly hours saved during the internal rollout"
     },
     {
       "id": "salesforce-slackbot--lessons-learned-0",
@@ -15454,6 +16506,63 @@
       "display_name": "Intent-based routing"
     },
     {
+      "id": "sierra-pinecone--primitives-3",
+      "approach_id": "sierra-pinecone",
+      "field": "primitives.3",
+      "text": "A prompt creates an isolated pod with a checked-out repository, warm build cache, sidecars, and a harness; the session streams its work back for watching, interrupting, or redirecting",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "sierra-pinecone-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 44"
+        }
+      ],
+      "display_name": "Start a session from a prompt"
+    },
+    {
+      "id": "sierra-pinecone--primitives-4",
+      "approach_id": "sierra-pinecone",
+      "field": "primitives.4",
+      "text": "A session opens its own pull requests and watches its own checks",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "sierra-pinecone-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 49"
+        }
+      ],
+      "display_name": "Broker its own pull requests"
+    },
+    {
+      "id": "sierra-pinecone--primitives-5",
+      "approach_id": "sierra-pinecone",
+      "field": "primitives.5",
+      "text": "A monitor sub-agent answers machine-review comments, fixes failing tests, rebases on conflicts, and pings a person in Slack when a decision needs a human",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "sierra-pinecone-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 49, 104"
+        }
+      ],
+      "display_name": "Babysit the pull request"
+    },
+    {
       "id": "sierra-pinecone--key-metrics-0",
       "approach_id": "sierra-pinecone",
       "field": "key_metrics.0",
@@ -15493,6 +16602,46 @@
       "reported_by": "Sierra",
       "metric_scope": "Company PRs opened through Pinecone in the month preceding the report",
       "denominator": "Sierra PRs opened in that month; not merged PRs"
+    },
+    {
+      "id": "sierra-pinecone--key-metrics-2",
+      "approach_id": "sierra-pinecone",
+      "field": "key_metrics.2",
+      "text": "96% of engineering uses Pinecone; the majority of the company works in it every day",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Sierra reported the adoption shares in its engineering blog without a method.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "sierra-pinecone-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 137"
+        }
+      ],
+      "reported_by": "Sierra",
+      "metric_scope": "Engineering use of Pinecone and company-wide daily use at report time"
+    },
+    {
+      "id": "sierra-pinecone--key-metrics-3",
+      "approach_id": "sierra-pinecone",
+      "field": "key_metrics.3",
+      "text": "Usage has tripled every month since April while costs fell",
+      "kind": "metric",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Sierra reported monthly growth multiples and a cost trend without absolute figures or a method.",
+      "valid_at": "2026",
+      "evidence": [
+        {
+          "source_id": "sierra-pinecone-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 139"
+        }
+      ],
+      "reported_by": "Sierra",
+      "metric_scope": "Pinecone usage growth since April and reported falling costs; no absolute figures published"
     },
     {
       "id": "sierra-pinecone--lessons-learned-0",
@@ -16545,6 +17694,29 @@
       ]
     },
     {
+      "id": "stripe-minions--architecture-context-mgmt",
+      "approach_id": "stripe-minions",
+      "field": "architecture.context_mgmt",
+      "text": "Subdirectory-scoped rule files attach as the agent traverses the filesystem, relevant MCP tools run over links before the run starts, and blueprint nodes can constrain tools or simplify each subagent's context",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Part 1 states the pre-run MCP hydration and Part 2 states the subdirectory-scoped rule files and blueprint-level context control directly.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "stripe-minions-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 64"
+        },
+        {
+          "source_id": "stripe-minions-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 60, 68"
+        }
+      ]
+    },
+    {
       "id": "stripe-minions--primitives-0",
       "approach_id": "stripe-minions",
       "field": "primitives.0",
@@ -16567,6 +17739,111 @@
         }
       ],
       "display_name": "One-shot end-to-end agent"
+    },
+    {
+      "id": "stripe-minions--primitives-1",
+      "approach_id": "stripe-minions",
+      "field": "primitives.1",
+      "text": "An engineer tags the Slack app from the thread discussing a change, or starts a minion from the CLI, the web interface, or an integrated internal tool such as the flaky-test ticketing UI",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "stripe-minions-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 36, 42"
+        }
+      ],
+      "display_name": "Start a run from Slack or an internal app"
+    },
+    {
+      "id": "stripe-minions--primitives-2",
+      "approach_id": "stripe-minions",
+      "field": "primitives.2",
+      "text": "Relevant MCP tools run deterministically over likely-looking links before the run starts, and rule files scoped to subdirectories attach as the agent traverses the filesystem",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "stripe-minions-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 64"
+        },
+        {
+          "source_id": "stripe-minions-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 68"
+        }
+      ],
+      "display_name": "Hydrate context before the run"
+    },
+    {
+      "id": "stripe-minions--primitives-3",
+      "approach_id": "stripe-minions",
+      "field": "primitives.3",
+      "text": "The blueprint's agent nodes implement the change in an isolated devbox, interleaved with deterministic lint, git, and push nodes",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "stripe-minions-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 30, 52–56, 94"
+        }
+      ],
+      "display_name": "Implement the task in a prewarmed devbox"
+    },
+    {
+      "id": "stripe-minions--primitives-4",
+      "approach_id": "stripe-minions",
+      "field": "primitives.4",
+      "text": "After a push, CI applies autofixes and sends unfixable failures back once for local repair; after at most two CI rounds the branch returns to its human operator",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "stripe-minions-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 72–74"
+        },
+        {
+          "source_id": "stripe-minions-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 96"
+        }
+      ],
+      "display_name": "Repair CI failures within a bounded loop"
+    },
+    {
+      "id": "stripe-minions--primitives-5",
+      "approach_id": "stripe-minions",
+      "field": "primitives.5",
+      "text": "The minion prepares a pull request following Stripe's PR template; the engineer opens it and requests review, or sends further instructions that push updated code",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "stripe-minions-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 50"
+        }
+      ],
+      "display_name": "Open the pull request for human review"
     },
     {
       "id": "stripe-minions--key-metrics-0",

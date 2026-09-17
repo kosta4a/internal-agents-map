@@ -53,18 +53,7 @@ const ENTRIES = [
   },
 ] as const;
 
-const PILOT_IDS = [
-  'github-qubot',
-  'notion-custom-agents',
-  'microsoft-prassistant',
-  'doordash-code-review',
-  'ycombinator-agent-infra',
-  'plaid-internal-mcp-server',
-  'spotify-honk-xirp',
-  'block-builderbot',
-  'posthog-stamphog',
-  'cloudflare-ai-stack',
-] as const;
+const PILOT_IDS = CATALOG.approaches.map((approach) => approach.id);
 
 async function structuredData(page: Page): Promise<Record<string, unknown>> {
   const text = await page.locator('script[type="application/ld+json"]').innerText();
@@ -188,11 +177,11 @@ test.describe('narrow entry pages', () => {
 });
 
 test.describe('reported results', () => {
-  test('separates the metrics from the statements of the other kinds', async ({ page }) => {
+  test('renders reviewed observations with their claim kinds', async ({ page }) => {
     await page.goto('/agents/ramp-inspect');
     const results = page.locator('#results');
-    const statements = results.getByRole('heading', { name: 'Reported outcomes and statements' });
-    await expect(statements).toBeVisible();
+    const observations = results.getByRole('heading', { name: 'Reported observations' });
+    await expect(observations).toBeVisible();
     const opinion = results.locator('.claim', { hasText: 'limited only by model-provider' });
     await expect(opinion).toHaveCount(1);
     await expect(opinion.locator('.claim-kind')).toHaveText('(opinion)');

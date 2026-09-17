@@ -99,9 +99,9 @@ describe('the published catalog', () => {
     }
   });
 
-  it('publishes exactly ten reviewed page-content records', () => {
+  it('publishes every record with reviewed page content', () => {
     const pilot = catalog.approaches.filter((item) => item.page_content);
-    expect(pilot).toHaveLength(10);
+    expect(pilot).toHaveLength(catalog.approaches.length);
     for (const item of pilot) {
       expect(Object.keys(item.page_content!.questions)).toHaveLength(7);
       expect(Object.keys(item.page_content!.implementation_fields)).toHaveLength(8);

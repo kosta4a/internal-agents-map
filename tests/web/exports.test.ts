@@ -244,22 +244,10 @@ describe('the qualification of a figure', () => {
 });
 
 describe('the results of an entry in Markdown', () => {
-  it('separates the metrics from the statements of the other kinds', () => {
+  it('renders reviewed observations with the statements of other kinds', () => {
     const markdown = recordMarkdown(catalog, 'ramp-inspect');
-    const entry = entryView(catalog, 'ramp-inspect');
-    expect(markdown).toContain('## Reported metrics');
-    expect(markdown).toContain('## Reported outcomes and statements');
-    const opinion = entry.resultStatementClaims.find((item) =>
-      item.text.includes('limited only by model-provider'),
-    )!;
-    expect(markdown.indexOf(opinion.text.trim())).toBeGreaterThan(
-      markdown.indexOf('## Reported outcomes and statements'),
-    );
-    for (const claim of entry.metricClaims) {
-      expect(markdown.indexOf(claim.text.trim()), claim.id).toBeLessThan(
-        markdown.indexOf('## Reported outcomes and statements'),
-      );
-    }
+    expect(markdown).toContain('## Reported observations');
+    expect(markdown).toContain('limited only by model-provider');
   });
 
   it('names the kind of every statement it groups outside the metrics', () => {

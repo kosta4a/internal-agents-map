@@ -54,9 +54,17 @@ primitives:
   desc: Recoverable K8s runners with a network proxy for credential injection
 - name: Intent-based routing
   desc: Routes model and environment by request intent, independent of the tool layer
+- {name: Start a session from a prompt, desc: 'A prompt creates an isolated pod with a checked-out repository, warm
+    build cache, sidecars, and a harness; the session streams its work back for watching, interrupting, or
+    redirecting'}
+- {name: Broker its own pull requests, desc: 'A session opens its own pull requests and watches its own checks'}
+- {name: Babysit the pull request, desc: 'A monitor sub-agent answers machine-review comments, fixes failing tests,
+    rebases on conflicts, and pings a person in Slack when a decision needs a human'}
 key_metrics:
 - More than 75,000 sessions created by 600 people in the month preceding the report
 - 70% of company PRs opened through Pinecone in the month preceding the report
+- '96% of engineering uses Pinecone; the majority of the company works in it every day'
+- Usage has tripled every month since April while costs fell
 lessons_learned:
 - Pinecone presents one entry point while a classifier chooses the repository, environment, harness, and model
   for the task.
@@ -147,6 +155,12 @@ evidence:
   primitives.2:
   - source_id: sierra-pinecone-source-1
     relation: supports
+  primitives.3:
+  - {source_id: sierra-pinecone-source-1, relation: supports, locator: 'Preserved content.md, line 44'}
+  primitives.4:
+  - {source_id: sierra-pinecone-source-1, relation: supports, locator: 'Preserved content.md, line 49'}
+  primitives.5:
+  - {source_id: sierra-pinecone-source-1, relation: supports, locator: 'Preserved content.md, lines 49, 104'}
   key_metrics.0:
   - source_id: sierra-pinecone-source-1
     relation: supports
@@ -155,6 +169,10 @@ evidence:
   - source_id: sierra-pinecone-source-1
     relation: supports
     locator: Preserved content.md, lines 138
+  key_metrics.2:
+  - {source_id: sierra-pinecone-source-1, relation: supports, locator: 'Preserved content.md, line 137'}
+  key_metrics.3:
+  - {source_id: sierra-pinecone-source-1, relation: supports, locator: 'Preserved content.md, line 139'}
   lessons_learned.0:
   - source_id: sierra-pinecone-source-1
     relation: supports
@@ -213,3 +231,61 @@ claim_metadata:
   key_metrics.1:
     metric_scope: Company PRs opened through Pinecone in the month preceding the report
     denominator: Sierra PRs opened in that month; not merged PRs
+  key_metrics.2:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Sierra reported the adoption shares in its engineering blog without a method.
+    valid_at: '2026'
+    reported_by: Sierra
+    metric_scope: Engineering use of Pinecone and company-wide daily use at report time
+  key_metrics.3:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Sierra reported monthly growth multiples and a cost trend without absolute figures or a method.
+    valid_at: '2026'
+    reported_by: Sierra
+    metric_scope: Pinecone usage growth since April and reported falling costs; no absolute figures published
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [sierra-pinecone-source-1, sierra-pinecone-source-2, sierra-pinecone-source-3]
+  workflow_scope: 'Employee prompt to a streamed cloud session with brokered pull requests'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.3, primitives.4], note: 'The three pre-existing primitives
+      are reusable mechanisms; the run is prompt to session to brokered pull request.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, primitives.5], note: 'Sessions stream to
+      the requester, who can watch, interrupt, or redirect; PR babysitting escalates to a person only when judgment
+      is required.'}
+    implementation: {state: reported, claim_paths: [architecture.model, architecture.harness, architecture.sandbox,
+      architecture.tool_access, architecture.knowledge, architecture.context_mgmt, architecture.credentials,
+      architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.5], note: 'The documented check is the babysitting loop:
+      watched CI checks, fixed failing tests, and answered machine-review comments.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
+      key_metrics.3]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials]}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: workflow,
+    primitives.4: workflow, primitives.5: validation}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'Pinecone sessions created
+      by Sierra employees in the month preceding the report'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Identical statement, figure, period, and scope as the
+      headline; both cite the same passage.'}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: 'Sierra pull requests opened
+      through Pinecone in the month preceding the report'}
+    key_metrics.2: {category: adoption-output, basis: reported-measurement, subject: 'Engineering adoption of
+      Pinecone and company-wide daily use'}
+    key_metrics.3: {category: adoption-output, basis: reported-measurement, subject: 'Pinecone usage growth since
+      April with reported falling costs'}

@@ -250,7 +250,7 @@ class BuildTests(unittest.TestCase):
 
     def test_page_content_pilot_is_complete_and_preserves_primitive_names(self) -> None:
         pilot = [record for record in self.records if record.get("page_content")]
-        self.assertEqual(len(pilot), 10)
+        self.assertEqual(len(pilot), len(self.records))
         catalog = build.normalize(self.records, self.companies)
         claims = {
             claim["field"]: claim

@@ -313,26 +313,16 @@ describe('a supporting system', () => {
 });
 
 describe('page-content pilot reading model', () => {
-  const ids = [
-    'github-qubot',
-    'notion-custom-agents',
-    'microsoft-prassistant',
-    'doordash-code-review',
-    'ycombinator-agent-infra',
-    'plaid-internal-mcp-server',
-    'spotify-honk-xirp',
-    'block-builderbot',
-    'posthog-stamphog',
-    'cloudflare-ai-stack',
-  ];
-
-  it('uses explicit workflow roles and preserves primitive names', () => {
-    for (const id of ids) {
-      const entry = entryView(catalog, id);
-      expect(entry.isPilot).toBe(true);
-      expect(entry.workflowScope).toBeTruthy();
-      expect(entry.workflowClaims.length).toBeGreaterThan(0);
-      for (const claim of entry.workflowClaims) expect(claim.displayName).toBeTruthy();
+  it('covers the whole catalog with explicit workflow roles', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      expect(entry.isPilot, approach.id).toBe(true);
+      const workflowReported = entry.coverageQuestions.workflow?.state === 'reported';
+      expect(entry.workflowClaims.length > 0, approach.id).toBe(workflowReported);
+      if (workflowReported) {
+        expect(entry.workflowScope, approach.id).toBeTruthy();
+        for (const claim of entry.workflowClaims) expect(claim.displayName, approach.id).toBeTruthy();
+      }
     }
     expect(entryView(catalog, 'doordash-code-review').mechanismClaims.map((claim) => claim.field)).toContain('primitives.0');
   });
@@ -347,10 +337,10 @@ describe('page-content pilot reading model', () => {
     expect(yc.lessonClaims.length).toBeGreaterThan(0);
   });
 
-  it('keeps legacy entries on their existing path', () => {
-    const legacy = entryView(catalog, 'replit-manager-agent');
-    expect(legacy.isPilot).toBe(false);
-    expect(legacy.researchOnlyClaims).toEqual([]);
+  it('leaves no record on the legacy path', () => {
+    for (const approach of catalog.approaches) {
+      expect(entryView(catalog, approach.id).isPilot, approach.id).toBe(true);
+    }
   });
 });
 
