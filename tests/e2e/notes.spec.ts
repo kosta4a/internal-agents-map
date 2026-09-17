@@ -146,9 +146,11 @@ test.describe('the Definitions guide', () => {
   test('explains scoped supervision and separates type from invocation', async ({ page }) => {
     await page.goto('/definitions#supervision');
     await expect(page.locator('#supervision')).toBeVisible();
-    await expect(page.locator('#supervision table tbody tr')).toHaveCount(5);
-    await expect(page.locator('#supervision')).toContainText('Level 2');
-    await expect(page.locator('#supervision')).toContainText('No level');
+    // Boundaries, structural types, and invocation modes each state their own table.
+    await expect(page.locator('#supervision .classification-table')).toHaveCount(3);
+    await expect(page.locator('#supervision table').first().locator('tbody tr')).toHaveCount(4);
+    await expect(page.locator('#supervision')).toContainText('Continuous steering');
+    await expect(page.locator('#supervision')).toContainText('Exception-only');
     await expect(page.locator('#supervision')).toContainText('Structural types');
     await expect(page.locator('#supervision')).toContainText('Invocation modes');
   });

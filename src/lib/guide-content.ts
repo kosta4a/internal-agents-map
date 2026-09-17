@@ -410,11 +410,10 @@ export const SUPERVISION_DEFINITIONS = {
     '. Levels 0–1 describe manual work and discrete assistance, outside the internal-agent workflows assessed here.',
   ] as TextBlock,
   rows: [
-    { id: 'continuous-steering', label: 'Continuous steering', level: 'Level 2', attention: 'A person pairs with the agent throughout execution.', meaning: 'The person repeatedly guides the work as it proceeds.' },
-    { id: 'work-product-review', label: 'Work-product review', level: 'Level 3', attention: 'A person reviews the draft or implementation.', meaning: 'The agent produces work, but review returns to the produced artifact.' },
-    { id: 'outcome-review', label: 'Outcome review', level: 'Level 4', attention: 'A person evaluates tests, behavior, or outcomes.', meaning: 'The normal review boundary is the result rather than routine implementation inspection.' },
-    { id: 'exception-only', label: 'Exception-only', level: 'Level 5', attention: 'A person returns when the system raises an exception.', meaning: 'A normal successful run does not require routine human review.' },
-    { id: 'unknown', label: 'Unknown', level: 'No level', attention: 'The evidence does not locate the attention boundary.', meaning: 'The catalog does not infer a level from other fields.' },
+    { id: 'continuous-steering', label: 'Continuous steering', level: '2', attention: 'A person pairs with the agent throughout execution.', meaning: 'The person repeatedly guides the work as it proceeds.' },
+    { id: 'work-product-review', label: 'Work-product review', level: '3', attention: 'A person reviews the draft or implementation.', meaning: 'The agent produces work, but review returns to the produced artifact.' },
+    { id: 'outcome-review', label: 'Outcome review', level: '4', attention: 'A person evaluates tests, behavior, or outcomes.', meaning: 'The normal review boundary is the result rather than routine implementation inspection.' },
+    { id: 'exception-only', label: 'Exception-only', level: '5', attention: 'A person returns when the system raises an exception.', meaning: 'A normal successful run does not require routine human review.' },
   ] as readonly SupervisionDefinition[],
   limits: [
     'Attention is separate from authority. A background run can still lack permission to publish, merge, spend money, or act in production. A level also does not state how long the system runs unattended.',
@@ -511,7 +510,7 @@ export const DEFINITIONS_CHART = {
   ] as readonly ChartDimension[],
   legend: { catalog: 'Catalog entry', reference: 'Reference example' },
   verticalAxis: { from: 'Standard capabilities', to: 'Company-specific capabilities' },
-  horizontalAxis: { from: 'One workflow', to: 'Many workflows' },
+  horizontalAxis: { from: 'Many workflows', to: 'One workflow' },
   cells: {
     specialized: { scope: 'Company-specific · focused', title: 'Specialized internal agents' },
     shared: {
@@ -523,7 +522,7 @@ export const DEFINITIONS_CHART = {
   } as Record<string, ChartCell>,
   emptyCell: 'No selected example currently fits.',
   caption: [
-    'Illustrative placements based on public descriptions. Blue circles are catalog entries; pink stars are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
+    'Illustrative placements based on public descriptions. Blue circles are catalog entries; green hexagons are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
   ] as TextBlock,
   body: [
     [
@@ -635,8 +634,8 @@ export const DEFINITIONS_TERMS = {
         { strong: 'Autonomy' },
         ' describes the decisions and actions an agent can take without human approval.',
       ],
-      ['Describe that authority concretely:'],
     ] as readonly TextBlock[],
+    lead: ['Describe that authority concretely:'] as TextBlock,
     quote:
       'A Minion can write code and run checks on its own. Production pull requests require human review.',
     closing: [

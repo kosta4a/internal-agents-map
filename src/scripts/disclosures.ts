@@ -7,6 +7,9 @@ import { animate } from 'motion';
 const TOGGLE_SECONDS = 0.28;
 const TOGGLE_EASE = [0.3, 0.7, 0.3, 1] as const;
 
+/** How to drive a disclosure that has already been given its motion. */
+const toggles = new WeakMap<HTMLDetailsElement, (opening: boolean) => void>();
+
 /** Readers who ask for less motion get the browser's own instant toggle. */
 function reducedMotion(): boolean {
   return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -33,6 +36,18 @@ function marker(details: HTMLDetailsElement): HTMLElement | null {
   return details.querySelector<HTMLElement>(':scope > summary > .icon');
 }
 
+/**
+ * The open disclosures that must close when this one opens.
+ * A group says so by carrying `data-exclusive`; without it, each opens alone.
+ */
+function crowd(details: HTMLDetailsElement): HTMLDetailsElement[] {
+  const group = details.closest('[data-exclusive]');
+  if (!group) return [];
+  return [...group.querySelectorAll<HTMLDetailsElement>('details[open]')].filter(
+    (other) => other !== details,
+  );
+}
+
 /** Animate one disclosure's own height, so its contents slide into place. */
 function start(details: HTMLDetailsElement, chevron: HTMLElement): void {
   let height: { stop: () => void; finished: Promise<unknown> } | undefined;
@@ -40,14 +55,7 @@ function start(details: HTMLDetailsElement, chevron: HTMLElement): void {
   /** Which toggle owns the element, so a stale one cannot clear a live animation. */
   let generation = 0;
 
-  details.addEventListener('click', (event) => {
-    const summary = event.target instanceof Element ? event.target.closest('summary') : null;
-    if (!summary || summary.parentElement !== details) return;
-    if (reducedMotion()) return;
-    // The element toggles on its own once the animation has run.
-    event.preventDefault();
-
-    const opening = !details.open;
+  const run = (opening: boolean): void => {
     // Read where it is now, mid-animation included, before clearing that height.
     const from = details.getBoundingClientRect().height;
     height?.stop();
@@ -81,6 +89,23 @@ function start(details: HTMLDetailsElement, chevron: HTMLElement): void {
       { rotate: opening ? 180 : 0 },
       { duration: TOGGLE_SECONDS, ease: TOGGLE_EASE },
     );
+  };
+  toggles.set(details, run);
+
+  details.addEventListener('click', (event) => {
+    const summary = event.target instanceof Element ? event.target.closest('summary') : null;
+    if (!summary || summary.parentElement !== details) return;
+
+    const opening = !details.open;
+    if (reducedMotion()) {
+      // The browser toggles this one; its group still has to give way.
+      if (opening) for (const other of crowd(details)) other.open = false;
+      return;
+    }
+    // The element toggles on its own once the animation has run.
+    event.preventDefault();
+    if (opening) for (const other of crowd(details)) toggles.get(other)?.(false);
+    run(opening);
   });
 }
 

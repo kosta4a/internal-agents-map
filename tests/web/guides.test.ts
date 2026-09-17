@@ -12,13 +12,12 @@ import { canonicalUrl, guidePath } from '../../src/lib/routes';
 import { SUPERVISION_DEFINITIONS } from '../../src/lib/guide-content';
 
 describe('the supervision definitions', () => {
-  it('maps each attention boundary to one scoped level and keeps unknown unassigned', () => {
+  it('maps each attention boundary to one scoped level', () => {
     expect(SUPERVISION_DEFINITIONS.rows.map(({ id, level }) => [id, level])).toEqual([
-      ['continuous-steering', 'Level 2'],
-      ['work-product-review', 'Level 3'],
-      ['outcome-review', 'Level 4'],
-      ['exception-only', 'Level 5'],
-      ['unknown', 'No level'],
+      ['continuous-steering', '2'],
+      ['work-product-review', '3'],
+      ['outcome-review', '4'],
+      ['exception-only', '5'],
     ]);
   });
 });
