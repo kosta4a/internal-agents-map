@@ -103,18 +103,34 @@ test.describe('the directory with javascript', () => {
   });
 
   for (const shortcut of ['Meta+k', 'Control+k']) {
-    test(`${shortcut} focuses search and selects the existing query`, async ({ page }) => {
+    test(`${shortcut} opens the palette and types into it`, async ({ page }) => {
       await page.goto('/?q=github');
       await expect(page.locator('#filters')).toBeVisible();
+      await expect(page.locator('#palette')).toBeHidden();
       await page.keyboard.press(shortcut);
-      await expect(page.locator('#q')).toBeFocused();
-      await expect(page.locator('#q')).toHaveValue('github');
+      await expect(page.locator('#palette')).toBeVisible();
+      await expect(page.locator('#palette-input')).toBeFocused();
       await page.keyboard.type('notion');
-      await expect(page.locator('#q')).toHaveValue('notion');
+      await expect(page.locator('#palette-input')).toHaveValue('notion');
+      // The letter reaches the field rather than closing what it opened.
       await page.keyboard.press('k');
-      await expect(page.locator('#q')).toHaveValue('notionk');
+      await expect(page.locator('#palette-input')).toHaveValue('notionk');
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#palette')).toBeHidden();
     });
   }
+
+  test('the palette opens from the search box and reaches every kind of page', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.search-box').click();
+    await expect(page.locator('#palette')).toBeVisible();
+    for (const group of ['catalog', 'notes', 'definitions']) {
+      await expect(page.locator(`.palette-group[data-group="${group}"]`)).toBeVisible();
+    }
+    await page.locator('#palette-input').fill('stripe');
+    await expect(page.locator('.palette-group[data-group="definitions"]')).toBeHidden();
+    await expect(page.locator('.palette-item:not([hidden])').first()).toContainText('Stripe');
+  });
 
   test('searches the cards and records the search in the URL', async ({ page }) => {
     await page.goto('/');

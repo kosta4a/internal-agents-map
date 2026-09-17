@@ -55,7 +55,7 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  width: min(396px, calc(100% - 32px));
+  width: min(296px, calc(100% - 32px));
 }
 #filters .search-row {
   display: grid;
@@ -74,7 +74,7 @@
   gap: 8px;
   width: 100%;
   min-width: 0;
-  padding: 8px 16px 8px 12px;
+  padding: 8px 10px 8px 14px;
   border: 0;
   border-radius: 999px;
   color: #fff;
@@ -226,15 +226,19 @@
   cursor: pointer;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 3 6 6m0-6-6 6' fill='none' stroke='%23b8b8b6' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E") center / 12px 12px no-repeat;
 }
-#filters .search-shortcut {
+#filters .search-shortcut,
+.search-launcher .search-shortcut,
+.palette-hint {
   flex: none;
   margin-left: auto;
-  padding: 2px 6px;
-  border: .5px solid rgba(255, 255, 255, .25);
-  border-radius: 4px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .1);
   color: rgba(255, 255, 255, .55);
   font: inherit;
   font-size: 12px;
+  line-height: 1;
   white-space: nowrap;
 }
 .empty-state {
@@ -270,9 +274,11 @@
   cursor: pointer;
 }
 /* No container to shade: hovering lightens everything the card says by a step. */
+@media (hover: hover) {
 .entry-box:hover h3 a { color: var(--sand-11); }
 .entry-box:hover .entry-summary { color: var(--sand-9); }
 .entry-box:hover .tag { color: var(--sand-9); }
+}
 /* The heading link covers the container, so the whole card opens the entry. */
 .entry-box h3 a::after {
   content: "";
@@ -371,16 +377,22 @@
   text-decoration: none;
 }
 .button .icon { flex: none; }
+@media (hover: hover) {
 .button:hover { background: var(--sand-4); }
+}
 /* The action that carries the reader onward. */
 .button-solid {
   background: var(--sand-12);
   color: var(--sand-1);
 }
 /* Already dark, so this one lifts toward the page instead of away from it. */
+@media (hover: hover) {
 .button-solid:hover { background: var(--sand-11); }
+}
 
+@media (hover: hover) {
 .page-back:hover { background: var(--sand-4); }
+}
 /* The bar that closes an entry sits below the last section, not above one. */
 .page-back-end {
   margin: 24px 0 0;
@@ -388,7 +400,9 @@
   color: var(--sand-1);
 }
 /* Already dark, so this one lifts toward the page instead of away from it. */
+@media (hover: hover) {
 .page-back-end:hover { background: var(--sand-11); }
+}
 .entry-header { padding-bottom: 8px; }
 .entry-header h1 {
   margin-top: 12px;
@@ -472,10 +486,11 @@
 .claim-marked > :not(.icon) { grid-column: 2; }
 /* A label or an attribution names the claim above it, so the mark stays on the
    claim's own line rather than beside the line that introduces it. */
-.claim-marked > .claim-label,
-.claim-marked > .claim-attribution { grid-column: 1 / -1; grid-row: 1; }
-.claim-marked:has(> .claim-label, > .claim-attribution) > .icon,
-.claim-marked:has(> .claim-label, > .claim-attribution) > .claim-text { grid-row: 2; }
+.claim-marked > .claim-label { grid-column: 1 / -1; grid-row: 1; }
+.claim-marked:has(> .claim-label) > .icon,
+.claim-marked:has(> .claim-label) > .claim-text { grid-row: 2; }
+/* What kind of statement this is, said before the statement itself. */
+.claim-attribution { color: var(--sand-10); }
 /* The observation takes its own row, starting at the mark's edge. */
 .claim-marked > .observed { grid-column: 1 / -1; margin-top: 0; }
 .entry-section h3 {
@@ -789,6 +804,8 @@
 }
 .related-card {
   position: relative;
+  /* A list item's stacking margin would push a card out of its grid row. */
+  margin: 0;
   display: grid;
   gap: 4px;
   cursor: pointer;
@@ -816,7 +833,9 @@
   inset: 0;
   border-radius: 14px;
 }
+@media (hover: hover) {
 .related-card:hover a { color: var(--sand-11); }
+}
 .doc-links {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -852,7 +871,9 @@
   inset: 0;
   border-radius: 14px;
 }
+@media (hover: hover) {
 .doc-card:hover a { color: var(--sand-11); }
+}
 .resource-links {
   display: flex;
   flex-wrap: wrap;
@@ -940,4 +961,191 @@
   border-bottom: .5px solid var(--sand-6);
   padding: 10px 12px;
   line-height: 20px;
+}
+
+.search-launcher {
+  position: fixed;
+  z-index: 10;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(296px, calc(100% - 32px));
+  padding: 8px 10px 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(33, 32, 28, .72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 14px rgba(33, 32, 28, .1);
+  font-size: 14px;
+  text-align: left;
+}
+.search-launcher .icon { flex: none; color: rgba(255, 255, 255, .55); }
+.search-launcher > span { flex: 1; min-width: 0; color: rgba(255, 255, 255, .55); }
+@media (hover: hover) {
+.search-launcher:hover { background: rgba(33, 32, 28, .84); }
+}
+
+/* The command palette: a dark sheet over the page, filtering links already here. */
+.palette {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding: 256px 16px 16px;
+}
+.palette-scrim { position: fixed; inset: 0; background: rgba(0, 0, 0, .53); }
+.palette-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(680px, 100%);
+  max-height: min(70vh, 620px);
+  overflow: hidden;
+  border-radius: 16px;
+  border: .5px solid rgba(255, 255, 255, .14);
+  background: rgba(20, 19, 17, .72);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  color: rgba(255, 255, 255, .92);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+}
+/* The rule under the search runs the full width, as the reference does. */
+.palette-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: .5px solid rgba(255, 255, 255, .12);
+}
+.palette-search .icon { flex: none; color: rgba(255, 255, 255, .45); }
+#palette-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+}
+#palette-input::placeholder { color: rgba(255, 255, 255, .4); }
+#palette-input::-webkit-search-cancel-button { display: none; }
+.palette-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; }
+.palette-facet { position: relative; }
+.palette-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .78);
+  font-size: 14px;
+}
+@media (hover: hover) {
+.palette-pill:hover { background: rgba(255, 255, 255, .14); }
+}
+.palette-pill.is-on { background: rgba(255, 255, 255, .22); color: #fff; }
+.palette-pill .icon { width: 14px; height: 14px; }
+.palette-pill-count {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .22);
+  font-size: 12px;
+  text-align: center;
+}
+.palette-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1;
+  min-width: 220px;
+  max-height: 260px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  border-radius: 12px;
+  border: .5px solid rgba(255, 255, 255, .14);
+  background: rgba(28, 27, 24, .92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+}
+.palette-menu li + li { margin-top: 2px; }
+.palette-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: rgba(255, 255, 255, .8);
+  font-size: 14px;
+  text-align: left;
+}
+@media (hover: hover) {
+.palette-option:hover { background: rgba(255, 255, 255, .1); }
+}
+.palette-option .icon { flex: none; width: 16px; height: 16px; opacity: 0; }
+.palette-option[aria-pressed="true"] { color: #fff; }
+.palette-option[aria-pressed="true"] .icon { opacity: 1; }
+.palette-results { overflow-y: auto; padding: 0 8px 8px; }
+.palette-results, .palette-menu { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .24) transparent; }
+.palette-results::-webkit-scrollbar, .palette-menu::-webkit-scrollbar { width: 10px; }
+.palette-results::-webkit-scrollbar-track, .palette-menu::-webkit-scrollbar-track { background: transparent; }
+.palette-results::-webkit-scrollbar-thumb, .palette-menu::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .24);
+  background-clip: content-box;
+}
+.palette-results::-webkit-scrollbar-thumb:hover, .palette-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, .4);
+  background-clip: content-box;
+}
+.palette-group-name {
+  margin: 0;
+  padding: 12px 8px 4px;
+  color: rgba(255, 255, 255, .45);
+  font-size: 14px;
+}
+.palette-group ul { list-style: none; margin: 0; padding: 0; }
+.palette-group li + li { margin-top: 4px; }
+.palette-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, .92);
+  font-size: 14px;
+  text-decoration: none;
+}
+.palette-item[aria-selected="true"] { background: rgba(255, 255, 255, .1); }
+@media (hover: hover) {
+  .palette-item:hover { background: rgba(255, 255, 255, .1); }
+}
+.palette-item-title { min-width: 0; }
+.palette-item-detail { flex: none; color: rgba(255, 255, 255, .45); }
+.palette-empty { padding: 24px 8px; color: rgba(255, 255, 255, .45); font-size: 14px; }
+@media (max-width: 800px) {
+  .palette { padding: 16px; align-content: center; }
+  .palette-panel { max-height: calc(100vh - 32px); }
 }

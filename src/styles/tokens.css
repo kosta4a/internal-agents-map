@@ -133,7 +133,7 @@ details[open] > summary::before { transform: rotate(90deg); }
   }
   /* A press answers at once, so the control stays attached to the pointer. */
   .button, .page-back { transition-property: color, background-color, transform; }
-  .button:active, .page-back:active { transform: scale(.99); transition-duration: 60ms; }
+  .button:active, .page-back:active { transform: scale(.97); transition-duration: 60ms; }
   :focus-visible { transition: outline-offset var(--hover-in) var(--ease-out); }
   .link-arrow { transition: transform var(--hover-in) var(--ease-out); }
   a:hover .link-arrow { transform: translate(1px,-1px); }

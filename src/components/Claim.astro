@@ -43,8 +43,8 @@ const attribution =
       {claim.label}{showKind && <span class="claim-kind"> ({claim.kindLabel.toLowerCase()})</span>}
     </span>
   )}
-  {attribution && <p class="claim-attribution">{attribution}</p>}
   <p class="claim-text">
+    {attribution && <><span class="claim-attribution">{attribution}:</span>{' '}</>}
     {isHeadline ? <>“<Arrowed text={claim.text} />”</> : <Arrowed text={claim.text} />}
   </p>
   {claim.contradicting.length > 0 && (

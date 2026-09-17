@@ -45,7 +45,7 @@ const graph = structuredData([
     <form id="filters" hidden role="search" aria-label="Filter catalog">
       <div class="search-row">
         <div class="search-field">
-          <div class="search-box">
+          <div class="search-box" data-palette-open>
             <label class="search-label" for="q">
               <svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="7" cy="7" r="4.5" />
@@ -63,11 +63,12 @@ const graph = structuredData([
               aria-controls="suggestions"
               aria-autocomplete="list"
               aria-describedby="search-help"
-              placeholder="Company, agent, work, type, invocation, or supervision…"
+              placeholder="Search anything"
               autocomplete="off"
+              tabindex="-1"
               aria-keyshortcuts="Meta+K Control+K"
             />
-            <kbd id="search-shortcut" class="search-shortcut" aria-hidden="true">Ctrl K</kbd>
+            <kbd id="search-shortcut" class="search-shortcut" aria-hidden="true">⌘ K</kbd>
           </div>
           <ul id="suggestions" class="suggestions" role="listbox" aria-label="Filter suggestions" hidden></ul>
         </div>
@@ -95,5 +96,7 @@ const graph = structuredData([
 <script>
   import { startDirectory } from '../scripts/directory';
 
-  startDirectory();
+  // The router builds this page again on every visit, so the directory is
+  // wired per build rather than once at first load.
+  document.addEventListener('astro:page-load', () => startDirectory());
 </script>

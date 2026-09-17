@@ -140,6 +140,7 @@
   z-index: 10;
 }
 .skip-link:focus { top: 12px; }
+.page-shell { padding-bottom: 48px; }
 footer {
   color: var(--sand-10);
   font-size: 14px;

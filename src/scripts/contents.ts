@@ -38,6 +38,9 @@ function heading(section: Element): string | null {
 }
 
 /** Build the rail, and keep it in step with what the reader can see. */
+/** The observer of the page on show, stopped when the next page builds. */
+let watching: IntersectionObserver | undefined;
+
 export function startContents(): void {
   const rail = document.getElementById('contents');
   const main = document.getElementById('main');
@@ -68,6 +71,7 @@ export function startContents(): void {
   rail.hidden = false;
 
   const seen = new Set<Element>();
+  watching?.disconnect();
   const observer = new IntersectionObserver(
     (records) => {
       for (const record of records) {
@@ -83,4 +87,5 @@ export function startContents(): void {
     { rootMargin: '-8% 0px -8% 0px', threshold: 0 },
   );
   for (const entry of entries) for (const target of entry.targets) observer.observe(target);
+  watching = observer;
 }

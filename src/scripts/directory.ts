@@ -16,12 +16,16 @@ import {
   toSelection,
 } from '../lib/search';
 
+/** The directory of the page on show, rebuilt whenever the router swaps one in. */
+let live: { fromUrl: () => void; legacy: () => void } | null = null;
+let claimed = false;
+
 /** The query parameters the directory reads and writes. They are part of the URL contract. */
 const CONTROL_KEYS = ['q', ...FACET_KEYS] as const;
 
 /** How long a card takes to collapse out of the list, or expand back into it. */
-const COLLAPSE_SECONDS = 0.32;
-const COLLAPSE_EASE = [0.3, 0.7, 0.3, 1] as const;
+const COLLAPSE_SECONDS = 0.24;
+const COLLAPSE_EASE = [0.77, 0, 0.175, 1] as const;
 /** How long the item tally takes to count to a new total. */
 const COUNT_SECONDS = 0.3;
 
@@ -204,11 +208,10 @@ export function startDirectory(): void {
     location.replace(target);
     return;
   }
-  // An old link can also arrive as a fragment change inside this page.
-  window.addEventListener('hashchange', () => {
+  const legacy = (): void => {
     const next = legacyTarget(location.hash, ids, sources);
     if (next) location.replace(next);
-  });
+  };
 
   const form = document.getElementById('filters');
   const results = document.getElementById('results');
@@ -216,18 +219,6 @@ export function startDirectory(): void {
   if (!(form instanceof HTMLFormElement) || !results || !empty || cards.length === 0) return;
 
   const input = element('q', HTMLInputElement);
-  const shortcut = document.getElementById('search-shortcut');
-  if (shortcut) shortcut.textContent = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
-  document.addEventListener('keydown', (event) => {
-    if (
-      event.defaultPrevented || event.isComposing || event.repeat ||
-      event.altKey || event.shiftKey || event.metaKey === event.ctrlKey ||
-      event.key.toLowerCase() !== 'k'
-    ) return;
-    event.preventDefault();
-    input.focus();
-    input.select();
-  });
   const chips = element('chips', HTMLUListElement);
   const listbox = element('suggestions', HTMLUListElement);
   const vocabulary = readVocabulary();
@@ -453,13 +444,20 @@ export function startDirectory(): void {
     selected = [];
     commit();
   });
-  window.addEventListener('popstate', () => {
+  const fromUrl = (): void => {
     clearTimeout(searchTimer);
     closeSuggestions();
     readUrl();
     renderChips();
     apply();
-  });
+  };
+  live = { fromUrl, legacy };
+  if (!claimed) {
+    claimed = true;
+    // An old link can also arrive as a fragment change inside this page.
+    window.addEventListener('hashchange', () => live?.legacy());
+    window.addEventListener('popstate', () => live?.fromUrl());
+  }
 
   form.hidden = false;
   readUrl();
