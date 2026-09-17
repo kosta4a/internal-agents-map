@@ -184,7 +184,6 @@ export function startPalette(): void {
     palette.hidden = true;
     // Back in the place it left, never shifted by a transform of its own.
     for (const bar of bars) fadeBar(bar, true);
-    document.documentElement.classList.remove('palette-open');
     if (opener instanceof HTMLElement) opener.focus();
   };
 
@@ -215,7 +214,6 @@ export function startPalette(): void {
     if (!palette.hidden) return;
     opener = document.activeElement;
     palette.hidden = false;
-    document.documentElement.classList.add('palette-open');
     apply();
     input.focus();
     input.select();
@@ -283,6 +281,10 @@ export function startPalette(): void {
 
   for (const dismiss of palette.querySelectorAll('[data-palette-dismiss]')) {
     dismiss.addEventListener('click', close);
+    // The page behind holds still without hiding its overflow, which would drop
+    // every sticky element back to where it would sit on an unscrolled page.
+    dismiss.addEventListener('wheel', (event) => event.preventDefault(), { passive: false });
+    dismiss.addEventListener('touchmove', (event) => event.preventDefault(), { passive: false });
   }
   palette.addEventListener('click', (event) => {
     if (event.target instanceof Element && !event.target.closest('.palette-facet')) closeMenus();

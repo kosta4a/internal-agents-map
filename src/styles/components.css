@@ -1145,8 +1145,6 @@
 .palette-item-title { min-width: 0; }
 .palette-item-detail { flex: none; color: rgba(255, 255, 255, .45); }
 .palette-empty { padding: 24px 8px; color: rgba(255, 255, 255, .45); font-size: 14px; }
-/* The page behind the palette holds still while it is open. */
-.palette-open, .palette-open body { overflow: hidden; }
 @media (max-width: 800px) {
   .palette { padding: 16px; align-content: center; }
   .palette-panel { max-height: calc(100vh - 32px); }
