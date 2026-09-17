@@ -511,7 +511,7 @@ export const DEFINITIONS_CHART = {
   ] as readonly ChartDimension[],
   legend: { catalog: 'Catalog entry', reference: 'Reference example' },
   verticalAxis: { from: 'Standard capabilities', to: 'Company-specific capabilities' },
-  horizontalAxis: { from: 'One workflow', to: 'Many workflows' },
+  horizontalAxis: { from: 'Many workflows', to: 'One workflow' },
   cells: {
     specialized: { scope: 'Company-specific · focused', title: 'Specialized internal agents' },
     shared: {
