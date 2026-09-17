@@ -117,6 +117,15 @@ test.describe('the directory with javascript', () => {
       await expect(page.locator('#palette-input')).toHaveValue('notionk');
       await page.keyboard.press('Escape');
       await expect(page.locator('#palette')).toBeHidden();
+      // A close leaves its animation's fill behind; the next open must clear it.
+      await page.keyboard.press(shortcut);
+      await expect(page.locator('#palette')).toBeVisible();
+      await expect
+        .poll(
+          () => page.evaluate(() => getComputedStyle(document.getElementById('palette')!).opacity),
+          { timeout: 2000 },
+        )
+        .toBe('1');
     });
   }
 

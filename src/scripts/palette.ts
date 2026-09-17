@@ -187,6 +187,9 @@ export function startPalette(): void {
     if (opener instanceof HTMLElement) opener.focus();
   };
 
+  /** The closing animation, stopped if the palette opens again before its fill is gone. */
+  let leaving: { stop: () => void; finished: Promise<unknown> } | undefined;
+
   const close = (): void => {
     if (palette.hidden) return;
     closeMenus();
@@ -194,7 +197,7 @@ export function startPalette(): void {
       settle();
       return;
     }
-    const leaving = animate(
+    leaving = animate(
       palette,
       { opacity: [1, 0] },
       { duration: SHUT_SECONDS, ease: EASE },
@@ -212,6 +215,9 @@ export function startPalette(): void {
 
   const open = (): void => {
     if (!palette.hidden) return;
+    // A finished close keeps its fill on the palette and would hide this open.
+    leaving?.stop();
+    palette.style.removeProperty('opacity');
     opener = document.activeElement;
     palette.hidden = false;
     apply();
