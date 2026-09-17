@@ -43,19 +43,16 @@
   min-width: 0;
 }
 #filters input::placeholder { color: rgba(255, 255, 255, .72); }
-/* The search field floats over the catalog near the bottom of the window. */
+/* Local directory search stays beside the collection it filters. */
 #filters {
-  position: fixed;
+  position: relative;
   z-index: 10;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  width: min(296px, calc(100% - 32px));
+  width: 100%;
 }
 #filters .search-row {
   display: grid;
@@ -1148,3 +1145,10 @@
   .palette { padding: 16px; align-content: center; }
   .palette-panel { max-height: calc(100vh - 32px); }
 }
+
+/* Collection navigation uses the existing text-link and spacing vocabulary. */
+.collection-nav { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 24px; font-size: 14px; }
+.collection-nav a[aria-current="page"] { font-weight: 600; text-decoration-thickness: 2px; }
+.collection-heading { margin-top: 32px; }
+#search-all { display: inline-block; margin: 12px 0 24px; }
+#search-all[hidden] { display: none; }

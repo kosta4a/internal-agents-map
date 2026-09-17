@@ -206,3 +206,19 @@ The build writes the website to `dist/`, which Git ignores. Do not commit websit
 Vercel builds and checks the same artifact for every push, and a merge to `main` deploys it to
 `https://internal-agents.com/`. See [website maintenance and delivery](docs/site.md) for the
 hosting rules, preview deployments, delivery checks, and rollback.
+
+## Agents and infrastructure
+
+The map maintains two collections. Agents perform identifiable work for internal
+teams; Infrastructure supplies reusable execution, orchestration, or tool access.
+Both retain structured, source-backed records. Notes compare lessons across cases.
+Choose the subject before assigning workflow claims or metrics: a task-performing
+system remains an agent even when it orchestrates subagents. A family requires
+independently useful constituent agents. Sandbox detail alone does not establish a
+platform. Attribute downstream agent results to their actual subject and author
+`built-on` only when a source establishes the dependency.
+
+The homepage counts agents; the Infrastructure index keeps supporting implementations
+discoverable. Full JSON exports include both collections, identified by derived
+`catalog_section`. Existing detail URLs and anchors remain stable. See the
+[schema migration](data/schema.md#collection-migration-catalog-7-compact-index-3).

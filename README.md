@@ -28,52 +28,73 @@ undocumented details stay unknown.
 
 <!-- BEGIN OVERVIEW -->
 
-**Current map: 40 approaches across 35 organizations, backed by 107 sources and 774 evidence-linked claims.**
+**Current map: 43 agents across 34 organizations, plus 13 infrastructure records. The complete catalog is backed by 109 distinct sources and 900 evidence-linked claims.**
 
-## Overview
+## Agents
 
 | Organization | Approach | Type | Work |
 | --- | --- | --- | --- |
-| Airbnb | [Airchat (airchat-cli)](docs/landscape.md#airbnb-airchat) | platform | coding, code-review |
+| Airbnb | [Datako](docs/landscape.md#airbnb-datako) | agent | data |
+| Airbnb | [Pascal](docs/landscape.md#airbnb-pascal) | agent | research |
 | Atlassian | [Rovo Dev (RovoDev)](docs/landscape.md#atlassian-rovo-dev) | agent | coding, code-review |
-| Block | [Builderbot](docs/landscape.md#block-builderbot) | orchestration-system | coding, code-review |
-| Brex | [Internal Agent Platform](docs/landscape.md#brex-agent-platform) | platform | finance-ops, support, customer-success |
-| Cloudflare | [Internal AI engineering stack](docs/landscape.md#cloudflare-ai-stack) | platform | coding, code-review |
-| Coinbase | [Forge / Mux](docs/landscape.md#coinbase-forge-mux) | agent-system | coding, code-review |
-| Databricks | [coSTAR and internal engineering agents](docs/landscape.md#databricks-costar) | agent-system | coding, code-review, on-call |
+| Block | [Builderbot](docs/landscape.md#block-builderbot) | agent | coding, code-review |
+| Brex | [Collections response agent](docs/landscape.md#brex-collections) | agent | finance-ops |
+| Brex | [Dispute preparation agent](docs/landscape.md#brex-disputes) | agent | finance-ops |
+| Brex | [Onboarding decision system](docs/landscape.md#brex-onboarding) | agent | finance-ops |
+| Brex | [Support quality agent](docs/landscape.md#brex-support-qa) | agent | support |
+| Cloudflare | [AI Code Reviewer](docs/landscape.md#cloudflare-code-reviewer) | agent | code-review |
+| Coinbase | [Forge](docs/landscape.md#coinbase-forge-mux) | agent | coding, code-review |
 | Domu | [Clementino](docs/landscape.md#domu-clementino) | agent | support, finance-ops, coding, recruitment, customer-success |
 | DoorDash | [AI Code Review Agent](docs/landscape.md#doordash-code-review) | agent | code-review |
-| DoorDash | [Flux / Agentic AI Platform](docs/landscape.md#doordash-flux) | platform | code-review, coding, ci-triage, on-call, maintenance, data |
-| Dropbox | [Nova](docs/landscape.md#dropbox-nova) | platform | coding, ci-triage, on-call, maintenance |
+| DoorDash | [DataExplorer](docs/landscape.md#doordash-dataexplorer) | agent | data |
+| Dropbox | [Deflaker](docs/landscape.md#dropbox-deflaker) | agent | coding |
 | Flex | [AI Investigation Agent](docs/landscape.md#flex-investigation-agent) | agent | finance-ops, on-call, coding |
 | GitHub | [Qubot](docs/landscape.md#github-qubot) | agent | data |
-| Harvey | [Spectre](docs/landscape.md#harvey-spectre) | platform | coding, code-review, on-call, security |
+| Harvey | [Security operations agents](docs/landscape.md#harvey-security-operations) | agent-system | security |
 | HubSpot | [Sidekick](docs/landscape.md#hubspot-sidekick) | agent | code-review |
 | Linear | [Linear Agent](docs/landscape.md#linear-agent) | agent | support, customer-success, coding |
 | Microsoft | [AI-powered code review assistant](docs/landscape.md#microsoft-prassistant) | agent | code-review |
 | monday.com | [Sphera / Atlas / Morphex](docs/landscape.md#monday-sphera-atlas-morphex) | agent-system | coding, code-review |
-| Notion | [Custom Agents](docs/landscape.md#notion-custom-agents) | platform | support, finance-ops, recruitment, security |
+| Notion | [Internal bug-triage agent](docs/landscape.md#notion-bug-triage) | agent | maintenance |
+| Notion | [Scruff](docs/landscape.md#notion-scruff) | agent | security |
 | OpenAI | [Agentic software factory](docs/landscape.md#openai-software-factory) | agent-system | coding, code-review, ci-triage, ops |
 | OpenAI | [Sevbot](docs/landscape.md#openai-sevbot) | agent | on-call |
 | Plaid | [AI Annotator](docs/landscape.md#plaid-ai-annotator) | agent | data |
 | Plaid | [Fix My Connection](docs/landscape.md#plaid-fix-my-connection) | agent | ops, maintenance |
-| Plaid | [Internal MCP server](docs/landscape.md#plaid-internal-mcp-server) | supporting-pattern | coding |
 | PostHog | [StampHog](docs/landscape.md#posthog-stamphog) | agent | code-review |
 | Ramp | [Inspect](docs/landscape.md#ramp-inspect) | agent | coding, code-review, on-call |
-| Replit | [Manager agent (agent-of-agents)](docs/landscape.md#replit-manager-agent) | orchestration-system | coding, code-review, support, research, data |
+| Replit | [Manager agent (agent-of-agents)](docs/landscape.md#replit-manager-agent) | agent | coding, code-review, support, research, data |
 | Salesforce | [Slackbot](docs/landscape.md#salesforce-slackbot) | agent | support, customer-success, ops |
 | Sentry | [Junior](docs/landscape.md#sentry-junior) | agent | coding, code-review, support, on-call |
-| Shopify | [Aquifer / River](docs/landscape.md#shopify-internal-agents) | platform | coding, code-review |
+| Shopify | [River](docs/landscape.md#shopify-river) | agent | coding |
 | Sierra | [Pinecone](docs/landscape.md#sierra-pinecone) | agent | coding, code-review, support, research, data |
-| Slack | [Multi-agent context system](docs/landscape.md#slack-context-system) | supporting-pattern | research |
-| Spotify | [Honk / Xirp](docs/landscape.md#spotify-honk-xirp) | agent-system | coding, migrations, code-review |
+| Slack | [Security investigation service](docs/landscape.md#slack-context-system) | agent | security |
+| Spotify | [Honk](docs/landscape.md#spotify-honk-xirp) | agent | coding, migrations, code-review |
 | Stripe | [Minions](docs/landscape.md#stripe-minions) | agent | coding, code-review |
-| StrongDM | [Software Factory](docs/landscape.md#strongdm-software-factory) | agent-system | coding |
+| StrongDM | [Software Factory](docs/landscape.md#strongdm-software-factory) | agent | coding |
 | Uber | [Internal coding agent (unnamed)](docs/landscape.md#uber-coding-agent) | agent | coding |
 | Uber | [uReview](docs/landscape.md#uber-ureview) | agent | code-review |
-| WorkOS | [Project Horizon](docs/landscape.md#workos-project-horizon) | platform | coding, code-review, security |
-| Y Combinator | [Internal agent infrastructure](docs/landscape.md#ycombinator-agent-infra) | platform | coding, ops |
+| WorkOS | [Project Horizon](docs/landscape.md#workos-project-horizon) | agent | coding, code-review, security |
+| Y Combinator | [Internal operations agent](docs/landscape.md#ycombinator-operations) | agent | ops, finance-ops |
 | Zup | [CodeGen](docs/landscape.md#zup-codegen) | agent | coding |
+
+## Infrastructure
+
+| Organization | Approach | Type | Work |
+| --- | --- | --- | --- |
+| Airbnb | [Airchat (airchat-cli)](docs/landscape.md#airbnb-airchat) | platform | coding, code-review |
+| Brex | [Internal Agent Platform](docs/landscape.md#brex-agent-platform) | platform | finance-ops, support, customer-success |
+| Cloudflare | [Internal AI engineering stack](docs/landscape.md#cloudflare-ai-stack) | platform | coding, code-review |
+| Coinbase | [Mux](docs/landscape.md#coinbase-mux) | platform | coding |
+| Databricks | [coSTAR](docs/landscape.md#databricks-costar) | supporting-pattern | coding, code-review, on-call |
+| DoorDash | [Analytics AI Marketplace](docs/landscape.md#doordash-ai-marketplace) | platform | data |
+| DoorDash | [Flux](docs/landscape.md#doordash-flux) | platform | code-review, coding, ci-triage, on-call, maintenance |
+| Dropbox | [Nova](docs/landscape.md#dropbox-nova) | platform | coding, ci-triage, on-call, maintenance |
+| Harvey | [Spectre](docs/landscape.md#harvey-spectre) | platform | coding, code-review, on-call, security |
+| Notion | [Custom Agents](docs/landscape.md#notion-custom-agents) | platform | support, finance-ops, recruitment, security |
+| Plaid | [Internal MCP server](docs/landscape.md#plaid-internal-mcp-server) | supporting-pattern | coding |
+| Shopify | [Aquifer](docs/landscape.md#shopify-internal-agents) | platform | coding, code-review |
+| Y Combinator | [Internal agent infrastructure](docs/landscape.md#ycombinator-agent-infra) | platform | coding, ops |
 
 <!-- END OVERVIEW -->
 
@@ -87,13 +108,13 @@ exception-only supervision. Levels describe a specific workflow, not company mat
 
 ## What the current map shows
 
-These counts classify 40 catalog entries. A platform and one of its components can both appear, so the entries are not independent deployments, shares of industry practice, or counts of successful runs.
+These counts classify 56 catalog entries. A platform and one of its components can both appear, so the entries are not independent deployments, shares of industry practice, or counts of successful runs.
 
-Entry autonomy is classified as 21 drafts-reviewed, 7 human-in-loop, 7 autonomous, 1 assistive, and 4 unknown. Human-in-loop includes approval checkpoints; it does not mean a person continuously steers the whole run.
+Agent autonomy (43 records; infrastructure excluded) is classified as 20 drafts-reviewed, 5 human-in-loop, 6 autonomous, 1 assistive, and 11 unknown. Human-in-loop includes approval checkpoints; it does not mean a person continuously steers the whole run.
 
-The catalog contains 51 scoped supervision assessments across those entries, including 3 continuous-steering, 26 work-product-review, 0 outcome-review, 6 exception-only, and 16 unknown assessments. 8 entries have more than one assessed workflow; the counts therefore do not assign one level to each company.
+The catalog contains 50 scoped supervision assessments across those entries, including 2 continuous-steering, 24 work-product-review, 0 outcome-review, 5 exception-only, and 19 unknown assessments. 5 entries have more than one assessed workflow; the counts therefore do not assign one level to each company.
 
-12 entries are platforms or supporting patterns. State duration is undocumented for 24 entries. Review cost, failure rates, and retired systems remain rarely reported.
+13 entries are platforms or supporting patterns. State duration is undocumented for 36 entries. Review cost, failure rates, and retired systems remain rarely reported.
 
 <!-- END README FINDINGS -->
 
@@ -131,3 +152,19 @@ Code and tooling are licensed under [MIT](LICENSE). Content and data are license
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Preserved third-party source
 material under [`archive/`](archive/README.md) retains its original ownership and is not
 relicensed under those terms.
+
+## Agents and infrastructure
+
+The map maintains two collections. Agents perform identifiable work for internal
+teams; Infrastructure supplies reusable execution, orchestration, or tool access.
+Both retain structured, source-backed records. Notes compare lessons across cases.
+Choose the subject before assigning workflow claims or metrics: a task-performing
+system remains an agent even when it orchestrates subagents. A family requires
+independently useful constituent agents. Sandbox detail alone does not establish a
+platform. Attribute downstream agent results to their actual subject and author
+`built-on` only when a source establishes the dependency.
+
+The homepage counts agents; the Infrastructure index keeps supporting implementations
+discoverable. Full JSON exports include both collections, identified by derived
+`catalog_section`. Existing detail URLs and anchors remain stable. See the
+[schema migration](data/schema.md#collection-migration-catalog-7-compact-index-3).

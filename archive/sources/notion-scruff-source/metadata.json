@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "notion-scruff-source",
+  "original_url": "https://www.notion.com/blog/meet-scruff-securitys-new-ai-teammate",
+  "final_url": "https://www.notion.com/blog/meet-scruff-securitys-new-ai-teammate",
+  "captured_at": "2026-09-17T18:23:51Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.6"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/notion-scruff-source/content.md",
+      "sha256": "sha256:b7612a549a76e421b67dbede4e65c65755c68245c6de45deec442f64ae81a26e",
+      "bytes": 12402
+    }
+  }
+}

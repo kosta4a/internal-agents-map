@@ -128,12 +128,12 @@ The join runs both ways. Every `company` value in `data/agents/` must have a reg
 
 Logo files live in `public/logos/<id>.svg` or `public/logos/<id>.png`. The build rejects an SVG larger than 64 KiB and a PNG larger than 128 KiB or narrower than 128 pixels. An SVG needs a `viewBox`. It must not hold a DOCTYPE, an ENTITY declaration, a script, a `foreignObject`, an `on*` attribute, a `javascript:` value, or a non-fragment `href`. The intrinsic size comes from the `viewBox` or from the PNG header.
 
-The build derives the `companies` collection into `data/agents.json` (schema version 6) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
+The build derives the `companies` collection into `data/agents.json` (schema version 7) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
 
 Schema 6 replaces the old `task-agent` and `background-agent` approach types with
 `agent`. Consumers that used those values should filter structural type with
 `approach_type: agent` and use `rubric.invocation` to distinguish interactive,
-background, scheduled, and event-driven operation. The compact index schema is 2.
+background, scheduled, and event-driven operation. The compact index schema is 3.
 
 ## Source records
 
@@ -276,3 +276,19 @@ Normalize URLs and remove tracking parameters. Link mirrors and translations wit
 
 Run `uv run python scripts/build.py` after each data change. Run
 `uv run python scripts/build.py --check` to verify committed output.
+
+## Collection migration (catalog 7 / compact index 3)
+
+The build derives `catalog_section`: `agent` and `agent-system` become `agents`;
+`platform`, `supporting-pattern`, and `orchestration-system` become `infrastructure`.
+Do not author this field. Unknown structural types fail validation. Existing fields,
+IDs, claim anchors, and detail URLs remain available. `/agents.json` and
+`/agents/index.json` retain their historical names and include both collections.
+Consumers must select `catalog_section` explicitly for agent counts or comparisons.
+One agent family counts once, not as an estimated number of constituent agents.
+
+`/` and `/index.md` represent Agents. `/infrastructure` and `/infrastructure.md`
+represent Infrastructure. `/?collection=all` shows two labeled groups. Legacy
+infrastructure type queries on `/` switch to All while retaining OR filters.
+Seven `page_content.questions` keys remain the common evidence contract; HTML and
+Markdown apply collection profiles without changing evidence or hiding unknowns.

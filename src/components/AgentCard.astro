@@ -14,6 +14,7 @@ const { card } = Astro.props;
   class="entry"
   id={card.id}
   data-approach-id={card.id}
+  data-collection={card.catalogSection}
   data-source-ids={card.sourceIds.join(' ')}
   data-search={card.search}
   data-work={card.domains.map((domain) => domain.id).join(' ')}
@@ -30,6 +31,7 @@ const { card } = Astro.props;
     </div>
     <p class="entry-summary">{card.excerpt}</p>
     <div class="tags">
+      <span class="tag">{card.approachTypeLabel}</span>
       {card.domains.map((domain) => (
         <span class="tag">{domain.label}</span>
       ))}

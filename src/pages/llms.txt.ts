@@ -23,14 +23,14 @@ export function llmsTxt(paths: readonly string[], noteTitles: ReadonlyMap<string
   return (
     `# ${SITE_NAME}\n\n` +
     '> A source-backed catalog of AI systems organizations build or adapt for their own teams.\n\n' +
-    'Read the compact index first, then fetch individual records for relevant systems. ' +
+    'Read the compact index first, then fetch individual records for relevant systems. The historical agents.json and agents/index.json endpoints contain both agents and infrastructure; use catalog_section to distinguish them. ' +
     'Preserve claim qualifications, dates, confidence, and contradicting evidence. ' +
     'Cite original sources; catalog judgments and company-reported metrics are not ' +
     'independent verification.\n\n' +
     line('Compact catalog index', '/agents/index.json') +
     line('Data and evidence guide', '/data-guide.md') +
     line('Complete dataset', '/agents.json') +
-    line('Complete catalog in Markdown', markdownPath(homePath())) +
+    line('Agents in Markdown', markdownPath(homePath())) +
     paths.map((path) => line(pageLabel(path, noteTitles), markdownPath(path))).join('')
   );
 }

@@ -197,8 +197,10 @@ export function startPalette(): void {
   /** The closing animation, stopped if the palette opens again before its fill is gone. */
   let leaving: { stop: () => void; finished: Promise<unknown> } | undefined;
 
+  let transition = 0;
   const close = (): void => {
     if (palette.hidden) return;
+    const version = ++transition;
     closeMenus();
     if (reducedMotion() || !panel) {
       settle();
@@ -211,8 +213,9 @@ export function startPalette(): void {
     );
     let ended = false;
     const done = (): void => {
-      if (ended) return;
+      if (ended || version !== transition) return;
       ended = true;
+      leaving?.stop();
       palette.style.removeProperty('opacity');
       settle();
     };
@@ -222,6 +225,7 @@ export function startPalette(): void {
 
   const open = (): void => {
     if (!palette.hidden) return;
+    transition += 1;
     // A finished close keeps its fill on the palette and would hide this open.
     leaving?.stop();
     palette.style.removeProperty('opacity');

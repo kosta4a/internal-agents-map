@@ -6,6 +6,7 @@ import {
   sortedApproaches,
   sourcesById,
   type Approach,
+  type CatalogSection,
   type Catalog,
   type Claim,
   type ClaimKind,
@@ -21,8 +22,37 @@ import { shorten } from './text';
 /** Where the repository keeps the preserved copy of a source. */
 const REPOSITORY_BLOB = 'https://github.com/steel-experiments/internal-agents-map/blob/main/';
 
-/** Approach types that describe shared infrastructure, not an execution workflow. */
-const SUPPORTING_TYPES: ReadonlySet<string> = new Set(['supporting-pattern', 'platform']);
+export interface PageProfile {
+  readonly section: CatalogSection;
+  readonly sectionOrder: readonly ('workflow' | 'people' | 'implementation')[];
+  readonly label: string;
+  readonly path: string;
+  readonly workflow: string;
+  readonly people: string;
+  readonly implementation: string;
+  readonly validation: string;
+  readonly observations: string;
+  readonly related: string;
+}
+
+/** One profile is shared by HTML and Markdown, with research keys unchanged. */
+export function pageProfile(section: CatalogSection): PageProfile {
+  return section === 'infrastructure' ? {
+    section, sectionOrder: ['implementation', 'workflow', 'people'], label: 'Infrastructure', path: '/infrastructure',
+    workflow: 'Documented uses', people: 'Access and controls',
+    implementation: 'Capabilities and architecture', validation: 'Reliability and validation',
+    observations: 'Adoption and operating evidence', related: 'Agents using this and related reading',
+  } : {
+    section, sectionOrder: ['workflow', 'people', 'implementation'], label: 'Agents', path: '/', workflow: 'How it works',
+    people: 'Where people stay involved', implementation: 'Implementation details',
+    validation: 'Validation and failure handling', observations: 'Reported observations',
+    related: 'Infrastructure used and related reading',
+  };
+}
+
+export function showQuestion(entry: EntryView, key: string): boolean {
+  return !entry.isSupportingSystem || entry.coverageQuestions[key]?.state !== 'not-applicable';
+}
 
 export interface CaveatView {
   readonly label: string;
@@ -136,6 +166,7 @@ export interface RelatedEntryView {
   readonly company: string;
   readonly agentName: string;
   readonly relationLabel: string;
+  readonly group: 'uses' | 'used-by' | 'related';
 }
 
 export interface RelatedNoteView {
@@ -158,11 +189,12 @@ export interface EntryView {
   readonly companyView: CompanyView;
   readonly agentName: string;
   readonly title: string;
+  readonly catalogSection: CatalogSection;
   readonly approachType: string;
   readonly approachTypeLabel: string;
   /** True when the entry describes infrastructure other systems build on. */
   readonly isSupportingSystem: boolean;
-  readonly supportingSystemNote: string | null;
+  readonly profile: PageProfile;
   readonly summary: ClaimView | null;
   readonly summaryText: string;
   readonly reviewedAt: string;
@@ -337,26 +369,10 @@ function claimView(claim: Claim, numbers: ReadonlyMap<string, number>, sources: 
   };
 }
 
-/**
- * Say what the catalog classifies this entry as.
- * The record, not the classification, says whether a workflow is reported.
- */
-function supportingSystemNote(approach: Approach, workflowClaims: number): string | null {
-  if (!SUPPORTING_TYPES.has(approach.approach_type)) return null;
-  const classification =
-    `This entry describes supporting infrastructure that other work builds on. ` +
-    `The catalog classifies it as a ${termLabel(approach.approach_type).toLowerCase()}.`;
-  const workflow =
-    workflowClaims > 0
-      ? `The record also reports a workflow.`
-      : `The record reports no execution workflow.`;
-  return `${classification} ${workflow}`;
-}
-
 function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[] {
   const byId = new Map(catalog.approaches.map((item) => [item.id, item]));
   const related: RelatedEntryView[] = [];
-  const add = (id: string, relationLabel: string) => {
+  const add = (id: string, relationLabel: string, group: RelatedEntryView['group']) => {
     const target = byId.get(id);
     if (!target || target.id === approach.id) return;
     if (related.some((item) => item.id === target.id)) return;
@@ -366,12 +382,14 @@ function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[
       company: target.company,
       agentName: target.agent_name,
       relationLabel,
+      group,
     });
   };
   for (const relationship of approach.relationships ?? []) {
     add(
       relationship.approach_id,
-      relationship.type === 'component-of' ? 'This entry is a component of' : 'Related implementation',
+      relationship.type === 'built-on' ? 'Built on' : relationship.type === 'component-of' ? 'Component of' : 'Related implementation',
+      relationship.type === 'built-on' ? 'uses' : 'related',
     );
   }
   for (const other of catalog.approaches) {
@@ -379,7 +397,8 @@ function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[
       if (relationship.approach_id !== approach.id) continue;
       add(
         other.id,
-        relationship.type === 'component-of' ? 'Names this entry as its context' : 'Related implementation',
+        relationship.type === 'built-on' ? 'Uses this infrastructure' : relationship.type === 'component-of' ? 'Includes component' : 'Related implementation',
+        relationship.type === 'built-on' && other.catalog_section === 'agents' ? 'used-by' : 'related',
       );
     }
   }
@@ -422,7 +441,7 @@ export function entryView(catalog: Catalog, id: string): EntryView {
   const validationClaims = page
     ? of((claim) => page.primitive_roles[claim.field] === 'validation')
     : [];
-  const supervisionClaims = of((claim) => claim.field.startsWith('operating_models.'));
+  const supervisionClaims = approach.catalog_section === 'agents' ? of((claim) => claim.field.startsWith('operating_models.')) : [];
   const allArchitectureClaims = of((claim) => claim.field.startsWith('architecture.'));
   const architectureClaims = page
     ? allArchitectureClaims.filter((claim) => {
@@ -489,10 +508,11 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     companyView: companyView(catalog, approach.company_id),
     agentName: approach.agent_name,
     title: `${approach.company} — ${approach.agent_name}`,
+    catalogSection: approach.catalog_section,
     approachType: approach.approach_type,
     approachTypeLabel: termLabel(approach.approach_type),
-    isSupportingSystem: SUPPORTING_TYPES.has(approach.approach_type),
-    supportingSystemNote: supportingSystemNote(approach, workflowClaims.length),
+    isSupportingSystem: approach.catalog_section === 'infrastructure',
+    profile: pageProfile(approach.catalog_section),
     summary,
     summaryText: summary?.text ?? '',
     reviewedAt: approach.last_reviewed_at,
@@ -557,6 +577,7 @@ export interface DirectoryCard {
   readonly excerpt: string;
   /** The text the directory search reads, normalized to lower case. */
   readonly search: string;
+  readonly catalogSection: CatalogSection;
   readonly approachType: string;
   readonly approachTypeLabel: string;
   readonly domains: readonly TermView[];
@@ -612,17 +633,20 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
         approach.approach_type,
         termLabel(approach.approach_type),
         ...domains.flatMap((domain) => [domain.id, domain.label]),
-        ...invocation.flatMap((mode) => [mode.id, mode.label]),
-        ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
-        approach.autonomy,
-        termLabel(approach.autonomy),
+        ...(approach.catalog_section === 'agents' ? [
+          ...invocation.flatMap((mode) => [mode.id, mode.label]),
+          ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
+          approach.autonomy,
+          termLabel(approach.autonomy),
+        ] : []),
       ]),
+      catalogSection: approach.catalog_section,
       approachType: approach.approach_type,
       approachTypeLabel: termLabel(approach.approach_type),
       sourceIds: approach.source_ids,
       domains,
-      invocation,
-      boundaries,
+      invocation: approach.catalog_section === 'agents' ? invocation : [],
+      boundaries: approach.catalog_section === 'agents' ? boundaries : [],
       reviewedAt: approach.last_reviewed_at,
     };
   });

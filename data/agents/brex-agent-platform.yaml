@@ -15,13 +15,13 @@ domains:
 - customer-success
 autonomy: human-in-loop
 operating_models:
-- scope: high-confidence operations case (support first touch, fraud recommendation) → automated completion;
-    low-confidence remainder → analyst review
+- scope: high-confidence operations case (support first touch, fraud recommendation) → automated completion; low-confidence
+    remainder → analyst review
   attention_boundary: exception-only
 - scope: KYC application → completed verification steps
   attention_boundary: work-product-review
-- scope: collections follow-up interaction → drafted response options the servicing team selects, customizes,
-    or sends
+- scope: collections follow-up interaction → drafted response options the servicing team selects, customizes, or
+    sends
   attention_boundary: work-product-review
 rubric:
   invocation:
@@ -30,10 +30,10 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: secondary-only
-summary: Brex built an internal platform in Retool where operations staff build, test and deploy agents for KYC checks,
-  card disputes, support quality assurance and collections. A roughly 25-person systems engineering team
-  maintains it, and analysts still review every case the agents do not handle with high confidence.
-headline_metric: Dispute processing time fell from three hours to three seconds
+summary: Brex built a Retool-based platform where operations staff build, test and deploy agents for KYC, disputes,
+  quality assurance and collections. Its systems engineering team maintains the builder; human involvement differs
+  by workflow.
+headline_metric: 'Dispute-agent use example: Dispute processing time fell from three hours to three seconds'
 architecture:
   sandbox: Retool-hosted runtime (no bespoke execution env described)
   harness: Retool-based builder with prompt management and multi-model testing/evaluation; built by a ~25-person
@@ -42,8 +42,8 @@ architecture:
   interfaces:
   - slack
   - internal-ui
-  tool_access: An MCP server exposes external product features to the internal platform; new product tools become
-    internally available immediately; invoked via Slack /c1
+  tool_access: An MCP server exposes product capabilities to internal agents. Separately, Slack /c1 requests access
+    to AI tools through ConductorOne; it is not evidence of invoking an operations agent.
   knowledge: Standard operating procedures uploaded as a knowledge base, such as 100-page dispute guides; customer
     account data
   credentials: SSO via internal Retool proxies (no per-user accounts); ConductorOne access management; Okta auth;
@@ -53,13 +53,15 @@ primitives:
   desc: Non-technical ops staff design prompts, test across models, deploy with QA oversight
 - name: MCP tool bridge
   desc: Product features exposed to internal agents through one MCP server
-- {name: Prepare the dispute submission, desc: 'The dispute agent applies the 100+ page dispute guide and the
-    BPO operating procedure to produce a more robust, better-articulated submission'}
-- {name: Draft the collections response, desc: 'The agent analyzes the customer reply and layers in account
-    context and negotiating guidelines, offering the servicing team drafts in several tones to select, customize,
-    or send'}
-- {name: Apply the quality rubric, desc: 'A QA agent reviews every support interaction against the quality rubric
-    and feeds response trends into a closed loop improving agent and human performance'}
+- name: Prepare the dispute submission
+  desc: The dispute agent applies the 100+ page dispute guide and the BPO operating procedure to produce a more
+    robust, better-articulated submission
+- name: Draft the collections response
+  desc: The agent analyzes the customer reply and layers in account context and negotiating guidelines, offering
+    the servicing team drafts in several tones to select, customize, or send
+- name: Apply the quality rubric
+  desc: A QA agent reviews every support interaction against the quality rubric and feeds response trends into a
+    closed loop improving agent and human performance
 key_metrics:
 - 50%+ of customer-support cases resolved by chatbot as first touch
 - 'Dispute processing: 3 hours → 3 seconds'
@@ -67,13 +69,13 @@ key_metrics:
 - KYC adverse-media accuracy 85% → 88%
 lessons_learned:
 - Brex's CTO recommends automating a useful portion of a workflow before pursuing complete automation.
-- Brex assigns a systems engineering team to maintain its internal agent platform and shares capabilities with
-  the customer product.
+- Brex assigns a systems engineering team to maintain its internal agent platform and shares capabilities with the
+  customer product.
 - Brex automates high-confidence fraud cases and sends the remaining cases to analysts with AI-generated findings.
-- Brex operations staff and engineers translated KYC procedures into individual decisions and instructions,
-  retaining human quality checks.
-- Brex groups legal approvals by data retention, training use, and segregation requirements, with controls
-  agreed by product and legal teams.
+- Brex operations staff and engineers translated KYC procedures into individual decisions and instructions, retaining
+  human quality checks.
+- Brex groups legal approvals by data retention, training use, and segregation requirements, with controls agreed
+  by product and legal teams.
 sources:
 - id: brex-agent-platform-source-1
   title: 'Agent, Human, Ops: How Brex Is Changing Roles and Workflows'
@@ -86,6 +88,17 @@ sources:
   last_verified_at: '2026-08-31'
   capture:
     manifest_path: archive/sources/brex-agent-platform-source-1/metadata.json
+- id: brex-onboarding-source
+  title: 'The end of the trade-off: How AI agents broke the onboarding trilemma'
+  url: https://www.brex.com/journal/rebuilding-onboarding-ai-native
+  canonical_url: https://www.brex.com/journal/rebuilding-onboarding-ai-native
+  kind: engineering-blog
+  provenance_class: first-party
+  accessed_at: '2026-09-17'
+  last_verified_at: '2026-09-17'
+  published_at: '2026-01-20'
+  capture:
+    manifest_path: archive/sources/brex-onboarding-source/metadata.json
 evidence:
   operating_models.0:
   - source_id: brex-agent-platform-source-1
@@ -105,6 +118,10 @@ evidence:
   summary:
   - source_id: brex-agent-platform-source-1
     relation: supports
+  - source_id: brex-onboarding-source
+    relation: contextualizes
+    locator: 'Separate documented implementation: see dedicated agent record; not evidence of identical builder
+      version.'
   headline_metric:
   - source_id: brex-agent-platform-source-1
     relation: supports
@@ -173,11 +190,17 @@ evidence:
   - source_id: brex-agent-platform-source-1
     relation: supports
   primitives.2:
-  - {source_id: brex-agent-platform-source-1, relation: supports, locator: 'Preserved content.md, lines 179–189'}
+  - source_id: brex-agent-platform-source-1
+    relation: supports
+    locator: Preserved content.md, lines 179–189
   primitives.3:
-  - {source_id: brex-agent-platform-source-1, relation: supports, locator: 'Preserved content.md, line 173'}
+  - source_id: brex-agent-platform-source-1
+    relation: supports
+    locator: Preserved content.md, line 173
   primitives.4:
-  - {source_id: brex-agent-platform-source-1, relation: supports, locator: 'Preserved content.md, lines 80–82'}
+  - source_id: brex-agent-platform-source-1
+    relation: supports
+    locator: Preserved content.md, lines 80–82
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -190,8 +213,8 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: low
-    confidence_reason: The report documents human checks inside the KYC flow and humans reviewing LLM work, but a
-      later passage shifts humans toward reviewing trends, so the per-run boundary is mixed in the evidence.
+    confidence_reason: The report documents human checks inside the KYC flow and humans reviewing LLM work, but
+      a later passage shifts humans toward reviewing trends, so the per-run boundary is mixed in the evidence.
     valid_at: '2025-09-25'
   operating_models.2:
     kind: inference
@@ -224,8 +247,8 @@ claim_metadata:
     kind: opinion
     provenance: reported
     confidence: medium
-    confidence_reason: The interview contrasts a 40% target with 100% and describes fraud cases still routed
-      to analysts. These are the CTO's priorities, not measured optimal targets.
+    confidence_reason: The interview contrasts a 40% target with 100% and describes fraud cases still routed to
+      analysts. These are the CTO's priorities, not measured optimal targets.
   lessons_learned.1:
     kind: fact
     provenance: reported
@@ -253,51 +276,123 @@ claim_metadata:
 page_content:
   version: 1
   reviewed_at: '2026-09-17'
-  source_ids: [brex-agent-platform-source-1]
-  workflow_scope: 'Two documented agent runs on the platform: dispute-submission preparation, and collections
-    response drafting for the servicing team'
+  source_ids:
+  - brex-agent-platform-source-1
+  - brex-onboarding-source
+  workflow_scope: 'Two documented agent runs on the platform: dispute-submission preparation, and collections response
+    drafting for the servicing team'
   questions:
-    purpose: {state: reported, claim_paths: [summary]}
-    workflow: {state: reported, claim_paths: [primitives.2, primitives.3], note: 'The prompt studio and the MCP
-      bridge are build-time mechanisms. Platform-wide capability and the L1/L2/L3 restructure stay out of the
-      run description.'}
-    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1, operating_models.2],
-      note: 'Boundaries differ by use: fraud is exception-only, KYC and collections keep work-product review,
-      and the dispute run documents no checkpoint.'}
-    implementation: {state: reported, claim_paths: [architecture.harness, architecture.sandbox, architecture.tool_access,
-      architecture.knowledge, architecture.credentials, architecture.interfaces]}
-    validation: {state: reported, claim_paths: [primitives.4], note: 'The quality-rubric agent checks every
-      support interaction; the KYC human checks are cited with human involvement.'}
-    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
-      key_metrics.3]}
-    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3,
-      lessons_learned.4]}
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.2
+      - primitives.3
+      note: The prompt studio and the MCP bridge are build-time mechanisms. Platform-wide capability and the L1/L2/L3
+        restructure stay out of the run description.
+    human_involvement:
+      state: not-applicable
+      claim_paths: []
+      note: There is no single platform-wide agent review boundary. Scoped downstream operating-model claims remain
+        in research details; access controls are described separately.
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.sandbox
+      - architecture.tool_access
+      - architecture.knowledge
+      - architecture.credentials
+      - architecture.interfaces
+    validation:
+      state: reported
+      claim_paths:
+      - primitives.4
+      note: The quality-rubric agent checks every support interaction; the KYC human checks are cited with human
+        involvement.
+    observations:
+      state: reported
+      claim_paths:
+      - headline_metric
+      - key_metrics.0
+      - key_metrics.1
+      - key_metrics.2
+      - key_metrics.3
+    lessons:
+      state: reported
+      claim_paths:
+      - lessons_learned.0
+      - lessons_learned.1
+      - lessons_learned.2
+      - lessons_learned.3
+      - lessons_learned.4
   implementation_fields:
-    model: {state: unreported, claim_paths: [], note: 'Deployed-agent models are not documented; multi-model
-      testing is build time. The placeholder claim stays in research details.'}
-    harness: {state: reported, claim_paths: [architecture.harness]}
-    sandbox: {state: reported, claim_paths: [architecture.sandbox], note: 'Retool hosts the runtime; the capture
-      describes no further isolation boundary.'}
-    tool_access: {state: reported, claim_paths: [architecture.tool_access], note: 'The MCP bridge and immediate
-      internal availability are supported at line 40; the Slack /c1 clause describes provisioning configuration,
-      not agent invocation (flagged).'}
-    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
-    context_mgmt: {state: unreported, claim_paths: [], note: 'No mechanism for maintaining agent context over
-      time is documented; the QA feedback loop improves performance rather than managing context.'}
-    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'SSO via Retool proxies, Okta
-      provisioning, and the retention and segregation controls are supported at lines 60–62; the ConductorOne
-      vendor name is not in the capture (flagged).'}
-    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
-  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: workflow, primitives.3: workflow,
-    primitives.4: validation}
+    model:
+      state: unreported
+      claim_paths: []
+      note: Deployed-agent models are not documented; multi-model testing is build time. The placeholder claim stays
+        in research details.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+    sandbox:
+      state: reported
+      claim_paths:
+      - architecture.sandbox
+      note: Retool hosts the runtime; the capture describes no further isolation boundary.
+    tool_access:
+      state: reported
+      claim_paths:
+      - architecture.tool_access
+      note: The MCP bridge and immediate internal availability are supported at line 40; the Slack /c1 clause describes
+        provisioning configuration, not agent invocation (flagged).
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: unreported
+      claim_paths: []
+      note: No mechanism for maintaining agent context over time is documented; the QA feedback loop improves performance
+        rather than managing context.
+    credentials:
+      state: reported
+      claim_paths:
+      - architecture.credentials
+      note: SSO via Retool proxies, Okta provisioning, and the retention and segregation controls are supported
+        at lines 60–62; the ConductorOne vendor name is not in the capture (flagged).
+    interfaces:
+      state: reported
+      claim_paths:
+      - architecture.interfaces
+  primitive_roles:
+    primitives.0: mechanism
+    primitives.1: mechanism
+    primitives.2: workflow
+    primitives.3: workflow
+    primitives.4: validation
   observations:
-    headline_metric: {category: effectiveness, basis: reported-measurement, subject: 'Dispute-submission preparation
-      time on the internal agent platform'}
-    key_metrics.0: {category: adoption-output, basis: reported-measurement, subject: 'Customer-support cases
-      resolved by the chatbot at first touch (customer-facing product AI, adjacent to this platform)'}
-    key_metrics.1: {duplicate_of: headline_metric, reason: 'Identical subject, values, period, scope, and locator
-      as the headline; the shorthand adds nothing.'}
-    key_metrics.2: {category: effectiveness, basis: reported-measurement, subject: 'Support-interaction QA coverage
-      and the staffing change from five specialists to one'}
-    key_metrics.3: {category: effectiveness, basis: reported-measurement, subject: 'KYC adverse-media classification
-      accuracy, agent versus human'}
+    headline_metric:
+      category: effectiveness
+      basis: reported-measurement
+      subject: Dispute-submission preparation time on the internal agent platform
+    key_metrics.0:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Customer-support cases resolved by the chatbot at first touch (customer-facing product AI, adjacent
+        to this platform)
+    key_metrics.1:
+      duplicate_of: headline_metric
+      reason: Identical subject, values, period, scope, and locator as the headline; the shorthand adds nothing.
+    key_metrics.2:
+      category: effectiveness
+      basis: reported-measurement
+      subject: Support-interaction QA coverage and the staffing change from five specialists to one
+    key_metrics.3:
+      category: effectiveness
+      basis: reported-measurement
+      subject: KYC adverse-media classification accuracy, agent versus human

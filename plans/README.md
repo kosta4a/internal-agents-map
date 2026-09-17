@@ -19,6 +19,7 @@ verification gate, and update the status row when finished.
 | [009](009-agent-page-content-pilot.md) | Pilot a shared content standard on five agent pages | P1 | L | 008 editorial follow-up | DONE; user approved merge to main on 2026-09-17 |
 | [010](010-page-content-batch-2.md) | Apply the page-content standard to a second reviewed batch | P1 | M | 009 | DONE on 2026-09-17; 10 of 40 records reviewed |
 | [011](011-page-content-catalog-completion.md) | Complete the page-content standard across the catalog | P1 | L | 009, 010 | DONE on 2026-09-17; all 40 records reviewed |
+| [012](012-separate-agents-and-infrastructure.md) | Give agents and infrastructure distinct places in one catalog | P1 | L | 008–011 | DONE on 2026-09-17; independently verified on isolated branch `codex/plan-012-agents-infrastructure`; not published |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -45,6 +46,12 @@ Each record keeps its source page and collection date; the gray-scale review
 sheet is recorded in the plan.
 
 ## Dependency notes
+
+- Plan 012 follows the twelve-record source recheck. It preserves infrastructure
+  research as a separate collection, corrects identities before assigning collection
+  membership, and replaces the universal page notice with appropriate content profiles.
+  It supersedes the earlier plans' single undifferentiated directory and supporting
+  notice decisions; their evidence-preservation and shared content contracts remain.
 
 - Plan 009 builds on the existing uncommitted 2026-09-17 editorial follow-up. It pilots
   coverage states, operational workflows, observations, and export parity on Qubot,
@@ -193,3 +200,20 @@ are generated from the catalog. All 116 tests and required checks pass; the firs
 validation/deployment workflow succeeded and all six public assets match the
 reviewed release. Desktop/mobile, keyboard, no-JavaScript, URL/history, subdirectory,
 and live-browser checks passed. See [website maintenance](../docs/site.md).
+
+## Plan 012 implementation review
+
+Implemented and independently verified on 2026-09-17 in
+`/Users/nikola/dev/steel/internal-agents-map-plan-012`, branch
+`codex/plan-012-agents-infrastructure`. The catalog now has 43 agent/family records
+and 13 infrastructure records, 900 claims, 109 distinct publisher URLs, and 111
+preserved captures. All 40 original records, 774 original claim anchors, and 107
+original source IDs/URLs remain available.
+
+The independent `npm run verify` passed: 158 Vitest, 14 negotiation, 201 Python,
+and 517 browser tests, with 47 expected browser-project skips. Generated data,
+coverage, archives, Astro/TypeScript, 69 built pages and 68 canonical routes,
+artifact parity, Ruff, privacy, local links, and whitespace checks passed. Desktop
+and mobile visual review covered collection browsing, infrastructure/agent/family
+profiles, and search. See the classification review ledger for source decisions.
+Implementation is approved locally; this record does not claim merge or deployment.

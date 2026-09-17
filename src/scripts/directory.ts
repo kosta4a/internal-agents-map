@@ -221,7 +221,11 @@ export function startDirectory(): void {
   const input = element('q', HTMLInputElement);
   const chips = element('chips', HTMLUListElement);
   const listbox = element('suggestions', HTMLUListElement);
-  const vocabulary = readVocabulary();
+  const allVocabulary = readVocabulary();
+  let vocabulary = allVocabulary;
+  const defaultCollection = document.getElementById('catalog')?.dataset.defaultCollection ?? 'agents';
+  let collection = defaultCollection;
+  const groups = [...document.querySelectorAll<HTMLElement>('[data-collection-group]')];
   const legacyNotice = document.getElementById('legacy-filter-notice');
 
   /** The selected facet terms, in the order they were chosen. */
@@ -239,6 +243,7 @@ export function startDirectory(): void {
   });
 
   const matches = (card: HTMLElement): boolean =>
+    (collection === 'all' || card.dataset.collection === collection) &&
     matchesText(card.dataset.search ?? '', input.value) &&
     matchesFacets(cardFacets(card), toSelection(selected));
 
@@ -275,6 +280,35 @@ export function startDirectory(): void {
   };
 
   const apply = (): void => {
+    const heading = document.getElementById('directory-heading');
+    if (heading) heading.textContent = collection === 'all' ? 'Agents and the infrastructure they run on.' : collection === 'infrastructure' ? 'Infrastructure companies build to support their agents.' : 'AI agents organizations build or adapt to do work for their own teams.';
+    document.querySelectorAll<HTMLElement>('[data-collection-link]').forEach((link) => {
+      if (link.dataset.collectionLink === collection) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+    });
+    if (collection === 'all') document.querySelector('.sidebar a[href="/"]')?.removeAttribute('aria-current');
+    const stats = document.getElementById('collection-stats');
+    const counts = JSON.parse(document.getElementById('collection-counts')?.textContent ?? '{}') as Record<string, { entries: number; organizations: number; sources: number }>;
+    if (stats && counts[defaultCollection]) {
+      const pairs: [number, string][] = collection === 'all'
+        ? [[counts.agents!.entries, 'agents'], [counts.infrastructure!.entries, 'infrastructure records']]
+        : [[counts[collection]!.entries, collection === 'infrastructure' ? 'infrastructure records' : 'agents'], [counts[collection]!.organizations, 'organizations'], [counts[collection]!.sources, 'sources']];
+      stats.replaceChildren(...pairs.map(([count, label]) => {
+        const item = document.createElement('div'); item.className = 'stat';
+        const number = document.createElement('strong'); number.textContent = String(count);
+        const caption = document.createElement('span'); caption.textContent = label;
+        item.append(number, caption); return item;
+      }));
+    }
+    for (const group of groups) group.hidden = collection !== 'all' && group.dataset.collectionGroup !== collection;
+    const allLink = document.getElementById('search-all') as HTMLAnchorElement | null;
+    if (allLink) {
+      const query = new URLSearchParams(location.search);
+      query.set('collection', 'all');
+      if (input.value) query.set('q', input.value); else query.delete('q');
+      allLink.href = `/?${query}`;
+      allLink.hidden = collection === 'all';
+    }
+    document.querySelectorAll<HTMLElement>('.collection-heading').forEach((heading) => { heading.hidden = collection !== 'all'; });
     let count = 0;
     for (const card of cards) {
       const visible = matches(card);
@@ -365,6 +399,7 @@ export function startDirectory(): void {
   const writeUrl = (): void => {
     const url = new URL(location.href);
     for (const key of CONTROL_KEYS) url.searchParams.delete(key);
+    if (collection === 'all') url.searchParams.set('collection', 'all'); else url.searchParams.delete('collection');
     if (input.value) url.searchParams.set('q', input.value);
     for (const term of selected) url.searchParams.append(term.key, term.id);
     if (url.href !== location.href) history.pushState(null, '', url);
@@ -374,6 +409,9 @@ export function startDirectory(): void {
   /** Read the state a shared or restored URL carries. Unknown values are dropped. */
   const readUrl = (): void => {
     const params = new URLSearchParams(location.search);
+    const infrastructureTypes = ['platform', 'supporting-pattern', 'orchestration-system'];
+    collection = params.get('collection') === 'all' || (defaultCollection === 'agents' && params.getAll('type').some((type) => infrastructureTypes.includes(type))) ? 'all' : defaultCollection;
+    vocabulary = allVocabulary.filter((term) => (collection !== 'infrastructure' || !['invocation', 'supervision'].includes(term.key)) && (term.key !== 'type' || collection === 'all' || infrastructureTypes.includes(term.id) === (collection === 'infrastructure')));
     input.value = params.get('q') ?? '';
     selected = [];
     let legacyBackground = false;
