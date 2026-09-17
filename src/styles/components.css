@@ -448,7 +448,10 @@
   gap: 8px;
 }
 .claim-marked > .icon { flex: none; }
-/* The observation takes its own row, starting at the icon's edge. */
+/* Everything the claim says sits beside the mark, never under it: the first
+   column is the mark's own width and nothing else may widen it. */
+.claim-marked > :not(.icon) { grid-column: 2; }
+/* The observation takes its own row, starting at the mark's edge. */
 .claim-marked > .observed { grid-column: 1 / -1; margin-top: 0; }
 .entry-section h3 {
   font-size: 16px;
@@ -591,21 +594,30 @@
 }
 .architecture-caveats span + span::before { content: " \00B7 "; }
 .classification-table {
-  overflow-x: auto;
   margin: 20px 0;
   border: .5px solid var(--sand-6);
-  border-radius: 4px;
+  border-radius: 12px;
+  /* Clipping keeps the square header fill inside the rounded corners; on a
+     screen too narrow for four columns, the table scrolls here, not the page. */
+  overflow: auto;
 }
-.classification-table table { width: 100%; border-collapse: collapse; min-width: 720px; }
+/* The table is as wide as the column and no wider: a row grows tall rather
+   than the reader having to scroll sideways to finish a sentence. */
+.classification-table table { width: 100%; border-collapse: collapse; }
 .classification-table th,
-.classification-table td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: .5px solid var(--sand-6); }
+.classification-table td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: .5px solid var(--sand-6);
+  border-right: .5px solid var(--sand-6);
+}
+.classification-table th:last-child,
+.classification-table td:last-child { border-right: 0; }
 .classification-table thead th { background: var(--sand-3); font-weight: 500; }
 .classification-table tbody tr:last-child > * { border-bottom: 0; }
-.classification-table tbody th { white-space: nowrap; font-weight: 500; }
-.term-definitions { max-width: 760px; }
-.term-definitions div { display: grid; grid-template-columns: minmax(130px, 180px) 1fr; border-bottom: .5px solid var(--sand-6); padding: 8px 0; }
-.term-definitions dt { font-weight: 500; }
-.term-definitions dd { margin: 0; }
+.classification-table tbody th { font-weight: 500; color: var(--ink); }
+.classification-table tbody td { color: var(--sand-10); }
 /* A metric turns the table: its qualifications head the columns, and the values
    sit under them. The rules move with the orientation. */
 .caveats-columns {
@@ -677,33 +689,37 @@
 .claim-details dt {
   font-weight: 400;
   color: var(--ink);
-  padding: 12px 12px 12px 16px;
+  padding: 10px 12px;
+  line-height: 20px;
+  border-right: .5px solid var(--sand-6);
 }
-.claim-details dd { padding: 12px 16px 12px 0; }
+.claim-details dd { padding: 10px 12px; line-height: 20px; color: var(--sand-10); }
 /* One rule between rows: the two cells of a row carry half of it each. */
 .claim-details dt ~ dt, .claim-details dd ~ dd { border-top: .5px solid var(--sand-6); }
 .evidence {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-  row-gap: 8px;
+  row-gap: 0;
   list-style: none;
-  padding: 12px 16px 16px;
+  padding: 0;
   margin: 0;
-  border-top: .5px solid var(--sand-6);
 }
 .evidence li {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-  gap: 8px 0;
+  gap: 0;
 }
+.evidence .relation,
+.evidence a { padding: 10px 12px; line-height: 20px; border-top: .5px solid var(--sand-6); }
+.evidence .relation { border-right: .5px solid var(--sand-6); }
 .relation {
   font-weight: 400;
   color: var(--ink);
 }
 /* The locator belongs under its source, not back in the label column. */
-.evidence .locator { grid-column: 2; }
+.evidence .locator { grid-column: 2; padding: 0 12px 10px; }
 .relation-contradicts { color: #a1392d; }
 .locator {
   display: block;
@@ -874,8 +890,9 @@
   display: grid;
   grid-template-columns: subgrid;
   align-content: start;
-  background: var(--sand-3);
-  border-radius: 16px;
+  background: #fff;
+  border: .5px solid var(--sand-6);
+  border-radius: 12px;
   padding: 0;
   overflow: hidden;
 }
@@ -889,7 +906,8 @@
   font-weight: 400;
   color: var(--ink);
   text-decoration: none;
-  background: var(--sand-4);
+  background: var(--sand-3);
   border-bottom: .5px solid var(--sand-6);
-  padding: 16px;
+  padding: 10px 12px;
+  line-height: 20px;
 }

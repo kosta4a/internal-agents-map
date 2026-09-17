@@ -229,14 +229,28 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <p><Inline parts={supervision.scope} /></p>
     <h3>Structural types</h3>
     <p>Structural type answers what kind of system the entry describes. It is independent of how work starts.</p>
-    <dl class="term-definitions">
-      {APPROACH_TYPE_DEFINITIONS.map((item) => <div><dt>{item.label}</dt><dd>{item.meaning}</dd></div>)}
-    </dl>
+    <div class="classification-table" role="region" aria-label="Structural types" tabindex="0">
+      <table>
+        <thead><tr><th>Type</th><th>What it means</th></tr></thead>
+        <tbody>
+          {APPROACH_TYPE_DEFINITIONS.map((item) => (
+            <tr><th scope="row">{item.label}</th><td>{item.meaning}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
     <h3>Invocation modes</h3>
     <p>Invocation answers how work starts or proceeds. One system can support several modes.</p>
-    <dl class="term-definitions">
-      {INVOCATION_DEFINITIONS.map((item) => <div><dt>{item.label}</dt><dd>{item.meaning}</dd></div>)}
-    </dl>
+    <div class="classification-table" role="region" aria-label="Invocation modes" tabindex="0">
+      <table>
+        <thead><tr><th>Mode</th><th>What it means</th></tr></thead>
+        <tbody>
+          {INVOCATION_DEFINITIONS.map((item) => (
+            <tr><th scope="row">{item.label}</th><td>{item.meaning}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </section>
   <section id="terminology">
     <h2>{terms.heading}</h2>
