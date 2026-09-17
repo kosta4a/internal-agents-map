@@ -1039,8 +1039,10 @@
 .palette-pill.is-on { background: rgba(255, 255, 255, .22); color: #fff; }
 .palette-pill .icon { width: 14px; height: 14px; }
 .palette-pill-count {
-  min-width: 16px;
-  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
   border-radius: 999px;
   background: rgba(255, 255, 255, .22);
   font-size: 12px;
@@ -1101,7 +1103,7 @@
   margin: 0;
   padding: 12px 8px 4px;
   color: rgba(255, 255, 255, .45);
-  font-size: 12px;
+  font-size: 14px;
 }
 .palette-group ul { list-style: none; margin: 0; padding: 0; }
 .palette-group li + li { margin-top: 4px; }

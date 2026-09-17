@@ -16,6 +16,10 @@ import {
   toSelection,
 } from '../lib/search';
 
+/** The directory of the page on show, rebuilt whenever the router swaps one in. */
+let live: { fromUrl: () => void; legacy: () => void } | null = null;
+let claimed = false;
+
 /** The query parameters the directory reads and writes. They are part of the URL contract. */
 const CONTROL_KEYS = ['q', ...FACET_KEYS] as const;
 
@@ -204,11 +208,10 @@ export function startDirectory(): void {
     location.replace(target);
     return;
   }
-  // An old link can also arrive as a fragment change inside this page.
-  window.addEventListener('hashchange', () => {
+  const legacy = (): void => {
     const next = legacyTarget(location.hash, ids, sources);
     if (next) location.replace(next);
-  });
+  };
 
   const form = document.getElementById('filters');
   const results = document.getElementById('results');
@@ -216,8 +219,6 @@ export function startDirectory(): void {
   if (!(form instanceof HTMLFormElement) || !results || !empty || cards.length === 0) return;
 
   const input = element('q', HTMLInputElement);
-  const shortcut = document.getElementById('search-shortcut');
-  if (shortcut) shortcut.textContent = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
   const chips = element('chips', HTMLUListElement);
   const listbox = element('suggestions', HTMLUListElement);
   const vocabulary = readVocabulary();
@@ -443,13 +444,20 @@ export function startDirectory(): void {
     selected = [];
     commit();
   });
-  window.addEventListener('popstate', () => {
+  const fromUrl = (): void => {
     clearTimeout(searchTimer);
     closeSuggestions();
     readUrl();
     renderChips();
     apply();
-  });
+  };
+  live = { fromUrl, legacy };
+  if (!claimed) {
+    claimed = true;
+    // An old link can also arrive as a fragment change inside this page.
+    window.addEventListener('hashchange', () => live?.legacy());
+    window.addEventListener('popstate', () => live?.fromUrl());
+  }
 
   form.hidden = false;
   readUrl();

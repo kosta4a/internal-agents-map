@@ -65,9 +65,10 @@ const graph = structuredData([
               aria-describedby="search-help"
               placeholder="Search anything"
               autocomplete="off"
+              tabindex="-1"
               aria-keyshortcuts="Meta+K Control+K"
             />
-            <kbd id="search-shortcut" class="search-shortcut" aria-hidden="true">Ctrl K</kbd>
+            <kbd id="search-shortcut" class="search-shortcut" aria-hidden="true">⌘ K</kbd>
           </div>
           <ul id="suggestions" class="suggestions" role="listbox" aria-label="Filter suggestions" hidden></ul>
         </div>
@@ -95,5 +96,7 @@ const graph = structuredData([
 <script>
   import { startDirectory } from '../scripts/directory';
 
-  startDirectory();
+  // The router builds this page again on every visit, so the directory is
+  // wired per build rather than once at first load.
+  document.addEventListener('astro:page-load', () => startDirectory());
 </script>

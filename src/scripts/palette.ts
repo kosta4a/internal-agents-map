@@ -47,6 +47,13 @@ function normalize(value: string): string {
   return value.toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * The palette of the page on show. The document keeps its listeners across a
+ * swap, so the shortcut is claimed once and always acts on the current one.
+ */
+let live: { open: () => void; close: () => void; isOpen: () => boolean } | null = null;
+let shortcutClaimed = false;
+
 /** Start the palette. Without it the shortcut does nothing and the items stay reachable. */
 export function startPalette(): void {
   const palette = document.getElementById('palette');
@@ -54,9 +61,8 @@ export function startPalette(): void {
   if (!palette || !(input instanceof HTMLInputElement)) return;
 
   const shortcut = document.getElementById('search-shortcut');
-  if (shortcut && !shortcut.textContent?.trim().startsWith('⌘')) {
-    shortcut.textContent = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
-  }
+  // The badge reads ⌘ K in the HTML, so only a platform without one changes it.
+  if (shortcut && !/Mac|iPhone|iPad|iPod/.test(navigator.platform)) shortcut.textContent = 'Ctrl K';
   const items = [...palette.querySelectorAll<HTMLAnchorElement>('.palette-item')];
   const groups = [...palette.querySelectorAll<HTMLElement>('.palette-group')];
   const empty = palette.querySelector<HTMLElement>('.palette-empty');
@@ -242,20 +248,34 @@ export function startPalette(): void {
     if (event.target instanceof Element && !event.target.closest('.palette-facet')) closeMenus();
   });
 
+  live = { open, close, isOpen: () => !palette.hidden };
+  if (shortcutClaimed) return;
+  shortcutClaimed = true;
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !palette.hidden) { event.preventDefault(); close(); return; }
+    if (!live) return;
+    if (event.key === 'Escape' && live.isOpen()) { event.preventDefault(); live.close(); return; }
     if (
       event.defaultPrevented || event.isComposing || event.repeat ||
       event.altKey || event.shiftKey || event.metaKey === event.ctrlKey ||
       event.key.toLowerCase() !== 'k'
     ) return;
     event.preventDefault();
-    open();
+    live.open();
   });
 
   // The directory's own search box is the palette's other door.
+  const ownControl = (event: Event): boolean =>
+    event.target instanceof Element && event.target.closest('button, a') !== null;
+
   for (const trigger of document.querySelectorAll<HTMLElement>('[data-palette-open]')) {
+    // Caught before the press can put focus in the field the bar is made of.
+    trigger.addEventListener('pointerdown', (event) => {
+      if (trigger.tagName !== 'BUTTON' && ownControl(event)) return;
+      event.preventDefault();
+      open();
+    });
     trigger.addEventListener('click', (event) => {
+      if (trigger.tagName !== 'BUTTON' && ownControl(event)) return;
       event.preventDefault();
       open();
     });

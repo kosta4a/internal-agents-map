@@ -3,6 +3,7 @@
 // ABOUTME: Every page passes its own title, description, and structured data.
 import '../styles/site.css';
 import ContributionInvite from '../components/ContributionInvite.astro';
+import { ClientRouter } from 'astro:transitions';
 import CommandPalette from '../components/CommandPalette.astro';
 import Icon from '../components/Icon.astro';
 import { canonicalUrl, guidePath, homePath, markdownPath, notesIndexPath } from '../lib/routes';
@@ -74,6 +75,7 @@ const contribute =
   {structuredData && (
     <script is:inline type="application/ld+json" set:html={jsonLdScript(structuredData)} />
   )}
+  <ClientRouter />
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -85,8 +87,8 @@ const contribute =
     <nav aria-label="Main navigation">
       <div class="nav-links">
         <a href={homePath()} aria-current={current === 'catalog' ? 'page' : undefined}><Icon name="layers-two" />Agent catalog</a>
-        <a href={guidePath('definitions')} aria-current={current === 'definitions' ? 'page' : undefined}><Icon name="book" />Definitions</a>
         <a href={notesIndexPath()} aria-current={current === 'notes' ? 'page' : undefined}><Icon name="note-text" />Notes</a>
+        <a href={guidePath('definitions')} aria-current={current === 'definitions' ? 'page' : undefined}><Icon name="book" />Definitions</a>
         <a href={guidePath('methodology')} aria-current={current === 'methodology' ? 'page' : undefined}><Icon name="compass-round" />Methodology</a>
         <a class="nav-external" href="https://github.com/steel-experiments/internal-agents-map"><span class="nav-label"><Icon name="github" />Repository</span><Icon name="arrow-upright" /></a>
         <a class="nav-external" href="/data-guide.md"><span class="nav-label"><Icon name="file-text" />Data guide</span><Icon name="arrow-upright" /></a>
@@ -113,7 +115,7 @@ const contribute =
   <button type="button" class="search-launcher" data-palette-open>
     <Icon name="search" size={16} />
     <span>Search anything</span>
-    <kbd class="search-shortcut" id="search-shortcut" aria-hidden="true">Ctrl K</kbd>
+    <kbd class="search-shortcut" id="search-shortcut" aria-hidden="true">⌘ K</kbd>
   </button>
 )}
 <CommandPalette />
@@ -122,9 +124,13 @@ const contribute =
   import { startDisclosures } from '../scripts/disclosures';
   import { startPalette } from '../scripts/palette';
 
-  startContents();
-  startDisclosures();
-  startPalette();
+  // The router swaps the document rather than reloading it, so every page it
+  // builds is wired here, not once at first load.
+  document.addEventListener('astro:page-load', () => {
+    startContents();
+    startDisclosures();
+    startPalette();
+  });
 </script>
 </body>
 </html>
