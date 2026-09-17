@@ -43,16 +43,19 @@
   min-width: 0;
 }
 #filters input::placeholder { color: rgba(255, 255, 255, .72); }
-/* Local directory search stays beside the collection it filters. */
+/* The search field floats over the catalog near the bottom of the window. */
 #filters {
-  position: relative;
+  position: fixed;
   z-index: 10;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  width: 100%;
+  width: min(296px, calc(100% - 32px));
 }
 #filters .search-row {
   display: grid;
