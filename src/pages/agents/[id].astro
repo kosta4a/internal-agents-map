@@ -41,7 +41,7 @@ const graph = structuredData([
 ]);
 
 // Invocation and interfaces are classifications, so they sit with the other facts.
-// Without a reported workflow the entry has no "How it works" material to show.
+// Reviewed entries explain a missing workflow even when there are no claims.
 const hasHowItWorks = entry.workflowClaims.length > 0;
 const invocation = entry.invocation.filter((item) => item.id !== 'unknown');
 const hasImplementation = entry.isPilot || entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
@@ -122,16 +122,22 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       </section>
     )}
 
-    {hasHowItWorks && (
+    {(hasHowItWorks || entry.isPilot) && (
       <section class="entry-section" id="how-it-works" aria-labelledby="how-it-works-title">
         <h2 id="how-it-works-title">How it works</h2>
-        <p class="section-note">
-          {entry.workflowScope ? `Representative workflow: ${entry.workflowScope}.` : 'The workflow the sources report for this implementation.'}
-          {' '}<a href="#sources">Research details</a>
-        </p>
-        <div class="step-panel">
-          {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={entry.isPilot} />)}
-        </div>
+        {hasHowItWorks ? (
+          <>
+            <p class="section-note">
+              {entry.workflowScope ? `Representative workflow: ${entry.workflowScope}.` : 'The workflow the sources report for this implementation.'}
+              {' '}<a href="#sources">Research details</a>
+            </p>
+            <div class="step-panel">
+              {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={entry.isPilot} />)}
+            </div>
+          </>
+        ) : entry.coverageQuestions.workflow && (
+          <p class="review-state"><strong>{entry.coverageQuestions.workflow.stateLabel}:</strong> {entry.coverageQuestions.workflow.note}</p>
+        )}
       </section>
     )}
 
@@ -177,6 +183,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
               {row.claim ? (
                 <dd id={row.claim.anchor} data-claim-id={row.claim.id}>
                   {row.claim.text}
+                  {row.note && <span class="architecture-note">{row.note}</span>}
                   {row.claim.caveats.length > 0 && (
                     <span class="architecture-caveats">
                       {row.claim.caveats.map((caveat) => (

@@ -54,7 +54,7 @@ const ENTRIES = [
 ] as const;
 
 const PILOT_IDS = CATALOG.approaches.map((approach) => approach.id);
-/** Records whose review reports a workflow; the others honestly omit the section. */
+/** Records with workflow claims; other reviewed entries explain their absence. */
 const WORKFLOW_REPORTED = new Set(
   (
     CATALOG.approaches as ReadonlyArray<{
@@ -199,11 +199,43 @@ test.describe('reported results', () => {
 });
 
 test.describe('page-content pilot', () => {
+  for (const [id, note] of [
+    ['plaid-ai-annotator', 'The capture names no run.'],
+    ['zup-codegen', 'no trigger-to-output sequence is described.'],
+  ]) {
+    test(`${id} explains its unreported workflow in HTML and Markdown`, async ({ page, request }) => {
+      await page.goto(`/agents/${id}`);
+      const workflow = page.locator('#how-it-works');
+      await expect(workflow).toBeVisible();
+      await expect(workflow).toContainText('Unreported');
+      await expect(workflow).toContainText(note);
+      await expect(workflow.locator('.claim')).toHaveCount(0);
+      const markdown = await (await request.get(`/agents/${id}.md`)).text();
+      const section = markdown.split('## How it works')[1]?.split('## Where people stay involved')[0];
+      expect(section).toContain('Unreported');
+      expect(section).toContain(note);
+    });
+  }
+
+  test('keeps reported implementation notes beside their claims', async ({ page, request }) => {
+    await page.goto('/agents/linear-agent');
+    const note = 'Codex is named for internal pull-request review; the captures say only frontier language models elsewhere.';
+    await expect(page.locator('#implementation .architecture-note', { hasText: note })).toBeVisible();
+    expect(await (await request.get('/agents/linear-agent.md')).text()).toContain(note);
+  });
+
+  test('keeps Sentry code-size exclusions in the canonical observation', async ({ page, request }) => {
+    await page.goto('/agents/sentry-junior');
+    await expect(page.locator('#results')).toContainText('excluding tests, evals, docs, and lockfiles');
+    const markdown = await (await request.get('/agents/sentry-junior.md')).text();
+    expect(markdown.split('## Reported observations')[1]?.split('## Lessons')[0])
+      .toContain('excluding tests, evals, docs, and lockfiles');
+  });
+
   for (const id of PILOT_IDS) {
     test(`${id} exposes the reviewed reading order and exports`, async ({ page, request }) => {
       await page.goto(`/agents/${id}`);
-      const selectors = ['#purpose', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources'];
-      if (WORKFLOW_REPORTED.has(id)) selectors.push('#how-it-works');
+      const selectors = ['#purpose', '#how-it-works', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources'];
       for (const selector of selectors) {
         await expect(page.locator(selector), selector).toBeVisible();
       }

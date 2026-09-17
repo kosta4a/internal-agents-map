@@ -1804,7 +1804,7 @@ Last reviewed: 2026-09-16.
 | State | durable-session |
 | Identity | mixed |
 | Evidence | detailed-primary |
-| Headline metric | Open-source (Apache-2.0) Slack agent (~100k lines of TS) used internally at Sentry <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1), [sentry-junior-source-4](#sentry-junior-source-4).</small> |
+| Headline metric | Open-source (Apache-2.0) Slack agent (~100k lines of TypeScript excluding tests, evals, docs, and lockfiles) used internally at Sentry <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1), [sentry-junior-source-4](#sentry-junior-source-4).</small> |
 
 ### Operating model
 

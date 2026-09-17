@@ -129,6 +129,27 @@ test.describe('the directory with javascript', () => {
     });
   }
 
+  test('search launchers and shortcuts survive client navigation', async ({ page }) => {
+    await page.goto('/definitions');
+    // A document replacement would erase this marker and mask the regression.
+    await page.evaluate(() => { Object.assign(window, { navigationMarker: true }); });
+    for (const path of ['/notes', '/']) {
+      await page.locator(`a[href="${path}"]`).first().click();
+      await expect(page).toHaveURL(new RegExp(`${path}$`));
+      expect(await page.evaluate(() => 'navigationMarker' in window)).toBe(true);
+      await page.locator(path === '/' ? '.search-box' : 'button[data-palette-open]').click();
+      await expect(page.locator('#palette')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#palette')).toBeHidden();
+      await page.keyboard.press('Control+k');
+      await expect(page.locator('#palette-input')).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#palette')).toBeHidden();
+    }
+    await page.locator('.search-box').click();
+    await expect(page.locator('#palette')).toBeVisible();
+  });
+
   test('the palette opens from the search box and reaches every kind of page', async ({ page }) => {
     await page.goto('/');
     await page.locator('.search-box').click();

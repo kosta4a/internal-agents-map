@@ -31,7 +31,8 @@ rubric:
 summary: An open-source Slack agent built at Sentry that retrieves context and acts across company systems.
   People can steer interactive tasks in a thread; Junior also handles scheduled tasks and inbound events. Its
   author prefers one agent for work that spans several systems.
-headline_metric: Open-source (Apache-2.0) Slack agent (~100k lines of TS) used internally at Sentry
+headline_metric: Open-source (Apache-2.0) Slack agent (~100k lines of TypeScript excluding tests, evals, docs,
+  and lockfiles) used internally at Sentry
 architecture:
   sandbox: Vercel serverless functions; Vercel agent-browser sandbox with an on-path proxy for traffic interception;
     ephemeral containers
@@ -260,7 +261,7 @@ claim_metadata:
     confidence_reason: The authorization discussion distinguishes global read access from user-authorized writes;
       it is an integration design, not a guarantee for every tool.
   headline_metric:
-    metric_scope: Junior codebase size and license in the author report
+    metric_scope: Junior codebase size (excluding tests, evals, documentation, and lockfiles) and license in the author report
   key_metrics.0:
     metric_scope: TypeScript lines in Junior excluding tests, evals, documentation, and lockfiles
   key_metrics.1:

@@ -297,19 +297,20 @@ export function startPalette(): void {
   });
 
   live = { open, close, isOpen: () => !palette.hidden };
-  if (shortcutClaimed) return;
-  shortcutClaimed = true;
-  document.addEventListener('keydown', (event) => {
-    if (!live) return;
-    if (event.key === 'Escape' && live.isOpen()) { event.preventDefault(); live.close(); return; }
-    if (
-      event.defaultPrevented || event.isComposing || event.repeat ||
-      event.altKey || event.shiftKey || event.metaKey === event.ctrlKey ||
-      event.key.toLowerCase() !== 'k'
-    ) return;
-    event.preventDefault();
-    live.open();
-  });
+  if (!shortcutClaimed) {
+    shortcutClaimed = true;
+    document.addEventListener('keydown', (event) => {
+      if (!live) return;
+      if (event.key === 'Escape' && live.isOpen()) { event.preventDefault(); live.close(); return; }
+      if (
+        event.defaultPrevented || event.isComposing || event.repeat ||
+        event.altKey || event.shiftKey || event.metaKey === event.ctrlKey ||
+        event.key.toLowerCase() !== 'k'
+      ) return;
+      event.preventDefault();
+      live.open();
+    });
+  }
 
   // The directory's own search box is the palette's other door.
   const ownControl = (event: Event): boolean =>

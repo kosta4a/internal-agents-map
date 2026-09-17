@@ -207,6 +207,10 @@ export function entryMarkdown(entry: EntryView, level = 1): string[] {
     lines.push(...claimSection('Purpose', entry.summary ? [entry.summary] : [], sources, level + 1));
     if (entry.workflowScope) lines.push(`Representative workflow: ${entry.workflowScope}.`, '');
     lines.push(...claimSection('How it works', entry.workflowClaims, sources, level + 1));
+    if (entry.workflowClaims.length === 0 && entry.coverageQuestions.workflow) {
+      const workflow = entry.coverageQuestions.workflow;
+      lines.push(heading(level + 1, 'How it works'), '', `**${workflow.stateLabel}:**${workflow.note ? ` ${workflow.note}` : ''}`, '');
+    }
     lines.push(heading(level + 1, 'Where people stay involved'), '');
     for (const model of entry.operatingModels) {
       lines.push(`- **${model.scope}** — ${model.boundaryLabel} · ${model.levelLabel}`);

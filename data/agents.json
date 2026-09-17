@@ -18492,7 +18492,7 @@
       "id": "sentry-junior--headline-metric",
       "approach_id": "sentry-junior",
       "field": "headline_metric",
-      "text": "Open-source (Apache-2.0) Slack agent (~100k lines of TS) used internally at Sentry",
+      "text": "Open-source (Apache-2.0) Slack agent (~100k lines of TypeScript excluding tests, evals, docs, and lockfiles) used internally at Sentry",
       "kind": "metric",
       "provenance": "reported",
       "confidence": "high",
@@ -18511,7 +18511,7 @@
         }
       ],
       "reported_by": "Sentry",
-      "metric_scope": "Junior codebase size and license in the author report"
+      "metric_scope": "Junior codebase size (excluding tests, evals, documentation, and lockfiles) and license in the author report"
     },
     {
       "id": "sentry-junior--architecture-sandbox",
