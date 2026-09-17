@@ -134,11 +134,12 @@ class ArtifactTests(unittest.TestCase):
     def test_the_guides_send_the_reader_to_the_entry_pages(self):
         definitions = (DIST / "definitions.html").read_text(encoding="utf-8")
         self.assertEqual(definitions.count("data-chart-reference="), 3)
+        chart = definitions.split('class="quadrant-plot"', 1)[1].split("</figure>", 1)[0]
         placed = {
-            url.split("#")[0]
-            for url in read_page("definitions.html").urls
-            if url.startswith("/agents/")
+            fragment.split('"', 1)[0].split("#")[0]
+            for fragment in chart.split('href="/agents/')[1:]
         }
+        placed = {f"/agents/{path}" for path in placed}
         self.assertTrue(placed)
         self.assertEqual(definitions.count("data-chart-approach-id="), len(placed))
         known = {f"/agents/{a['id']}" for a in self.catalog["approaches"]}

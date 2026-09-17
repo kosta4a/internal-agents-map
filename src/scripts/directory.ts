@@ -218,16 +218,6 @@ export function startDirectory(): void {
   const input = element('q', HTMLInputElement);
   const shortcut = document.getElementById('search-shortcut');
   if (shortcut) shortcut.textContent = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
-  document.addEventListener('keydown', (event) => {
-    if (
-      event.defaultPrevented || event.isComposing || event.repeat ||
-      event.altKey || event.shiftKey || event.metaKey === event.ctrlKey ||
-      event.key.toLowerCase() !== 'k'
-    ) return;
-    event.preventDefault();
-    input.focus();
-    input.select();
-  });
   const chips = element('chips', HTMLUListElement);
   const listbox = element('suggestions', HTMLUListElement);
   const vocabulary = readVocabulary();

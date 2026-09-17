@@ -3,6 +3,7 @@
 // ABOUTME: Every page passes its own title, description, and structured data.
 import '../styles/site.css';
 import ContributionInvite from '../components/ContributionInvite.astro';
+import CommandPalette from '../components/CommandPalette.astro';
 import Icon from '../components/Icon.astro';
 import { canonicalUrl, guidePath, homePath, markdownPath, notesIndexPath } from '../lib/routes';
 import {
@@ -108,12 +109,22 @@ const contribute =
     <small>{SITE_NAME}, compiled by <a href="https://steel.dev/?utm_source=internal-agents-map&utm_medium=website&utm_content=footer">Steel</a>, browser infrastructure for AI agents.</small>
   </div>
 </footer>
+{path !== homePath() && (
+  <button type="button" class="search-launcher" data-palette-open>
+    <Icon name="search" size={16} />
+    <span>Search anything</span>
+    <kbd class="search-shortcut" id="search-shortcut" aria-hidden="true">Ctrl K</kbd>
+  </button>
+)}
+<CommandPalette />
 <script>
   import { startContents } from '../scripts/contents';
   import { startDisclosures } from '../scripts/disclosures';
+  import { startPalette } from '../scripts/palette';
 
   startContents();
   startDisclosures();
+  startPalette();
 </script>
 </body>
 </html>

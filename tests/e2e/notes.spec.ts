@@ -81,7 +81,7 @@ test.describe('one note', () => {
   test('sends its catalog links to the entry pages', async ({ page }) => {
     await page.goto('/notes/stop-a-run');
     for (const id of ['stripe-minions', 'dropbox-nova', 'doordash-code-review']) {
-      await expect(page.locator(`a[href="/agents/${id}"]`)).toHaveCount(1);
+      await expect(page.locator(`main a[href="/agents/${id}"]`)).toHaveCount(1);
     }
     await expect(page.locator('a[href*="index.html"]')).toHaveCount(0);
   });
@@ -198,6 +198,6 @@ test.describe('the Methodology guide', () => {
     );
     await expect(page.locator('a[href="/definitions"]')).not.toHaveCount(0);
     await expect(page.locator('a[href="/notes"]')).not.toHaveCount(0);
-    await expect(page.locator('section')).toHaveCount(8);
+    await expect(page.locator('main section')).toHaveCount(8);
   });
 });
