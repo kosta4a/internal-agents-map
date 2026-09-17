@@ -1243,11 +1243,14 @@ Last reviewed: 2026-09-16.
 - Per-change deploy agent: After human approval for production, an agent manages the rollout, builds a monitoring dashboard, and watches signals of success or failure <small>Sources: [openai-factory-article](#openai-factory-article); Context: [hn-zbrock-internal-adoption](#hn-zbrock-internal-adoption).</small>
 - Perf harness with Synthetics A/B: A perf harness sends problematic pull requests to the Synthetics A/B framework to evaluate performance implications <small>Sources: [openai-factory-article](#openai-factory-article).</small>
 - Perf Factory: Agents sift through alerts and dashboards, de-duplicate signals, identify real latency regressions, root-cause them, and propose fixes <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- Implement and babysit the pull request: Codex makes code changes toward the goal, builds and tests, and babysits the pull request by fixing CI failures until it is green <small>Sources: [openai-factory-article](#openai-factory-article).</small>
 
 ### Reported metrics
 
 - Non-engineering orgs such as finance, recruitment, and legal went from about 0% to 90% Codex usage within a four-month period (self-reported) <small>Sources: [openai-factory-article](#openai-factory-article); Context: [openai-chatgpt-work-post](#openai-chatgpt-work-post).</small>
 - Some build-test-deploy systems saw about a 10x load increase within roughly six months (self-reported) <small>Sources: [openai-factory-article](#openai-factory-article).</small>
+- 92% of OpenAI technical staff used Codex daily, as reported at DevDay in October 2025 <small>Sources: [venturebeat-devday-codex](#venturebeat-devday-codex).</small>
+- Engineers using Codex completed 70% more pull requests each week, as reported at DevDay in October 2025 <small>Sources: [venturebeat-devday-codex](#venturebeat-devday-codex).</small>
 
 ### Catalog observations
 
@@ -1756,6 +1759,10 @@ Last reviewed: 2026-09-16.
 - Progressive tool discovery: searchMcpTools connects to a requested MCP provider and discovers its tools on demand <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - On-path credential proxy: An outbound proxy injects credentials for configured domains or pauses the agent for authorization <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 - Interrupt/resume broker: Pauses near a serverless deadline and queues a task to continue the session <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- Answer a Slack question from the codebase: Junior searches the repo, traces the code path, and answers in the thread instead of guessing <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- Open a GitHub issue from a conversation: Tagged in a thread, Junior summarizes the discussion, does gap analysis or an RCA, and opens the ticket through the typed tool that attaches the deterministic footer <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- Run visual QA in the browser sandbox: Junior opens a feature with agent-browser, clicks around, takes screenshots or videos, and writes up the rough edges in the same thread <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
+- Watch a pull request for follow-ups: After opening a PR Junior subscribes to its events; a failed check or requested change becomes a synthetic message, and Junior decides what to update in the thread <small>Sources: [sentry-junior-source-1](#sentry-junior-source-1).</small>
 
 ### Reported metrics
 
@@ -2239,6 +2246,8 @@ Last reviewed: 2026-09-16.
 - Specialized assistants: Standard, best-practices, and AppSec reviewers generate findings for different issue classes <small>Sources: [uber-ureview-source-1](#uber-ureview-source-1).</small>
 - Multi-layer quality filtering: Confidence grading, semantic deduplication, and historically low-value category suppression reduce noise <small>Sources: [uber-ureview-source-1](#uber-ureview-source-1).</small>
 - Production feedback loop: Developer ratings, addressed-comment detection, and a curated benchmark tune prompts, thresholds, and models <small>Sources: [uber-ureview-source-1](#uber-ureview-source-1).</small>
+- Ingest an eligible diff: When a developer submits a change, uReview filters out low-signal files such as configuration and generated code, then builds a structured prompt with surrounding code context <small>Sources: [uber-ureview-source-1](#uber-ureview-source-1).</small>
+- Post validated comments: The system posts validated comments in line with the code on the review platform, where developers rate each one Useful or Not Useful <small>Sources: [uber-ureview-source-1](#uber-ureview-source-1).</small>
 
 ### Reported metrics
 

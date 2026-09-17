@@ -73,11 +73,17 @@ primitives:
 - name: Perf Factory
   desc: Agents sift through alerts and dashboards, de-duplicate signals, identify real
     latency regressions, root-cause them, and propose fixes
+- name: Implement and babysit the pull request
+  desc: Codex makes code changes toward the goal, builds and tests, and babysits the
+    pull request by fixing CI failures until it is green
 key_metrics:
 - Non-engineering orgs such as finance, recruitment, and legal went from about 0% to
   90% Codex usage within a four-month period (self-reported)
 - Some build-test-deploy systems saw about a 10x load increase within roughly six
   months (self-reported)
+- 92% of OpenAI technical staff used Codex daily, as reported at DevDay in October 2025
+- Engineers using Codex completed 70% more pull requests each week, as reported at
+  DevDay in October 2025
 lessons_learned:
 - OpenAI's desktop lead attributes some adoption growth to longer-running tasks and an agent that coordinates
   sub-agents.
@@ -322,6 +328,10 @@ evidence:
   - source_id: openai-factory-article
     relation: supports
     locator: "Preserved content.md, line 186 (Perf Factory)"
+  primitives.5:
+  - source_id: openai-factory-article
+    relation: supports
+    locator: "Preserved content.md, lines 149-153 (implements changes; builds, tests, fixes CI failures until green)"
   key_metrics.0:
   - source_id: openai-factory-article
     relation: supports
@@ -333,6 +343,14 @@ evidence:
   - source_id: openai-factory-article
     relation: supports
     locator: "Preserved content.md, line 92 (roughly 10x load increase on some systems in about six months)"
+  key_metrics.2:
+  - source_id: venturebeat-devday-codex
+    relation: supports
+    locator: "Preserved content.md, line 32 (company-reported 92% daily technical-staff use, relayed by press at DevDay)"
+  key_metrics.3:
+  - source_id: venturebeat-devday-codex
+    relation: supports
+    locator: "Preserved content.md, line 32 (company-reported 70% more pull requests per week for engineers using Codex)"
   lessons_learned.0:
   - source_id: openai-factory-article
     relation: supports
@@ -385,6 +403,22 @@ claim_metadata:
     valid_at: "2026-09"
     reported_by: OpenAI
     metric_scope: Load on build-test-deploy pipeline systems
+  key_metrics.2:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: "OpenAI's own figure relayed by press at DevDay 2025; no method or denominator published."
+    valid_at: "2025-10"
+    reported_by: OpenAI
+    metric_scope: Daily Codex use by OpenAI technical staff in October 2025
+  key_metrics.3:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: "OpenAI's own figure relayed by press at DevDay 2025; the comparison group and counting method are not stated."
+    valid_at: "2025-10"
+    reported_by: OpenAI
+    metric_scope: Weekly pull requests completed by OpenAI engineers using Codex, relative to unstated baseline
   architecture.sandbox:
     kind: inference
     provenance: catalog-judgment
@@ -407,3 +441,55 @@ claim_metadata:
     confidence: high
     confidence_reason: Ambrosino describes teams distributing workflows and explains why a generic agent alone
       was insufficient; this is his adoption assessment.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [openai-factory-article, venturebeat-devday-codex, openai-harness-engineering-post,
+    hn-harness-engineering-thread, hn-zbrock-internal-prototype, hn-zbrock-internal-adoption,
+    openai-agents-api-post, openai-chatgpt-work-post, every-codex-team-interview]
+  workflow_scope: Human-defined change through green pull request, agent review, risk routing,
+    human-approved rollout; and the production alert to proposed perf fix
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.5, primitives.2, primitives.4], note: 'The article
+      documents the pipeline as agent runs: implement and keep the PR green, handhold the approved rollout,
+      and the production perf-fix loop. The review agents and the perf harness are cited with validation;
+      the risk routing is a mechanism.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1], note: 'A human
+      approves production deployment before the deploy agent takes over; opted-in low-risk areas auto-approve
+      with review by exception. The Perf Factory boundary is the unknown catalog judgment kept in research
+      details.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.tool_access,
+      architecture.knowledge, architecture.context_mgmt, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.0, primitives.3], note: 'Domain-specialist agents
+      review every change and the perf harness sends problematic PRs to Synthetics A/B; the CI suite runs
+      inside the implement primitive.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
+      key_metrics.3]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'The article names no underlying model for the internal
+      harness. The harness-engineering team names gpt-5 and codex-cli for its own 2025 prototype start, which
+      does not state the current internal harness model.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'The pipeline article documents no execution sandbox.
+      The Agents API post documents sandboxing for the external product, not this internal pipeline boundary.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: unreported, claim_paths: [], note: 'Credential handling for the internal system access
+      is not documented; the production approval gate is an authorization step cited with human involvement.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: validation, primitives.1: mechanism, primitives.2: workflow, primitives.3: validation,
+    primitives.4: workflow, primitives.5: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'Weekly Codex and
+      ChatGPT Work use across OpenAI employees, September 2026'}
+    key_metrics.0: {category: adoption-output, basis: reported-measurement, subject: 'Weekly Codex use in
+      non-engineering orgs such as finance, recruitment, and legal over a four-month period'}
+    key_metrics.1: {category: runtime-capacity, basis: estimate, subject: 'Load on build-test-deploy pipeline
+      systems over about six months'}
+    key_metrics.2: {category: adoption-output, basis: reported-measurement, subject: 'Daily Codex use by OpenAI
+      technical staff in October 2025'}
+    key_metrics.3: {category: effectiveness, basis: reported-measurement, subject: 'Weekly pull requests completed
+      per OpenAI engineer using Codex, October 2025, against an unstated baseline'}

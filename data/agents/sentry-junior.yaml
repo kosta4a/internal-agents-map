@@ -56,6 +56,14 @@ primitives:
   desc: An outbound proxy injects credentials for configured domains or pauses the agent for authorization
 - name: Interrupt/resume broker
   desc: Pauses near a serverless deadline and queues a task to continue the session
+- {name: Answer a Slack question from the codebase, desc: 'Junior searches the repo, traces the code path, and answers
+    in the thread instead of guessing'}
+- {name: Open a GitHub issue from a conversation, desc: 'Tagged in a thread, Junior summarizes the discussion, does
+    gap analysis or an RCA, and opens the ticket through the typed tool that attaches the deterministic footer'}
+- {name: Run visual QA in the browser sandbox, desc: 'Junior opens a feature with agent-browser, clicks around, takes
+    screenshots or videos, and writes up the rough edges in the same thread'}
+- {name: Watch a pull request for follow-ups, desc: 'After opening a PR Junior subscribes to its events; a failed
+    check or requested change becomes a synthetic message, and Junior decides what to update in the thread'}
 key_metrics:
 - Around 100,000 lines of TypeScript excluding tests, evals, docs, and lockfiles
 - 4 months from start to writeup
@@ -168,6 +176,14 @@ evidence:
   - source_id: sentry-junior-source-1
     relation: supports
     locator: Preserved content.md, lines 136
+  primitives.3:
+  - {source_id: sentry-junior-source-1, relation: supports, locator: 'Preserved content.md, line 34'}
+  primitives.4:
+  - {source_id: sentry-junior-source-1, relation: supports, locator: 'Preserved content.md, lines 40, 218–220'}
+  primitives.5:
+  - {source_id: sentry-junior-source-1, relation: supports, locator: 'Preserved content.md, line 42'}
+  primitives.6:
+  - {source_id: sentry-junior-source-1, relation: supports, locator: 'Preserved content.md, lines 263–279'}
   key_metrics.0:
   - source_id: sentry-junior-source-1
     relation: supports
@@ -249,3 +265,42 @@ claim_metadata:
     metric_scope: TypeScript lines in Junior excluding tests, evals, documentation, and lockfiles
   key_metrics.1:
     metric_scope: Author-reported development and iteration time before the writeup
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [sentry-junior-source-1, sentry-junior-source-2, sentry-junior-source-3, sentry-junior-source-4]
+  workflow_scope: Slack thread request or watched event to an acted-upon answer or artifact
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.3, primitives.4, primitives.5, primitives.6], note: 'The four
+      runs the writeup documents; the discovery, proxy, and broker primitives are reusable mechanisms.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0], note: 'People give information, steer
+      mid-run, and review the work. The event-driven follow-up boundary is unverified and stays in research details.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.sandbox,
+      architecture.tool_access, architecture.knowledge, architecture.context_mgmt, architecture.credentials,
+      architecture.interfaces]}
+    validation: {state: reported, claim_paths: [lessons_learned.3], note: 'vitest-evals runs event scenarios with
+      explicit pass and fail criteria and asserts on side effects; interceptors also force deterministic issue and
+      PR footers at runtime.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3,
+      lessons_learned.4]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials]}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces], note: 'Slack is the primary surface and the
+      dashboard is the web surface; the writeup also names a local junior chat CLI, which the claim list does not carry.'}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: workflow,
+    primitives.4: workflow, primitives.5: workflow, primitives.6: workflow}
+  observations:
+    headline_metric: {category: implementation-scale, basis: reported-measurement, subject: 'Junior codebase size,
+      Apache-2.0 license, and internal use at Sentry'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same about-100,000-line
+      TypeScript count with the same exclusions.'}
+    key_metrics.1: {category: implementation-scale, basis: reported-measurement, subject: 'Author-reported development
+      time from project start to writeup'}
