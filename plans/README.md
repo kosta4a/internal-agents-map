@@ -20,6 +20,7 @@ verification gate, and update the status row when finished.
 | [010](010-page-content-batch-2.md) | Apply the page-content standard to a second reviewed batch | P1 | M | 009 | DONE on 2026-09-17; 10 of 40 records reviewed |
 | [011](011-page-content-catalog-completion.md) | Complete the page-content standard across the catalog | P1 | L | 009, 010 | DONE on 2026-09-17; all 40 records reviewed |
 | [012](012-separate-agents-and-infrastructure.md) | Give agents and infrastructure distinct places in one catalog | P1 | L | 008–011 | DONE on 2026-09-17; independently verified on isolated branch `codex/plan-012-agents-infrastructure`; not published |
+| [013](013-add-company-pages.md) | Add company pages within the existing design | P2 | M | 012 + approved UI removals | DONE on 2026-09-17; independent full verification and desktop/mobile design review passed |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -46,6 +47,10 @@ Each record keeps its source page and collection date; the gray-scale review
 sheet is recorded in the plan.
 
 ## Dependency notes
+
+- Plan 013 adds derived company pages reached from record metadata, with no new
+  menu item. It preserves Plan 012’s collections and the subsequent user-requested
+  UI removals. It narrowly supersedes Plan 007’s deferral of company hubs.
 
 - Plan 012 follows the twelve-record source recheck. It preserves infrastructure
   research as a separate collection, corrects identities before assigning collection

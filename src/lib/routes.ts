@@ -41,6 +41,21 @@ export function entryPath(id: string): string {
   return `/agents/${id}`;
 }
 
+/** The stable page of one organization. */
+export function organizationPath(id: string): string {
+  if (!SLUG_PATTERN.test(id)) throw new Error(`Company id "${id}" is not a lower-case slug.`);
+  return `/organizations/${id}`;
+}
+
+/** Publish only registry companies with catalog records. */
+export function organizationPaths(catalog: Catalog): string[] {
+  const ids = new Set(catalog.approaches.map((entry) => entry.company_id));
+  for (const id of ids) {
+    if (!catalog.companies.some((company) => company.id === id)) throw new Error(`Unknown company "${id}".`);
+  }
+  return catalog.companies.filter((company) => ids.has(company.id)).map((company) => organizationPath(company.id));
+}
+
 /** The notes index. */
 export function notesIndexPath(): string {
   return '/notes';
@@ -109,7 +124,7 @@ export function publicationRoutes(catalog: Catalog, extraPaths: readonly string[
     assertPublishableId(approach.id);
     return entryPath(approach.id);
   });
-  const paths = [homePath(), ...entries, ...extraPaths];
+  const paths = [homePath(), ...entries, ...organizationPaths(catalog), ...extraPaths];
   assertUniquePaths(paths);
   return paths.map(publicationRoute);
 }

@@ -305,13 +305,13 @@ test.describe('supporting systems', () => {
     const facts = page.locator('.entry-facts');
     await expect(facts).not.toContainText('Invocation');
     await expect(page.locator('#how-it-works h2')).toHaveText('Documented uses');
-    await expect(page.locator('.entry-header a[href="/infrastructure"]')).toBeVisible();
+    await expect(facts.locator('div').filter({ has: page.locator('dt', { hasText: 'Approach type' }) }).locator('dd')).toHaveText('Component');
   });
 
   test('do not deny the workflow of a platform that reports one', async ({ page }) => {
     await page.goto('/agents/workos-project-horizon');
     await expect(page.locator('#how-it-works')).toBeVisible();
-    await expect(page.locator('.entry-header a[href="/"]')).toHaveText('Agents');
+    await expect(page.locator('.entry-facts div').filter({ has: page.locator('dt', { hasText: 'Approach type' }) }).locator('dd')).toHaveText('Agent');
     await expect(page.getByText('no execution workflow')).toHaveCount(0);
   });
 

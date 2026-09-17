@@ -282,9 +282,6 @@ export function startDirectory(): void {
   const apply = (): void => {
     const heading = document.getElementById('directory-heading');
     if (heading) heading.textContent = collection === 'all' ? 'Agents and the infrastructure they run on.' : collection === 'infrastructure' ? 'Infrastructure companies build to support their agents.' : 'AI agents organizations build or adapt to do work for their own teams.';
-    document.querySelectorAll<HTMLElement>('[data-collection-link]').forEach((link) => {
-      if (link.dataset.collectionLink === collection) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
-    });
     if (collection === 'all') document.querySelector('.sidebar a[href="/"]')?.removeAttribute('aria-current');
     const stats = document.getElementById('collection-stats');
     const counts = JSON.parse(document.getElementById('collection-counts')?.textContent ?? '{}') as Record<string, { entries: number; organizations: number; sources: number }>;
@@ -300,14 +297,6 @@ export function startDirectory(): void {
       }));
     }
     for (const group of groups) group.hidden = collection !== 'all' && group.dataset.collectionGroup !== collection;
-    const allLink = document.getElementById('search-all') as HTMLAnchorElement | null;
-    if (allLink) {
-      const query = new URLSearchParams(location.search);
-      query.set('collection', 'all');
-      if (input.value) query.set('q', input.value); else query.delete('q');
-      allLink.href = `/?${query}`;
-      allLink.hidden = collection === 'all';
-    }
     document.querySelectorAll<HTMLElement>('.collection-heading').forEach((heading) => { heading.hidden = collection !== 'all'; });
     let count = 0;
     for (const card of cards) {

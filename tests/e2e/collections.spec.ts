@@ -8,8 +8,8 @@ for (const [path, section] of [['/', 'agents'], ['/infrastructure', 'infrastruct
     await page.goto(path!);
     await expect(page.locator('article.entry:visible')).toHaveCount(count(section!));
     await expect(page.locator(`article.entry[data-collection="${section === 'agents' ? 'infrastructure' : 'agents'}"]:visible`)).toHaveCount(0);
-    await expect(page.locator('.collection-nav a[href="/infrastructure"]')).toBeVisible();
-    await expect(page.locator('.collection-nav a[href="/"]')).toBeVisible();
+    await expect(page.locator('.sidebar a[href="/infrastructure"]')).toBeVisible();
+    await expect(page.locator('.sidebar a[href="/"]')).toBeVisible();
   });
 }
 test('legacy platform and mixed-type queries switch to grouped All with OR semantics and history', async ({ page, javaScriptEnabled }) => {
@@ -23,13 +23,15 @@ test('legacy platform and mixed-type queries switch to grouped All with OR seman
   await expect(page).toHaveURL(/collection=all/);
   await page.goBack();
   await expect(page.locator('#q')).toHaveValue('');
-  await expect(page.locator('[data-collection-link="all"]')).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('#directory-heading')).toHaveText('Agents and the infrastructure they run on.');
+  await expect(page.locator('[data-collection-group="infrastructure"]')).toBeVisible();
+  await expect(page.locator('[data-collection-group="agents"]')).toBeVisible();
 });
-test('local search stays scoped and offers All without losing the query', async ({ page, javaScriptEnabled }) => {
+test('local search stays scoped and All URLs search across collections', async ({ page, javaScriptEnabled }) => {
   test.skip(javaScriptEnabled === false);
   await page.goto('/?q=spectre');
   await expect(page.locator('article.entry[data-approach-id="harvey-spectre"]')).toBeHidden();
-  await page.locator('#search-all').click();
+  await page.goto('/?collection=all&q=spectre');
   await expect(page.locator('article.entry[data-approach-id="harvey-spectre"]')).toBeVisible();
   await expect(page.locator('#q')).toHaveValue('spectre');
 });

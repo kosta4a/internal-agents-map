@@ -45,11 +45,6 @@ const graph = structuredData([
       <div class="stat"><strong>{scopedCounts.organizations}</strong><span>organizations</span></div>
       <div class="stat"><strong>{scopedCounts.sources}</strong><span>sources</span></div>
     </div>
-    <nav class="collection-nav" aria-label="Catalog collections">
-      <a href="/" data-collection-link="agents" aria-current={!infrastructure ? 'page' : undefined}>Agents ({catalog.approaches.filter((item) => item.catalog_section === 'agents').length})</a>
-      <a href="/infrastructure" data-collection-link="infrastructure" aria-current={infrastructure ? 'page' : undefined}>Infrastructure ({catalog.approaches.filter((item) => item.catalog_section === 'infrastructure').length})</a>
-      <a href="/?collection=all" data-all-collections data-collection-link="all">All records</a>
-    </nav>
   </header>
   <section id="catalog" data-default-collection={collection} aria-labelledby="catalog-title">
     <h2 id="catalog-title" class="visually-hidden">Explore the catalog</h2>
@@ -98,10 +93,9 @@ const graph = structuredData([
       No approaches match these filters. Try a broader search or{' '}
       <button type="reset" form="filters" class="text-button">reset the filters</button>.
     </p>
-    <a id="search-all" class="section-note" href="/?collection=all">Search all records</a>
     {(['agents', 'infrastructure'] as const).map((section) => (
       <div class="entries collection-group" data-collection-group={section} hidden={section !== collection}>
-        <h2 class="collection-heading">{section === 'agents' ? 'Agents' : 'Infrastructure'}</h2>
+        {section === 'infrastructure' && <h2 class="collection-heading">Infrastructure</h2>}
         {cards.filter((card) => card.catalogSection === section).map((card) => <AgentCard card={card} />)}
       </div>
     ))}

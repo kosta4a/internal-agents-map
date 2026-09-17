@@ -10,7 +10,7 @@ import ResearchDetails from '../../components/ResearchDetails.astro';
 import SourceList from '../../components/SourceList.astro';
 import { loadCatalog } from '../../lib/catalog';
 import { entryView, showQuestion } from '../../lib/entry-view';
-import { assertPublishableId, canonicalUrl } from '../../lib/routes';
+import { assertPublishableId, canonicalUrl, organizationPath } from '../../lib/routes';
 import {
   SITE_NAME,
   breadcrumbNode,
@@ -53,7 +53,6 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
 <SiteLayout title={title} description={description} path={entry.path} structuredData={graph}>
   <article class="entry-page" data-approach-id={entry.id}>
     <header class="entry-header">
-      <p class="section-note"><a href={entry.profile.path}>{entry.profile.label}</a> / {entry.approachTypeLabel}</p>
       <CompanyLogo company={entry.companyView} size={40} eager />
       <h1>{entry.agentName}</h1>
       {entry.summary && !entry.isPilot ? (
@@ -66,7 +65,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       <dl class="entry-facts">
         <div>
           <dt>Company</dt>
-          <dd>{entry.company}</dd>
+          <dd><a href={organizationPath(entry.companyView.id)}>{entry.company}</a></dd>
         </div>
         <div>
           <dt>Approach type</dt>

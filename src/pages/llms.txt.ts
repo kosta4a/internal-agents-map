@@ -6,7 +6,7 @@ import { contentPaths } from '../lib/content-routes';
 import { termLabel } from '../lib/labels';
 import { noteViews } from '../lib/notes';
 import { SITE_NAME } from '../lib/metadata';
-import { ORIGIN, homePath, markdownPath, notePath } from '../lib/routes';
+import { ORIGIN, organizationPaths, organizationPath, homePath, markdownPath, notePath } from '../lib/routes';
 
 /** The label of one guide or note. A note carries its authored title. */
 function pageLabel(path: string, noteTitles: ReadonlyMap<string, string>): string {
@@ -36,9 +36,10 @@ export function llmsTxt(paths: readonly string[], noteTitles: ReadonlyMap<string
 }
 
 export const GET: APIRoute = async () => {
-  loadCatalog();
+  const catalog = loadCatalog();
   const noteTitles = new Map(noteViews().map((note) => [notePath(note.slug), note.title]));
-  return new Response(llmsTxt(await contentPaths(), noteTitles), {
+  for (const company of catalog.companies) noteTitles.set(organizationPath(company.id), company.name);
+  return new Response(llmsTxt([...(await contentPaths()), ...organizationPaths(catalog)], noteTitles), {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });
 };

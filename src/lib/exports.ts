@@ -13,6 +13,7 @@ import {
 } from './entry-view';
 import { SITE_DESCRIPTION, SITE_NAME } from './metadata';
 import {
+  organizationPath,
   ORIGIN,
   canonicalUrl,
   entryJsonPath,
@@ -176,6 +177,7 @@ function sourceBlock(source: SourceView): string[] {
 /** The identification lines that open an entry. */
 function factLines(entry: EntryView): string[] {
   const facts: ReadonlyArray<readonly [string, string | null]> = [
+    ['Company', markdownLink(entry.company, canonicalUrl(organizationPath(entry.companyView.id)))],
     ['Collection', entry.profile.label],
     ['Approach type', entry.approachTypeLabel],
     ['Deployment stage', entry.deploymentStageLabel],

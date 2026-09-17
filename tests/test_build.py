@@ -609,6 +609,13 @@ class BuildTests(unittest.TestCase):
             "/notes",
             *(f"/notes/{path.stem}" for path in NOTES.glob("*.md")),
             *(f"/agents/{record['id']}" for record in self.records),
+            *(
+                f"/organizations/{company_id}"
+                for company_id in {
+                    record["company_id"]
+                    for record in build.normalize(self.records, self.companies)["approaches"]
+                }
+            ),
         ]
         self.assertEqual(
             sorted(manifest["routes"]),

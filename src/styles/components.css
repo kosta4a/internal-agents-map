@@ -1149,9 +1149,14 @@
   .palette-panel { max-height: calc(100vh - 32px); }
 }
 
-/* Collection navigation uses the existing text-link and spacing vocabulary. */
-.collection-nav { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 24px; font-size: 14px; }
-.collection-nav a[aria-current="page"] { font-weight: 600; text-decoration-thickness: 2px; }
+/* Separate the infrastructure group when all records are shown. */
 .collection-heading { margin-top: 32px; }
-#search-all { display: inline-block; margin: 12px 0 24px; }
-#search-all[hidden] { display: none; }
+
+/* Company indexes reuse the entry shell and unboxed catalog previews. */
+.organization-website { display: inline-flex; align-items: center; gap: 4px; color: var(--sand-10); }
+.organization-connections { list-style: none; padding: 16px; margin: 16px 0 0; border-radius: 14px; background: var(--sand-3); }
+.organization-connections > li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.organization-connections > li + li { margin-top: 16px; }
+
+.organization-page .entry h3 { margin: 0; }
+.organization-page .entry-section > .entry:last-child { margin-bottom: 0; }

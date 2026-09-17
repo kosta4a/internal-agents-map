@@ -46,6 +46,14 @@ class ArtifactTests(unittest.TestCase):
     def test_the_built_artifact_passes_every_publication_rule(self):
         self.assertEqual(checker.validate(DIST), [])
 
+    def test_company_pages_contain_only_their_records(self):
+        for company_id in {a["company_id"] for a in self.catalog["approaches"]}:
+            page = read_page(f"organizations/{company_id}.html")
+            expected = Counter(
+                a["id"] for a in self.catalog["approaches"] if a["company_id"] == company_id
+            )
+            self.assertEqual(Counter(page.coverage["approach"]), expected)
+
     def test_every_claim_and_source_reaches_its_own_entry_page(self):
         for kind, field in (("claim", "claim_ids"), ("source", "source_ids")):
             published = Counter(
