@@ -472,10 +472,11 @@
 .claim-marked > :not(.icon) { grid-column: 2; }
 /* A label or an attribution names the claim above it, so the mark stays on the
    claim's own line rather than beside the line that introduces it. */
-.claim-marked > .claim-label,
-.claim-marked > .claim-attribution { grid-column: 1 / -1; grid-row: 1; }
-.claim-marked:has(> .claim-label, > .claim-attribution) > .icon,
-.claim-marked:has(> .claim-label, > .claim-attribution) > .claim-text { grid-row: 2; }
+.claim-marked > .claim-label { grid-column: 1 / -1; grid-row: 1; }
+.claim-marked:has(> .claim-label) > .icon,
+.claim-marked:has(> .claim-label) > .claim-text { grid-row: 2; }
+/* What kind of statement this is, said before the statement itself. */
+.claim-attribution { color: var(--sand-10); }
 /* The observation takes its own row, starting at the mark's edge. */
 .claim-marked > .observed { grid-column: 1 / -1; margin-top: 0; }
 .entry-section h3 {
@@ -789,6 +790,8 @@
 }
 .related-card {
   position: relative;
+  /* A list item's stacking margin would push a card out of its grid row. */
+  margin: 0;
   display: grid;
   gap: 4px;
   cursor: pointer;

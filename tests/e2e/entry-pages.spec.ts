@@ -242,12 +242,12 @@ test.describe('lesson attribution', () => {
     await page.goto('/agents/strongdm-software-factory');
     await expect(
       page.locator('#claim-strongdm-software-factory--lessons-learned-2 .claim-attribution'),
-    ).toHaveText('Reported opinion');
+    ).toHaveText('Reported opinion:');
 
     await page.goto('/agents/coinbase-forge-mux');
     await expect(
       page.locator('#claim-coinbase-forge-mux--lessons-learned-2 .claim-attribution'),
-    ).toHaveText('Catalog interpretation');
+    ).toHaveText('Catalog interpretation:');
   });
 });
 
