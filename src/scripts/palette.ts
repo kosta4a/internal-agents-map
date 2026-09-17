@@ -22,6 +22,33 @@ function reducedMotion(): boolean {
 }
 
 /**
+ * Blur the bar out of the way, or back into it.
+ * The bar is centred by a transform of its own, so only its opacity and its
+ * focus move: touching the transform would slide it sideways as it went.
+ */
+function fadeBar(bar: HTMLElement, show: boolean, delay = 0): void {
+  const rest = (): void => {
+    bar.style.opacity = show ? '' : '0';
+    bar.style.removeProperty('filter');
+    bar.style.pointerEvents = show ? '' : 'none';
+  };
+  if (reducedMotion()) {
+    rest();
+    return;
+  }
+  if (show) bar.style.pointerEvents = '';
+  const run = animate(
+    bar,
+    show
+      ? { opacity: [0, 1], filter: ['blur(6px)', 'blur(0px)'] }
+      : { opacity: [1, 0], filter: ['blur(0px)', 'blur(6px)'] },
+    { duration: OPEN_SECONDS, ease: EASE, delay },
+  );
+  run.finished.then(rest, rest);
+  setTimeout(rest, (OPEN_SECONDS + delay) * 1000 + 80);
+}
+
+/**
  * Bring one block in: out of focus and slightly low, to sharp and in place.
  * The blur is on the contents, never on the panel, whose own backdrop filter
  * would stop working the moment it became a containing block.
@@ -141,6 +168,8 @@ export function startPalette(): void {
     }
   };
 
+  /** The bars that open the palette: the directory's own box, or the launcher. */
+  const bars = [...document.querySelectorAll<HTMLElement>('#filters, .search-launcher')];
   const panel = palette.querySelector<HTMLElement>('.palette-panel');
   const scrim = palette.querySelector<HTMLElement>('.palette-scrim');
   const search = palette.querySelector<HTMLElement>('.palette-search');
@@ -149,6 +178,8 @@ export function startPalette(): void {
 
   const settle = (): void => {
     palette.hidden = true;
+    // Back in the place it left, never shifted by a transform of its own.
+    for (const bar of bars) fadeBar(bar, true);
     document.documentElement.classList.remove('palette-open');
     if (opener instanceof HTMLElement) opener.focus();
   };
@@ -181,6 +212,8 @@ export function startPalette(): void {
     apply();
     input.focus();
     input.select();
+    // The bar goes as the palette comes: one exchange, not two steps.
+    for (const bar of bars) fadeBar(bar, false);
     if (scrim) bringIn(scrim);
     if (panel) bringIn(panel);
     if (search) bringIn(search, 0.04);
