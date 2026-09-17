@@ -93,8 +93,9 @@ const {
   grid-template-rows: repeat(2, minmax(0, 1fr));
   border: .5px solid var(--sand-6);
   border-radius: 16px;
+  /* The fill is the plot's own, so nothing needs clipping and a name near an
+     edge can run past it rather than being cut. */
   background: var(--sand-3);
-  overflow: hidden;
 }
 .quadrant-cell { position: relative; min-width: 0; }
 /* The two axes are a reading aid inside the square, not edges of it. */
@@ -108,9 +109,9 @@ const {
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
 .quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 12px; padding-left: 20px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
-.quadrant-cell:nth-child(4) li { left: 12%; top: 15%; }
-.quadrant-cell:nth-child(4) li:nth-child(2) { left: 33%; top: 37%; }
-.quadrant-cell:nth-child(4) li:nth-child(3) { left: 20%; top: 60%; }
+.quadrant-assistants li { left: 12%; top: 15%; }
+.quadrant-assistants li:nth-child(2) { left: 33%; top: 37%; }
+.quadrant-assistants li:nth-child(3) { left: 20%; top: 60%; }
 .quadrant-cell li::before {
   content: "";
   position: absolute;
@@ -498,8 +499,8 @@ const {
   .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
   .quadrant-cell .reference-marker::before { width: 11.25px; height: 11.25px; top: calc((1.35em - 11.25px) / 2); }
   .quadrant-cell li:nth-child(2) { left: 22%; }
-  .quadrant-cell:nth-child(4) li:nth-child(2) { left: 28%; }
-  .quadrant-cell:nth-child(3) li span { display: none; }
+  .quadrant-assistants li:nth-child(2) { left: 28%; }
+  .quadrant-ready li span { display: none; }
   .quadrant-x-axis, .quadrant-y-axis { font-size: 12px; }
   .quadrant-legend { gap: 8px 16px; }
   .core-definition { padding: 40px 20px; }

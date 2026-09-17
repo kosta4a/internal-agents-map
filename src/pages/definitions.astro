@@ -127,18 +127,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
       <div class="quadrant-chart">
         <div class="quadrant-y-axis"><span>{chart.verticalAxis.from}</span><span>{chart.verticalAxis.to}</span></div>
         <div class="quadrant-plot">
-          <div class="quadrant-cell">
-            <h3><span>{chart.cells.specialized.scope}</span>{chart.cells.specialized.title}</h3>
-            <ul>
-              {cells.specialized.length === 0 && <li>{chart.emptyCell}</li>}
-              {cells.specialized.map((item) => (
-                <li data-chart-approach-id={item.id}>
-                  <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div class="quadrant-cell">
+          <div class="quadrant-cell quadrant-shared">
             <h3><span>{chart.cells.shared.scope}</span>{chart.cells.shared.title}</h3>
             <ul>
               {cells.shared.length === 0 && <li>{chart.emptyCell}</li>}
@@ -149,7 +138,26 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
               ))}
             </ul>
           </div>
-          <div class="quadrant-cell">
+          <div class="quadrant-cell quadrant-specialized">
+            <h3><span>{chart.cells.specialized.scope}</span>{chart.cells.specialized.title}</h3>
+            <ul>
+              {cells.specialized.length === 0 && <li>{chart.emptyCell}</li>}
+              {cells.specialized.map((item) => (
+                <li data-chart-approach-id={item.id}>
+                  <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="quadrant-cell quadrant-assistants">
+            <h3><span>{chart.cells.assistants.scope}</span>{chart.cells.assistants.title}</h3>
+            <ul>
+              {ASSISTANT_REFERENCES.map((item) => (
+                <li class="reference-marker" data-chart-reference={item.id}><strong>{item.name}</strong><span>{item.category}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div class="quadrant-cell quadrant-ready">
             <h3><span>{chart.cells.ready.scope}</span>{chart.cells.ready.title}</h3>
             <ul>
               {cells.ready.length === 0 && <li>{chart.emptyCell}</li>}
@@ -159,14 +167,6 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
                 </li>
               ))}
               {READY_REFERENCES.map((item) => (
-                <li class="reference-marker" data-chart-reference={item.id}><strong>{item.name}</strong><span>{item.category}</span></li>
-              ))}
-            </ul>
-          </div>
-          <div class="quadrant-cell">
-            <h3><span>{chart.cells.assistants.scope}</span>{chart.cells.assistants.title}</h3>
-            <ul>
-              {ASSISTANT_REFERENCES.map((item) => (
                 <li class="reference-marker" data-chart-reference={item.id}><strong>{item.name}</strong><span>{item.category}</span></li>
               ))}
             </ul>
