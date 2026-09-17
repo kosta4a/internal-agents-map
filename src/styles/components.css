@@ -1047,7 +1047,9 @@
   background: rgba(255, 255, 255, .08);
   color: rgba(255, 255, 255, .78);
   font-size: 14px;
+  line-height: 1;
 }
+.palette-pill-label { display: block; }
 @media (hover: hover) {
 .palette-pill:hover { background: rgba(255, 255, 255, .14); }
 }
@@ -1061,6 +1063,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, .22);
   font-size: 12px;
+  line-height: 1;
   text-align: center;
 }
 .palette-menu {

@@ -1,6 +1,7 @@
 # Design
 
 - Use ABC Areal on every page. Default sizes: 20px titles, 16px headings, 14px body and controls, 12px metadata. Use regular (400) and medium (500) weights; inherit existing responsive overrides.
+- Keep one font weight within a paragraph; use darker text for inline emphasis.
 - Keep white backgrounds and Radix Sand colors: `--sand-12` for primary text, `--sand-10` for secondary text, `--sand-3` for surfaces, and `--sand-6` for fine table dividers.
 - Reuse the centered 684px content column, sticky header, sidebar, and desktop table of contents. Follow the shared mobile layout with 24px page padding.
 - Use 8–16px spacing within components and 24–40px between groups.

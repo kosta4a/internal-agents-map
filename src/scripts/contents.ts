@@ -42,9 +42,14 @@ function heading(section: Element): string | null {
 let watching: IntersectionObserver | undefined;
 
 export function startContents(): void {
+  watching?.disconnect();
+  watching = undefined;
   const rail = document.getElementById('contents');
   const main = document.getElementById('main');
   if (!(rail instanceof HTMLElement) || !main) return;
+
+  rail.replaceChildren();
+  rail.hidden = true;
 
   const list = document.createElement('ul');
   const entries: Entry[] = [];
@@ -71,7 +76,6 @@ export function startContents(): void {
   rail.hidden = false;
 
   const seen = new Set<Element>();
-  watching?.disconnect();
   const observer = new IntersectionObserver(
     (records) => {
       for (const record of records) {

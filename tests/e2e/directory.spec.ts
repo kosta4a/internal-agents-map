@@ -150,6 +150,32 @@ test.describe('the directory with javascript', () => {
     await expect(page.locator('#palette')).toBeVisible();
   });
 
+  test('reinitializing a page keeps one contents rail and a working palette', async ({ page }) => {
+    await page.goto('/definitions');
+    const links = page.locator('#contents a');
+    await expect(links).not.toHaveCount(0);
+    const count = await links.count();
+    await page.evaluate(() => {
+      document.dispatchEvent(new Event('astro:page-load'));
+      document.dispatchEvent(new Event('astro:page-load'));
+    });
+    await expect(page.locator('#contents .contents-title')).toHaveCount(1);
+    await expect(links).toHaveCount(count);
+    await page.locator('[data-palette-open]').click();
+    await page.locator('.palette-pill').first().click();
+    await expect(page.locator('.palette-menu').first()).toBeVisible();
+  });
+
+  test('every part of the search bar opens the palette after repeated closes', async ({ page }) => {
+    await page.goto('/?work=security');
+    for (const target of ['#q', '#search-shortcut', '.search-label', '#chips button']) {
+      await page.locator(target).first().click();
+      await expect(page.locator('#palette-input')).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#palette')).toBeHidden();
+    }
+  });
+
   test('the palette opens from the search box and reaches every kind of page', async ({ page }) => {
     await page.goto('/');
     await page.locator('.search-box').click();

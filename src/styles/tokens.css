@@ -76,6 +76,8 @@ h1 { font-size: 20px; margin-bottom: 16px; }
 h2 { font-size: 16px; }
 h3 { font-size: 16px; }
 h4 { font-size: 16px; }
+/* Inline emphasis uses tone while preserving the surrounding text weight. */
+strong, b { font-weight: inherit; color: var(--ink); }
 p + p { margin-top: 16px; }
 ul { padding-left: 24px; }
 li + li { margin-top: 8px; }

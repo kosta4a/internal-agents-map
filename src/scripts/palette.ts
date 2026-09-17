@@ -28,9 +28,14 @@ function reducedMotion(): boolean {
  */
 const fading = new WeakMap<HTMLElement, { stop: () => void }>();
 
+const fadeVersions = new WeakMap<HTMLElement, object>();
+
 function fadeBar(bar: HTMLElement, show: boolean, delay = 0): void {
+  const version = {};
+  fadeVersions.set(bar, version);
   fading.get(bar)?.stop();
   const rest = (): void => {
+    if (fadeVersions.get(bar) !== version) return;
     bar.style.opacity = show ? '' : '0';
     bar.style.removeProperty('filter');
     bar.style.pointerEvents = show ? '' : 'none';
@@ -84,12 +89,14 @@ function normalize(value: string): string {
  */
 let live: { open: () => void; close: () => void; isOpen: () => boolean } | null = null;
 let shortcutClaimed = false;
+const initialized = new WeakSet<HTMLElement>();
 
 /** Start the palette. Without it the shortcut does nothing and the items stay reachable. */
 export function startPalette(): void {
   const palette = document.getElementById('palette');
   const input = document.getElementById('palette-input');
-  if (!palette || !(input instanceof HTMLInputElement)) return;
+  if (!palette || !(input instanceof HTMLInputElement) || initialized.has(palette)) return;
+  initialized.add(palette);
 
   const shortcut = document.getElementById('search-shortcut');
   // The badge reads ⌘ K in the HTML, so only a platform without one changes it.
@@ -313,18 +320,9 @@ export function startPalette(): void {
   }
 
   // The directory's own search box is the palette's other door.
-  const ownControl = (event: Event): boolean =>
-    event.target instanceof Element && event.target.closest('button, a') !== null;
-
   for (const trigger of document.querySelectorAll<HTMLElement>('[data-palette-open]')) {
-    // Caught before the press can put focus in the field the bar is made of.
-    trigger.addEventListener('pointerdown', (event) => {
-      if (trigger.tagName !== 'BUTTON' && ownControl(event)) return;
-      event.preventDefault();
-      open();
-    });
+    // Open after the full click so a touch cannot land on the arriving scrim.
     trigger.addEventListener('click', (event) => {
-      if (trigger.tagName !== 'BUTTON' && ownControl(event)) return;
       event.preventDefault();
       open();
     });
