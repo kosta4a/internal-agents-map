@@ -15,7 +15,7 @@ import { canonicalUrl, homePath, notesIndexPath } from '../lib/routes';
 
 function document(): string {
   const catalog = loadCatalog();
-  const catalogLink = `[catalog](${canonicalUrl(homePath())}#catalog)`;
+  const catalogLink = `[agent catalog](${canonicalUrl(homePath())}#catalog)`;
   return [
     `Source: ${canonicalUrl(notesIndexPath())}`,
     NOTES_EYEBROW,

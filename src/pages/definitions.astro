@@ -324,7 +324,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     {terms.autonomy.body.map((block) => <p><Inline parts={block} /></p>)}
     <p><Inline parts={terms.autonomy.lead} /> “{terms.autonomy.quote}” <Inline parts={terms.autonomy.closing} /></p>
   </section>
-  <section id="faq" class="guide-faq">
+  <section id="faq" class="guide-faq" data-exclusive>
     <h2>{questions.heading}</h2>
     {questions.items.map((item) => (
       <details>
