@@ -98,9 +98,9 @@ const {
   background: var(--sand-3);
 }
 .quadrant-cell { position: relative; min-width: 0; }
-/* The two axes are a reading aid inside the square, not edges of it. */
-.quadrant-cell:nth-child(odd) { border-right: 1px dotted var(--sand-7); }
-.quadrant-cell:nth-child(-n+2) { border-bottom: 1px dotted var(--sand-7); }
+/* The two axes carry the same hairline as the square they divide. */
+.quadrant-cell:nth-child(odd) { border-right: .5px solid var(--sand-6); }
+.quadrant-cell:nth-child(-n+2) { border-bottom: .5px solid var(--sand-6); }
 .quadrant-cell h3 { position: absolute; top: var(--cell-inset); left: var(--cell-inset); right: var(--cell-inset); margin: 0; font-size: 12px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
 .quadrant-cell h3 span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 12px; line-height: 1.35; font-weight: 400; }
 .quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: var(--cell-inset); }
