@@ -635,8 +635,8 @@ export const DEFINITIONS_TERMS = {
         { strong: 'Autonomy' },
         ' describes the decisions and actions an agent can take without human approval.',
       ],
-      ['Describe that authority concretely:'],
     ] as readonly TextBlock[],
+    lead: ['Describe that authority concretely:'] as TextBlock,
     quote:
       'A Minion can write code and run checks on its own. Production pull requests require human review.',
     closing: [

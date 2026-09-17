@@ -265,6 +265,7 @@ export function noteMarkdown(catalog: Catalog, note: NoteView): string {
     noteBodyMarkdown(note),
     `## ${note.sources.length === 1 ? 'Source' : 'Sources'}`,
     sources.join('\n'),
+    '### Related items',
     catalogLinks.join(' '),
     `[All notes](${notesUrl}) [${next.isFirst ? 'Read' : 'Next'}: ${next.note.title} →](${canonicalUrl(next.note.path)})`,
   ].join('\n\n');

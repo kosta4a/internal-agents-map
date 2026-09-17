@@ -322,8 +322,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <aside class="concept-combination"><p class="combination-title">{terms.combination.label}<br /><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
     <h3 id={terms.autonomy.id}>{terms.autonomy.heading}</h3>
     {terms.autonomy.body.map((block) => <p><Inline parts={block} /></p>)}
-    <blockquote>{terms.autonomy.quote}</blockquote>
-    <p><Inline parts={terms.autonomy.closing} /></p>
+    <p><Inline parts={terms.autonomy.lead} /> “{terms.autonomy.quote}” <Inline parts={terms.autonomy.closing} /></p>
   </section>
   <section id="faq" class="guide-faq">
     <h2>{questions.heading}</h2>
