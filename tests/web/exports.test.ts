@@ -245,12 +245,12 @@ describe('the qualification of a figure', () => {
 
 describe('the results of an entry in Markdown', () => {
   it('separates the metrics from the statements of the other kinds', () => {
-    const markdown = recordMarkdown(catalog, 'block-builderbot');
-    const entry = entryView(catalog, 'block-builderbot');
+    const markdown = recordMarkdown(catalog, 'ramp-inspect');
+    const entry = entryView(catalog, 'ramp-inspect');
     expect(markdown).toContain('## Reported metrics');
     expect(markdown).toContain('## Reported outcomes and statements');
     const opinion = entry.resultStatementClaims.find((item) =>
-      item.text.includes('now takes days'),
+      item.text.includes('limited only by model-provider'),
     )!;
     expect(markdown.indexOf(opinion.text.trim())).toBeGreaterThan(
       markdown.indexOf('## Reported outcomes and statements'),

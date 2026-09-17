@@ -53,9 +53,12 @@ primitives:
   desc: Structured, generated repo context (runtime, nav, conventions, boundaries, deps)
 - name: AI Code Reviewer
   desc: 'Multi-agent CI review: risk tiering, specialist agents, Codex-rule citations'
+- name: AGENTS.md staleness flag
+  desc: The AI Code Reviewer flags merge requests whose repository changes suggest the repo's
+    AGENTS.md is outdated
 key_metrics:
 - 3,683 internal users (60% of company, 93% of R&D)
-- 47.95M AI requests and 241.37B tokens via AI Gateway in the preceding 30 days
+- 47.95M AI requests, 20.18M AI Gateway requests per month, and 241.37B tokens routed through AI Gateway
 - 10,952 merge requests in the week of March 23, 2026, nearly double the Q4 baseline; four-week average above 8,700
 - 295 teams using agentic AI tools
 lessons_learned:
@@ -144,6 +147,10 @@ evidence:
   primitives.3:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+  primitives.4:
+  - source_id: cloudflare-ai-stack-source-1
+    relation: supports
+    locator: Preserved content.md, lines 249–251
   key_metrics.0:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
@@ -197,15 +204,16 @@ claim_metadata:
   headline_metric:
     valid_at: '2026'
     metric_scope: Internal AI engineering requests in the 30 days preceding the report
-    measurement_method: Company-reported AI Gateway count for the preceding 30 days
+    measurement_method: Company-reported total internal AI request count for the preceding 30 days
   key_metrics.0:
     valid_at: '2026'
     metric_scope: Active internal AI coding-tool users in the preceding 30 days
     denominator: Approximately 6,100 employees for company share; R&D organization for R&D share
   key_metrics.1:
     valid_at: '2026'
-    metric_scope: Internal AI requests and AI Gateway tokens in the preceding 30 days
-    measurement_method: Reported request counts and AI Gateway token counts
+    metric_scope: Total internal AI requests in the preceding 30 days; AI Gateway requests reported per month;
+      AI Gateway token volume
+    measurement_method: Reported total AI request count, AI Gateway request count, and AI Gateway token count
   key_metrics.2:
     valid_at: 2026-03
     metric_scope: Company merge requests in the week of March 23, 2026, versus Q4 baseline; not agent-authored PRs
@@ -237,3 +245,44 @@ claim_metadata:
     confidence: medium
     confidence_reason: The workload breakdown and named Workers AI tasks support this division; future growth
       of open-model traffic is presented as an expectation.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [cloudflare-ai-stack-source-1, cloudflare-ai-stack-source-2]
+  workflow_scope: Merge request → automated multi-agent advisory review
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.3]}
+    human_involvement: {state: reported, claim_paths: [operating_models.1], note: The owning team reviews
+      and refines each generated AGENTS.md merge request; the merge-request review flow posts advisory
+      comments with no documented required checkpoint.}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.sandbox,
+      architecture.tool_access, architecture.knowledge, architecture.context_mgmt, architecture.credentials,
+      architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.4]}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
+      key_metrics.3]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials]}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces], note: The capture documents CLI
+      clients and the CI review component; it does not name a web interface for the internal stack.}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: workflow,
+    primitives.4: validation}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: AI requests across
+      the internal AI engineering system}
+    key_metrics.0: {category: adoption-output, basis: reported-measurement, subject: Active internal AI
+      coding-tool users}
+    key_metrics.1: {category: runtime-capacity, basis: reported-measurement, subject: 'Internal AI request,
+      AI Gateway request, and AI Gateway token volume'}
+    key_metrics.2: {category: adoption-output, basis: reported-measurement, subject: Company-wide merge
+      requests during AI tool adoption}
+    key_metrics.3: {category: adoption-output, basis: reported-measurement, subject: Teams with agentic
+      AI tool activity}

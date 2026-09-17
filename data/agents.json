@@ -142,6 +142,151 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "block-builderbot-source-1",
+          "block-builderbot-source-2",
+          "block-builderbot-source-3",
+          "block-builderbot-source-4",
+          "block-builderbot-source-5"
+        ],
+        "workflow_scope": "Slack-requested ticket to reviewed pull request",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2",
+              "primitives.1"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ],
+            "note": "Colleagues steer runs in the Slack thread; the engineering post adds that humans grant the final stamp of approval on pull requests (lines 46, 50)."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3"
+            ],
+            "note": "The launch post documents CI watch and feedback iteration; the pre-push just checks in the engineering post cover local agents generally and are not tied to Builderbot's runs."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.2"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures name the goose orchestration framework but no underlying model; the public repository README names apps and crates only."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No capture documents an execution or isolation boundary; the legacy unknown claim stays in research details."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ],
+            "note": "The launch post also limits operation to source code and system configuration, with no customer data or PII."
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Credential handling is not documented; the source-code-only boundary is a data restriction, not a credential mechanism."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "Slack, Linear, and Jira are named in the launch post; the pull-request host is not named in the captures."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow",
+          "primitives.3": "validation",
+          "primitives.4": "mechanism"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Builderbot merged pull requests per week and their share of Block production code changes"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Builderbot operations per day; the source does not define an operation"
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Same weekly merge count and production-change share from the same passage, with the same period and scope."
+          },
+          "key_metrics.2": {
+            "category": "cost-latency",
+            "basis": "qualitative",
+            "subject": "Turnaround for Square seller features and repetitive engineering work"
+          }
+        }
+      },
       "company_id": "block",
       "claim_ids": [
         "block-builderbot--summary",
@@ -152,8 +297,12 @@
         "block-builderbot--architecture-interfaces",
         "block-builderbot--architecture-tool-access",
         "block-builderbot--architecture-knowledge",
+        "block-builderbot--architecture-context-mgmt",
         "block-builderbot--primitives-0",
         "block-builderbot--primitives-1",
+        "block-builderbot--primitives-2",
+        "block-builderbot--primitives-3",
+        "block-builderbot--primitives-4",
         "block-builderbot--key-metrics-0",
         "block-builderbot--key-metrics-1",
         "block-builderbot--key-metrics-2",
@@ -294,6 +443,159 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "cloudflare-ai-stack-source-1",
+          "cloudflare-ai-stack-source-2"
+        ],
+        "workflow_scope": "Merge request → automated multi-agent advisory review",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.1"
+            ],
+            "note": "The owning team reviews and refines each generated AGENTS.md merge request; the merge-request review flow posts advisory comments with no documented required checkpoint."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.4"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2",
+              "key_metrics.3"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "The capture documents CLI clients and the CI review component; it does not name a web interface for the internal stack."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "validation"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "AI requests across the internal AI engineering system"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Active internal AI coding-tool users"
+          },
+          "key_metrics.1": {
+            "category": "runtime-capacity",
+            "basis": "reported-measurement",
+            "subject": "Internal AI request, AI Gateway request, and AI Gateway token volume"
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Company-wide merge requests during AI tool adoption"
+          },
+          "key_metrics.3": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Teams with agentic AI tool activity"
+          }
+        }
+      },
       "company_id": "cloudflare",
       "claim_ids": [
         "cloudflare-ai-stack--summary",
@@ -310,6 +612,7 @@
         "cloudflare-ai-stack--primitives-1",
         "cloudflare-ai-stack--primitives-2",
         "cloudflare-ai-stack--primitives-3",
+        "cloudflare-ai-stack--primitives-4",
         "cloudflare-ai-stack--key-metrics-0",
         "cloudflare-ai-stack--key-metrics-1",
         "cloudflare-ai-stack--key-metrics-2",
@@ -2075,6 +2378,135 @@
         "identity": "user",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "plaid-internal-mcp-server-source-1"
+        ],
+        "workflow_scope": "AI-client request → authenticated internal tool access and context",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "primitives.1",
+              "primitives.2",
+              "primitives.4"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1",
+              "primitives.2"
+            ],
+            "note": "Tool calls run under the engineer's authenticated employee identity; the capture documents no separate output-review checkpoint."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.tool_access",
+              "architecture.credentials"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1"
+            ]
+          },
+          "lessons": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture offers design rationale, such as the view that existing access-control frameworks can be naturally replicated, but states no evaluated transferable lesson."
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "not-applicable",
+            "claim_paths": [],
+            "note": "The server connects AI clients to internal data and runs no model itself; the capture describes no model component."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture describes the identity-aware proxy and managed-device checks as access control, not an execution isolation boundary."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Documentation and internal data are integrated as tools; the capture describes no separate knowledge or context store."
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture describes delivering context to AI clients, not how context is maintained or organized over time."
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The capture names AI clients such as Claude Code and Cursor that connect as MCP clients, not a human-facing surface of the server."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "workflow",
+          "primitives.1": "workflow",
+          "primitives.2": "workflow",
+          "primitives.3": "validation",
+          "primitives.4": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "estimate",
+            "subject": "Claude Code and Cursor usage among Plaid engineers and agents relying on the internal MCP server"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "estimate",
+            "subject": "Claude Code and Cursor adoption among Plaid engineers"
+          },
+          "key_metrics.1": {
+            "category": "adoption-output",
+            "basis": "estimate",
+            "subject": "Tool calls through and agents built on the internal MCP server across engineering, product, and support"
+          }
+        }
+      },
       "company_id": "plaid",
       "claim_ids": [
         "plaid-internal-mcp-server--summary",
@@ -2082,6 +2514,11 @@
         "plaid-internal-mcp-server--architecture-harness",
         "plaid-internal-mcp-server--architecture-tool-access",
         "plaid-internal-mcp-server--architecture-credentials",
+        "plaid-internal-mcp-server--primitives-0",
+        "plaid-internal-mcp-server--primitives-1",
+        "plaid-internal-mcp-server--primitives-2",
+        "plaid-internal-mcp-server--primitives-3",
+        "plaid-internal-mcp-server--primitives-4",
         "plaid-internal-mcp-server--key-metrics-0",
         "plaid-internal-mcp-server--key-metrics-1",
         "plaid-internal-mcp-server--operating-models-0"
@@ -2124,6 +2561,155 @@
         "identity": "dedicated-agent",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "posthog-stamphog-source-1",
+          "posthog-stamphog-source-2",
+          "posthog-stamphog-source-3"
+        ],
+        "workflow_scope": "stamphog-labeled pull request through gates, bot wait, LLM review, and verdict",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.4",
+              "primitives.5",
+              "primitives.1",
+              "primitives.6"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.1",
+              "operating_models.0"
+            ]
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.credentials",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0",
+              "lessons_learned.2"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The pinned README documents the GitHub Action host and the reviewer's Read, Grep, and Glob tools but no isolation boundary for a run."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "validation",
+          "primitives.1": "workflow",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "workflow",
+          "primitives.6": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "StampHog-handled PRs per month and main-repository merged-PR approval share per quarter"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Restates the monthly handled-PR count of the headline metric with the same period, scope, and qualifications."
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Restates the quarterly main-repository approval share of the headline metric with the same period, denominator, and qualifications."
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "PostHog PRs approved by StampHog and its monthly token cost"
+          }
+        }
+      },
       "company_id": "posthog",
       "claim_ids": [
         "posthog-stamphog--summary",
@@ -2138,6 +2724,10 @@
         "posthog-stamphog--primitives-0",
         "posthog-stamphog--primitives-1",
         "posthog-stamphog--primitives-2",
+        "posthog-stamphog--primitives-3",
+        "posthog-stamphog--primitives-4",
+        "posthog-stamphog--primitives-5",
+        "posthog-stamphog--primitives-6",
         "posthog-stamphog--key-metrics-0",
         "posthog-stamphog--key-metrics-1",
         "posthog-stamphog--key-metrics-2",
@@ -2669,6 +3259,149 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "spotify-honk-xirp-source-1",
+          "spotify-honk-xirp-source-2",
+          "spotify-honk-xirp-source-3"
+        ],
+        "workflow_scope": "Natural-language change request → Honk pull request through Fleet Management",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.4",
+              "primitives.5"
+            ]
+          },
+          "human_involvement": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures keep reviews and merges on the pre-agent pull-request workflow (Honk Part 1 lines 26 and 58) without stating a required human checkpoint for Honk pull requests; the no-human auto-merge statement covers deterministic Fleetshift pull requests only (Code with Claude line 36)."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model",
+              "architecture.harness",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.0"
+            ]
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ]
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Kubernetes pods and containerized jobs are documented as the execution environment (Honk Part 1 line 26; Code with Claude line 56) but the isolation boundary is not stated; sandboxing is named as an open challenge (Honk Part 1 line 101)."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Credential handling for Honk sessions and their trusted tools is not documented in the reviewed captures."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "validation",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Cumulative merged Honk-generated pull requests across Spotify"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Same cumulative merged Honk pull-request count period and scope as the headline observation."
+          },
+          "key_metrics.1": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Selected code migrations executed with Honk against manual completion time"
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "estimate",
+            "subject": "Spotify pull requests automated by Fleet Management since mid-2024 including deterministic transformations"
+          }
+        }
+      },
       "company_id": "spotify",
       "claim_ids": [
         "spotify-honk-xirp--summary",
@@ -2683,6 +3416,9 @@
         "spotify-honk-xirp--primitives-0",
         "spotify-honk-xirp--primitives-1",
         "spotify-honk-xirp--primitives-2",
+        "spotify-honk-xirp--primitives-3",
+        "spotify-honk-xirp--primitives-4",
+        "spotify-honk-xirp--primitives-5",
         "spotify-honk-xirp--key-metrics-0",
         "spotify-honk-xirp--key-metrics-1",
         "spotify-honk-xirp--key-metrics-2",
@@ -3680,6 +4416,24 @@
       ]
     },
     {
+      "id": "block-builderbot--architecture-context-mgmt",
+      "approach_id": "block-builderbot",
+      "field": "architecture.context_mgmt",
+      "text": "Progressive disclosure pairs a global world model with hyperlocal context through nested AGENTS.md files, module-scoped .agents/checks review prompts, and hundreds of internal Agent Skills from an internal Skills Marketplace",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "Block's engineering blog describes these context mechanisms directly; it does not quantify their effect.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "block-builderbot-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 32–40"
+        }
+      ]
+    },
+    {
       "id": "block-builderbot--primitives-0",
       "approach_id": "block-builderbot",
       "field": "primitives.0",
@@ -3714,6 +4468,63 @@
         }
       ],
       "display_name": "Ticket-driven flow"
+    },
+    {
+      "id": "block-builderbot--primitives-2",
+      "approach_id": "block-builderbot",
+      "field": "primitives.2",
+      "text": "Anyone tags @builderbot in Slack with a short description and it researches, plans, and implements in that thread while teammates steer in real time",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "The launch post describes tagging @builderbot in Slack and collaborating in that thread in real time.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "block-builderbot-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 16"
+        }
+      ],
+      "display_name": "Slack thread start"
+    },
+    {
+      "id": "block-builderbot--primitives-3",
+      "approach_id": "block-builderbot",
+      "field": "primitives.3",
+      "text": "After opening the pull request, Builderbot watches CI and iterates based on feedback; humans step in where they add the most value",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "The launch post states that Builderbot watches CI and iterates on feedback; the division of labor with humans is the company's own description.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "block-builderbot-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 18"
+        }
+      ],
+      "display_name": "CI watch and iteration"
+    },
+    {
+      "id": "block-builderbot--primitives-4",
+      "approach_id": "block-builderbot",
+      "field": "primitives.4",
+      "text": "The sq agents review entrypoint dispatches parallel global and module-scoped review subagents against a pull request and verifies world-model alignment before humans grant final approval",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "The engineering post describes the review entrypoint and its parallel subagents; it does not isolate their effect on outcomes.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "block-builderbot-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 46–58"
+        }
+      ],
+      "display_name": "Review protector gate"
     },
     {
       "id": "block-builderbot--key-metrics-0",
@@ -4310,7 +5121,7 @@
       ],
       "reported_by": "Cloudflare",
       "metric_scope": "Internal AI engineering requests in the 30 days preceding the report",
-      "measurement_method": "Company-reported AI Gateway count for the preceding 30 days"
+      "measurement_method": "Company-reported total internal AI request count for the preceding 30 days"
     },
     {
       "id": "cloudflare-ai-stack--architecture-sandbox",
@@ -4522,6 +5333,25 @@
       "display_name": "AI Code Reviewer"
     },
     {
+      "id": "cloudflare-ai-stack--primitives-4",
+      "approach_id": "cloudflare-ai-stack",
+      "field": "primitives.4",
+      "text": "The AI Code Reviewer flags merge requests whose repository changes suggest the repo's AGENTS.md is outdated",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "cloudflare-ai-stack-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 249–251"
+        }
+      ],
+      "display_name": "AGENTS.md staleness flag"
+    },
+    {
       "id": "cloudflare-ai-stack--key-metrics-0",
       "approach_id": "cloudflare-ai-stack",
       "field": "key_metrics.0",
@@ -4546,7 +5376,7 @@
       "id": "cloudflare-ai-stack--key-metrics-1",
       "approach_id": "cloudflare-ai-stack",
       "field": "key_metrics.1",
-      "text": "47.95M AI requests and 241.37B tokens via AI Gateway in the preceding 30 days",
+      "text": "47.95M AI requests, 20.18M AI Gateway requests per month, and 241.37B tokens routed through AI Gateway",
       "kind": "metric",
       "provenance": "reported",
       "confidence": "high",
@@ -4560,8 +5390,8 @@
         }
       ],
       "reported_by": "Cloudflare",
-      "metric_scope": "Internal AI requests and AI Gateway tokens in the preceding 30 days",
-      "measurement_method": "Reported request counts and AI Gateway token counts"
+      "metric_scope": "Total internal AI requests in the preceding 30 days; AI Gateway requests reported per month; AI Gateway token volume",
+      "measurement_method": "Reported total AI request count, AI Gateway request count, and AI Gateway token count"
     },
     {
       "id": "cloudflare-ai-stack--key-metrics-2",
@@ -9958,6 +10788,101 @@
       ]
     },
     {
+      "id": "plaid-internal-mcp-server--primitives-0",
+      "approach_id": "plaid-internal-mcp-server",
+      "field": "primitives.0",
+      "text": "An engineer's AI tool such as Claude Code or Cursor reaches internal data through the one central internal MCP server instead of a locally managed arrangement of MCP servers",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-internal-mcp-server-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 38–40, 67"
+        }
+      ],
+      "display_name": "Connect an AI client"
+    },
+    {
+      "id": "plaid-internal-mcp-server--primitives-1",
+      "approach_id": "plaid-internal-mcp-server",
+      "field": "primitives.1",
+      "text": "CLI-based authentication uses the Device Authorization Grant flow with DPoP and short-lived bearer tokens through a locally running proxy",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-internal-mcp-server-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 59"
+        }
+      ],
+      "display_name": "Authenticate the engineer"
+    },
+    {
+      "id": "plaid-internal-mcp-server--primitives-2",
+      "approach_id": "plaid-internal-mcp-server",
+      "field": "primitives.2",
+      "text": "The identity-aware proxy validates a Plaid managed device and identity-provider login; a signed identity token is parsed and the centralized authorization server checks the employee's access to the target service",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-internal-mcp-server-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 57, 59"
+        }
+      ],
+      "display_name": "Authorize the request"
+    },
+    {
+      "id": "plaid-internal-mcp-server--primitives-3",
+      "approach_id": "plaid-internal-mcp-server",
+      "field": "primitives.3",
+      "text": "Tool-level controls enforce the LLM data access policy when a tool is called, and the centralized design adds caller identity inspection and audit logging",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-internal-mcp-server-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 61–63, 82, 87"
+        }
+      ],
+      "display_name": "Enforce data policy at call time"
+    },
+    {
+      "id": "plaid-internal-mcp-server--primitives-4",
+      "approach_id": "plaid-internal-mcp-server",
+      "field": "primitives.4",
+      "text": "The tool returns data from internal systems such as Jira, application logs, and data schemas to the AI client",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "plaid-internal-mcp-server-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 14–16"
+        }
+      ],
+      "display_name": "Return internal context"
+    },
+    {
       "id": "plaid-internal-mcp-server--key-metrics-0",
       "approach_id": "plaid-internal-mcp-server",
       "field": "key_metrics.0",
@@ -10247,6 +11172,97 @@
         }
       ],
       "display_name": "Auditable verdict bundle"
+    },
+    {
+      "id": "posthog-stamphog--primitives-3",
+      "approach_id": "posthog-stamphog",
+      "field": "primitives.3",
+      "text": "An engineer adds the stamphog label to a non-draft pull request and the GitHub Action runs the review pipeline",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "posthog-stamphog-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 107–108"
+        },
+        {
+          "source_id": "posthog-stamphog-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 19, 41–44"
+        }
+      ],
+      "display_name": "Label-triggered run start"
+    },
+    {
+      "id": "posthog-stamphog--primitives-4",
+      "approach_id": "posthog-stamphog",
+      "field": "primitives.4",
+      "text": "The run waits up to five minutes for allowlisted reviewer-bot reviews to finish and returns WAIT with the label kept when one is still in flight",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "posthog-stamphog-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 80–92"
+        }
+      ],
+      "display_name": "Wait out in-flight bot reviews"
+    },
+    {
+      "id": "posthog-stamphog--primitives-5",
+      "approach_id": "posthog-stamphog",
+      "field": "primitives.5",
+      "text": "Claude reads the diff, repository files, discussion timeline, and reviewer signals to look for production breakage, security issues, and missed dependencies",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "posthog-stamphog-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 123"
+        },
+        {
+          "source_id": "posthog-stamphog-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 95–112"
+        }
+      ],
+      "display_name": "LLM showstopper review"
+    },
+    {
+      "id": "posthog-stamphog--primitives-6",
+      "approach_id": "posthog-stamphog",
+      "field": "primitives.6",
+      "text": "An approval is posted once as the StampHog app and counts toward branch protection; every other verdict updates one sticky comment with its reason and next steps",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "posthog-stamphog-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 114–116"
+        },
+        {
+          "source_id": "posthog-stamphog-source-3",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 128–131"
+        }
+      ],
+      "display_name": "Post the verdict"
     },
     {
       "id": "posthog-stamphog--key-metrics-0",
@@ -13112,6 +14128,68 @@
         }
       ],
       "display_name": "Xirp (workspace/context layer)"
+    },
+    {
+      "id": "spotify-honk-xirp--primitives-3",
+      "approach_id": "spotify-honk-xirp",
+      "field": "primitives.3",
+      "text": "An engineer states the change in natural language instead of a deterministic migration script; from Slack or GitHub Enterprise an interactive agent gathers the task details into the prompt",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "spotify-honk-xirp-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 58, 87"
+        }
+      ],
+      "display_name": "Describe the change as a prompt"
+    },
+    {
+      "id": "spotify-honk-xirp--primitives-4",
+      "approach_id": "spotify-honk-xirp",
+      "field": "primitives.4",
+      "text": "The coding agent performs the modification while Fleet Management keeps identifying targets and scheduling the work",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "spotify-honk-xirp-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 52–58"
+        },
+        {
+          "source_id": "spotify-honk-xirp-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 56–62"
+        }
+      ],
+      "display_name": "Honk executes the code change"
+    },
+    {
+      "id": "spotify-honk-xirp--primitives-5",
+      "approach_id": "spotify-honk-xirp",
+      "field": "primitives.5",
+      "text": "Fleet Management opens the pull request against the target repository; getting reviews and merging into production remain the pre-agent workflow",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "spotify-honk-xirp-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 26, 58"
+        }
+      ],
+      "display_name": "Open the pull request through the existing workflow"
     },
     {
       "id": "spotify-honk-xirp--key-metrics-0",

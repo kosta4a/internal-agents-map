@@ -59,6 +59,11 @@ const PILOT_IDS = [
   'microsoft-prassistant',
   'doordash-code-review',
   'ycombinator-agent-infra',
+  'plaid-internal-mcp-server',
+  'spotify-honk-xirp',
+  'block-builderbot',
+  'posthog-stamphog',
+  'cloudflare-ai-stack',
 ] as const;
 
 async function structuredData(page: Page): Promise<Record<string, unknown>> {
@@ -184,11 +189,11 @@ test.describe('narrow entry pages', () => {
 
 test.describe('reported results', () => {
   test('separates the metrics from the statements of the other kinds', async ({ page }) => {
-    await page.goto('/agents/block-builderbot');
+    await page.goto('/agents/ramp-inspect');
     const results = page.locator('#results');
     const statements = results.getByRole('heading', { name: 'Reported outcomes and statements' });
     await expect(statements).toBeVisible();
-    const opinion = results.locator('.claim', { hasText: 'now takes days' });
+    const opinion = results.locator('.claim', { hasText: 'limited only by model-provider' });
     await expect(opinion).toHaveCount(1);
     await expect(opinion.locator('.claim-kind')).toHaveText('(opinion)');
   });
@@ -252,9 +257,10 @@ test.describe('lesson attribution', () => {
 });
 
 test.describe('supporting systems', () => {
-  test('omit an empty workflow section and keep the invocation fact', async ({ page }) => {
+  test('show the reviewed workflow section and keep the invocation fact', async ({ page }) => {
     await page.goto('/agents/plaid-internal-mcp-server');
-    await expect(page.locator('#how-it-works')).toHaveCount(0);
+    await expect(page.locator('#how-it-works')).toBeVisible();
+    await expect(page.locator('#how-it-works .claim-label').first()).not.toBeEmpty();
     const facts = page.locator('.entry-facts');
     await expect(facts).toContainText('Invocation');
     await expect(facts).toContainText('Interactive');

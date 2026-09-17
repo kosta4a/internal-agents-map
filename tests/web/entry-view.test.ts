@@ -303,15 +303,28 @@ describe('a supporting system', () => {
     expect(entry.supportingSystemNote).toContain('workflow');
   });
 
-  it('keeps the notice on plaid-internal-mcp-server, which reports no workflow', () => {
+  it('does not deny the workflow that plaid-internal-mcp-server reports', () => {
     const entry = entryView(catalog, 'plaid-internal-mcp-server');
-    expect(entry.workflowClaims.length).toBe(0);
-    expect(entry.supportingSystemNote).toContain('no execution workflow');
+    expect(entry.isSupportingSystem).toBe(true);
+    expect(entry.workflowClaims.length).toBeGreaterThan(0);
+    expect(entry.supportingSystemNote).not.toMatch(/not an agent|no execution workflow/);
+    expect(entry.supportingSystemNote).toContain('workflow');
   });
 });
 
 describe('page-content pilot reading model', () => {
-  const ids = ['github-qubot', 'notion-custom-agents', 'microsoft-prassistant', 'doordash-code-review', 'ycombinator-agent-infra'];
+  const ids = [
+    'github-qubot',
+    'notion-custom-agents',
+    'microsoft-prassistant',
+    'doordash-code-review',
+    'ycombinator-agent-infra',
+    'plaid-internal-mcp-server',
+    'spotify-honk-xirp',
+    'block-builderbot',
+    'posthog-stamphog',
+    'cloudflare-ai-stack',
+  ];
 
   it('uses explicit workflow roles and preserves primitive names', () => {
     for (const id of ids) {
@@ -335,7 +348,7 @@ describe('page-content pilot reading model', () => {
   });
 
   it('keeps legacy entries on their existing path', () => {
-    const legacy = entryView(catalog, 'block-builderbot');
+    const legacy = entryView(catalog, 'replit-manager-agent');
     expect(legacy.isPilot).toBe(false);
     expect(legacy.researchOnlyClaims).toEqual([]);
   });

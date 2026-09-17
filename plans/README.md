@@ -17,6 +17,7 @@ verification gate, and update the status row when finished.
 | [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
 | [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; editorial follow-up included with the approved Plan 009 merge. Earlier releases: `15bacb9`, `b6ae5c4` |
 | [009](009-agent-page-content-pilot.md) | Pilot a shared content standard on five agent pages | P1 | L | 008 editorial follow-up | DONE; user approved merge to main on 2026-09-17 |
+| [010](010-page-content-batch-2.md) | Apply the page-content standard to a second reviewed batch | P1 | M | 009 | DONE on 2026-09-17; 10 of 40 records reviewed |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)

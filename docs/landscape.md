@@ -184,11 +184,15 @@ Last reviewed: 2026-09-16.
 - Interfaces: slack, linear, jira, github <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
 - Tool access: MCP connects agents to internal tools and data; picks up Linear/Jira tickets, creates the branch, writes code, opens the PR, watches CI <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
 - Knowledge: Company-wide code context across hundreds of millions of lines and hundreds of services; Block also frames Builderbot as an 'agentic protector' around its software world model <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1), [block-builderbot-source-2](#block-builderbot-source-2).</small>
+- Context mgmt: Progressive disclosure pairs a global world model with hyperlocal context through nested AGENTS.md files, module-scoped .agents/checks review prompts, and hundreds of internal Agent Skills from an internal Skills Marketplace <small>Sources: [block-builderbot-source-2](#block-builderbot-source-2).</small>
 
 ### Primitives
 
 - Orchestration layer: Coordinates multiple agents over one codebase instead of running a single loop <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
 - Ticket-driven flow: Linear/Jira ticket → branch → code → PR → CI watch, end to end <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
+- Slack thread start: Anyone tags @builderbot in Slack with a short description and it researches, plans, and implements in that thread while teammates steer in real time <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
+- CI watch and iteration: After opening the pull request, Builderbot watches CI and iterates based on feedback; humans step in where they add the most value <small>Sources: [block-builderbot-source-1](#block-builderbot-source-1).</small>
+- Review protector gate: The sq agents review entrypoint dispatches parallel global and module-scoped review subagents against a pull request and verifies world-model alignment before humans grant final approval <small>Sources: [block-builderbot-source-2](#block-builderbot-source-2).</small>
 
 ### Reported metrics
 
@@ -322,11 +326,12 @@ Last reviewed: 2026-09-16.
 - Code Mode: Searches tool schemas through a portal and exposes a separate execution function <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 - AGENTS.md: Structured, generated repo context (runtime, nav, conventions, boundaries, deps) <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 - AI Code Reviewer: Multi-agent CI review: risk tiering, specialist agents, Codex-rule citations <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
+- AGENTS.md staleness flag: The AI Code Reviewer flags merge requests whose repository changes suggest the repo's AGENTS.md is outdated <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 
 ### Reported metrics
 
 - 3,683 internal users (60% of company, 93% of R&D) <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
-- 47.95M AI requests and 241.37B tokens via AI Gateway in the preceding 30 days <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
+- 47.95M AI requests, 20.18M AI Gateway requests per month, and 241.37B tokens routed through AI Gateway <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 - 10,952 merge requests in the week of March 23, 2026, nearly double the Q4 baseline; four-week average above 8,700 <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 - 295 teams using agentic AI tools <small>Sources: [cloudflare-ai-stack-source-1](#cloudflare-ai-stack-source-1).</small>
 
@@ -1389,6 +1394,14 @@ Last reviewed: 2026-09-16.
 - Tool access: More than 20 tools and several internal services (Jira, logs, schemas) <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
 - Credentials: Behind Plaid's identity-aware proxy and centralized authorization <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
 
+### Primitives
+
+- Connect an AI client: An engineer's AI tool such as Claude Code or Cursor reaches internal data through the one central internal MCP server instead of a locally managed arrangement of MCP servers <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
+- Authenticate the engineer: CLI-based authentication uses the Device Authorization Grant flow with DPoP and short-lived bearer tokens through a locally running proxy <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
+- Authorize the request: The identity-aware proxy validates a Plaid managed device and identity-provider login; a signed identity token is parsed and the centralized authorization server checks the employee's access to the target service <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
+- Enforce data policy at call time: Tool-level controls enforce the LLM data access policy when a tool is called, and the centralized design adds caller identity inspection and audit logging <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
+- Return internal context: The tool returns data from internal systems such as Jira, application logs, and data schemas to the AI client <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
+
 ### Reported metrics
 
 - Claude Code and Cursor are used by over 80% of Plaid engineers; the source does not report internal MCP server adoption share <small>Sources: [plaid-internal-mcp-server-source-1](#plaid-internal-mcp-server-source-1).</small>
@@ -1442,6 +1455,10 @@ Last reviewed: 2026-09-16.
 - Authoritative safety gates: Draft state, conflicts, requested changes, sensitive paths, size ceilings, and risk tiers can block AI approval; the LLM may tighten but never loosen a gate <small>Sources: [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
 - Risk-aware routing: Eligible changes can be approved while risky, ambiguous, or insufficiently assured changes are refused or escalated to a suitable human reviewer <small>Sources: [posthog-stamphog-source-1](#posthog-stamphog-source-1), [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
 - Auditable verdict bundle: Each run records PR metadata, classification, gate results, reviewer output, and the final verdict <small>Sources: [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
+- Label-triggered run start: An engineer adds the stamphog label to a non-draft pull request and the GitHub Action runs the review pipeline <small>Sources: [posthog-stamphog-source-1](#posthog-stamphog-source-1), [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
+- Wait out in-flight bot reviews: The run waits up to five minutes for allowlisted reviewer-bot reviews to finish and returns WAIT with the label kept when one is still in flight <small>Sources: [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
+- LLM showstopper review: Claude reads the diff, repository files, discussion timeline, and reviewer signals to look for production breakage, security issues, and missed dependencies <small>Sources: [posthog-stamphog-source-2](#posthog-stamphog-source-2), [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
+- Post the verdict: An approval is posted once as the StampHog app and counts toward branch protection; every other verdict updates one sticky comment with its reason and next steps <small>Sources: [posthog-stamphog-source-1](#posthog-stamphog-source-1), [posthog-stamphog-source-3](#posthog-stamphog-source-3).</small>
 
 ### Reported metrics
 
@@ -1941,6 +1958,9 @@ Last reviewed: 2026-09-16.
 - Deterministic and model-based verification: The harness combines build/test tools, formatting and linting, and LLM-based diff evaluation <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1).</small>
 - Fleet management: Target thousands of repos, run builds/tests, open and merge PRs at fleet scale <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1), [spotify-honk-xirp-source-2](#spotify-honk-xirp-source-2).</small>
 - Xirp (workspace/context layer): An agentic development environment connected to Portal for organizational context; its relationship to Honk is not documented in the captured sources <small>Sources: [spotify-honk-xirp-source-3](#spotify-honk-xirp-source-3).</small>
+- Describe the change as a prompt: An engineer states the change in natural language instead of a deterministic migration script; from Slack or GitHub Enterprise an interactive agent gathers the task details into the prompt <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1).</small>
+- Honk executes the code change: The coding agent performs the modification while Fleet Management keeps identifying targets and scheduling the work <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1), [spotify-honk-xirp-source-2](#spotify-honk-xirp-source-2).</small>
+- Open the pull request through the existing workflow: Fleet Management opens the pull request against the target repository; getting reviews and merging into production remain the pre-agent workflow <small>Sources: [spotify-honk-xirp-source-1](#spotify-honk-xirp-source-1).</small>
 
 ### Reported metrics
 
