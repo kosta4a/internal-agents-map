@@ -4,8 +4,8 @@
 import { animate } from 'motion';
 
 /** How long a disclosure takes to open or close. */
-const TOGGLE_SECONDS = 0.28;
-const TOGGLE_EASE = [0.3, 0.7, 0.3, 1] as const;
+const TOGGLE_SECONDS = 0.24;
+const TOGGLE_EASE = [0.77, 0, 0.175, 1] as const;
 
 /** How to drive a disclosure that has already been given its motion. */
 const toggles = new WeakMap<HTMLDetailsElement, (opening: boolean) => void>();

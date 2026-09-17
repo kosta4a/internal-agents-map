@@ -274,9 +274,11 @@
   cursor: pointer;
 }
 /* No container to shade: hovering lightens everything the card says by a step. */
+@media (hover: hover) {
 .entry-box:hover h3 a { color: var(--sand-11); }
 .entry-box:hover .entry-summary { color: var(--sand-9); }
 .entry-box:hover .tag { color: var(--sand-9); }
+}
 /* The heading link covers the container, so the whole card opens the entry. */
 .entry-box h3 a::after {
   content: "";
@@ -375,16 +377,22 @@
   text-decoration: none;
 }
 .button .icon { flex: none; }
+@media (hover: hover) {
 .button:hover { background: var(--sand-4); }
+}
 /* The action that carries the reader onward. */
 .button-solid {
   background: var(--sand-12);
   color: var(--sand-1);
 }
 /* Already dark, so this one lifts toward the page instead of away from it. */
+@media (hover: hover) {
 .button-solid:hover { background: var(--sand-11); }
+}
 
+@media (hover: hover) {
 .page-back:hover { background: var(--sand-4); }
+}
 /* The bar that closes an entry sits below the last section, not above one. */
 .page-back-end {
   margin: 24px 0 0;
@@ -392,7 +400,9 @@
   color: var(--sand-1);
 }
 /* Already dark, so this one lifts toward the page instead of away from it. */
+@media (hover: hover) {
 .page-back-end:hover { background: var(--sand-11); }
+}
 .entry-header { padding-bottom: 8px; }
 .entry-header h1 {
   margin-top: 12px;
@@ -823,7 +833,9 @@
   inset: 0;
   border-radius: 14px;
 }
+@media (hover: hover) {
 .related-card:hover a { color: var(--sand-11); }
+}
 .doc-links {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -859,7 +871,9 @@
   inset: 0;
   border-radius: 14px;
 }
+@media (hover: hover) {
 .doc-card:hover a { color: var(--sand-11); }
+}
 .resource-links {
   display: flex;
   flex-wrap: wrap;
@@ -972,7 +986,9 @@
 }
 .search-launcher .icon { flex: none; color: rgba(255, 255, 255, .55); }
 .search-launcher > span { flex: 1; min-width: 0; color: rgba(255, 255, 255, .55); }
+@media (hover: hover) {
 .search-launcher:hover { background: rgba(33, 32, 28, .84); }
+}
 
 /* The command palette: a dark sheet over the page, filtering links already here. */
 .palette {
@@ -1035,7 +1051,9 @@
   color: rgba(255, 255, 255, .78);
   font-size: 14px;
 }
+@media (hover: hover) {
 .palette-pill:hover { background: rgba(255, 255, 255, .14); }
+}
 .palette-pill.is-on { background: rgba(255, 255, 255, .22); color: #fff; }
 .palette-pill .icon { width: 14px; height: 14px; }
 .palette-pill-count {
@@ -1081,7 +1099,9 @@
   font-size: 14px;
   text-align: left;
 }
+@media (hover: hover) {
 .palette-option:hover { background: rgba(255, 255, 255, .1); }
+}
 .palette-option .icon { flex: none; width: 16px; height: 16px; opacity: 0; }
 .palette-option[aria-pressed="true"] { color: #fff; }
 .palette-option[aria-pressed="true"] .icon { opacity: 1; }
@@ -1118,8 +1138,10 @@
   font-size: 14px;
   text-decoration: none;
 }
-.palette-item:hover,
 .palette-item[aria-selected="true"] { background: rgba(255, 255, 255, .1); }
+@media (hover: hover) {
+  .palette-item:hover { background: rgba(255, 255, 255, .1); }
+}
 .palette-item-title { min-width: 0; }
 .palette-item-detail { flex: none; color: rgba(255, 255, 255, .45); }
 .palette-empty { padding: 24px 8px; color: rgba(255, 255, 255, .45); font-size: 14px; }

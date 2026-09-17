@@ -26,7 +26,10 @@ function reducedMotion(): boolean {
  * The bar is centred by a transform of its own, so only its opacity and its
  * focus move: touching the transform would slide it sideways as it went.
  */
+const fading = new WeakMap<HTMLElement, { stop: () => void }>();
+
 function fadeBar(bar: HTMLElement, show: boolean, delay = 0): void {
+  fading.get(bar)?.stop();
   const rest = (): void => {
     bar.style.opacity = show ? '' : '0';
     bar.style.removeProperty('filter');
@@ -44,6 +47,7 @@ function fadeBar(bar: HTMLElement, show: boolean, delay = 0): void {
       : { opacity: [1, 0], filter: ['blur(0px)', 'blur(6px)'] },
     { duration: OPEN_SECONDS, ease: EASE, delay },
   );
+  fading.set(bar, run);
   run.finished.then(rest, rest);
   setTimeout(rest, (OPEN_SECONDS + delay) * 1000 + 80);
 }
@@ -196,7 +200,10 @@ export function startPalette(): void {
       { opacity: [1, 0] },
       { duration: SHUT_SECONDS, ease: EASE },
     );
+    let ended = false;
     const done = (): void => {
+      if (ended) return;
+      ended = true;
       palette.style.removeProperty('opacity');
       settle();
     };

@@ -24,8 +24,8 @@ let claimed = false;
 const CONTROL_KEYS = ['q', ...FACET_KEYS] as const;
 
 /** How long a card takes to collapse out of the list, or expand back into it. */
-const COLLAPSE_SECONDS = 0.32;
-const COLLAPSE_EASE = [0.3, 0.7, 0.3, 1] as const;
+const COLLAPSE_SECONDS = 0.24;
+const COLLAPSE_EASE = [0.77, 0, 0.175, 1] as const;
 /** How long the item tally takes to count to a new total. */
 const COUNT_SECONDS = 0.3;
 
