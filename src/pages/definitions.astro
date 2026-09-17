@@ -215,7 +215,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
         <figcaption><strong>{localFigure.term}</strong><span>{localFigure.caption}</span></figcaption>
         <div class="place-scene" role="img" aria-label={localFigure.label}>
           <div class="place-machine">
-            <span class="place-machine-title">Computer</span>
+            <span class="place-machine-title" data-your-computer>Computer</span>
             <div class="place-box"><i class="place-agent-dot" aria-hidden="true"></i></div>
             <span class="place-callout"><svg viewBox="0 0 12 74" aria-hidden="true"><path d="M6 74 V1 M2 5.5 L6 1 L10 5.5"/></svg><span>Agent runs here</span></span>
           </div>
@@ -225,7 +225,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
         <figcaption><strong>{cloudFigure.term}</strong><span>{cloudFigure.caption}</span></figcaption>
         <div class="place-scene" role="img" aria-label={cloudFigure.label}>
           <div class="place-machine">
-            <span class="place-machine-title">Computer</span>
+            <span class="place-machine-title" data-your-computer>Computer</span>
             <div class="place-box"></div>
           </div>
           <div class="place-link">
@@ -304,8 +304,10 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
 </ArticleLayout>
 <script>
   import { startSignals } from '../scripts/signals';
+  import { startYourComputer } from '../scripts/your-computer';
   import { startWorkCycle } from '../scripts/work-cycle';
 
   startSignals();
+  startYourComputer();
   startWorkCycle();
 </script>
