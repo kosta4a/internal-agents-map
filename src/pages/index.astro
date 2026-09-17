@@ -65,7 +65,9 @@ const graph = structuredData([
               aria-describedby="search-help"
               placeholder="Company, agent, work, type, invocation, or supervision…"
               autocomplete="off"
+              aria-keyshortcuts="Meta+K Control+K"
             />
+            <kbd id="search-shortcut" class="search-shortcut" aria-hidden="true">Ctrl K</kbd>
           </div>
           <ul id="suggestions" class="suggestions" role="listbox" aria-label="Filter suggestions" hidden></ul>
         </div>

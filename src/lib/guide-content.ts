@@ -510,7 +510,7 @@ export const DEFINITIONS_CHART = {
   ] as readonly ChartDimension[],
   legend: { catalog: 'Catalog entry', reference: 'Reference example' },
   verticalAxis: { from: 'Standard capabilities', to: 'Company-specific capabilities' },
-  horizontalAxis: { from: 'Many workflows', to: 'One workflow' },
+  horizontalAxis: { from: 'One workflow', to: 'Many workflows' },
   cells: {
     specialized: { scope: 'Company-specific · focused', title: 'Specialized internal agents' },
     shared: {
@@ -522,7 +522,7 @@ export const DEFINITIONS_CHART = {
   } as Record<string, ChartCell>,
   emptyCell: 'No selected example currently fits.',
   caption: [
-    'Illustrative placements based on public descriptions. Blue circles are catalog entries; green hexagons are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
+    'Illustrative placements based on public descriptions. Blue circles are catalog entries; green triangles are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
   ] as TextBlock,
   body: [
     [

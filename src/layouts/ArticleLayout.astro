@@ -131,12 +131,12 @@ const {
 /* A reference names a class of product: breaking it reads as two of them. */
 .quadrant-cell .reference-marker { max-width: none; white-space: nowrap; }
 .quadrant-cell .reference-marker::before {
-  top: calc((1.35em - 13.75px) / 2);
+  top: calc((1.35em - 12px) / 2);
   border-radius: 0;
-  width: 13.75px;
-  height: 13.75px;
+  width: 12px;
+  height: 12px;
   background: var(--green-9);
-  clip-path: var(--hexagon);
+  clip-path: var(--triangle);
 }
 .quadrant-cell li[data-chart-reference="deep-research"] { left: 5%; top: 42%; max-width: 40%; }
 .quadrant-cell li[data-chart-reference="ready-made-task"] { left: 49%; top: 42%; max-width: 48%; }
@@ -153,7 +153,7 @@ const {
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
 .quadrant-legend i { width: 12.5px; height: 12.5px; }
 .quadrant-legend .catalog-marker { border-radius: 50%; background: var(--blue-9); }
-.quadrant-legend .reference-marker-key { width: 13.75px; height: 13.75px; background: var(--green-9); clip-path: var(--hexagon); }
+.quadrant-legend .reference-marker-key { width: 12px; height: 12px; background: var(--green-9); clip-path: var(--triangle); }
 /* The plot is the body's own width, so its scale label has room outside it. */
 .guide .quadrant-figure { max-width: none; }
 .guide-faq details {
@@ -466,7 +466,7 @@ const {
   .quadrant-cell li { font-size: 12px; padding-left: 16px; }
   .quadrant-cell li span { font-size: 12px; }
   .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
-  .quadrant-cell .reference-marker::before { width: 11.25px; height: 11.25px; top: calc((1.35em - 11.25px) / 2); }
+  .quadrant-cell .reference-marker::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
   .quadrant-cell li:nth-child(2) { left: 22%; }
   .quadrant-assistants li:nth-child(2) { left: 28%; }
   .quadrant-ready li span { display: none; }

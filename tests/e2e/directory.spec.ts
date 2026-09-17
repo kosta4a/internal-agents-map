@@ -102,6 +102,20 @@ test.describe('the directory with javascript', () => {
     await expect(page.locator('#empty')).toBeHidden();
   });
 
+  for (const shortcut of ['Meta+k', 'Control+k']) {
+    test(`${shortcut} focuses search and selects the existing query`, async ({ page }) => {
+      await page.goto('/?q=github');
+      await expect(page.locator('#filters')).toBeVisible();
+      await page.keyboard.press(shortcut);
+      await expect(page.locator('#q')).toBeFocused();
+      await expect(page.locator('#q')).toHaveValue('github');
+      await page.keyboard.type('notion');
+      await expect(page.locator('#q')).toHaveValue('notion');
+      await page.keyboard.press('k');
+      await expect(page.locator('#q')).toHaveValue('notionk');
+    });
+  }
+
   test('searches the cards and records the search in the URL', async ({ page }) => {
     await page.goto('/');
     await page.fill('#q', SEARCH.term);
