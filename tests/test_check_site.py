@@ -27,7 +27,7 @@ STYLESHEET = "_astro/site.abcd1234.css"
 GUIDE_ROUTES = ("/", "/definitions", "/notes", "/notes/a-note")
 
 CATALOG = {
-    "schema_version": 6,
+    "schema_version": 7,
     "approaches": [
         {
             "id": "first-agent",
@@ -164,6 +164,9 @@ def routing_manifest():
     for approach in CATALOG["approaches"]:
         path = "/agents/" + approach["id"]
         routes[path] = {"html": path + ".html", "markdown": path + ".md"}
+    for company in CATALOG["companies"]:
+        path = "/organizations/" + company["id"]
+        routes[path] = {"html": path + ".html", "markdown": path + ".md"}
     return {"schema_version": 1, "routes": routes}
 
 
@@ -196,6 +199,11 @@ def build_artifact(root):
         )
         files[f"agents/{approach['id']}.json"] = "{}"
         files[f"agents/{approach['id']}.md"] = "# " + approach["agent_name"]
+    for company in CATALOG["companies"]:
+        members = [a for a in CATALOG["approaches"] if a["company_id"] == company["id"]]
+        company_cards = "".join(card(a, claims[a["claim_ids"][0]]) for a in members)
+        files[f"organizations/{company['id']}.html"] = document(company["name"], company_cards)
+        files[f"organizations/{company['id']}.md"] = "# " + company["name"]
     files["404.html"] = document("Not found", "<p>No such page.</p>")
     for path in GUIDE_ROUTES[1:]:
         name = path.lstrip("/")
@@ -399,6 +407,20 @@ class AstroArtifactTests(unittest.TestCase):
         errors = self.validate()
         self.assertTrue(any("omits /agents/second-agent" in e for e in errors), errors)
         self.assertTrue(any("/agents/third-agent" in e for e in errors), errors)
+
+    def test_missing_organization_route_fails(self):
+        manifest = json.loads(self.routes.read_text(encoding="utf-8"))
+        del manifest["routes"]["/organizations/first"]
+        self.routes.write_text(json.dumps(manifest), encoding="utf-8")
+        self.assertIn("Organization route membership differs from the catalog.", self.validate())
+
+    def test_unrelated_record_on_organization_page_fails(self):
+        path = self.root / "organizations/first.html"
+        text = path.read_text(encoding="utf-8").replace(
+            'data-approach-id="first-agent"', 'data-approach-id="second-agent"'
+        )
+        path.write_text(text, encoding="utf-8")
+        self.assertIn("Incorrect organization membership: first.", self.validate())
 
     def test_unsupported_manifest_version_fails(self):
         manifest = json.loads(self.routes.read_text(encoding="utf-8"))

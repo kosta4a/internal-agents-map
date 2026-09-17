@@ -203,7 +203,7 @@ export const METHODOLOGY_SECTIONS: readonly GuideSection[] = [
         'Each case describes a system that a named organization built or adapted for its own teams. Public sources must describe its implementation or use.',
       ],
       [
-        'We also include platforms and supporting tools that help teams build internal agents. A product name is optional. Commercial systems can qualify when sources describe the internal build or adaptation. General adoption claims are insufficient.',
+        'We maintain platforms and supporting tools in a separate Infrastructure collection, alongside the default Agents collection. A product name is optional. Commercial systems can qualify when sources describe the internal build or adaptation. General adoption claims are insufficient.',
       ],
     ],
   },
@@ -389,7 +389,7 @@ export const WORK_MODES_DESCRIPTION =
 
 export const APPROACH_TYPE_DEFINITIONS: readonly ClassificationDefinition[] = [
   { id: 'agent', label: termLabel('agent'), meaning: 'One system that carries out tasks.' },
-  { id: 'agent-system', label: termLabel('agent-system'), meaning: 'A related family of agents with shared infrastructure.' },
+  { id: 'agent-system', label: termLabel('agent-system'), meaning: 'A documented family of independently useful agents; internal subagents alone do not establish a family.' },
   { id: 'platform', label: termLabel('platform'), meaning: 'Reusable infrastructure for several agents or workflows.' },
   { id: 'orchestration-system', label: termLabel('orchestration-system'), meaning: 'A system whose primary role is coordinating agents.' },
   { id: 'supporting-pattern', label: termLabel('supporting-pattern'), meaning: 'A narrower implemented component that enables agent operation.' },
@@ -460,7 +460,7 @@ export const DEFINITIONS_SCOPE = {
     [
       'Real systems often combine model-directed steps with programmed automation. A coding agent might decide how to fix a problem while a fixed pipeline runs tests and prepares the result for review.',
     ],
-    ['The map includes these agents alongside the platforms and supporting systems that enable them.'],
+    ['The map separates task-performing Agents from the reusable Infrastructure that enables them. Notes draw lessons across both collections.'],
   ] as readonly TextBlock[],
 } as const;
 
@@ -506,7 +506,7 @@ export const DEFINITIONS_CHART = {
     {
       heading: 'Horizontal axis indicates how broad the work is.',
       description: [
-        'Focused agents follow one defined workflow. Broader agents support many kinds of work or provide a shared platform.',
+        'Focused agents follow one defined workflow. Broader agents perform many kinds of work. Shared platforms have a separate infrastructure index.',
       ],
     },
     {
@@ -523,14 +523,14 @@ export const DEFINITIONS_CHART = {
     specialized: { scope: 'Company-specific · focused', title: 'Specialized internal agents' },
     shared: {
       scope: 'Company-specific · broad',
-      title: 'General internal agents & shared platforms',
+      title: 'General internal agents',
     },
     ready: { scope: 'Standard · focused', title: 'Ready-made focused agents' },
     assistants: { scope: 'Standard · broad', title: 'General-purpose assistants' },
   } as Record<string, ChartCell>,
   emptyCell: 'No selected example currently fits.',
   caption: [
-    'Illustrative placements based on public descriptions. Blue circles are catalog entries; green triangles are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
+    'Illustrative placements based on public descriptions. Blue circles are agents; infrastructure is excluded from this comparison; green triangles are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
   ] as TextBlock,
   body: [
     [
@@ -672,7 +672,7 @@ export const DEFINITIONS_QUESTIONS = {
     {
       question: 'Is a shared agent platform itself an agent?',
       answer: [
-        'A platform can provide the context, tools, execution environments, and controls used by multiple agents. The map includes platforms because they help explain how organizations make agents available across teams.',
+        'A platform can provide the context, tools, execution environments, and controls used by multiple agents. The Infrastructure collection preserves this architecture research without counting platforms as agents. The default Agents collection covers the systems that perform identifiable work.',
       ],
     },
     {

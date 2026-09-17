@@ -2,6 +2,9 @@
 // ABOUTME: It keeps the wording of the published catalog stable across pages.
 
 const TERM_LABELS: Record<string, string> = {
+  'agent-system': 'Agent family',
+  'supporting-pattern': 'Component',
+  'orchestration-system': 'Orchestration',
   'ci-triage': 'CI triage',
   'on-call': 'On-call',
   'event-driven': 'Event-driven',

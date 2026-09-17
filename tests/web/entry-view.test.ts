@@ -161,7 +161,7 @@ describe('block-builderbot', () => {
 
   it('is not labelled as supporting infrastructure', () => {
     expect(entry.isSupportingSystem).toBe(false);
-    expect(entry.supportingSystemNote).toBeNull();
+    expect(entry.profile.section).toBe('agents');
   });
 });
 
@@ -197,8 +197,8 @@ describe('plaid-internal-mcp-server', () => {
 
   it('is labelled as supporting infrastructure', () => {
     expect(entry.isSupportingSystem).toBe(true);
-    expect(entry.approachTypeLabel).toBe('Supporting pattern');
-    expect(entry.supportingSystemNote).toContain('supporting infrastructure');
+    expect(entry.approachTypeLabel).toBe('Component');
+    expect(entry.profile.section).toBe('infrastructure');
   });
 
   it('keeps coding-tool adoption apart from server adoption', () => {
@@ -252,7 +252,8 @@ describe('the directory model', () => {
     const ureview = cards.find((card) => card.id === 'uber-ureview')!;
     expect(ureview.boundaries).toEqual([{ id: 'work-product-review', label: 'Work-product review', level: 3 }]);
     for (const card of cards) {
-      expect(card.boundaries.length).toBeGreaterThan(0);
+      if (card.catalogSection === 'agents') expect(card.boundaries.length).toBeGreaterThan(0);
+      else expect(card.boundaries).toEqual([]);
       for (const boundary of card.boundaries) {
         expect(boundary.level === null).toBe(boundary.id === 'unknown');
       }
@@ -276,39 +277,18 @@ describe('directory card summaries', () => {
   });
 });
 
-describe('a supporting system', () => {
-  /** The entries the catalog classifies as shared infrastructure. */
-  const supporting = catalog.approaches
-    .map((approach) => entryView(catalog, approach.id))
-    .filter((entry) => entry.isSupportingSystem);
-
-  it('says a workflow is missing only where the record reports none', () => {
-    expect(supporting.length).toBeGreaterThan(0);
-    for (const entry of supporting) {
-      expect(entry.supportingSystemNote, entry.id).toContain('supporting infrastructure');
-      expect(entry.supportingSystemNote, entry.id).toContain(entry.approachTypeLabel.toLowerCase());
-      if (entry.workflowClaims.length === 0) {
-        expect(entry.supportingSystemNote, entry.id).toContain('no execution workflow');
-      } else {
-        expect(entry.supportingSystemNote, entry.id).not.toContain('no execution workflow');
-      }
+describe('collection profiles', () => {
+  it('leads infrastructure with architecture and keeps operational scopes in research', () => {
+    for (const approach of catalog.approaches.filter((item) => item.catalog_section === 'infrastructure')) {
+      const entry = entryView(catalog, approach.id);
+      expect(entry.profile.sectionOrder[0]).toBe('implementation');
+      expect(entry.profile.workflow).toBe('Documented uses');
+      expect(entry.supervisionClaims).toEqual([]);
+      for (const claim of entry.claims.filter((claim) => claim.field.startsWith('operating_models.'))) expect(entry.researchOnlyClaims).toContainEqual(claim);
     }
   });
-
-  it('does not deny the workflow that workos-project-horizon reports', () => {
-    const entry = entryView(catalog, 'workos-project-horizon');
-    expect(entry.isSupportingSystem).toBe(true);
-    expect(entry.workflowClaims.length).toBeGreaterThan(0);
-    expect(entry.supportingSystemNote).not.toMatch(/not an agent|no execution workflow/);
-    expect(entry.supportingSystemNote).toContain('workflow');
-  });
-
-  it('does not deny the workflow that plaid-internal-mcp-server reports', () => {
-    const entry = entryView(catalog, 'plaid-internal-mcp-server');
-    expect(entry.isSupportingSystem).toBe(true);
-    expect(entry.workflowClaims.length).toBeGreaterThan(0);
-    expect(entry.supportingSystemNote).not.toMatch(/not an agent|no execution workflow/);
-    expect(entry.supportingSystemNote).toContain('workflow');
+  it('keeps task-performing Horizon and Slack in agents', () => {
+    for (const id of ['workos-project-horizon', 'slack-context-system']) expect(entryView(catalog, id).profile.section).toBe('agents');
   });
 });
 

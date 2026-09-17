@@ -29,7 +29,7 @@ EXPORT_FILES = {
 }
 # The document the host returns for an unknown path. No route points to it.
 ERROR_PAGE = "404.html"
-DIRECTORIES = {"_astro", "fonts", "notes", "agents", "logos"}
+DIRECTORIES = {"_astro", "fonts", "notes", "agents", "logos", "organizations"}
 # A bundled stylesheet or script: a stem, which can hold dots, a content hash, and its type.
 BUNDLED_ASSET = re.compile(r"_astro/[A-Za-z0-9_.-]+\.[A-Za-z0-9_-]{8,}\.(?:css|js)")
 CHUNK_IMPORT = re.compile(r"\./([A-Za-z0-9_.-]+\.[A-Za-z0-9_-]{8,}\.js)")
@@ -155,6 +155,11 @@ def validate(
         errors.append("Unsupported route manifest schema version.")
     routes = manifest.get("routes") or {}
     check_entry_routes(routes, approaches, errors)
+    company_ids = {approach["company_id"] for approach in approaches}
+    wanted_companies = {f"/organizations/{company_id}" for company_id in company_ids}
+    listed_companies = {path for path in routes if path.startswith("/organizations/")}
+    if wanted_companies != listed_companies:
+        errors.append("Organization route membership differs from the catalog.")
     expected = route_files(routes, errors) | PUBLIC_FILES | EXPORT_FILES | {ERROR_PAGE}
     expected |= {f"agents/{approach['id']}.json" for approach in approaches}
     # The published logo set comes from the companies the catalog declares.
@@ -225,6 +230,11 @@ def validate(
         if (root / "agents.json").read_bytes() != catalog_bytes:
             errors.append("Site JSON differs from the source catalog.")
         check_directory_coverage(pages[root / "index.html"], approaches, errors)
+        for company_id in company_ids:
+            page = pages.get(root / f"organizations/{company_id}.html")
+            wanted = Counter(a["id"] for a in approaches if a["company_id"] == company_id)
+            if page is None or Counter(page.coverage["approach"]) != wanted:
+                errors.append(f"Incorrect organization membership: {company_id}.")
         for approach in approaches:
             page = pages.get(root / f"agents/{approach['id']}.html")
             if page is not None:

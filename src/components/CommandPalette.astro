@@ -28,6 +28,7 @@ const NO_FACETS = { work: '', type: '', invocation: '', supervision: '' };
 
 /** A catalog entry carries its facets, so a pill can hide it without a round trip. */
 const catalogItems = cards.map((card) => ({
+  collection: card.catalogSection,
   path: card.path,
   title: `${card.company} · ${card.agentName}`,
   detail: card.approachTypeLabel,
@@ -57,7 +58,8 @@ const definitionItems = DEFINITIONS_JUMP_LINKS.map((link) => ({
 }));
 
 const groups = [
-  { id: 'catalog', label: 'Catalog', items: catalogItems },
+  { id: 'catalog', label: 'Agents', items: catalogItems.filter((item) => item.collection === 'agents') },
+  { id: 'infrastructure', label: 'Infrastructure', items: catalogItems.filter((item) => item.collection === 'infrastructure') },
   { id: 'notes', label: 'Notes', items: noteItems },
   { id: 'definitions', label: 'Definitions', items: definitionItems },
 ];

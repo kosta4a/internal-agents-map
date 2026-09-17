@@ -1,0 +1,106 @@
+---
+// ABOUTME: Shared entry sections ordered by the collection reading profile.
+import Claim from './Claim.astro';
+import Arrowed from './Arrowed.astro';
+import Icon from './Icon.astro';
+import { showQuestion, type EntryView } from '../lib/entry-view';
+interface Props { entry: EntryView; section: 'workflow' | 'people' | 'implementation' }
+const { entry, section } = Astro.props;
+const hasHowItWorks = entry.workflowClaims.length > 0;
+const hasImplementation = entry.isPilot || entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
+---
+{section === 'workflow' && <>
+    {(hasHowItWorks || entry.isPilot) && showQuestion(entry, 'workflow') && (
+      <section class="entry-section" id="how-it-works" aria-labelledby="how-it-works-title">
+        <h2 id="how-it-works-title">{entry.profile.workflow}</h2>
+        {hasHowItWorks ? (
+          <>
+            <p class="section-note">
+              {entry.workflowScope ? `${entry.isSupportingSystem ? 'Documented use example' : 'Representative workflow'}: ${entry.workflowScope}.` : 'The workflow the sources report for this implementation.'}
+              {' '}<a href="#sources">Research details</a>
+            </p>
+            <div class="step-panel">
+              {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={entry.isPilot} />)}
+            </div>
+          </>
+        ) : entry.coverageQuestions.workflow && (
+          <p class="review-state"><strong>{entry.coverageQuestions.workflow.stateLabel}:</strong> {entry.coverageQuestions.workflow.note}</p>
+        )}
+      </section>
+    )}
+
+</>}
+{section === 'people' && <>
+    {(entry.isSupportingSystem || showQuestion(entry, 'human_involvement')) && <section class="entry-section" id="human-involvement" aria-labelledby="human-involvement-title">
+      <h2 id="human-involvement-title">{entry.profile.people}</h2>
+      {!entry.isSupportingSystem && <p class="section-note">
+        Each scope pairs its normal attention boundary with supporting evidence. See the <a href="/definitions#supervision">supervision definitions</a> for the level mapping and limits.
+      </p>}
+      {!entry.isSupportingSystem && entry.isPilot && entry.coverageQuestions.human_involvement?.note && (
+        <p class="review-state"><strong>{entry.coverageQuestions.human_involvement.stateLabel}:</strong> {entry.coverageQuestions.human_involvement.note}</p>
+      )}
+      {!entry.isSupportingSystem && entry.operatingModels.length > 0 && (
+        <ul class="scope-list">
+          {entry.operatingModels.map((model) => (
+            <li>
+              <p class="scope-line">
+                <Icon name="person" />
+                <strong><Arrowed text={model.scope} /></strong>
+              </p>
+              <span>{model.boundaryLabel} · {model.levelLabel}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {entry.isSupportingSystem && entry.architectureRows.some((row) => row.field === 'architecture.credentials' && row.claim) && <p>See <a href={`#${entry.architectureRows.find((row) => row.field === 'architecture.credentials')?.claim?.anchor}`}>documented credential and access boundaries</a> in the architecture above. Scoped human-review assessments for individual uses remain in research details.</p>}
+      {entry.isSupportingSystem && !entry.architectureRows.some((row) => row.field === 'architecture.credentials' && row.claim) && <p class="review-state">No separate access-control assessment is recorded.</p>}
+      {entry.supervisionClaims.map((claim) => (
+        <Claim claim={claim} showLabel={false} mark="person" />
+      ))}
+    </section>}
+
+</>}
+{section === 'implementation' && <>
+    {hasImplementation && (
+      <section class="entry-section" id="implementation" aria-labelledby="implementation-title">
+        <h2 id="implementation-title">{entry.profile.implementation}</h2>
+        <dl class="architecture">
+          {entry.architectureRows.map((row) => (
+            <>
+              <dt>{row.label}</dt>
+              {row.claim ? (
+                <dd id={row.claim.anchor} data-claim-id={row.claim.id}>
+                  {row.claim.text}
+                  {row.note && <span class="architecture-note">{row.note}</span>}
+                  {row.claim.caveats.length > 0 && (
+                    <span class="architecture-caveats">
+                      {row.claim.caveats.map((caveat) => (
+                        <span>{caveat.label}: {caveat.value}</span>
+                      ))}
+                    </span>
+                  )}
+                </dd>
+              ) : (
+                <dd class="is-unreported">
+                  {row.state ? <><strong>{row.state === 'not-applicable' ? 'Not applicable' : row.state === 'not-reviewed' ? 'Not reviewed' : 'Not reported'}</strong>{row.note && <span>{row.note}</span>}</> : 'N/A'}
+                </dd>
+              )}
+            </>
+          ))}
+        </dl>
+        {entry.otherClaims.length > 0 && (
+          <>
+            <h3>Other reported details</h3>
+            {entry.otherClaims.map((claim) => <Claim claim={claim} />)}
+          </>
+        )}
+        {entry.mechanismClaims.length > 0 && (
+          <>
+            <h3>Mechanisms</h3>
+            {entry.mechanismClaims.map((claim) => <Claim claim={claim} />)}
+          </>
+        )}
+      </section>
+    )}
+
+</>}

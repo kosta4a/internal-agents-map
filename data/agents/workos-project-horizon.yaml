@@ -1,13 +1,13 @@
 id: workos-project-horizon
 company: WorkOS
 agent_name: Project Horizon
-approach_type: platform
+approach_type: agent
 deployment_stage: deployed
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: workos-project-horizon-source-1
-last_reviewed_at: '2026-09-16'
+last_reviewed_at: '2026-09-17'
 status: internal
 domains:
 - coding
@@ -15,7 +15,7 @@ domains:
 - security
 autonomy: drafts-reviewed
 operating_models:
-- scope: 'requirements and acceptance criteria → tested implementation'
+- scope: requirements and acceptance criteria → tested implementation
   attention_boundary: work-product-review
 rubric:
   invocation:
@@ -25,8 +25,8 @@ rubric:
   identity: user
   evidence_strength: detailed-primary
 summary: Horizon takes requests and external events into remote coding sessions, connects them to company context
-  through MCP, and returns changes for human review. Its orchestrator manages sandbox lifecycle and routes
-  results back to Slack, Linear, GitHub, or the web UI.
+  through MCP, and returns changes for human review. Its orchestrator manages sandbox lifecycle and routes results
+  back to Slack, Linear, GitHub, or the web UI.
 architecture:
   sandbox: Cloudflare Containers + Sandbox SDK; disposable, tightly scoped sandboxes with explicit lifecycle APIs
     and egress controls; full monorepo stack in Docker dev containers
@@ -58,31 +58,30 @@ primitives:
 - name: MCP as an iterative product
   desc: WorkOS revises tool names and schemas to address repeated exploration and mistaken tool use
 - name: Divide the project into issues
-  desc: 'The PM agent splits a delegated Linear project into individual issues with descriptions and dependency
-    ordering; a human reviews each issue before implementation starts'
+  desc: The PM agent splits a delegated Linear project into individual issues with descriptions and dependency ordering;
+    a human reviews each issue before implementation starts
 - name: Run the implementation session in the sandbox
-  desc: 'When an issue moves to In Progress, the orchestrator assigns it to a cloud agent that boots the Docker
-    development container with OpenCode and the custom MCP context server'
+  desc: When an issue moves to In Progress, the orchestrator assigns it to a cloud agent that boots the Docker development
+    container with OpenCode and the custom MCP context server
 - name: Hand off the pull request for human review
-  desc: 'The run ends as a pull request attributed to the issue owner; no code merges without explicit human
-    approval'
+  desc: The run ends as a pull request attributed to the issue owner; no code merges without explicit human approval
 - name: Continue the dependency chain after merge
-  desc: 'The GitHub merge webhook marks the Linear issues done and starts the next eligible run on newly
-    unblocked issues'
+  desc: The GitHub merge webhook marks the Linear issues done and starts the next eligible run on newly unblocked
+    issues
 - name: Verify the work inside the sandbox
-  desc: 'The run lints, builds, and runs automated tests, and does initial validation of acceptance criteria,
-    before requesting human attention'
+  desc: The run lints, builds, and runs automated tests, and does initial validation of acceptance criteria, before
+    requesting human attention
 lessons_learned:
-- WorkOS chose Cloudflare sandbox infrastructure for programmatic lifecycle control and an outbound proxy that
-  enforces its egress policy.
-- Horizon's orchestrator runs outside disposable sandboxes and manages incoming work, sandbox lifecycle, and
-  returned artifacts.
-- WorkOS describes OpenCode in one Horizon deployment and Claude Remote Routines in another; the accounts do
-  not establish a migration of the whole platform.
-- Horizon turns run friction into proposed platform fixes, while WorkOS still seeds many improvement tasks
-  manually and retains human review.
-- WorkOS revises MCP tool names, schemas, and conventions after observing agents repeat expensive exploration
-  and wrong turns.
+- WorkOS chose Cloudflare sandbox infrastructure for programmatic lifecycle control and an outbound proxy that enforces
+  its egress policy.
+- Horizon's orchestrator runs outside disposable sandboxes and manages incoming work, sandbox lifecycle, and returned
+  artifacts.
+- WorkOS describes OpenCode in one Horizon deployment and Claude Remote Routines in another; the accounts do not
+  establish a migration of the whole platform.
+- Horizon turns run friction into proposed platform fixes, while WorkOS still seeds many improvement tasks manually
+  and retains human review.
+- WorkOS revises MCP tool names, schemas, and conventions after observing agents repeat expensive exploration and
+  wrong turns.
 sources:
 - id: workos-project-horizon-source-1
   title: Project Horizon - an autonomous code factory at WorkOS
@@ -184,15 +183,25 @@ evidence:
     relation: supports
     locator: Preserved content.md, lines 104
   primitives.4:
-  - {source_id: workos-project-horizon-source-1, relation: supports, locator: 'Preserved content.md, lines 46-48'}
+  - source_id: workos-project-horizon-source-1
+    relation: supports
+    locator: Preserved content.md, lines 46-48
   primitives.5:
-  - {source_id: workos-project-horizon-source-1, relation: supports, locator: 'Preserved content.md, lines 48-56'}
+  - source_id: workos-project-horizon-source-1
+    relation: supports
+    locator: Preserved content.md, lines 48-56
   primitives.6:
-  - {source_id: workos-project-horizon-source-1, relation: supports, locator: 'Preserved content.md, lines 54, 60'}
+  - source_id: workos-project-horizon-source-1
+    relation: supports
+    locator: Preserved content.md, lines 54, 60
   primitives.7:
-  - {source_id: workos-project-horizon-source-1, relation: supports, locator: 'Preserved content.md, line 62'}
+  - source_id: workos-project-horizon-source-1
+    relation: supports
+    locator: Preserved content.md, line 62
   primitives.8:
-  - {source_id: workos-project-horizon-source-1, relation: supports, locator: 'Preserved content.md, lines 38, 96'}
+  - source_id: workos-project-horizon-source-1
+    relation: supports
+    locator: Preserved content.md, lines 38, 96
   lessons_learned.0:
   - source_id: workos-project-horizon-source-1
     relation: supports
@@ -224,14 +233,15 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: high
-    confidence_reason: 'The source states a human is always in the loop at PR handoff and no code merges without explicit human approval; humans also review each PM-generated issue before implementation starts.'
+    confidence_reason: The source states a human is always in the loop at PR handoff and no code merges without
+      explicit human approval; humans also review each PM-generated issue before implementation starts.
     valid_at: '2026-05-06'
   lessons_learned.0:
     kind: fact
     provenance: reported
     confidence: medium
-    confidence_reason: The runtime discussion names WorkOS's missing development infrastructure and required
-      controls, then identifies the chosen provider and proxy design.
+    confidence_reason: The runtime discussion names WorkOS's missing development infrastructure and required controls,
+      then identifies the chosen provider and proxy design.
   lessons_learned.1:
     kind: fact
     provenance: reported
@@ -248,8 +258,8 @@ claim_metadata:
     kind: fact
     provenance: reported
     confidence: medium
-    confidence_reason: The feedback-loop section describes log-driven fixes and explicitly limits the degree
-      of automatic task creation; it does not measure continual reliability gains.
+    confidence_reason: The feedback-loop section describes log-driven fixes and explicitly limits the degree of
+      automatic task creation; it does not measure continual reliability gains.
   lessons_learned.4:
     kind: fact
     provenance: reported
@@ -259,35 +269,103 @@ claim_metadata:
 page_content:
   version: 1
   reviewed_at: '2026-09-17'
-  source_ids: [workos-project-horizon-source-1, workos-project-horizon-source-2, workos-project-horizon-source-3,
-    workos-project-horizon-source-4]
-  workflow_scope: 'Delegated Linear project to merged, human-approved pull requests across the dependency chain'
+  source_ids:
+  - workos-project-horizon-source-1
+  - workos-project-horizon-source-2
+  - workos-project-horizon-source-3
+  - workos-project-horizon-source-4
+  workflow_scope: Delegated Linear project to merged, human-approved pull requests across the dependency chain
   questions:
-    purpose: {state: reported, claim_paths: [summary]}
-    workflow: {state: reported, claim_paths: [primitives.4, primitives.5, primitives.6, primitives.7]}
-    human_involvement: {state: reported, claim_paths: [operating_models.0, primitives.4, primitives.6], note: 'A
-      human reviews each PM-generated issue before implementation starts, and a human is always in the loop at
-      pull-request handoff; humans are frequently the bottleneck.'}
-    implementation: {state: reported, claim_paths: [architecture.harness, architecture.sandbox, architecture.tool_access,
-      architecture.knowledge, architecture.context_mgmt, architecture.credentials, architecture.interfaces]}
-    validation: {state: reported, claim_paths: [primitives.8], note: 'Lint, build, and automated tests run in the
-      sandbox before human attention; headless browser verification is named as planned work, not a current
-      check.'}
-    observations: {state: unreported, claim_paths: [], note: 'The captures describe capability and direction
-      without a measured Horizon outcome; the UI Nits closure rate belongs to the surrounding program rather
-      than to Horizon alone.'}
-    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2,
-      lessons_learned.3, lessons_learned.4]}
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.4
+      - primitives.5
+      - primitives.6
+      - primitives.7
+    human_involvement:
+      state: reported
+      claim_paths:
+      - operating_models.0
+      - primitives.4
+      - primitives.6
+      note: A human reviews each PM-generated issue before implementation starts, and a human is always in the loop
+        at pull-request handoff; humans are frequently the bottleneck.
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.sandbox
+      - architecture.tool_access
+      - architecture.knowledge
+      - architecture.context_mgmt
+      - architecture.credentials
+      - architecture.interfaces
+    validation:
+      state: reported
+      claim_paths:
+      - primitives.8
+      note: Lint, build, and automated tests run in the sandbox before human attention; headless browser verification
+        is named as planned work, not a current check.
+    observations:
+      state: unreported
+      claim_paths: []
+      note: The captures describe capability and direction without a measured Horizon outcome; the UI Nits closure
+        rate belongs to the surrounding program rather than to Horizon alone.
+    lessons:
+      state: reported
+      claim_paths:
+      - lessons_learned.0
+      - lessons_learned.1
+      - lessons_learned.2
+      - lessons_learned.3
+      - lessons_learned.4
   implementation_fields:
-    model: {state: unreported, claim_paths: [], note: 'No source names the underlying model; the harness is the
-      swappable layer, and the placeholder claim stays in research details.'}
-    harness: {state: reported, claim_paths: [architecture.harness]}
-    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
-    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
-    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
-    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
-    credentials: {state: reported, claim_paths: [architecture.credentials]}
-    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
-  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: mechanism,
-    primitives.4: workflow, primitives.5: workflow, primitives.6: workflow, primitives.7: workflow, primitives.8: validation}
+    model:
+      state: unreported
+      claim_paths: []
+      note: No source names the underlying model; the harness is the swappable layer, and the placeholder claim
+        stays in research details.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+    sandbox:
+      state: reported
+      claim_paths:
+      - architecture.sandbox
+    tool_access:
+      state: reported
+      claim_paths:
+      - architecture.tool_access
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: reported
+      claim_paths:
+      - architecture.context_mgmt
+    credentials:
+      state: reported
+      claim_paths:
+      - architecture.credentials
+    interfaces:
+      state: reported
+      claim_paths:
+      - architecture.interfaces
+  primitive_roles:
+    primitives.0: mechanism
+    primitives.1: mechanism
+    primitives.2: mechanism
+    primitives.3: mechanism
+    primitives.4: workflow
+    primitives.5: workflow
+    primitives.6: workflow
+    primitives.7: workflow
+    primitives.8: validation
   observations: {}

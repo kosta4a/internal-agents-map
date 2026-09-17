@@ -233,3 +233,7 @@ HTML with CDN cache hits. `www` returns 308 and preserves path/query. Both Verce
 nameservers are verified. Local DNS still held the previous delegation, so custom
 domain HTTPS checks used `--resolve-ip` with a public DNS answer; no TLS checks
 were bypassed. Browser acceptance used the public production Vercel alias.
+
+## Company pages
+
+Each referenced company has a generated `/organizations/<company.id>` page and matching `.md` representation. Record Company fields link to it. Membership and connections derive from existing catalog records; registry-only companies have no page. Agents and Infrastructure remain separate nonempty groups, and connections retain authored direction and relation type. There is no Organizations menu item or index. Shared page furniture, catalog cards, and floating search remain unchanged. Routes are included in the publication inventory, sitemap, and llms.txt; no catalog schema or JSON export changes are required.

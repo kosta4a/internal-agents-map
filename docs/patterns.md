@@ -8,20 +8,20 @@ Most evidence comes from organizations that describe their own systems. Architec
 
 ## Catalog snapshot
 
-The catalog currently contains 40 entries. These are catalog classifications, not independent deployments or industry shares:
+The catalog currently contains 56 entries. These are catalog classifications, not independent deployments or industry shares:
 
 | Type | Count |
 | --- | ---: |
-| Agent | 20 |
-| Platform | 10 |
-| Agent system | 6 |
-| Orchestration system | 2 |
+| Agent | 40 |
+| Platform | 11 |
+| Agent family | 3 |
+| Orchestration system | 0 |
 | Supporting pattern | 2 |
 
-- 16 entries document a concrete execution environment.
-- 24 entries list Slack as an interface.
-- State duration is unknown for 24, durable-session for 8, cross-session-memory for 3, mixed for 4, and run-only for 1 approaches.
-- Autonomy is classified as drafts-reviewed for 21, human-in-loop for 7, autonomous for 7, assistive for 1, and unknown for 4 approaches.
+- 17 entries document a concrete execution environment.
+- 27 entries list Slack as an interface.
+- State duration is unknown for 36, durable-session for 10, cross-session-memory for 5, mixed for 4, and run-only for 1 approaches.
+- Agent autonomy (43 records; infrastructure excluded) is classified as drafts-reviewed for 20, human-in-loop for 5, autonomous for 6, assistive for 1, and unknown for 11 approaches.
 
 <!-- END PATTERNS SNAPSHOT -->
 
@@ -49,7 +49,7 @@ verification and review
 system of record
 ```
 
-No catalog rule requires this exact design. Some entries implement only part of it. The [Slack context system](landscape.md#slack-context-system), for example, documents context management rather than a complete execution platform.
+No catalog rule requires this exact design. Some entries implement only part of it. The [Slack security investigation service](landscape.md#slack-context-system), for example, uses context management within a task-performing investigation agent. Context-management detail does not make the whole system supporting infrastructure.
 
 ## Execution environments
 

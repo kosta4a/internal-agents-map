@@ -1243,11 +1243,25 @@ def render_overview_table(records: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def catalog_section(approach_type: str) -> str:
+    """Derive collection identity from the audited structural type."""
+    if approach_type in {"agent", "agent-system"}:
+        return "agents"
+    if approach_type in {"platform", "supporting-pattern", "orchestration-system"}:
+        return "infrastructure"
+    die(f"Unknown approach type: {approach_type!r}")
+
+
 def render_overview(records: list[dict], export: dict) -> str:
-    company_count = len({record["company"] for record in records})
+    agents = [record for record in records if catalog_section(record["approach_type"]) == "agents"]
+    infrastructure = [
+        record for record in records if catalog_section(record["approach_type"]) == "infrastructure"
+    ]
+    company_count = len({record["company"] for record in agents})
     summary = (
-        f"**Current map: {len(records)} approaches across {company_count} organizations, "
-        f"backed by {len(export['sources'])} sources and "
+        f"**Current map: {len(agents)} agents across {company_count} organizations, "
+        f"plus {len(infrastructure)} infrastructure records. The complete catalog is "
+        f"backed by {len({source.get('canonical_url', source['url']) for source in export['sources']})} distinct sources and "
         f"{len(export['claims'])} evidence-linked claims.**"
     )
     return "\n".join(
@@ -1256,9 +1270,13 @@ def render_overview(records: list[dict], export: dict) -> str:
             "",
             summary,
             "",
-            "## Overview",
+            "## Agents",
             "",
-            render_overview_table(records),
+            render_overview_table(agents),
+            "",
+            "## Infrastructure",
+            "",
+            render_overview_table(infrastructure),
             "",
             OVERVIEW_END,
         ]
@@ -1283,17 +1301,19 @@ def documented_environment(value: Any) -> bool:
 
 def catalog_statistics(records: list[dict]) -> dict[str, Any]:
     """Return the shared entry and scoped-workflow counts used by generated summaries."""
-    operating_models = [model for record in records for model in record["operating_models"]]
+    agents = [record for record in records if catalog_section(record["approach_type"]) == "agents"]
+    operating_models = [model for record in agents for model in record["operating_models"]]
     return {
         "entries": len(records),
+        "agents": len(agents),
         "approach_types": Counter(record["approach_type"] for record in records),
-        "autonomy": Counter(record["autonomy"] for record in records),
+        "autonomy": Counter(record["autonomy"] for record in agents),
         "state": Counter(record["rubric"]["state"] for record in records),
         "attention_boundaries": Counter(model["attention_boundary"] for model in operating_models),
         "operating_models": len(operating_models),
-        "multi_workflow_entries": sum(len(record["operating_models"]) > 1 for record in records),
+        "multi_workflow_entries": sum(len(record["operating_models"]) > 1 for record in agents),
         "supporting_entries": sum(
-            record["approach_type"] in {"platform", "supporting-pattern"} for record in records
+            catalog_section(record["approach_type"]) == "infrastructure" for record in records
         ),
         "slack": sum(
             "slack" in ((record.get("architecture") or {}).get("interfaces") or [])
@@ -1320,7 +1340,7 @@ def render_readme_findings(records: list[dict]) -> str:
             "components can both appear, so the entries are not independent deployments, shares "
             "of industry practice, or counts of successful runs.",
             "",
-            "Entry autonomy is classified as "
+            f"Agent autonomy ({stats['agents']} records; infrastructure excluded) is classified as "
             f"{autonomy['drafts-reviewed']} drafts-reviewed, "
             f"{autonomy['human-in-loop']} human-in-loop, "
             f"{autonomy['autonomous']} autonomous, {autonomy['assistive']} assistive, and "
@@ -1348,7 +1368,7 @@ def render_patterns_snapshot(records: list[dict]) -> str:
     approach_labels = {
         "agent": "Agent",
         "platform": "Platform",
-        "agent-system": "Agent system",
+        "agent-system": "Agent family",
         "orchestration-system": "Orchestration system",
         "supporting-pattern": "Supporting pattern",
     }
@@ -1374,7 +1394,7 @@ def render_patterns_snapshot(records: list[dict]) -> str:
             f"{state_counts['durable-session']}, cross-session-memory for "
             f"{state_counts['cross-session-memory']}, mixed for {state_counts['mixed']}, "
             f"and run-only for {state_counts['run-only']} approaches.",
-            "- Autonomy is classified as "
+            f"- Agent autonomy ({stats['agents']} records; infrastructure excluded) is classified as "
             f"drafts-reviewed for {autonomy_counts['drafts-reviewed']}, human-in-loop for "
             f"{autonomy_counts['human-in-loop']}, autonomous for "
             f"{autonomy_counts['autonomous']}, assistive for {autonomy_counts['assistive']}, "
@@ -1398,7 +1418,7 @@ def render_adoption_snapshot(records: list[dict]) -> str:
             "counting unit; platforms and components can both appear. The evidence is uneven, "
             "and most sources are company reports.",
             "",
-            f"{stats['slack']} entries list Slack as an interface. The entry autonomy distribution is "
+            f"{stats['slack']} entries list Slack as an interface. Agent autonomy, excluding infrastructure, is "
             f"{autonomy_counts['drafts-reviewed']} `drafts-reviewed`, "
             f"{autonomy_counts['human-in-loop']} `human-in-loop`, "
             f"{autonomy_counts['autonomous']} `autonomous`, "
@@ -1420,9 +1440,27 @@ def render_landscape(records: list[dict]) -> str:
         "",
         "The L2-L5 labels adapt [Dan Shapiro's five levels of AI-assisted software development](https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-autocomplete-to-the-software-factory/) into scoped human-attention boundaries: **L2** continuous steering, **L3** work-product review, **L4** outcome review, and **L5** exception-only supervision. Each label applies only to the workflow shown; it is a catalog judgment, not a company maturity score.",
         "",
-        "## Comparison",
+        "## Agent comparison",
         "",
-        render_comparison_table(records),
+        render_comparison_table(
+            [record for record in records if catalog_section(record["approach_type"]) == "agents"]
+        ),
+        "",
+        "## Infrastructure",
+        "",
+        "These records describe reusable systems, not equivalent agent deployments.",
+        "",
+        "\n".join(
+            [
+                "| Organization | Infrastructure | Type | Work supported |",
+                "| --- | --- | --- | --- |",
+                *[
+                    f"| {markdown(record['company'])} | [{markdown(record['agent_name'])}](#{anchor(record)}) | {record['approach_type']} | {markdown(record['domains'])} |"
+                    for record in records
+                    if catalog_section(record["approach_type"]) == "infrastructure"
+                ],
+            ]
+        ),
         "",
     ]
     out.extend(
@@ -1451,6 +1489,7 @@ def render_landscape(records: list[dict]) -> str:
                 "",
                 "| Field | Value |",
                 "| --- | --- |",
+                f"| Collection | {catalog_section(record['approach_type'])} |",
                 f"| Approach type | {markdown(record['approach_type'])} |",
                 f"| First public evidence | {markdown(record['first_public_evidence']['date'])} |",
                 f"| Deployment stage | {markdown(record['deployment_stage'])} |",
@@ -1548,6 +1587,7 @@ def normalize(records: list[dict], companies: list[dict]) -> dict:
             {**item, "level": BOUNDARY_LEVELS[item["attention_boundary"]]}
             for item in record["operating_models"]
         ]
+        approach["catalog_section"] = catalog_section(record["approach_type"])
         approach["claim_ids"] = []
         approach["source_ids"] = [source["id"] for source in record["sources"]]
         approach["interfaces"] = (record.get("architecture") or {}).get("interfaces", [])
@@ -1608,7 +1648,7 @@ def normalize(records: list[dict], companies: list[dict]) -> dict:
                 normalized_source["capture"] = manifest
             sources.append(normalized_source)
     return {
-        "schema_version": 6,
+        "schema_version": 7,
         "approaches": approaches,
         "claims": claims,
         "sources": sources,

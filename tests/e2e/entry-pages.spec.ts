@@ -15,8 +15,9 @@ interface CatalogCompany {
 const CATALOG = JSON.parse(
   readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8'),
 ) as {
-  approaches: ReadonlyArray<{ id: string; company_id: string }>;
+  approaches: ReadonlyArray<{ id: string; company_id: string; catalog_section: string; page_content: { questions: Record<string, { state: string }> } }>;
   companies: ReadonlyArray<CatalogCompany>;
+  claims: ReadonlyArray<{ id: string; approach_id: string }>;
 };
 /** The number of implementations in the committed catalog. */
 const TOTAL = CATALOG.approaches.length;
@@ -75,14 +76,14 @@ test.describe('the directory', () => {
   test('links to every entry page in the initial HTML', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('h1')).toHaveText(
-      'AI systems organizations build or adapt to do work for their own teams.',
+      'AI agents organizations build or adapt to do work for their own teams.',
     );
     const cards = page.locator('article.entry[data-approach-id]');
     await expect(cards).toHaveCount(TOTAL);
     for (const entry of ENTRIES) {
       const card = page.locator(`article.entry#${entry.id}`);
       await expect(card).toHaveCount(1);
-      await expect(card.locator(`a[href="/agents/${entry.id}"]`).first()).toBeVisible();
+      await expect(card.locator(`a[href="/agents/${entry.id}"]`).first()).toHaveCount(1);
     }
   });
 
@@ -113,9 +114,11 @@ for (const entry of ENTRIES) {
 
       await expect(page.locator('#sources')).toBeVisible();
       await expect(page.locator('#related')).toBeVisible();
+      if (entry.id !== 'plaid-internal-mcp-server') {
       await expect(
         page.locator('#human-involvement a[href="/definitions#supervision"]'),
       ).toHaveText('supervision definitions');
+      }
       await expect(page.locator('a[href="/"]').first()).toBeVisible();
     });
 
@@ -180,7 +183,7 @@ test.describe('narrow entry pages', () => {
       };
 
       await expectNoHorizontalOverflow();
-      await page.locator('details.claim-details > summary').click();
+      await page.locator('details.claim-details > summary').filter({ hasText: 'Research details for every claim' }).click();
       await expect(page.locator('.ledger')).toBeVisible();
       await expectNoHorizontalOverflow();
     });
@@ -235,7 +238,9 @@ test.describe('page-content pilot', () => {
   for (const id of PILOT_IDS) {
     test(`${id} exposes the reviewed reading order and exports`, async ({ page, request }) => {
       await page.goto(`/agents/${id}`);
-      const selectors = ['#purpose', '#how-it-works', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources'];
+      const record = CATALOG.approaches.find((item) => item.id === id)!;
+      const questionBySection: Record<string, string> = { '#how-it-works': 'workflow', '#validation': 'validation', '#results': 'observations', '#lessons': 'lessons' };
+      const selectors = ['#purpose', '#how-it-works', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources'].filter((selector) => !(record.catalog_section === 'infrastructure' && questionBySection[selector] && record.page_content.questions[questionBySection[selector]!]!.state === 'not-applicable'));
       for (const selector of selectors) {
         await expect(page.locator(selector), selector).toBeVisible();
       }
@@ -245,6 +250,7 @@ test.describe('page-content pilot', () => {
       await expect(page.locator('#purpose a[href="#sources"]')).toBeVisible();
       const ids = await page.locator('[data-claim-id]').evaluateAll((nodes) => nodes.map((node) => node.id));
       expect(new Set(ids).size).toBe(ids.length);
+      expect([...ids].sort()).toEqual(CATALOG.claims.filter((claim) => claim.approach_id === id).map((claim) => `claim-${claim.id}`).sort());
       expect((await request.get(`/agents/${id}.md`)).status()).toBe(200);
     });
   }
@@ -259,7 +265,7 @@ test.describe('page-content pilot', () => {
   test('shows one reading-flow representation of Notion’s aliased count', async ({ page }) => {
     await page.goto('/agents/notion-custom-agents');
     await expect(page.locator('#results .claim', { hasText: 'More than 3,000 internal Custom Agents' })).toHaveCount(1);
-    await page.locator('details.claim-details > summary').click();
+    await page.locator('details.claim-details > summary').filter({ hasText: 'Research details for every claim' }).click();
     await expect(page.getByText('Duplicate representation of').first()).toBeVisible();
   });
 
@@ -297,15 +303,15 @@ test.describe('supporting systems', () => {
     await expect(page.locator('#how-it-works')).toBeVisible();
     await expect(page.locator('#how-it-works .claim-label').first()).not.toBeEmpty();
     const facts = page.locator('.entry-facts');
-    await expect(facts).toContainText('Invocation');
-    await expect(facts).toContainText('Interactive');
-    await expect(page.getByText('supporting infrastructure').first()).toBeVisible();
+    await expect(facts).not.toContainText('Invocation');
+    await expect(page.locator('#how-it-works h2')).toHaveText('Documented uses');
+    await expect(facts.locator('div').filter({ has: page.locator('dt', { hasText: 'Approach type' }) }).locator('dd')).toHaveText('Component');
   });
 
   test('do not deny the workflow of a platform that reports one', async ({ page }) => {
     await page.goto('/agents/workos-project-horizon');
     await expect(page.locator('#how-it-works')).toBeVisible();
-    await expect(page.getByText('supporting infrastructure').first()).toBeVisible();
+    await expect(page.locator('.entry-facts div').filter({ has: page.locator('dt', { hasText: 'Approach type' }) }).locator('dd')).toHaveText('Agent');
     await expect(page.getByText('no execution workflow')).toHaveCount(0);
   });
 

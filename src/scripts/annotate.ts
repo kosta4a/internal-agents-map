@@ -1,5 +1,5 @@
 // ABOUTME: Mounts the Agentation annotation toolbar into a host element of its own.
-// ABOUTME: Development injects this; a production build never loads or bundles it.
+// ABOUTME: Explicitly opted-in development injects this; production never bundles it.
 
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';

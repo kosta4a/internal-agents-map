@@ -9,6 +9,14 @@
       "html": "/agents/airbnb-airchat.html",
       "markdown": "/agents/airbnb-airchat.md"
     },
+    "/agents/airbnb-datako": {
+      "html": "/agents/airbnb-datako.html",
+      "markdown": "/agents/airbnb-datako.md"
+    },
+    "/agents/airbnb-pascal": {
+      "html": "/agents/airbnb-pascal.html",
+      "markdown": "/agents/airbnb-pascal.md"
+    },
     "/agents/atlassian-rovo-dev": {
       "html": "/agents/atlassian-rovo-dev.html",
       "markdown": "/agents/atlassian-rovo-dev.md"
@@ -17,9 +25,29 @@
       "html": "/agents/block-builderbot.html",
       "markdown": "/agents/block-builderbot.md"
     },
+    "/agents/brex-collections": {
+      "html": "/agents/brex-collections.html",
+      "markdown": "/agents/brex-collections.md"
+    },
+    "/agents/brex-disputes": {
+      "html": "/agents/brex-disputes.html",
+      "markdown": "/agents/brex-disputes.md"
+    },
     "/agents/brex-agent-platform": {
       "html": "/agents/brex-agent-platform.html",
       "markdown": "/agents/brex-agent-platform.md"
+    },
+    "/agents/brex-onboarding": {
+      "html": "/agents/brex-onboarding.html",
+      "markdown": "/agents/brex-onboarding.md"
+    },
+    "/agents/brex-support-qa": {
+      "html": "/agents/brex-support-qa.html",
+      "markdown": "/agents/brex-support-qa.md"
+    },
+    "/agents/cloudflare-code-reviewer": {
+      "html": "/agents/cloudflare-code-reviewer.html",
+      "markdown": "/agents/cloudflare-code-reviewer.md"
     },
     "/agents/cloudflare-ai-stack": {
       "html": "/agents/cloudflare-ai-stack.html",
@@ -28,6 +56,10 @@
     "/agents/coinbase-forge-mux": {
       "html": "/agents/coinbase-forge-mux.html",
       "markdown": "/agents/coinbase-forge-mux.md"
+    },
+    "/agents/coinbase-mux": {
+      "html": "/agents/coinbase-mux.html",
+      "markdown": "/agents/coinbase-mux.md"
     },
     "/agents/databricks-costar": {
       "html": "/agents/databricks-costar.html",
@@ -41,9 +73,21 @@
       "html": "/agents/doordash-code-review.html",
       "markdown": "/agents/doordash-code-review.md"
     },
+    "/agents/doordash-ai-marketplace": {
+      "html": "/agents/doordash-ai-marketplace.html",
+      "markdown": "/agents/doordash-ai-marketplace.md"
+    },
+    "/agents/doordash-dataexplorer": {
+      "html": "/agents/doordash-dataexplorer.html",
+      "markdown": "/agents/doordash-dataexplorer.md"
+    },
     "/agents/doordash-flux": {
       "html": "/agents/doordash-flux.html",
       "markdown": "/agents/doordash-flux.md"
+    },
+    "/agents/dropbox-deflaker": {
+      "html": "/agents/dropbox-deflaker.html",
+      "markdown": "/agents/dropbox-deflaker.md"
     },
     "/agents/dropbox-nova": {
       "html": "/agents/dropbox-nova.html",
@@ -56,6 +100,10 @@
     "/agents/github-qubot": {
       "html": "/agents/github-qubot.html",
       "markdown": "/agents/github-qubot.md"
+    },
+    "/agents/harvey-security-operations": {
+      "html": "/agents/harvey-security-operations.html",
+      "markdown": "/agents/harvey-security-operations.md"
     },
     "/agents/harvey-spectre": {
       "html": "/agents/harvey-spectre.html",
@@ -80,6 +128,14 @@
     "/agents/notion-custom-agents": {
       "html": "/agents/notion-custom-agents.html",
       "markdown": "/agents/notion-custom-agents.md"
+    },
+    "/agents/notion-bug-triage": {
+      "html": "/agents/notion-bug-triage.html",
+      "markdown": "/agents/notion-bug-triage.md"
+    },
+    "/agents/notion-scruff": {
+      "html": "/agents/notion-scruff.html",
+      "markdown": "/agents/notion-scruff.md"
     },
     "/agents/openai-software-factory": {
       "html": "/agents/openai-software-factory.html",
@@ -125,6 +181,10 @@
       "html": "/agents/shopify-internal-agents.html",
       "markdown": "/agents/shopify-internal-agents.md"
     },
+    "/agents/shopify-river": {
+      "html": "/agents/shopify-river.html",
+      "markdown": "/agents/shopify-river.md"
+    },
     "/agents/sierra-pinecone": {
       "html": "/agents/sierra-pinecone.html",
       "markdown": "/agents/sierra-pinecone.md"
@@ -161,9 +221,157 @@
       "html": "/agents/ycombinator-agent-infra.html",
       "markdown": "/agents/ycombinator-agent-infra.md"
     },
+    "/agents/ycombinator-operations": {
+      "html": "/agents/ycombinator-operations.html",
+      "markdown": "/agents/ycombinator-operations.md"
+    },
     "/agents/zup-codegen": {
       "html": "/agents/zup-codegen.html",
       "markdown": "/agents/zup-codegen.md"
+    },
+    "/organizations/airbnb": {
+      "html": "/organizations/airbnb.html",
+      "markdown": "/organizations/airbnb.md"
+    },
+    "/organizations/atlassian": {
+      "html": "/organizations/atlassian.html",
+      "markdown": "/organizations/atlassian.md"
+    },
+    "/organizations/block": {
+      "html": "/organizations/block.html",
+      "markdown": "/organizations/block.md"
+    },
+    "/organizations/brex": {
+      "html": "/organizations/brex.html",
+      "markdown": "/organizations/brex.md"
+    },
+    "/organizations/cloudflare": {
+      "html": "/organizations/cloudflare.html",
+      "markdown": "/organizations/cloudflare.md"
+    },
+    "/organizations/coinbase": {
+      "html": "/organizations/coinbase.html",
+      "markdown": "/organizations/coinbase.md"
+    },
+    "/organizations/databricks": {
+      "html": "/organizations/databricks.html",
+      "markdown": "/organizations/databricks.md"
+    },
+    "/organizations/domu": {
+      "html": "/organizations/domu.html",
+      "markdown": "/organizations/domu.md"
+    },
+    "/organizations/doordash": {
+      "html": "/organizations/doordash.html",
+      "markdown": "/organizations/doordash.md"
+    },
+    "/organizations/dropbox": {
+      "html": "/organizations/dropbox.html",
+      "markdown": "/organizations/dropbox.md"
+    },
+    "/organizations/flex": {
+      "html": "/organizations/flex.html",
+      "markdown": "/organizations/flex.md"
+    },
+    "/organizations/github": {
+      "html": "/organizations/github.html",
+      "markdown": "/organizations/github.md"
+    },
+    "/organizations/harvey": {
+      "html": "/organizations/harvey.html",
+      "markdown": "/organizations/harvey.md"
+    },
+    "/organizations/hubspot": {
+      "html": "/organizations/hubspot.html",
+      "markdown": "/organizations/hubspot.md"
+    },
+    "/organizations/linear": {
+      "html": "/organizations/linear.html",
+      "markdown": "/organizations/linear.md"
+    },
+    "/organizations/microsoft": {
+      "html": "/organizations/microsoft.html",
+      "markdown": "/organizations/microsoft.md"
+    },
+    "/organizations/monday-com": {
+      "html": "/organizations/monday-com.html",
+      "markdown": "/organizations/monday-com.md"
+    },
+    "/organizations/notion": {
+      "html": "/organizations/notion.html",
+      "markdown": "/organizations/notion.md"
+    },
+    "/organizations/openai": {
+      "html": "/organizations/openai.html",
+      "markdown": "/organizations/openai.md"
+    },
+    "/organizations/plaid": {
+      "html": "/organizations/plaid.html",
+      "markdown": "/organizations/plaid.md"
+    },
+    "/organizations/posthog": {
+      "html": "/organizations/posthog.html",
+      "markdown": "/organizations/posthog.md"
+    },
+    "/organizations/ramp": {
+      "html": "/organizations/ramp.html",
+      "markdown": "/organizations/ramp.md"
+    },
+    "/organizations/replit": {
+      "html": "/organizations/replit.html",
+      "markdown": "/organizations/replit.md"
+    },
+    "/organizations/salesforce": {
+      "html": "/organizations/salesforce.html",
+      "markdown": "/organizations/salesforce.md"
+    },
+    "/organizations/sentry": {
+      "html": "/organizations/sentry.html",
+      "markdown": "/organizations/sentry.md"
+    },
+    "/organizations/shopify": {
+      "html": "/organizations/shopify.html",
+      "markdown": "/organizations/shopify.md"
+    },
+    "/organizations/sierra": {
+      "html": "/organizations/sierra.html",
+      "markdown": "/organizations/sierra.md"
+    },
+    "/organizations/slack": {
+      "html": "/organizations/slack.html",
+      "markdown": "/organizations/slack.md"
+    },
+    "/organizations/spotify": {
+      "html": "/organizations/spotify.html",
+      "markdown": "/organizations/spotify.md"
+    },
+    "/organizations/stripe": {
+      "html": "/organizations/stripe.html",
+      "markdown": "/organizations/stripe.md"
+    },
+    "/organizations/strongdm": {
+      "html": "/organizations/strongdm.html",
+      "markdown": "/organizations/strongdm.md"
+    },
+    "/organizations/uber": {
+      "html": "/organizations/uber.html",
+      "markdown": "/organizations/uber.md"
+    },
+    "/organizations/workos": {
+      "html": "/organizations/workos.html",
+      "markdown": "/organizations/workos.md"
+    },
+    "/organizations/y-combinator": {
+      "html": "/organizations/y-combinator.html",
+      "markdown": "/organizations/y-combinator.md"
+    },
+    "/organizations/zup": {
+      "html": "/organizations/zup.html",
+      "markdown": "/organizations/zup.md"
+    },
+    "/infrastructure": {
+      "html": "/infrastructure.html",
+      "markdown": "/infrastructure.md"
     },
     "/definitions": {
       "html": "/definitions.html",

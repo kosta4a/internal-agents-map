@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "cloudflare-code-review-source",
+  "original_url": "https://blog.cloudflare.com/ai-code-review/",
+  "final_url": "https://blog.cloudflare.com/ai-code-review/",
+  "captured_at": "2026-09-17T18:23:44Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.6"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/cloudflare-code-review-source/content.md",
+      "sha256": "sha256:2b35fedd60a0270889fa9594d0e13b7e98e01a76264fe9f38224505760008566",
+      "bytes": 38081
+    }
+  }
+}

@@ -1,13 +1,13 @@
 id: replit-manager-agent
 company: Replit
 agent_name: Manager agent (agent-of-agents)
-approach_type: orchestration-system
+approach_type: agent
 deployment_stage: scaled
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: replit-manager-agent-source-1
-last_reviewed_at: '2026-09-16'
+last_reviewed_at: '2026-09-17'
 status: internal
 domains:
 - coding
@@ -48,20 +48,21 @@ architecture:
 primitives:
 - name: Manager agent
   desc: One human gives an objective; the manager spawns parallel agents for verifiable work and escalates judgment
-- {name: Take an objective and gather context, desc: The manager agent takes a goal from a person and gathers context
-    across company systems}
-- {name: Spawn parallel loop agents, desc: It spawns multiple agents that work in loops on the verifiable task for
-    the person}
-- {name: Check results and escalate judgment, desc: Work results are checked, and human judgment is requested when
-    needed}
+- name: Take an objective and gather context
+  desc: The manager agent takes a goal from a person and gathers context across company systems
+- name: Spawn parallel loop agents
+  desc: It spawns multiple agents that work in loops on the verifiable task for the person
+- name: Check results and escalate judgment
+  desc: Work results are checked
+  and human judgment is requested when needed: null
 key_metrics:
 - 2.9x code output for a consistent author cohort from early January to late June
 - No corresponding deterioration in review/reversion/incident metrics
-- '30% of human PR review time saved (and growing) in the agent review lane'
+- 30% of human PR review time saved (and growing) in the agent review lane
 - Hardest support tickets, those escalated to humans, closed 60% faster
 lessons_learned:
-- Replit gives employees a manager agent that can delegate verifiable tasks to several agents, while human
-  review remains part of its coding workflow.
+- Replit gives employees a manager agent that can delegate verifiable tasks to several agents, while human review
+  remains part of its coding workflow.
 - Replit reports higher code output alongside flat review latency, reversion trends, and incident counts; those
   measures cover different aspects of the workflow.
 sources:
@@ -107,18 +108,28 @@ evidence:
   - source_id: replit-manager-agent-source-1
     relation: supports
   architecture.knowledge:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, lines 120, 132'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, lines 120, 132
   architecture.credentials:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, line 34'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, line 34
   primitives.0:
   - source_id: replit-manager-agent-source-1
     relation: supports
   primitives.1:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, lines 16, 34'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, lines 16, 34
   primitives.2:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, line 78'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, line 78
   primitives.3:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, line 16'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, line 16
   key_metrics.0:
   - source_id: replit-manager-agent-source-1
     relation: supports
@@ -128,9 +139,13 @@ evidence:
     relation: supports
     locator: Preserved content.md, lines 50–56
   key_metrics.2:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, line 50'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, line 50
   key_metrics.3:
-  - {source_id: replit-manager-agent-source-1, relation: supports, locator: 'Preserved content.md, line 168'}
+  - source_id: replit-manager-agent-source-1
+    relation: supports
+    locator: Preserved content.md, line 168
   lessons_learned.0:
   - source_id: replit-manager-agent-source-1
     relation: supports
@@ -161,8 +176,8 @@ claim_metadata:
     kind: fact
     provenance: reported
     confidence: medium
-    confidence_reason: The manager-agent passage describes delegation; the review passages explicitly retain
-      human co-review and risk-based requests for a second reviewer.
+    confidence_reason: The manager-agent passage describes delegation; the review passages explicitly retain human
+      co-review and risk-based requests for a second reviewer.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
@@ -199,43 +214,115 @@ claim_metadata:
 page_content:
   version: 1
   reviewed_at: '2026-09-17'
-  source_ids: [replit-manager-agent-source-1]
+  source_ids:
+  - replit-manager-agent-source-1
   workflow_scope: Person's objective through parallel loop agents to verifiable work product
   questions:
-    purpose: {state: reported, claim_paths: [summary]}
-    workflow: {state: reported, claim_paths: [primitives.1, primitives.2]}
-    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1], note: 'Humans review
-      the resulting work; in the agent review lane a second human reviewer joins only when the assessed risk makes
-      one necessary.'}
-    implementation: {state: reported, claim_paths: [architecture.harness, architecture.sandbox, architecture.tool_access,
-      architecture.knowledge, architecture.context_mgmt, architecture.credentials, architecture.interfaces]}
-    validation: {state: reported, claim_paths: [primitives.3], note: 'The documented check is result-checking with
-      escalation for judgment; the code-review lane separately pairs human reviews with an agentic co-reviewer.'}
-    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
-      key_metrics.3]}
-    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1]}
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.1
+      - primitives.2
+    human_involvement:
+      state: reported
+      claim_paths:
+      - operating_models.0
+      - operating_models.1
+      note: Humans review the resulting work; in the agent review lane a second human reviewer joins only when the
+        assessed risk makes one necessary.
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.sandbox
+      - architecture.tool_access
+      - architecture.knowledge
+      - architecture.context_mgmt
+      - architecture.credentials
+      - architecture.interfaces
+    validation:
+      state: reported
+      claim_paths:
+      - primitives.3
+      note: The documented check is result-checking with escalation for judgment; the code-review lane separately
+        pairs human reviews with an agentic co-reviewer.
+    observations:
+      state: reported
+      claim_paths:
+      - headline_metric
+      - key_metrics.0
+      - key_metrics.1
+      - key_metrics.2
+      - key_metrics.3
+    lessons:
+      state: reported
+      claim_paths:
+      - lessons_learned.0
+      - lessons_learned.1
   implementation_fields:
-    model: {state: unreported, claim_paths: [], note: 'The capture names no model; the placeholder claim stays in
-      research details.'}
-    harness: {state: reported, claim_paths: [architecture.harness]}
-    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
-    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
-    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
-    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt], note: 'Stated as coordination and
-      routing of parallel sub-agents; no finer-grained context mechanism is documented.'}
-    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'Stated at the level of token
-      proxies; the capture gives no further credential mechanism.'}
-    interfaces: {state: reported, claim_paths: [architecture.interfaces], note: 'A Slack interface carried adoption
-      beyond engineering.'}
-  primitive_roles: {primitives.0: mechanism, primitives.1: workflow, primitives.2: workflow, primitives.3: validation}
+    model:
+      state: unreported
+      claim_paths: []
+      note: The capture names no model; the placeholder claim stays in research details.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+    sandbox:
+      state: reported
+      claim_paths:
+      - architecture.sandbox
+    tool_access:
+      state: reported
+      claim_paths:
+      - architecture.tool_access
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: reported
+      claim_paths:
+      - architecture.context_mgmt
+      note: Stated as coordination and routing of parallel sub-agents; no finer-grained context mechanism is documented.
+    credentials:
+      state: reported
+      claim_paths:
+      - architecture.credentials
+      note: Stated at the level of token proxies; the capture gives no further credential mechanism.
+    interfaces:
+      state: reported
+      claim_paths:
+      - architecture.interfaces
+      note: A Slack interface carried adoption beyond engineering.
+  primitive_roles:
+    primitives.0: mechanism
+    primitives.1: workflow
+    primitives.2: workflow
+    primitives.3: validation
   observations:
-    headline_metric: {category: effectiveness, basis: reported-measurement, subject: 'Code output for a consistent
-      author cohort; company review latency, PR reversion rates, and incident trends'}
-    key_metrics.0: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same 2.9x cohort
-      figure with the period already stated in the headline metric scope.'}
-    key_metrics.1: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same flat
-      review-latency, reversion, and incident trends with the same company scope.'}
-    key_metrics.2: {category: cost-latency, basis: reported-measurement, subject: 'Human pull-request review time in
-      the agent review lane'}
-    key_metrics.3: {category: cost-latency, basis: reported-measurement, subject: 'Closure time for support tickets
-      escalated to humans'}
+    headline_metric:
+      category: effectiveness
+      basis: reported-measurement
+      subject: Code output for a consistent author cohort; company review latency, PR reversion rates, and incident
+        trends
+    key_metrics.0:
+      duplicate_of: headline_metric
+      reason: 'Component of the compound headline: the same 2.9x cohort figure with the period already stated in
+        the headline metric scope.'
+    key_metrics.1:
+      duplicate_of: headline_metric
+      reason: 'Component of the compound headline: the same flat review-latency, reversion, and incident trends
+        with the same company scope.'
+    key_metrics.2:
+      category: cost-latency
+      basis: reported-measurement
+      subject: Human pull-request review time in the agent review lane
+    key_metrics.3:
+      category: cost-latency
+      basis: reported-measurement
+      subject: Closure time for support tickets escalated to humans

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "slack-security-foundation",
+  "original_url": "https://slack.engineering/streamlining-security-investigations-with-agents/",
+  "final_url": "https://slack.engineering/streamlining-security-investigations-with-agents/",
+  "captured_at": "2026-09-17T18:23:29Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.6"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/slack-security-foundation/content.md",
+      "sha256": "sha256:922b96fc3b787d4ae4222bab4b0bfae952b45e2594dde5a173aac05957744ed4",
+      "bytes": 15642
+    }
+  }
+}

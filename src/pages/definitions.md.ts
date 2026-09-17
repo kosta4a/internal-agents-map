@@ -95,6 +95,8 @@ function document(): string {
     `# ${DEFINITIONS_HEADING}`,
     DEFINITIONS_LEDE,
     ...blocks(DEFINITIONS_INTRO),
+    'The agent comparisons below exclude shared infrastructure. Explore [platforms and components](https://internal-agents.com/infrastructure) separately.',
+    '',
     DEFINITIONS_JUMP_LINKS.map((link) => `[${link.label}](${page}#${link.fragment})`).join(' '),
     scope.eyebrow,
     `## ${scope.heading}`,

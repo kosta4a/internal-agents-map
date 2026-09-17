@@ -147,12 +147,13 @@ describe('the content routes', () => {
   it('lists the guides, the notes index, and every note', async () => {
     const paths = await contentPaths();
     expect(paths).toEqual([
+      '/infrastructure',
       guidePath('definitions'),
       guidePath('methodology'),
       notesIndexPath(),
       ...SLUGS.map((slug) => notePath(slug)),
     ]);
-    expect(paths).toHaveLength(10);
+    expect(paths).toHaveLength(11);
     expect(new Set(paths).size).toBe(paths.length);
   });
 });

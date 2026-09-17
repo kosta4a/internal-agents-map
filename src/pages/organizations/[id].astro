@@ -1,0 +1,43 @@
+---
+// ABOUTME: A compact company index using existing catalog cards and page furniture.
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import CompanyLogo from '../../components/CompanyLogo.astro';
+import AgentCard from '../../components/AgentCard.astro';
+import Icon from '../../components/Icon.astro';
+import { loadCatalog } from '../../lib/catalog';
+import { organizationView } from '../../lib/organization-view';
+import { organizationPaths, canonicalUrl } from '../../lib/routes';
+import { SITE_NAME, structuredData, webPageNode } from '../../lib/metadata';
+export function getStaticPaths() {
+  return organizationPaths(loadCatalog()).map((path) => ({ params: { id: path.split('/').pop() } }));
+}
+const view = organizationView(loadCatalog(), Astro.params.id!);
+const title = `${view.company.name} · ${SITE_NAME}`;
+const description = `Agents and infrastructure documented at ${view.company.name}.`;
+const graph = structuredData([webPageNode({ url: canonicalUrl(view.path), name: title, description })]);
+---
+<SiteLayout title={title} description={description} path={view.path} structuredData={graph}>
+  <article class="entry-page organization-page">
+    <header class="entry-header">
+      <CompanyLogo company={view.company} size={40} eager />
+      <h1>{view.company.name}</h1>
+      <a class="organization-website" href={view.homepage}>{view.websiteLabel}<Icon name="arrow-upright" size={16} /></a>
+    </header>
+    {view.groups.map((group) => (
+      <section class="entry-section" id={group.id} aria-labelledby={`${group.id}-title`}>
+        <h2 id={`${group.id}-title`}>{group.label}</h2>
+        {group.cards.map((card) => <AgentCard card={card} />)}
+      </section>
+    ))}
+    {view.connections.length > 0 && <section class="entry-section" id="connections" aria-labelledby="connections-title">
+      <h2 id="connections-title">Connections</h2>
+      <ul class="organization-connections">
+        {view.connections.map((connection) => <li>
+          <a href={connection.from.path}>{connection.from.agentName}</a>
+          <span class="related-kind">{connection.label}</span>
+          <a href={connection.to.path}>{connection.to.agentName}</a>
+        </li>)}
+      </ul>
+    </section>}
+  </article>
+</SiteLayout>

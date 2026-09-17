@@ -6,6 +6,7 @@ import { guidePath, notesIndexPath } from './routes';
 /** Clean paths of every guide page and note, without the home page or entries. */
 export async function contentPaths(): Promise<string[]> {
   return [
+    '/infrastructure',
     guidePath('definitions'),
     guidePath('methodology'),
     notesIndexPath(),

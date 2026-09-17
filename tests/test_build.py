@@ -226,7 +226,7 @@ class BuildTests(unittest.TestCase):
 
     def test_normalized_export_has_linked_collections(self) -> None:
         export = build.normalize(self.records, self.companies)
-        self.assertEqual(export["schema_version"], 6)
+        self.assertEqual(export["schema_version"], 7)
         claim_ids = {claim["id"] for claim in export["claims"]}
         source_ids = {source["id"] for source in export["sources"]}
         company_ids = {company["id"] for company in export["companies"]}
@@ -482,7 +482,7 @@ class BuildTests(unittest.TestCase):
             normalized_source = next(
                 item for item in export["sources"] if item["id"] == source["id"]
             )
-            self.assertEqual(export["schema_version"], 6)
+            self.assertEqual(export["schema_version"], 7)
             self.assertEqual(normalized_source["capture"], manifest)
             self.assertNotIn("manifest_path", normalized_source["capture"])
 
@@ -603,11 +603,19 @@ class BuildTests(unittest.TestCase):
         manifest = json.loads((ROOT / "routing-manifest.json").read_text(encoding="utf-8"))
         expected = [
             "/",
+            "/infrastructure",
             "/definitions",
             "/methodology",
             "/notes",
             *(f"/notes/{path.stem}" for path in NOTES.glob("*.md")),
             *(f"/agents/{record['id']}" for record in self.records),
+            *(
+                f"/organizations/{company_id}"
+                for company_id in {
+                    record["company_id"]
+                    for record in build.normalize(self.records, self.companies)["approaches"]
+                }
+            ),
         ]
         self.assertEqual(
             sorted(manifest["routes"]),
@@ -628,11 +636,23 @@ class BuildTests(unittest.TestCase):
 
     def test_overview_counts_match_export(self) -> None:
         export = build.normalize(self.records, self.companies)
-        company_count = len({record["company"] for record in self.records})
+        company_count = len(
+            {
+                record["company"]
+                for record in self.records
+                if build.catalog_section(record["approach_type"]) == "agents"
+            }
+        )
         overview = build.render_overview(self.records, export)
-        self.assertIn(f"{len(self.records)} approaches", overview)
+        self.assertIn(
+            f"{sum(build.catalog_section(record['approach_type']) == 'agents' for record in self.records)} agents",
+            overview,
+        )
         self.assertIn(f"{company_count} organizations", overview)
-        self.assertIn(f"{len(export['sources'])} sources", overview)
+        self.assertIn(
+            f"{len({source.get('canonical_url', source['url']) for source in export['sources']})} distinct sources",
+            overview,
+        )
         self.assertIn(f"{len(export['claims'])} evidence-linked claims", overview)
 
     def test_readme_overview_contains_every_approach(self) -> None:
@@ -670,16 +690,20 @@ class BuildTests(unittest.TestCase):
         stats = build.catalog_statistics(fixture)
         self.assertEqual(stats["entries"], 2)
         self.assertEqual(stats["supporting_entries"], 2)
-        self.assertEqual(stats["operating_models"], 3)
-        self.assertEqual(stats["multi_workflow_entries"], 1)
-        self.assertEqual(stats["attention_boundaries"]["work-product-review"], 1)
-        self.assertEqual(stats["attention_boundaries"]["unknown"], 2)
-        self.assertEqual(stats["autonomy"]["human-in-loop"], 1)
+        self.assertEqual(stats["operating_models"], 0)
+        self.assertEqual(stats["multi_workflow_entries"], 0)
+        self.assertEqual(stats["attention_boundaries"]["work-product-review"], 0)
+        self.assertEqual(stats["attention_boundaries"]["unknown"], 0)
+        self.assertEqual(stats["autonomy"]["human-in-loop"], 0)
 
     def test_analysis_snapshots_match_catalog(self) -> None:
         patterns = build.render_patterns_snapshot(self.records)
         adoption = build.render_adoption_snapshot(self.records)
-        autonomy_counts = Counter(record["autonomy"] for record in self.records)
+        autonomy_counts = Counter(
+            record["autonomy"]
+            for record in self.records
+            if build.catalog_section(record["approach_type"]) == "agents"
+        )
         self.assertIn(f"contains {len(self.records)} entries", patterns)
         self.assertIn(f"draw on {len(self.records)} catalog entries", adoption)
         self.assertIn(
@@ -1020,7 +1044,7 @@ class BuildTests(unittest.TestCase):
         labels = {
             "agent": "Agent",
             "platform": "Platform",
-            "agent-system": "Agent system",
+            "agent-system": "Agent family",
             "orchestration-system": "Orchestration system",
             "supporting-pattern": "Supporting pattern",
         }

@@ -15,7 +15,7 @@ export default defineConfig({
     // One file per page, so /agents/<id> is served from agents/<id>.html.
     format: 'file',
   },
-  // The annotation toolbar mounts on the dev server only; it injects nothing here.
+  // ENABLE_ANNOTATIONS=1 opts the dev server into annotations; builds never include it.
   // Writes routing-manifest.json and checks dist/ against the declared routes.
   integrations: [annotationIntegration(), publicationIntegration()],
 });

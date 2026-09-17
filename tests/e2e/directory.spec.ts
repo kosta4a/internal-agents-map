@@ -10,11 +10,12 @@ const PREVIEW_HOST = new URL(PREVIEW_URL).host;
 const CATALOG = JSON.parse(
   readFileSync(new URL('../../data/agents.json', import.meta.url), 'utf8'),
 ) as {
-  approaches: ReadonlyArray<{ id: string; company_id: string }>;
+  approaches: ReadonlyArray<{ id: string; company_id: string; catalog_section: 'agents' | 'infrastructure' }>;
   companies: ReadonlyArray<{ id: string; logo: { readonly path: string } | null }>;
 };
 /** The number of implementations in the committed catalog. */
-const TOTAL = CATALOG.approaches.length;
+const TOTAL = CATALOG.approaches.filter((item) => item.catalog_section === 'agents').length;
+const ALL_TOTAL = CATALOG.approaches.length;
 /** The logo descriptor of each company, or null when only its monogram remains. */
 const LOGO_BY_COMPANY = new Map(CATALOG.companies.map((company) => [company.id, company.logo]));
 /** Cards whose companies show a monogram, and cards whose companies show a logo. */
@@ -32,7 +33,7 @@ const SUPERVISION = { value: 'exception-only', label: 'Exception-only (level 5)'
 /** A search term. The cards whose text carries it are counted from the page. */
 const SEARCH = { term: 'uber' };
 
-const visibleCards = (page: Page) => page.locator('article.entry:not([hidden])');
+const visibleCards = (page: Page) => page.locator('article.entry:visible');
 /** The chips of the selected facet terms, in selection order. */
 const chips = (page: Page) => page.locator('#chips .chip');
 const chip = (page: Page, key: string, value: string) =>
@@ -40,10 +41,10 @@ const chip = (page: Page, key: string, value: string) =>
 const suggestion = (page: Page, key: string, value: string) =>
   page.locator(`#suggestions [role="option"][data-key="${key}"][data-id="${value}"]`);
 /** How many cards carry the work value, hidden or not. */
-const workCount = (page: Page) => page.locator(`article.entry[data-work~="${WORK.value}"]`).count();
+const workCount = (page: Page) => page.locator(`article.entry[data-collection="agents"][data-work~="${WORK.value}"]`).count();
 /** How many cards carry the search term in their searchable text, hidden or not. */
 const searchCount = (page: Page) =>
-  page.locator(`article.entry[data-search*="${SEARCH.term}"]`).count();
+  page.locator(`article.entry[data-collection="agents"][data-search*="${SEARCH.term}"]`).count();
 
 test.describe('the directory without javascript', () => {
   test.skip(({ javaScriptEnabled }) => javaScriptEnabled !== false, 'This is the no-JS project.');
@@ -55,7 +56,7 @@ test.describe('the directory without javascript', () => {
     const targets = await links.evaluateAll((nodes) =>
       nodes.map((node) => (node as HTMLAnchorElement).getAttribute('href')),
     );
-    expect(new Set(targets).size).toBe(TOTAL);
+    expect(new Set(targets).size).toBe(ALL_TOTAL);
     await expect(page.locator('#filters')).toBeHidden();
   });
 
@@ -67,10 +68,10 @@ test.describe('the directory without javascript', () => {
 
   test('gives every card exactly one company logo mark', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('article.entry')).toHaveCount(TOTAL);
-    await expect(page.locator('article.entry span.company-logo')).toHaveCount(TOTAL);
+    await expect(page.locator('article.entry')).toHaveCount(ALL_TOTAL);
+    await expect(page.locator('article.entry span.company-logo')).toHaveCount(ALL_TOTAL);
     await expect(page.locator('article.entry:has(span.company-logo[data-company-id])')).toHaveCount(
-      TOTAL,
+      ALL_TOTAL,
     );
 
     for (const approach of MONOGRAM_CARDS) {
@@ -137,7 +138,7 @@ test.describe('the directory with javascript', () => {
       await page.locator(`a[href="${path}"]`).first().click();
       await expect(page).toHaveURL(new RegExp(`${path}$`));
       expect(await page.evaluate(() => 'navigationMarker' in window)).toBe(true);
-      await page.locator(path === '/' ? '.search-box' : 'button[data-palette-open]').click();
+      await page.locator(path === '/' ? '#search-shortcut' : 'button[data-palette-open]').click();
       await expect(page.locator('#palette')).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(page.locator('#palette')).toBeHidden();
@@ -146,7 +147,7 @@ test.describe('the directory with javascript', () => {
       await page.keyboard.press('Escape');
       await expect(page.locator('#palette')).toBeHidden();
     }
-    await page.locator('.search-box').click();
+    await page.locator('#search-shortcut').click();
     await expect(page.locator('#palette')).toBeVisible();
   });
 
@@ -166,9 +167,9 @@ test.describe('the directory with javascript', () => {
     await expect(page.locator('.palette-menu').first()).toBeVisible();
   });
 
-  test('every part of the search bar opens the palette after repeated closes', async ({ page }) => {
+  test('global search launcher opens the palette after repeated closes', async ({ page }) => {
     await page.goto('/?work=security');
-    for (const target of ['#q', '#search-shortcut', '.search-label', '#chips button']) {
+    for (const target of ['#search-shortcut', '#search-shortcut', '#search-shortcut']) {
       await page.locator(target).first().click();
       await expect(page.locator('#palette-input')).toBeFocused();
       await page.keyboard.press('Escape');
@@ -178,9 +179,9 @@ test.describe('the directory with javascript', () => {
 
   test('the palette opens from the search box and reaches every kind of page', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.search-box').click();
+    await page.locator('#search-shortcut').click();
     await expect(page.locator('#palette')).toBeVisible();
-    for (const group of ['catalog', 'notes', 'definitions']) {
+    for (const group of ['catalog', 'infrastructure', 'notes', 'definitions']) {
       await expect(page.locator(`.palette-group[data-group="${group}"]`)).toBeVisible();
     }
     await page.locator('#palette-input').fill('stripe');
@@ -233,11 +234,11 @@ test.describe('the directory with javascript', () => {
 
   test('keeps other words as free text that must all match', async ({ page }) => {
     await page.goto('/');
-    await page.fill('#q', 'coding assistant');
+    await page.fill('#q', 'internal coding');
     await page.keyboard.press('Enter');
     await expect(chips(page)).toHaveCount(0);
-    await expect(page.locator('#q')).toHaveValue('coding assistant');
-    await expect(page).toHaveURL(/\?q=coding(\+|%20)assistant$/);
+    await expect(page.locator('#q')).toHaveValue('internal coding');
+    await expect(page).toHaveURL(/\?q=internal(\+|%20)coding$/);
     // Cards collapse before they are hidden, so let the list settle first.
     await expect(visibleCards(page)).not.toHaveCount(TOTAL);
     const count = await visibleCards(page).count();
@@ -247,7 +248,7 @@ test.describe('the directory with javascript', () => {
       nodes.map((node) => (node as HTMLElement).dataset.search ?? ''),
     )) {
       expect(text).toContain('coding');
-      expect(text).toContain('assistant');
+      expect(text).toContain('internal');
     }
   });
 
@@ -260,7 +261,7 @@ test.describe('the directory with javascript', () => {
     await expect(chips(page)).toHaveCount(2);
     await expect(page).toHaveURL(/\?work=security&work=coding$/);
     const either = await page
-      .locator('article.entry[data-work~="security"], article.entry[data-work~="coding"]')
+      .locator('article.entry[data-collection="agents"][data-work~="security"], article.entry[data-collection="agents"][data-work~="coding"]')
       .count();
     await expect(visibleCards(page)).toHaveCount(either);
   });
@@ -330,7 +331,7 @@ test.describe('the directory with javascript', () => {
     await expect(visibleCards(page)).toHaveCount(
       await page
         .locator(
-          `article.entry[data-work~="${WORK.value}"][data-supervision~="${SUPERVISION.value}"]`,
+          `article.entry[data-collection="agents"][data-work~="${WORK.value}"][data-supervision~="${SUPERVISION.value}"]`,
         )
         .count(),
     );

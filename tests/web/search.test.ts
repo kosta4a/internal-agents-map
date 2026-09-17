@@ -147,7 +147,7 @@ describe('card matching', () => {
       };
       const selection = toSelection([
         findTerm('type', card.approachType, vocabulary)!,
-        findTerm('supervision', card.boundaries[0]!.id, vocabulary)!,
+        ...(card.boundaries.length ? [findTerm('supervision', card.boundaries[0]!.id, vocabulary)!] : []),
       ]);
       expect(matchesFacets(facets, selection)).toBe(true);
     }
