@@ -148,12 +148,24 @@ Last reviewed: 2026-09-16.
 ### Architecture
 
 - Harness: Built on the HULA framework, which runs set context, generate plan, generate code, and raise PR <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
-- Interfaces: jira <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
+- Model: Rovo Dev Code Reviewer runs Anthropic Claude 3.5 Sonnet, with a gpt-4o-mini judge for factual checks <small>Sources: [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
+- Context mgmt: Top-50 similar resolved Jira work items and their merged PR diffs attach as additional run context <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
+- Interfaces: jira <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1), [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
+
+### Primitives
+
+- Set the context: The user provides the repository and the work-item description the agent needs <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
+- Generate the plan: The agent generates a plan that the user can review and refine before it proceeds <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
+- Generate the code: The agent writes the code, and the human can review it and request changes <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
+- Raise the pull request: The agent raises the PR, and the user reviews it and merges it <small>Sources: [atlassian-rovo-dev-source-1](#atlassian-rovo-dev-source-1).</small>
+- Filter review comments through two checks: A gpt-4o-mini judge drops factually incorrect comments and a fine-tuned ModernBERT drops unactionable ones before posting <small>Sources: [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
 
 ### Reported metrics
 
 - Dogfooded across 1,900+ repositories over more than a year <small>Sources: [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
 - Trained on a proprietary internal dogfooding dataset of 50,000+ Rovo Dev comments <small>Sources: [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
+- Median PR cycle time reduced by 30.8% over the year-long evaluation <small>Sources: [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
+- Human-written review comments reduced by 35.6% <small>Sources: [atlassian-rovo-dev-source-2](#atlassian-rovo-dev-source-2).</small>
 
 ### Sources
 
@@ -732,6 +744,10 @@ Last reviewed: 2026-09-16.
 
 - Validation loop: Bounded iteration with feedback on failure; deterministic systems control test execution <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 - Dash: Nova is expanding its context sources, including Dash and MCP-based integrations <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- Ingest flaky-test evidence: Athena detects a flaky test; the Deflaker workflow sends its passing and failing logs to Nova as context and asks the agent to identify a likely root cause <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- Propose a root-cause fix: The Nova agent proposes a fix for the flaky test <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- Validate the fix in CI: CI runs the test 100 or more times depending on its failure rate to check the proposed change <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
+- Retry with carried-forward notes: A flake starts another attempt with new logs and notes from the previous one, until a working fix lands or attempts reach the cap of five <small>Sources: [dropbox-nova-source-1](#dropbox-nova-source-1).</small>
 
 ### Reported metrics
 
@@ -786,10 +802,20 @@ Last reviewed: 2026-09-16.
 - Model: Anthropic (named for the tool-calling investigation loop and the coding sub-agent); specific model version not named <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 - Interfaces: slack <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 - Tool access: Traces a payment end-to-end across payment systems; can open a PR with a proposed fix when a bug is found <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Context mgmt: Follow-up questions continue in the same Slack thread with full context; investigation length and thread depth are capped <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 
 ### Primitives
 
 - Investigation-to-fix loop: Payment trace → root-cause hypothesis → proposed code fix as a PR <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Resolve the identifier and walk the transaction: A universal resolver maps an email, order number, transaction ID, or ticket to the relevant records, and the agent walks the transaction lifecycle across payments, refunds, consultations, webhooks, and payouts <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Dig into the failing path: When something looks wrong the agent pulls provider responses and real-time payment state, searches production logs, and inspects error traces and the source code around the failure <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Assess confidence before acting: The agent verifies the failure mode in the affected code path and assesses its confidence before taking any action <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Spawn the coding sub-agent for a high-confidence fix: The agent creates an engineering ticket and a coding sub-agent clones the repository, applies the fix, and opens a pull request posted back to the Slack thread <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+- Run the validation pipeline before the pull request: The coding sub-agent runs compile checks, linting, formatting, and tests before opening the pull request <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
+
+### Reported metrics
+
+- Flex reports routine investigations compressed from about 20 minutes of engineering time to seconds <small>Sources: [flex-investigation-agent-source-1](#flex-investigation-agent-source-1).</small>
 
 ### Catalog observations
 
@@ -1669,15 +1695,22 @@ Last reviewed: 2026-09-16.
 - Interfaces: slack <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 - Tool access: Investigates incidents, reviews PRs, answers questions, analyzes company data, triages support, researches sales accounts, improves Replit Agent itself <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 - Context mgmt: Manager agent coordinates parallel sub-agents and routes results <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- Knowledge: Knowledge-base and codebase state, with a semantic layer over the data warehouse naming source-of-truth tables <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- Credentials: Tool access mediated by token proxies <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 
 ### Primitives
 
 - Manager agent: One human gives an objective; the manager spawns parallel agents for verifiable work and escalates judgment <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- Take an objective and gather context: The manager agent takes a goal from a person and gathers context across company systems <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- Spawn parallel loop agents: It spawns multiple agents that work in loops on the verifiable task for the person <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- Check results and escalate judgment: Work results are checked <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 
 ### Reported metrics
 
 - 2.9x code output for a consistent author cohort from early January to late June <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 - No corresponding deterioration in review/reversion/incident metrics <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- 30% of human PR review time saved (and growing) in the agent review lane <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
+- Hardest support tickets, those escalated to humans, closed 60% faster <small>Sources: [replit-manager-agent-source-1](#replit-manager-agent-source-1).</small>
 
 ### Catalog observations
 
@@ -2250,10 +2283,21 @@ Last reviewed: 2026-09-16.
 - Sandbox: unknown <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
 - Harness: Not specified publicly <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
 
+### Primitives
+
+- Delegate the task: Engineers delegate coding tasks to the agent rather than accepting its suggestions <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+- Write the complete change: The agent writes the entire code change with zero human authoring <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+- Review and approve: An engineer reviews and approves the agent-written change <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+
 ### Reported metrics
 
 - ~1,800 complete code changes per week (~8% of changes at the time) <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
 - 95% of engineers use AI tools monthly <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+
+### Catalog observations
+
+- Uber's CTO describes the engineer's role shifting from writing every line to architecting systems and reviewing AI-generated code. <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
+- Uber's CTO attributes the strongest adoption to engineers quietly experimenting, not to a top-down push. <small>Sources: [uber-coding-agent-source-1](#uber-coding-agent-source-1).</small>
 
 ### Sources
 

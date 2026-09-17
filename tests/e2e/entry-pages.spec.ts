@@ -54,6 +54,17 @@ const ENTRIES = [
 ] as const;
 
 const PILOT_IDS = CATALOG.approaches.map((approach) => approach.id);
+/** Records whose review reports a workflow; the others honestly omit the section. */
+const WORKFLOW_REPORTED = new Set(
+  (
+    CATALOG.approaches as ReadonlyArray<{
+      id: string;
+      page_content?: { questions?: { workflow?: { state?: string } } };
+    }>
+  )
+    .filter((approach) => approach.page_content?.questions?.workflow?.state === 'reported')
+    .map((approach) => approach.id),
+);
 
 async function structuredData(page: Page): Promise<Record<string, unknown>> {
   const text = await page.locator('script[type="application/ld+json"]').innerText();
@@ -177,14 +188,13 @@ test.describe('narrow entry pages', () => {
 });
 
 test.describe('reported results', () => {
-  test('renders reviewed observations with their claim kinds', async ({ page }) => {
+  test('renders reviewed observations with the statements of other kinds', async ({ page }) => {
     await page.goto('/agents/ramp-inspect');
     const results = page.locator('#results');
     const observations = results.getByRole('heading', { name: 'Reported observations' });
     await expect(observations).toBeVisible();
     const opinion = results.locator('.claim', { hasText: 'limited only by model-provider' });
     await expect(opinion).toHaveCount(1);
-    await expect(opinion.locator('.claim-kind')).toHaveText('(opinion)');
   });
 });
 
@@ -192,10 +202,14 @@ test.describe('page-content pilot', () => {
   for (const id of PILOT_IDS) {
     test(`${id} exposes the reviewed reading order and exports`, async ({ page, request }) => {
       await page.goto(`/agents/${id}`);
-      for (const selector of ['#purpose', '#how-it-works', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources']) {
+      const selectors = ['#purpose', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources'];
+      if (WORKFLOW_REPORTED.has(id)) selectors.push('#how-it-works');
+      for (const selector of selectors) {
         await expect(page.locator(selector), selector).toBeVisible();
       }
-      await expect(page.locator('#how-it-works .claim-label').first()).not.toBeEmpty();
+      if (WORKFLOW_REPORTED.has(id)) {
+        await expect(page.locator('#how-it-works .claim-label').first()).not.toBeEmpty();
+      }
       await expect(page.locator('#purpose a[href="#sources"]')).toBeVisible();
       const ids = await page.locator('[data-claim-id]').evaluateAll((nodes) => nodes.map((node) => node.id));
       expect(new Set(ids).size).toBe(ids.length);

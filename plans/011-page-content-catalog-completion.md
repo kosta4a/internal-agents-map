@@ -82,3 +82,16 @@ contract change.
 
 - 2026-09-17: plan written; branch created from `92d5222` (Plan 010 committed,
   unpushed). Baseline gates pass.
+- 2026-09-17: executed in six waves (three flag records plus three
+  coordinator-reviewed small records, then 4 + 5 + 5 + 5 + 5 parallel reviews),
+  each record read against its full captures with the disposition key-scan run
+  by the reviewing agent and re-verified centrally per wave. All 40 records now
+  carry `page-content-v1`; 600 dispositions (464 reported, 135 unreported,
+  1 not-applicable, 0 not-reviewed). One contract boundary recorded: the
+  Atlassian Bitbucket surface lives in a disposition note because the interface
+  vocabulary does not name it. Capture-gap follow-ups are listed in
+  `011-catalog-review.md`. Wave commits: `baec70a`, `d1f378e`, `73f35d4`,
+  `f0867ca`, `919a46f`, plus the final artifact commit.
+- 2026-09-17: final `npm run verify` passed end to end on the completed
+  catalog. Status: COMPLETE — branch not pushed; the merge and deployment
+  decision belongs to the user.

@@ -54,6 +54,16 @@ primitives:
   desc: Bounded iteration with feedback on failure; deterministic systems control test execution
 - name: Dash
   desc: Nova is expanding its context sources, including Dash and MCP-based integrations
+- name: Ingest flaky-test evidence
+  desc: Athena detects a flaky test; the Deflaker workflow sends its passing and failing logs to Nova as context
+    and asks the agent to identify a likely root cause
+- name: Propose a root-cause fix
+  desc: The Nova agent proposes a fix for the flaky test
+- name: Validate the fix in CI
+  desc: CI runs the test 100 or more times depending on its failure rate to check the proposed change
+- name: Retry with carried-forward notes
+  desc: A flake starts another attempt with new logs and notes from the previous one, until a working fix lands
+    or attempts reach the cap of five
 key_metrics:
 - 'Flaky-test remediation (Deflaker): 100+ validation runs'
 - Predecessor Goose-based migrator used across thousands of migration entries before workflows moved onto Nova
@@ -170,6 +180,14 @@ evidence:
   architecture.interfaces:
   - source_id: dropbox-nova-source-1
     relation: supports
+  primitives.2:
+  - {source_id: dropbox-nova-source-1, relation: supports, locator: 'Preserved content.md, lines 58, 62'}
+  primitives.3:
+  - {source_id: dropbox-nova-source-1, relation: supports, locator: 'Preserved content.md, line 58'}
+  primitives.4:
+  - {source_id: dropbox-nova-source-1, relation: supports, locator: 'Preserved content.md, line 58'}
+  primitives.5:
+  - {source_id: dropbox-nova-source-1, relation: supports, locator: 'Preserved content.md, lines 58, 62'}
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -221,3 +239,45 @@ claim_metadata:
     measurement_method: Run the test 100 or more times depending on its failure rate; retry capped at five fix attempts
   key_metrics.1:
     metric_scope: Predecessor Goose-based migrator, before workflows moved onto Nova
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [dropbox-nova-source-1, dropbox-nova-source-2]
+  workflow_scope: 'Athena flaky-test alert through the Deflaker fix-and-validate loop to a landed fix or capped attempts'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.2, primitives.3, primitives.5], note: 'The Deflaker run is
+      the documented operational workflow; interactive sessions and the crash-alert experiment are other modes on
+      the platform, outside this scope.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1], note: 'Two documented
+      modes: engineers steer interactive sessions, while async workflows run without a person and surface crash-alert
+      candidates to service teams.'}
+    implementation: {state: reported, claim_paths: [architecture.sandbox, architecture.harness, architecture.model,
+      architecture.tool_access, architecture.knowledge, architecture.context_mgmt, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.4], note: 'Caller-attached validation commands run after
+      each attempt; the Deflaker CI runs are the documented instance.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model], note: 'Multiple coding agents run behind one interface;
+      no specific model or provider is named.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox]}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: unreported, claim_paths: [], note: 'The capture states agents operate within existing
+      infrastructure and validation paths but names no authentication or authorization mechanism; the legacy
+      same-as-engineers claim stays in research details.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: workflow, primitives.3: workflow,
+    primitives.4: validation, primitives.5: workflow}
+  observations:
+    headline_metric: {category: runtime-capacity, basis: qualitative, subject: 'Parallel agents a migration owner
+      launches and manages from one runbook'}
+    key_metrics.0: {category: runtime-capacity, basis: reported-measurement, subject: 'CI validation runs per proposed
+      Deflaker flaky-test fix'}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: 'Migration entries processed by
+      the predecessor Goose-based migrator before workflows moved onto Nova'}
+    key_metrics.2: {duplicate_of: headline_metric, reason: 'Same dozens-of-agents capacity from the same runbook
+      passage; identical scope with no separate period or qualification.'}

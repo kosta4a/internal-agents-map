@@ -28,9 +28,17 @@ headline_metric: ~1,800 complete code changes per week (~8% of changes)
 architecture:
   sandbox: unknown
   harness: Not specified publicly
+primitives:
+- {name: Delegate the task, desc: Engineers delegate coding tasks to the agent rather than accepting its suggestions}
+- {name: Write the complete change, desc: The agent writes the entire code change with zero human authoring}
+- {name: Review and approve, desc: An engineer reviews and approves the agent-written change}
 key_metrics:
 - ~1,800 complete code changes per week (~8% of changes at the time)
 - 95% of engineers use AI tools monthly
+lessons_learned:
+- Uber's CTO describes the engineer's role shifting from writing every line to architecting systems and
+  reviewing AI-generated code.
+- Uber's CTO attributes the strongest adoption to engineers quietly experimenting, not to a top-down push.
 sources:
 - id: uber-coding-agent-source-1
   title: Uber's CTO on AI coding agents (Business Insider)
@@ -68,6 +76,16 @@ evidence:
   - source_id: uber-coding-agent-source-1
     relation: supports
     locator: Preserved content.md, lines 18
+  primitives.0:
+  - {source_id: uber-coding-agent-source-1, relation: supports, locator: 'Preserved content.md, line 24'}
+  primitives.1:
+  - {source_id: uber-coding-agent-source-1, relation: supports, locator: 'Preserved content.md, lines 24–26'}
+  primitives.2:
+  - {source_id: uber-coding-agent-source-1, relation: supports, locator: 'Preserved content.md, line 26'}
+  lessons_learned.0:
+  - {source_id: uber-coding-agent-source-1, relation: supports, locator: 'Preserved content.md, line 36'}
+  lessons_learned.1:
+  - {source_id: uber-coding-agent-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -102,3 +120,68 @@ claim_metadata:
     confidence_reason: Only limited public evidence supports this claim.
     metric_scope: Monthly use of AI tools among Uber engineers; not internal-agent-specific adoption
     denominator: Uber engineers
+  primitives.0:
+    kind: fact
+    provenance: reported
+    confidence: medium
+    confidence_reason: A single secondary article relays the CTO's statement about delegation versus suggestions.
+  primitives.1:
+    kind: fact
+    provenance: reported
+    confidence: medium
+    confidence_reason: The CTO's zero-human-authoring statement is relayed verbatim by one secondary article.
+  primitives.2:
+    kind: fact
+    provenance: reported
+    confidence: medium
+    confidence_reason: One secondary article relays the CTO's review-and-approve description without naming the
+      review venue or policy.
+  lessons_learned.0:
+    kind: opinion
+    provenance: reported
+    confidence: medium
+    confidence_reason: An attributed view of one CTO on the engineer's role, relayed by a single secondary article.
+  lessons_learned.1:
+    kind: opinion
+    provenance: reported
+    confidence: medium
+    confidence_reason: An attributed adoption observation of one CTO; no adoption method or measurement is described.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [uber-coding-agent-source-1]
+  workflow_scope: Delegated coding task to engineer-approved code change
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.0, primitives.1, primitives.2], note: 'The three steps carry
+      the full delegation-to-approval arc the article describes; no other stage is documented.'}
+    human_involvement: {state: reported, claim_paths: [summary, operating_models.0], note: 'Engineers review and
+      approve every agent-written change; the CTO describes zero human authoring.'}
+    implementation: {state: unreported, claim_paths: [], note: 'The capture names no model, harness, tools, or
+      interfaces; the sandbox and harness claims in research details are placeholders.'}
+    validation: {state: reported, claim_paths: [primitives.2], note: 'The documented check of the work is the human
+      review gate cited with human involvement; no automated check is described.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1], note: 'Two attributed opinions
+      of the CTO, relayed by a single secondary article.'}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'No model is named in the capture.'}
+    harness: {state: unreported, claim_paths: [], note: 'No execution environment is described; the placeholder claim
+      stays in research details.'}
+    sandbox: {state: unreported, claim_paths: [], note: 'No isolation boundary is described; the unknown claim stays
+      in research details.'}
+    tool_access: {state: unreported, claim_paths: [], note: 'No tools or systems accessed by the agent are named.'}
+    knowledge: {state: unreported, claim_paths: [], note: 'No knowledge source is described in the capture.'}
+    context_mgmt: {state: unreported, claim_paths: [], note: 'No context-management mechanism is described.'}
+    credentials: {state: unreported, claim_paths: [], note: 'Credential handling is not described in the capture.'}
+    interfaces: {state: unreported, claim_paths: [], note: 'The capture names no surface through which engineers
+      invoke the agent.'}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow, primitives.2: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'Weekly code changes written
+      entirely by the internal coding agent, and their share of all Uber code changes'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Same weekly count and 8% share from the same passage;
+      the at-the-time wording only makes explicit the point-in-time framing the headline growth statement already
+      carries, so it adds no separate information.'}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: 'Monthly AI-tool use among Uber
+      engineers generally, not specific to this agent'}
