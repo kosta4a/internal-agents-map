@@ -49,6 +49,16 @@ primitives:
   desc: River works in shared Slack threads whose history can be searched and used to update skills
 - name: Skills as files
   desc: Written-down knowledge mined from successful patterns and public transcripts
+- name: Take a request in a public channel
+  desc: A person @-mentions River with a question or task in a public Slack channel; River works only in the open
+- name: Work the problem in the open
+  desc: River reads files, runs queries and tests, and posts partial findings to the thread
+- name: Absorb a mid-thread redirect
+  desc: A second person drops in with a constraint or redirect; River incorporates it without losing the
+    conversation and continues
+- name: Leave a reusable transcript
+  desc: The finished thread stays searchable so the next person starts from it, and observed patterns feed back
+    into skills
 key_metrics:
 - 'River: 59,918 sessions / 30 days across 5,170 Slack channels'
 - 3,536 River-coauthored PRs merged; 1 in 8 merged PRs company-wide
@@ -114,6 +124,14 @@ evidence:
   primitives.2:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+  primitives.3:
+  - {source_id: shopify-internal-agents-source-1, relation: supports, locator: 'Preserved content.md, lines 69, 75'}
+  primitives.4:
+  - {source_id: shopify-internal-agents-source-1, relation: supports, locator: 'Preserved content.md, lines 65, 76'}
+  primitives.5:
+  - {source_id: shopify-internal-agents-source-1, relation: supports, locator: 'Preserved content.md, lines 77-78'}
+  primitives.6:
+  - {source_id: shopify-internal-agents-source-1, relation: supports, locator: 'Preserved content.md, lines 71, 79'}
   key_metrics.0:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -190,3 +208,47 @@ claim_metadata:
     measurement_method: river_sessions domain table for reported session-linked counts
   key_metrics.2:
     metric_scope: Median River session duration and tool calls per session
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [shopify-internal-agents-source-1]
+  workflow_scope: 'One River thread: public @river request through worked findings, a human redirect, and a searchable transcript'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.3, primitives.4, primitives.5, primitives.6], note: 'The
+      article documents exactly one representative workflow, the well-going public River thread; PR review and
+      the headless Vanilla profile are separate Aquifer profiles, not steps of this run.'}
+    human_involvement: {state: reported, claim_paths: [primitives.5], note: 'A second human redirects the thread
+      mid-run; no required review checkpoint on River''s own output is documented, and the PR-review profile often
+      runs without a human.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.sandbox, architecture.model,
+      architecture.tool_access, architecture.knowledge, architecture.credentials, architecture.context_mgmt,
+      architecture.interfaces]}
+    validation: {state: unreported, claim_paths: [], note: 'Tests River runs are part of its work, and CI
+      improvements serve human developers; no check of River''s own output is documented.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model], note: 'The documented content is the swap design;
+      no specific model is named.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox], note: 'The brain-and-hands framing the claim
+      credits to Anthropic appears in the capture only as an unnamed linked essay.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'The credentials proxy and
+      per-profile sandbox policy are documented; Shopify SSO is not named in the capture.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces], note: 'Slack is named; the capture
+      documents pull-request creation but never names GitHub as the host.'}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: workflow,
+    primitives.4: workflow, primitives.5: workflow, primitives.6: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'Company-wide merged pull
+      requests coauthored by River'}
+    key_metrics.0: {category: adoption-output, basis: reported-measurement, subject: 'River sessions and distinct
+      Slack channels over a recent 30-day period'}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: 'River-coauthored merged pull
+      requests and their company-wide share in a recent 30-day period'}
+    key_metrics.2: {category: cost-latency, basis: reported-measurement, subject: 'Median River session duration and
+      median tool calls per session'}

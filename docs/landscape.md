@@ -273,6 +273,9 @@ Last reviewed: 2026-09-16.
 
 - Prompt + eval studio: Non-technical ops staff design prompts, test across models, deploy with QA oversight <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 - MCP tool bridge: Product features exposed to internal agents through one MCP server <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- Prepare the dispute submission: The dispute agent applies the 100+ page dispute guide and the BPO operating procedure to produce a more robust, better-articulated submission <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- Draft the collections response: The agent analyzes the customer reply and layers in account context and negotiating guidelines, offering the servicing team drafts in several tones to select, customize, or send <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
+- Apply the quality rubric: A QA agent reviews every support interaction against the quality rubric and feeds response trends into a closed loop improving agent and human performance <small>Sources: [brex-agent-platform-source-1](#brex-agent-platform-source-1).</small>
 
 ### Reported metrics
 
@@ -661,6 +664,7 @@ Last reviewed: 2026-09-16.
 - Playbook: YAML unit of agentic work: task, inputs, skills, tools, permissions, validation, outputs <small>Sources: [doordash-flux-source-3](#doordash-flux-source-3).</small>
 - DataExplorer: Identifies schemas, generates grounded SQL, validates via EXPLAIN before execution <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
 - Maturity model: Deterministic workflows and single agents are in use; deep agents are being developed and tested; swarms remain research <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
+- Answer a grounded data question: From a business question, DataExplorer identifies candidate tables through DescribeTable with cached column examples, generates starter SQL grounded in the schema, and EXPLAIN validation with autocorrection precedes execution <small>Sources: [doordash-flux-source-2](#doordash-flux-source-2).</small>
 
 ### Reported metrics
 
@@ -884,7 +888,7 @@ Last reviewed: 2026-09-16.
 - Sandbox: Isolated ephemeral execution environments; durable runs <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Harness: Collaborative cloud agent platform with explicit boundaries around GitHub, Datadog, Linear, and other connected systems <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Model: Not specified <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
-- Interfaces: slack, web, automation <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Interfaces: slack, web, automation, cli <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Tool access: Explicit tool boundaries; tool configuration injected at run start; requests start from Slack, the web app, or automations; connects to systems like GitHub, Datadog, and Linear <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Credentials: Short-lived, scoped credentials injected at run start; no ambient access to the control plane or a user's machine <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Context mgmt: Durable runs over disposable execution environments <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
@@ -893,6 +897,10 @@ Last reviewed: 2026-09-16.
 
 - Durable runs / ephemeral execution: Long-lived run state over throwaway compute <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 - Reviewable artifacts: Returns summaries, diffs, branches, and pull requests alongside the run history <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Start a durable run: A request from Slack, the web app, an automation, or the CLI creates a durable run and starts a fresh sandbox that hydrates the repository <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Execute the agent in the sandbox: The worker runs the agent, streams output, and reaches approved external systems through tool configuration injected at run start <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Return reviewable artifacts: The run persists summaries, diffs, branches, and pull requests; a failed run returns the result to a person who decides what happens next <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
+- Scheduled verification loops: Cron-based automations materialize ordinary runs for cleanup passes, test generation, dependency checks, and verification loops <small>Sources: [harvey-spectre-source-1](#harvey-spectre-source-1).</small>
 
 ### Catalog observations
 
@@ -1856,6 +1864,10 @@ Last reviewed: 2026-09-16.
 - Session/Harness/Sandbox split: Durable identity, disposable loop, isolated execution; swap any layer independently <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
 - River (public-by-default): River works in shared Slack threads whose history can be searched and used to update skills <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
 - Skills as files: Written-down knowledge mined from successful patterns and public transcripts <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
+- Take a request in a public channel: A person @-mentions River with a question or task in a public Slack channel; River works only in the open <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
+- Work the problem in the open: River reads files, runs queries and tests, and posts partial findings to the thread <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
+- Absorb a mid-thread redirect: A second person drops in with a constraint or redirect; River incorporates it without losing the conversation and continues <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
+- Leave a reusable transcript: The finished thread stays searchable so the next person starts from it, and observed patterns feed back into skills <small>Sources: [shopify-internal-agents-source-1](#shopify-internal-agents-source-1).</small>
 
 ### Reported metrics
 
@@ -2357,6 +2369,11 @@ Last reviewed: 2026-09-16.
 - Purpose-built agent infra: Cloudflare sandbox infrastructure with programmatic lifecycle APIs and an outbound proxy for egress controls <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 - Self-improvement loop: Session logs can lead to proposed fixes, scripts, or context updates; many platform tasks are still seeded manually <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 - MCP as an iterative product: WorkOS revises tool names and schemas to address repeated exploration and mistaken tool use <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- Divide the project into issues: The PM agent splits a delegated Linear project into individual issues with descriptions and dependency ordering; a human reviews each issue before implementation starts <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- Run the implementation session in the sandbox: When an issue moves to In Progress, the orchestrator assigns it to a cloud agent that boots the Docker development container with OpenCode and the custom MCP context server <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- Hand off the pull request for human review: The run ends as a pull request attributed to the issue owner; no code merges without explicit human approval <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- Continue the dependency chain after merge: The GitHub merge webhook marks the Linear issues done and starts the next eligible run on newly unblocked issues <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
+- Verify the work inside the sandbox: The run lints, builds, and runs automated tests, and does initial validation of acceptance criteria, before requesting human attention <small>Sources: [workos-project-horizon-source-1](#workos-project-horizon-source-1).</small>
 
 ### Catalog observations
 

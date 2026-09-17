@@ -512,6 +512,161 @@
         "identity": "unknown",
         "evidence_strength": "secondary-only"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "brex-agent-platform-source-1"
+        ],
+        "workflow_scope": "Two documented agent runs on the platform: dispute-submission preparation, and collections response drafting for the servicing team",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2",
+              "primitives.3"
+            ],
+            "note": "The prompt studio and the MCP bridge are build-time mechanisms. Platform-wide capability and the L1/L2/L3 restructure stay out of the run description."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "operating_models.1",
+              "operating_models.2"
+            ],
+            "note": "Boundaries differ by use: fraud is exception-only, KYC and collections keep work-product review, and the dispute run documents no checkpoint."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.4"
+            ],
+            "note": "The quality-rubric agent checks every support interaction; the KYC human checks are cited with human involvement."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2",
+              "key_metrics.3"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Deployed-agent models are not documented; multi-model testing is build time. The placeholder claim stays in research details."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ],
+            "note": "Retool hosts the runtime; the capture describes no further isolation boundary."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ],
+            "note": "The MCP bridge and immediate internal availability are supported at line 40; the Slack /c1 clause describes provisioning configuration, not agent invocation (flagged)."
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No mechanism for maintaining agent context over time is documented; the QA feedback loop improves performance rather than managing context."
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "SSO via Retool proxies, Okta provisioning, and the retention and segregation controls are supported at lines 60–62; the ConductorOne vendor name is not in the capture (flagged)."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "workflow",
+          "primitives.3": "workflow",
+          "primitives.4": "validation"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Dispute-submission preparation time on the internal agent platform"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Customer-support cases resolved by the chatbot at first touch (customer-facing product AI, adjacent to this platform)"
+          },
+          "key_metrics.1": {
+            "duplicate_of": "headline_metric",
+            "reason": "Identical subject, values, period, scope, and locator as the headline; the shorthand adds nothing."
+          },
+          "key_metrics.2": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "Support-interaction QA coverage and the staffing change from five specialists to one"
+          },
+          "key_metrics.3": {
+            "category": "effectiveness",
+            "basis": "reported-measurement",
+            "subject": "KYC adverse-media classification accuracy, agent versus human"
+          }
+        }
+      },
       "company_id": "brex",
       "claim_ids": [
         "brex-agent-platform--summary",
@@ -525,6 +680,9 @@
         "brex-agent-platform--architecture-credentials",
         "brex-agent-platform--primitives-0",
         "brex-agent-platform--primitives-1",
+        "brex-agent-platform--primitives-2",
+        "brex-agent-platform--primitives-3",
+        "brex-agent-platform--primitives-4",
         "brex-agent-platform--key-metrics-0",
         "brex-agent-platform--key-metrics-1",
         "brex-agent-platform--key-metrics-2",
@@ -1670,6 +1828,160 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "doordash-flux-source-1",
+          "doordash-flux-source-2",
+          "doordash-flux-source-3"
+        ],
+        "workflow_scope": "Business question to grounded, validated answer on the analytics platform",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5"
+            ],
+            "note": "The named run is the analytics platform's DataExplorer loop. Flux runs are documented at platform level (playbook defines work, sandbox executes, gateway governs access, surfaces invoke) without one named run, and the code-review run belongs to the separate doordash-code-review record."
+          },
+          "human_involvement": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Runs execute unattended in parallel around the clock. Engineers reviewing output in public Slack threads is an observed adoption practice, not a stated required checkpoint on either platform."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.credentials",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5",
+              "lessons_learned.4"
+            ],
+            "note": "The analytics platform validates generated SQL with linting, EXPLAIN checks, and statistical-metadata checks with autocorrection, plus a separate LLM-as-judge and DeepEval framework. Flux playbooks package validation per playbook."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4",
+              "lessons_learned.5"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No model or provider is named for either platform. The modular-primitives design claim stays in research details."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ],
+            "note": "The maturity model is the analytics platform's progression. Flux supports multiple coding agent harnesses inside its sandboxes."
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ],
+            "note": "Firecracker microVMs with a sub-five-second p95 end-to-end setup objective; a Flux capability."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ],
+            "note": "Flux Agent Gateway with playbook-scoped logged permissions; LangGraph orchestration and prospective A2A on the analytics platform."
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ],
+            "note": "Hybrid retrieval and schema-aware SQL generation; an analytics-platform capability."
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "Scoped per playbook and brokered through the gateway rather than the laptop; a Flux capability with provenance on every action."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "Flux invocation surfaces are Slack, GitHub, cron, CLI, and skill; the analytics platform adds Cursor. The analytics conversational web UI is not claimed."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "mechanism",
+          "primitives.4": "mechanism",
+          "primitives.5": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Engineering tasks automated on Flux in one reported month; the calendar month is unspecified"
+          },
+          "key_metrics.0": {
+            "duplicate_of": "headline_metric",
+            "reason": "Identical statement, scope, period, and locators as the headline: the same 130,000-task one-month count."
+          },
+          "key_metrics.1": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Weekly automated code reviews powered by Flux; the reviewer agent itself is the separate doordash-code-review record"
+          },
+          "key_metrics.2": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Unique Flux playbooks and weekly playbook invocations"
+          }
+        }
+      },
       "company_id": "doordash",
       "claim_ids": [
         "doordash-flux--summary",
@@ -1687,6 +1999,7 @@
         "doordash-flux--primitives-2",
         "doordash-flux--primitives-3",
         "doordash-flux--primitives-4",
+        "doordash-flux--primitives-5",
         "doordash-flux--key-metrics-0",
         "doordash-flux--key-metrics-1",
         "doordash-flux--key-metrics-2",
@@ -2070,6 +2383,128 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "harvey-spectre-source-1",
+          "harvey-spectre-source-2"
+        ],
+        "workflow_scope": "Request from Slack, the web app, an automation, or the CLI through a sandboxed durable run to reviewable artifacts",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.2",
+              "primitives.3",
+              "primitives.4"
+            ],
+            "note": "The named run is the first-version flow the post documents: create a run, start a fresh sandbox, hydrate the repository, run the agent, stream output, persist artifacts."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0"
+            ],
+            "note": "Work-product review at the returned artifacts; a failed run hands the result to a person who decides what happens next."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox",
+              "architecture.harness",
+              "architecture.tool_access",
+              "architecture.credentials",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5"
+            ],
+            "note": "Verification loops run as scheduled ordinary runs; the post documents no separate check inside an interactive run beyond the review boundary."
+          },
+          "observations": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The platform post reports no measured outcomes. The security article's figures describe the separate agentic SOC, which runs on its own infrastructure by design."
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The post names providers and multi-provider support but no model; the placeholder claim stays in research details."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No knowledge store for Spectre runs is documented; the SOC's memory system belongs to the separate security platform."
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "The CLI joins Slack, the web app, and automations as a surface over the same durable run."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "workflow",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "validation"
+        },
+        "observations": {}
+      },
       "company_id": "harvey",
       "claim_ids": [
         "harvey-spectre--summary",
@@ -2082,6 +2517,10 @@
         "harvey-spectre--architecture-context-mgmt",
         "harvey-spectre--primitives-0",
         "harvey-spectre--primitives-1",
+        "harvey-spectre--primitives-2",
+        "harvey-spectre--primitives-3",
+        "harvey-spectre--primitives-4",
+        "harvey-spectre--primitives-5",
         "harvey-spectre--lessons-learned-0",
         "harvey-spectre--lessons-learned-1",
         "harvey-spectre--lessons-learned-2",
@@ -2094,7 +2533,8 @@
       "interfaces": [
         "slack",
         "web",
-        "automation"
+        "automation",
+        "cli"
       ]
     },
     {
@@ -5090,6 +5530,160 @@
         "identity": "unknown",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "shopify-internal-agents-source-1"
+        ],
+        "workflow_scope": "One River thread: public @river request through worked findings, a human redirect, and a searchable transcript",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.3",
+              "primitives.4",
+              "primitives.5",
+              "primitives.6"
+            ],
+            "note": "The article documents exactly one representative workflow, the well-going public River thread; PR review and the headless Vanilla profile are separate Aquifer profiles, not steps of this run."
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.5"
+            ],
+            "note": "A second human redirects the thread mid-run; no required review checkpoint on River's own output is documented, and the PR-review profile often runs without a human."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.sandbox",
+              "architecture.model",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.credentials",
+              "architecture.context_mgmt",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "Tests River runs are part of its work, and CI improvements serve human developers; no check of River's own output is documented."
+          },
+          "observations": {
+            "state": "reported",
+            "claim_paths": [
+              "headline_metric",
+              "key_metrics.0",
+              "key_metrics.1",
+              "key_metrics.2"
+            ]
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.model"
+            ],
+            "note": "The documented content is the swap design; no specific model is named."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ],
+            "note": "The brain-and-hands framing the claim credits to Anthropic appears in the capture only as an unnamed linked essay."
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ],
+            "note": "The credentials proxy and per-profile sandbox policy are documented; Shopify SSO is not named in the capture."
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ],
+            "note": "Slack is named; the capture documents pull-request creation but never names GitHub as the host."
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "workflow",
+          "primitives.4": "workflow",
+          "primitives.5": "workflow",
+          "primitives.6": "workflow"
+        },
+        "observations": {
+          "headline_metric": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "Company-wide merged pull requests coauthored by River"
+          },
+          "key_metrics.0": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "River sessions and distinct Slack channels over a recent 30-day period"
+          },
+          "key_metrics.1": {
+            "category": "adoption-output",
+            "basis": "reported-measurement",
+            "subject": "River-coauthored merged pull requests and their company-wide share in a recent 30-day period"
+          },
+          "key_metrics.2": {
+            "category": "cost-latency",
+            "basis": "reported-measurement",
+            "subject": "Median River session duration and median tool calls per session"
+          }
+        }
+      },
       "company_id": "shopify",
       "claim_ids": [
         "shopify-internal-agents--summary",
@@ -5105,6 +5699,10 @@
         "shopify-internal-agents--primitives-0",
         "shopify-internal-agents--primitives-1",
         "shopify-internal-agents--primitives-2",
+        "shopify-internal-agents--primitives-3",
+        "shopify-internal-agents--primitives-4",
+        "shopify-internal-agents--primitives-5",
+        "shopify-internal-agents--primitives-6",
         "shopify-internal-agents--key-metrics-0",
         "shopify-internal-agents--key-metrics-1",
         "shopify-internal-agents--key-metrics-2",
@@ -6487,6 +7085,138 @@
         "identity": "user",
         "evidence_strength": "detailed-primary"
       },
+      "page_content": {
+        "version": 1,
+        "reviewed_at": "2026-09-17",
+        "source_ids": [
+          "workos-project-horizon-source-1",
+          "workos-project-horizon-source-2",
+          "workos-project-horizon-source-3",
+          "workos-project-horizon-source-4"
+        ],
+        "workflow_scope": "Delegated Linear project to merged, human-approved pull requests across the dependency chain",
+        "questions": {
+          "purpose": {
+            "state": "reported",
+            "claim_paths": [
+              "summary"
+            ]
+          },
+          "workflow": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.4",
+              "primitives.5",
+              "primitives.6",
+              "primitives.7"
+            ]
+          },
+          "human_involvement": {
+            "state": "reported",
+            "claim_paths": [
+              "operating_models.0",
+              "primitives.4",
+              "primitives.6"
+            ],
+            "note": "A human reviews each PM-generated issue before implementation starts, and a human is always in the loop at pull-request handoff; humans are frequently the bottleneck."
+          },
+          "implementation": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness",
+              "architecture.sandbox",
+              "architecture.tool_access",
+              "architecture.knowledge",
+              "architecture.context_mgmt",
+              "architecture.credentials",
+              "architecture.interfaces"
+            ]
+          },
+          "validation": {
+            "state": "reported",
+            "claim_paths": [
+              "primitives.8"
+            ],
+            "note": "Lint, build, and automated tests run in the sandbox before human attention; headless browser verification is named as planned work, not a current check."
+          },
+          "observations": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "The captures describe capability and direction without a measured Horizon outcome; the UI Nits closure rate belongs to the surrounding program rather than to Horizon alone."
+          },
+          "lessons": {
+            "state": "reported",
+            "claim_paths": [
+              "lessons_learned.0",
+              "lessons_learned.1",
+              "lessons_learned.2",
+              "lessons_learned.3",
+              "lessons_learned.4"
+            ]
+          }
+        },
+        "implementation_fields": {
+          "model": {
+            "state": "unreported",
+            "claim_paths": [],
+            "note": "No source names the underlying model; the harness is the swappable layer, and the placeholder claim stays in research details."
+          },
+          "harness": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.harness"
+            ]
+          },
+          "sandbox": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.sandbox"
+            ]
+          },
+          "tool_access": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.tool_access"
+            ]
+          },
+          "knowledge": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.knowledge"
+            ]
+          },
+          "context_mgmt": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.context_mgmt"
+            ]
+          },
+          "credentials": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.credentials"
+            ]
+          },
+          "interfaces": {
+            "state": "reported",
+            "claim_paths": [
+              "architecture.interfaces"
+            ]
+          }
+        },
+        "primitive_roles": {
+          "primitives.0": "mechanism",
+          "primitives.1": "mechanism",
+          "primitives.2": "mechanism",
+          "primitives.3": "mechanism",
+          "primitives.4": "workflow",
+          "primitives.5": "workflow",
+          "primitives.6": "workflow",
+          "primitives.7": "workflow",
+          "primitives.8": "validation"
+        },
+        "observations": {}
+      },
       "company_id": "workos",
       "claim_ids": [
         "workos-project-horizon--summary",
@@ -6502,6 +7232,11 @@
         "workos-project-horizon--primitives-1",
         "workos-project-horizon--primitives-2",
         "workos-project-horizon--primitives-3",
+        "workos-project-horizon--primitives-4",
+        "workos-project-horizon--primitives-5",
+        "workos-project-horizon--primitives-6",
+        "workos-project-horizon--primitives-7",
+        "workos-project-horizon--primitives-8",
         "workos-project-horizon--lessons-learned-0",
         "workos-project-horizon--lessons-learned-1",
         "workos-project-horizon--lessons-learned-2",
@@ -7873,6 +8608,63 @@
         }
       ],
       "display_name": "MCP tool bridge"
+    },
+    {
+      "id": "brex-agent-platform--primitives-2",
+      "approach_id": "brex-agent-platform",
+      "field": "primitives.2",
+      "text": "The dispute agent applies the 100+ page dispute guide and the BPO operating procedure to produce a more robust, better-articulated submission",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "brex-agent-platform-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 179–189"
+        }
+      ],
+      "display_name": "Prepare the dispute submission"
+    },
+    {
+      "id": "brex-agent-platform--primitives-3",
+      "approach_id": "brex-agent-platform",
+      "field": "primitives.3",
+      "text": "The agent analyzes the customer reply and layers in account context and negotiating guidelines, offering the servicing team drafts in several tones to select, customize, or send",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "brex-agent-platform-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 173"
+        }
+      ],
+      "display_name": "Draft the collections response"
+    },
+    {
+      "id": "brex-agent-platform--primitives-4",
+      "approach_id": "brex-agent-platform",
+      "field": "primitives.4",
+      "text": "A QA agent reviews every support interaction against the quality rubric and feeds response trends into a closed loop improving agent and human performance",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "medium",
+      "confidence_reason": "A linked participant or independent source reports the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "brex-agent-platform-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 80–82"
+        }
+      ],
+      "display_name": "Apply the quality rubric"
     },
     {
       "id": "brex-agent-platform--key-metrics-0",
@@ -10361,6 +11153,25 @@
       "display_name": "Maturity model"
     },
     {
+      "id": "doordash-flux--primitives-5",
+      "approach_id": "doordash-flux",
+      "field": "primitives.5",
+      "text": "From a business question, DataExplorer identifies candidate tables through DescribeTable with cached column examples, generates starter SQL grounded in the schema, and EXPLAIN validation with autocorrection precedes execution",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "doordash-flux-source-2",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 42, 78–80"
+        }
+      ],
+      "display_name": "Answer a grounded data question"
+    },
+    {
       "id": "doordash-flux--key-metrics-0",
       "approach_id": "doordash-flux",
       "field": "key_metrics.0",
@@ -11468,7 +12279,7 @@
       "id": "harvey-spectre--architecture-interfaces",
       "approach_id": "harvey-spectre",
       "field": "architecture.interfaces",
-      "text": "slack, web, automation",
+      "text": "slack, web, automation, cli",
       "kind": "fact",
       "provenance": "reported",
       "confidence": "high",
@@ -11477,7 +12288,8 @@
       "evidence": [
         {
           "source_id": "harvey-spectre-source-1",
-          "relation": "supports"
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 16, 40"
         }
       ]
     },
@@ -11568,6 +12380,82 @@
         }
       ],
       "display_name": "Reviewable artifacts"
+    },
+    {
+      "id": "harvey-spectre--primitives-2",
+      "approach_id": "harvey-spectre",
+      "field": "primitives.2",
+      "text": "A request from Slack, the web app, an automation, or the CLI creates a durable run and starts a fresh sandbox that hydrates the repository",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "harvey-spectre-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 16, 24, 40"
+        }
+      ],
+      "display_name": "Start a durable run"
+    },
+    {
+      "id": "harvey-spectre--primitives-3",
+      "approach_id": "harvey-spectre",
+      "field": "primitives.3",
+      "text": "The worker runs the agent, streams output, and reaches approved external systems through tool configuration injected at run start",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "harvey-spectre-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 24, 44, 46"
+        }
+      ],
+      "display_name": "Execute the agent in the sandbox"
+    },
+    {
+      "id": "harvey-spectre--primitives-4",
+      "approach_id": "harvey-spectre",
+      "field": "primitives.4",
+      "text": "The run persists summaries, diffs, branches, and pull requests; a failed run returns the result to a person who decides what happens next",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "harvey-spectre-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 16, 24"
+        }
+      ],
+      "display_name": "Return reviewable artifacts"
+    },
+    {
+      "id": "harvey-spectre--primitives-5",
+      "approach_id": "harvey-spectre",
+      "field": "primitives.5",
+      "text": "Cron-based automations materialize ordinary runs for cleanup passes, test generation, dependency checks, and verification loops",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "harvey-spectre-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 68, 74"
+        }
+      ],
+      "display_name": "Scheduled verification loops"
     },
     {
       "id": "harvey-spectre--lessons-learned-0",
@@ -17042,6 +17930,82 @@
       "display_name": "Skills as files"
     },
     {
+      "id": "shopify-internal-agents--primitives-3",
+      "approach_id": "shopify-internal-agents",
+      "field": "primitives.3",
+      "text": "A person @-mentions River with a question or task in a public Slack channel; River works only in the open",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "shopify-internal-agents-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 69, 75"
+        }
+      ],
+      "display_name": "Take a request in a public channel"
+    },
+    {
+      "id": "shopify-internal-agents--primitives-4",
+      "approach_id": "shopify-internal-agents",
+      "field": "primitives.4",
+      "text": "River reads files, runs queries and tests, and posts partial findings to the thread",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "shopify-internal-agents-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 65, 76"
+        }
+      ],
+      "display_name": "Work the problem in the open"
+    },
+    {
+      "id": "shopify-internal-agents--primitives-5",
+      "approach_id": "shopify-internal-agents",
+      "field": "primitives.5",
+      "text": "A second person drops in with a constraint or redirect; River incorporates it without losing the conversation and continues",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "shopify-internal-agents-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 77-78"
+        }
+      ],
+      "display_name": "Absorb a mid-thread redirect"
+    },
+    {
+      "id": "shopify-internal-agents--primitives-6",
+      "approach_id": "shopify-internal-agents",
+      "field": "primitives.6",
+      "text": "The finished thread stays searchable so the next person starts from it, and observed patterns feed back into skills",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "shopify-internal-agents-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 71, 79"
+        }
+      ],
+      "display_name": "Leave a reusable transcript"
+    },
+    {
       "id": "shopify-internal-agents--key-metrics-0",
       "approach_id": "shopify-internal-agents",
       "field": "key_metrics.0",
@@ -20180,6 +21144,101 @@
         }
       ],
       "display_name": "MCP as an iterative product"
+    },
+    {
+      "id": "workos-project-horizon--primitives-4",
+      "approach_id": "workos-project-horizon",
+      "field": "primitives.4",
+      "text": "The PM agent splits a delegated Linear project into individual issues with descriptions and dependency ordering; a human reviews each issue before implementation starts",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "workos-project-horizon-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 46-48"
+        }
+      ],
+      "display_name": "Divide the project into issues"
+    },
+    {
+      "id": "workos-project-horizon--primitives-5",
+      "approach_id": "workos-project-horizon",
+      "field": "primitives.5",
+      "text": "When an issue moves to In Progress, the orchestrator assigns it to a cloud agent that boots the Docker development container with OpenCode and the custom MCP context server",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "workos-project-horizon-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 48-56"
+        }
+      ],
+      "display_name": "Run the implementation session in the sandbox"
+    },
+    {
+      "id": "workos-project-horizon--primitives-6",
+      "approach_id": "workos-project-horizon",
+      "field": "primitives.6",
+      "text": "The run ends as a pull request attributed to the issue owner; no code merges without explicit human approval",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "workos-project-horizon-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 54, 60"
+        }
+      ],
+      "display_name": "Hand off the pull request for human review"
+    },
+    {
+      "id": "workos-project-horizon--primitives-7",
+      "approach_id": "workos-project-horizon",
+      "field": "primitives.7",
+      "text": "The GitHub merge webhook marks the Linear issues done and starts the next eligible run on newly unblocked issues",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "workos-project-horizon-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, line 62"
+        }
+      ],
+      "display_name": "Continue the dependency chain after merge"
+    },
+    {
+      "id": "workos-project-horizon--primitives-8",
+      "approach_id": "workos-project-horizon",
+      "field": "primitives.8",
+      "text": "The run lints, builds, and runs automated tests, and does initial validation of acceptance criteria, before requesting human attention",
+      "kind": "fact",
+      "provenance": "reported",
+      "confidence": "high",
+      "confidence_reason": "A linked first-party source states the claim.",
+      "valid_at": null,
+      "evidence": [
+        {
+          "source_id": "workos-project-horizon-source-1",
+          "relation": "supports",
+          "locator": "Preserved content.md, lines 38, 96"
+        }
+      ],
+      "display_name": "Verify the work inside the sandbox"
     },
     {
       "id": "workos-project-horizon--lessons-learned-0",

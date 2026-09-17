@@ -53,6 +53,13 @@ primitives:
   desc: Non-technical ops staff design prompts, test across models, deploy with QA oversight
 - name: MCP tool bridge
   desc: Product features exposed to internal agents through one MCP server
+- {name: Prepare the dispute submission, desc: 'The dispute agent applies the 100+ page dispute guide and the
+    BPO operating procedure to produce a more robust, better-articulated submission'}
+- {name: Draft the collections response, desc: 'The agent analyzes the customer reply and layers in account
+    context and negotiating guidelines, offering the servicing team drafts in several tones to select, customize,
+    or send'}
+- {name: Apply the quality rubric, desc: 'A QA agent reviews every support interaction against the quality rubric
+    and feeds response trends into a closed loop improving agent and human performance'}
 key_metrics:
 - 50%+ of customer-support cases resolved by chatbot as first touch
 - 'Dispute processing: 3 hours → 3 seconds'
@@ -165,6 +172,12 @@ evidence:
   architecture.interfaces:
   - source_id: brex-agent-platform-source-1
     relation: supports
+  primitives.2:
+  - {source_id: brex-agent-platform-source-1, relation: supports, locator: 'Preserved content.md, lines 179–189'}
+  primitives.3:
+  - {source_id: brex-agent-platform-source-1, relation: supports, locator: 'Preserved content.md, line 173'}
+  primitives.4:
+  - {source_id: brex-agent-platform-source-1, relation: supports, locator: 'Preserved content.md, lines 80–82'}
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -237,3 +250,54 @@ claim_metadata:
     confidence: medium
     confidence_reason: The approval tracks and defined controls are described in the interview; vendor identity
       alone is not the stated basis for those tracks.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [brex-agent-platform-source-1]
+  workflow_scope: 'Two documented agent runs on the platform: dispute-submission preparation, and collections
+    response drafting for the servicing team'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.2, primitives.3], note: 'The prompt studio and the MCP
+      bridge are build-time mechanisms. Platform-wide capability and the L1/L2/L3 restructure stay out of the
+      run description.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, operating_models.1, operating_models.2],
+      note: 'Boundaries differ by use: fraud is exception-only, KYC and collections keep work-product review,
+      and the dispute run documents no checkpoint.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.sandbox, architecture.tool_access,
+      architecture.knowledge, architecture.credentials, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.4], note: 'The quality-rubric agent checks every
+      support interaction; the KYC human checks are cited with human involvement.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
+      key_metrics.3]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3,
+      lessons_learned.4]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'Deployed-agent models are not documented; multi-model
+      testing is build time. The placeholder claim stays in research details.'}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox], note: 'Retool hosts the runtime; the capture
+      describes no further isolation boundary.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access], note: 'The MCP bridge and immediate
+      internal availability are supported at line 40; the Slack /c1 clause describes provisioning configuration,
+      not agent invocation (flagged).'}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: unreported, claim_paths: [], note: 'No mechanism for maintaining agent context over
+      time is documented; the QA feedback loop improves performance rather than managing context.'}
+    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'SSO via Retool proxies, Okta
+      provisioning, and the retention and segregation controls are supported at lines 60–62; the ConductorOne
+      vendor name is not in the capture (flagged).'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: workflow, primitives.3: workflow,
+    primitives.4: validation}
+  observations:
+    headline_metric: {category: effectiveness, basis: reported-measurement, subject: 'Dispute-submission preparation
+      time on the internal agent platform'}
+    key_metrics.0: {category: adoption-output, basis: reported-measurement, subject: 'Customer-support cases
+      resolved by the chatbot at first touch (customer-facing product AI, adjacent to this platform)'}
+    key_metrics.1: {duplicate_of: headline_metric, reason: 'Identical subject, values, period, scope, and locator
+      as the headline; the shorthand adds nothing.'}
+    key_metrics.2: {category: effectiveness, basis: reported-measurement, subject: 'Support-interaction QA coverage
+      and the staffing change from five specialists to one'}
+    key_metrics.3: {category: effectiveness, basis: reported-measurement, subject: 'KYC adverse-media classification
+      accuracy, agent versus human'}

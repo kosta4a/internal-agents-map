@@ -64,6 +64,10 @@ primitives:
 - name: Maturity model
   desc: Deterministic workflows and single agents are in use; deep agents are being developed and tested; swarms
     remain research
+- name: Answer a grounded data question
+  desc: 'From a business question, DataExplorer identifies candidate tables through DescribeTable with cached
+    column examples, generates starter SQL grounded in the schema, and EXPLAIN validation with autocorrection
+    precedes execution'
 key_metrics:
 - 130,000 engineering tasks automated in one month
 - 25,000+ automated code reviews per week
@@ -168,6 +172,8 @@ evidence:
   - source_id: doordash-flux-source-2
     relation: supports
     locator: Preserved content.md, lines 66
+  primitives.5:
+  - {source_id: doordash-flux-source-2, relation: supports, locator: 'Preserved content.md, lines 42, 78–80'}
   key_metrics.0:
   - source_id: doordash-flux-source-1
     relation: supports
@@ -267,3 +273,53 @@ claim_metadata:
     confidence_reason: Dated August 11, 2026 report; weekly measurement boundaries are not supplied.
   key_metrics.2:
     metric_scope: Unique playbooks and weekly invocations on Flux
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [doordash-flux-source-1, doordash-flux-source-2, doordash-flux-source-3]
+  workflow_scope: Business question to grounded, validated answer on the analytics platform
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.5], note: 'The named run is the analytics platform''s
+      DataExplorer loop. Flux runs are documented at platform level (playbook defines work, sandbox executes,
+      gateway governs access, surfaces invoke) without one named run, and the code-review run belongs to the
+      separate doordash-code-review record.'}
+    human_involvement: {state: unreported, claim_paths: [], note: 'Runs execute unattended in parallel around the
+      clock. Engineers reviewing output in public Slack threads is an observed adoption practice, not a stated
+      required checkpoint on either platform.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.sandbox, architecture.tool_access,
+      architecture.knowledge, architecture.credentials, architecture.context_mgmt, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.5, lessons_learned.4], note: 'The analytics platform
+      validates generated SQL with linting, EXPLAIN checks, and statistical-metadata checks with autocorrection,
+      plus a separate LLM-as-judge and DeepEval framework. Flux playbooks package validation per playbook.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2, lessons_learned.3,
+      lessons_learned.4, lessons_learned.5]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: 'No model or provider is named for either platform. The
+      modular-primitives design claim stays in research details.'}
+    harness: {state: reported, claim_paths: [architecture.harness], note: 'The maturity model is the analytics
+      platform''s progression. Flux supports multiple coding agent harnesses inside its sandboxes.'}
+    sandbox: {state: reported, claim_paths: [architecture.sandbox], note: 'Firecracker microVMs with a sub-five-second
+      p95 end-to-end setup objective; a Flux capability.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access], note: 'Flux Agent Gateway with playbook-scoped
+      logged permissions; LangGraph orchestration and prospective A2A on the analytics platform.'}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt], note: 'Hybrid retrieval and schema-aware
+      SQL generation; an analytics-platform capability.'}
+    credentials: {state: reported, claim_paths: [architecture.credentials], note: 'Scoped per playbook and brokered
+      through the gateway rather than the laptop; a Flux capability with provenance on every action.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces], note: 'Flux invocation surfaces are Slack,
+      GitHub, cron, CLI, and skill; the analytics platform adds Cursor. The analytics conversational web UI is
+      not claimed.'}
+  primitive_roles: {primitives.0: mechanism, primitives.1: mechanism, primitives.2: mechanism, primitives.3: mechanism,
+    primitives.4: mechanism, primitives.5: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'Engineering tasks automated
+      on Flux in one reported month; the calendar month is unspecified'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Identical statement, scope, period, and locators as
+      the headline: the same 130,000-task one-month count.'}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: 'Weekly automated code reviews
+      powered by Flux; the reviewer agent itself is the separate doordash-code-review record'}
+    key_metrics.2: {category: adoption-output, basis: reported-measurement, subject: 'Unique Flux playbooks and
+      weekly playbook invocations'}
