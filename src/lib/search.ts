@@ -9,9 +9,9 @@ export type FacetKey = (typeof FACET_KEYS)[number];
 
 /** The name each facet shows next to a chip or a suggestion. */
 export const FACET_LABELS: Record<FacetKey, string> = {
-  work: 'Work',
+  work: 'Work domain',
   type: 'Approach type',
-  invocation: 'Invocation',
+  invocation: 'Work modes',
   supervision: 'Human supervision',
 };
 
@@ -39,7 +39,7 @@ export function normalize(value: string): string {
 
 /** Every spelling a term answers to, normalized. */
 function spellings(term: FacetTerm): string[] {
-  return [term.id, term.label, ...term.aliases].map(normalize);
+  return [term.id, term.label, ...term.aliases].flatMap((value) => [normalize(value), normalize(value.replace(/-/g, ' '))]);
 }
 
 /** Collect the facet vocabulary of the directory from its cards, sorted by label within each facet. */
@@ -52,7 +52,7 @@ export function facetVocabulary(cards: readonly DirectoryCard[]): FacetTerm[] {
     for (const domain of card.domains) add({ key: 'work', id: domain.id, label: domain.label, aliases: [] });
     add({ key: 'type', id: card.approachType, label: card.approachTypeLabel, aliases: [] });
     for (const mode of card.invocation) {
-      add({ key: 'invocation', id: mode.id, label: mode.label, aliases: [] });
+      add({ key: 'invocation', id: mode.id, label: mode.label, aliases: mode.id === 'interactive' ? ['foreground'] : [] });
     }
     for (const boundary of card.boundaries) {
       add({

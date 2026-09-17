@@ -1,6 +1,7 @@
 // ABOUTME: Holds the text of the two guides: headings, paragraphs, list items, and links.
 // ABOUTME: The HTML pages and their Markdown exports render the same values from here.
 
+import { termLabel } from './labels';
 import { SITE_NAME } from './metadata';
 import { canonicalUrl, entryPath, guidePath, notesIndexPath } from './routes';
 
@@ -380,20 +381,26 @@ export const DEFINITIONS_JUMP_LINKS: readonly JumpLink[] = [
   { label: 'Other terms ↓', fragment: 'terminology' },
 ];
 
+export const WORK_DOMAIN_DESCRIPTION =
+  'Work domain describes the kind of work an entry supports, such as coding, code review, support, or finance operations. One entry can cover several domains. This differs from workflow breadth, which describes how narrowly or broadly the system works.';
+
+export const WORK_MODES_DESCRIPTION =
+  'Work modes describe how work starts or proceeds. Interactive (foreground) and background describe participation; scheduled and event-driven describe triggers. One system can support several modes, such as event-driven background work.';
+
 export const APPROACH_TYPE_DEFINITIONS: readonly ClassificationDefinition[] = [
-  { id: 'agent', label: 'Agent', meaning: 'One system that carries out tasks.' },
-  { id: 'agent-system', label: 'Agent system', meaning: 'A related family of agents with shared infrastructure.' },
-  { id: 'platform', label: 'Platform', meaning: 'Reusable infrastructure for several agents or workflows.' },
-  { id: 'orchestration-system', label: 'Orchestration system', meaning: 'A system whose primary role is coordinating agents.' },
-  { id: 'supporting-pattern', label: 'Supporting pattern', meaning: 'A narrower implemented component that enables agent operation.' },
+  { id: 'agent', label: termLabel('agent'), meaning: 'One system that carries out tasks.' },
+  { id: 'agent-system', label: termLabel('agent-system'), meaning: 'A related family of agents with shared infrastructure.' },
+  { id: 'platform', label: termLabel('platform'), meaning: 'Reusable infrastructure for several agents or workflows.' },
+  { id: 'orchestration-system', label: termLabel('orchestration-system'), meaning: 'A system whose primary role is coordinating agents.' },
+  { id: 'supporting-pattern', label: termLabel('supporting-pattern'), meaning: 'A narrower implemented component that enables agent operation.' },
 ];
 
 export const INVOCATION_DEFINITIONS: readonly ClassificationDefinition[] = [
-  { id: 'interactive', label: 'Interactive', meaning: 'A person starts and exchanges messages with the system.' },
-  { id: 'background', label: 'Background', meaning: 'Work continues without continuous interaction after it starts.' },
-  { id: 'scheduled', label: 'Scheduled', meaning: 'A time rule starts the work.' },
-  { id: 'event-driven', label: 'Event-driven', meaning: 'A system event starts the work.' },
-  { id: 'unknown', label: 'Unknown', meaning: 'The collected evidence does not establish how work starts.' },
+  { id: 'interactive', label: termLabel('interactive'), meaning: 'A person starts and exchanges messages with the system. This is foreground participation while those exchanges continue.' },
+  { id: 'background', label: termLabel('background'), meaning: 'Work continues without continuous interaction after it starts.' },
+  { id: 'scheduled', label: termLabel('scheduled'), meaning: 'A time rule starts the work.' },
+  { id: 'event-driven', label: termLabel('event-driven'), meaning: 'A system event starts the work.' },
+  { id: 'unknown', label: termLabel('unknown'), meaning: 'The collected evidence does not establish how work starts or proceeds.' },
 ];
 
 export const SUPERVISION_DEFINITIONS = {
@@ -410,10 +417,11 @@ export const SUPERVISION_DEFINITIONS = {
     '. Levels 0–1 describe manual work and discrete assistance, outside the internal-agent workflows assessed here.',
   ] as TextBlock,
   rows: [
-    { id: 'continuous-steering', label: 'Continuous steering', level: '2', attention: 'A person pairs with the agent throughout execution.', meaning: 'The person repeatedly guides the work as it proceeds.' },
-    { id: 'work-product-review', label: 'Work-product review', level: '3', attention: 'A person reviews the draft or implementation.', meaning: 'The agent produces work, but review returns to the produced artifact.' },
-    { id: 'outcome-review', label: 'Outcome review', level: '4', attention: 'A person evaluates tests, behavior, or outcomes.', meaning: 'The normal review boundary is the result rather than routine implementation inspection.' },
-    { id: 'exception-only', label: 'Exception-only', level: '5', attention: 'A person returns when the system raises an exception.', meaning: 'A normal successful run does not require routine human review.' },
+    { id: 'continuous-steering', label: termLabel('continuous-steering'), level: '2', attention: 'A person pairs with the agent throughout execution.', meaning: 'The person repeatedly guides the work as it proceeds.' },
+    { id: 'work-product-review', label: termLabel('work-product-review'), level: '3', attention: 'A person reviews the draft or implementation.', meaning: 'The agent produces work, but review returns to the produced artifact.' },
+    { id: 'outcome-review', label: termLabel('outcome-review'), level: '4', attention: 'A person evaluates tests, behavior, or outcomes.', meaning: 'The normal review boundary is the result rather than routine implementation inspection.' },
+    { id: 'exception-only', label: termLabel('exception-only'), level: '5', attention: 'A person returns when the system raises an exception.', meaning: 'A normal successful run does not require routine human review.' },
+    { id: 'unknown', label: termLabel('unknown'), level: '—', attention: 'Not established by the collected evidence.', meaning: 'The normal review boundary is undocumented or has not been assessed. Unknown does not mean no human supervision.' },
   ] as readonly SupervisionDefinition[],
   limits: [
     'Attention is separate from authority. A background run can still lack permission to publish, merge, spend money, or act in production. A level also does not state how long the system runs unattended.',

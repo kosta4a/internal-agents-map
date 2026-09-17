@@ -18,6 +18,7 @@ describe('the supervision definitions', () => {
       ['work-product-review', '3'],
       ['outcome-review', '4'],
       ['exception-only', '5'],
+      ['unknown', '—'],
     ]);
   });
 });

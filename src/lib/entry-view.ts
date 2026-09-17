@@ -612,7 +612,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
         approach.approach_type,
         termLabel(approach.approach_type),
         ...domains.flatMap((domain) => [domain.id, domain.label]),
-        ...invocation.flatMap((mode) => [mode.id, mode.label]),
+        ...invocation.flatMap((mode) => [mode.id, mode.label, mode.id === 'interactive' ? 'foreground' : '']),
         ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
         approach.autonomy,
         termLabel(approach.autonomy),

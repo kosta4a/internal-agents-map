@@ -42,8 +42,8 @@ describe('the facet vocabulary', () => {
 
   it('names a supervision boundary with its level and answers to the level alone', () => {
     const term = findTerm('supervision', 'exception-only', vocabulary)!;
-    expect(term.label).toBe('Exception only (level 5)');
-    expect(term.aliases).toEqual(['Exception only', 'level 5']);
+    expect(term.label).toBe('Exception-only (level 5)');
+    expect(term.aliases).toEqual(['Exception-only', 'level 5']);
     const unknown = findTerm('supervision', 'unknown', vocabulary)!;
     expect(unknown.label).toBe('Unknown');
     expect(unknown.aliases).toEqual(['Unknown']);
@@ -55,6 +55,7 @@ describe('term resolution', () => {
     expect(resolveTerm('coding', vocabulary)?.id).toBe('coding');
     expect(resolveTerm('  Code Review ', vocabulary)?.id).toBe('code-review');
     expect(resolveTerm('BACKGROUND', vocabulary)?.id).toBe('background');
+    expect(resolveTerm('foreground', vocabulary)?.id).toBe('interactive');
     expect(resolveTerm('level 5', vocabulary)?.id).toBe('exception-only');
     expect(resolveTerm('work product review', vocabulary)?.key).toBe('supervision');
   });

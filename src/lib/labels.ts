@@ -4,6 +4,9 @@
 const TERM_LABELS: Record<string, string> = {
   'ci-triage': 'CI triage',
   'on-call': 'On-call',
+  'event-driven': 'Event-driven',
+  'work-product-review': 'Work-product review',
+  'exception-only': 'Exception-only',
 };
 
 /** Make a readable label from an identifier such as `work-product-review`. */

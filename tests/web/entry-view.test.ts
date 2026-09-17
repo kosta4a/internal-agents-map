@@ -250,7 +250,7 @@ describe('the directory model', () => {
 
   it('carries the derived level next to every attention boundary', () => {
     const ureview = cards.find((card) => card.id === 'uber-ureview')!;
-    expect(ureview.boundaries).toEqual([{ id: 'work-product-review', label: 'Work product review', level: 3 }]);
+    expect(ureview.boundaries).toEqual([{ id: 'work-product-review', label: 'Work-product review', level: 3 }]);
     for (const card of cards) {
       expect(card.boundaries.length).toBeGreaterThan(0);
       for (const boundary of card.boundaries) {
