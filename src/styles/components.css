@@ -451,6 +451,12 @@
 /* Everything the claim says sits beside the mark, never under it: the first
    column is the mark's own width and nothing else may widen it. */
 .claim-marked > :not(.icon) { grid-column: 2; }
+/* A label or an attribution names the claim above it, so the mark stays on the
+   claim's own line rather than beside the line that introduces it. */
+.claim-marked > .claim-label,
+.claim-marked > .claim-attribution { grid-column: 1 / -1; grid-row: 1; }
+.claim-marked:has(> .claim-label, > .claim-attribution) > .icon,
+.claim-marked:has(> .claim-label, > .claim-attribution) > .claim-text { grid-row: 2; }
 /* The observation takes its own row, starting at the mark's edge. */
 .claim-marked > .observed { grid-column: 1 / -1; margin-top: 0; }
 .entry-section h3 {
@@ -618,6 +624,8 @@
 .classification-table tbody tr:last-child > * { border-bottom: 0; }
 .classification-table tbody th { font-weight: 500; color: var(--ink); }
 .classification-table tbody td { color: var(--sand-10); }
+/* The two term tables read as one pair, so their name column is one width. */
+.term-table th:first-child { width: 28%; }
 /* A metric turns the table: its qualifications head the columns, and the values
    sit under them. The rules move with the orientation. */
 .caveats-columns {
