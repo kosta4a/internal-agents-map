@@ -66,13 +66,13 @@ const {
 
 /* The chart shows two questions about an implementation, not a score. */
 /* The scale row's height is stated, so the vertical scale can span the plot exactly. */
-.quadrant-chart { --scale-row: 20px; --scale-gap: 12px; --cell-inset: 20px; position: relative; display: grid; gap: var(--scale-gap); }
+.quadrant-chart { --scale-row: 20px; --scale-gap: 16px; --cell-inset: 20px; position: relative; display: grid; gap: var(--scale-gap); }
 /* Standard sits at the foot of the scale, company-specific at its head. */
 .quadrant-y-axis {
   position: absolute;
   top: 0;
   bottom: calc(var(--scale-row) + var(--scale-gap));
-  right: calc(100% + 12px);
+  right: calc(100% + var(--scale-gap));
   width: 1.2em;
   font-size: 12px;
   color: var(--muted);
