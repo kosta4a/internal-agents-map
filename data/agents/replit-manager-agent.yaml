@@ -49,9 +49,10 @@ key_metrics:
 - 2.9x code output for a consistent author cohort from early January to late June
 - No corresponding deterioration in review/reversion/incident metrics
 lessons_learned:
-- Give every employee a manager agent that spawns sub-agents; verifiable work parallelizes, judgment escalates to
-  humans
-- Track outcome metrics (reverts, incidents), not activity; output can scale without quality regressions
+- Replit gives employees a manager agent that can delegate verifiable tasks to several agents, while human
+  review remains part of its coding workflow.
+- Replit reports higher code output alongside flat review latency, reversion trends, and incident counts; those
+  measures cover different aspects of the workflow.
 sources:
 - id: replit-manager-agent-source-1
   title: The Self-Driving Company
@@ -108,9 +109,11 @@ evidence:
   lessons_learned.0:
   - source_id: replit-manager-agent-source-1
     relation: supports
+    locator: Preserved content.md, lines 50-62,78
   lessons_learned.1:
   - source_id: replit-manager-agent-source-1
     relation: supports
+    locator: Preserved content.md, lines 10,50-62
   architecture.interfaces:
   - source_id: replit-manager-agent-source-1
     relation: supports
@@ -130,15 +133,17 @@ claim_metadata:
       when necessary inside the agent review lane.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The manager-agent passage describes delegation; the review passages explicitly retain
+      human co-review and risk-based requests for a second reviewer.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The article reports these trends together but provides no controlled comparison or complete
+      workload denominator, so it cannot establish unchanged quality for all additional output.
   headline_metric:
     metric_scope: Code output for a consistent author cohort across early January to late June; separate from company-wide
       hiring effects

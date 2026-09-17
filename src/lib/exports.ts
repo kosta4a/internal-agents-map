@@ -203,7 +203,52 @@ export function entryMarkdown(entry: EntryView, level = 1): string[] {
   // The catalog file needs the address of each entry; the record file states it above.
   if (level > 1) lines.push(`Page: ${canonicalUrl(entry.path)}`, '');
 
-  if (entry.operatingModels.length > 0) {
+  if (entry.isPilot) {
+    lines.push(...claimSection('Purpose', entry.summary ? [entry.summary] : [], sources, level + 1));
+    if (entry.workflowScope) lines.push(`Representative workflow: ${entry.workflowScope}.`, '');
+    lines.push(...claimSection('How it works', entry.workflowClaims, sources, level + 1));
+    lines.push(heading(level + 1, 'Where people stay involved'), '');
+    for (const model of entry.operatingModels) {
+      lines.push(`- **${model.scope}** — ${model.boundaryLabel} · ${model.levelLabel}`);
+    }
+    const people = entry.coverageQuestions.human_involvement;
+    if (people?.note) lines.push('', `**${people.stateLabel}:** ${people.note}`);
+    lines.push('');
+    lines.push(...claimSection('Supervision evidence', entry.supervisionClaims, sources, level + 2));
+    lines.push(...claimSection('Implementation details', [...entry.architectureClaims, ...entry.mechanismClaims], sources, level + 1));
+    lines.push(heading(level + 2, 'Implementation coverage'), '');
+    for (const row of entry.architectureRows) {
+      lines.push(`- **${row.label}:** ${row.state ?? 'Unassessed'}${row.note ? ` — ${row.note}` : ''}`);
+    }
+    lines.push('');
+    lines.push(...claimSection('Validation and failure handling', entry.validationClaims, sources, level + 1));
+    if (entry.validationClaims.length === 0 && entry.coverageQuestions.validation?.note) {
+      lines.push(`**${entry.coverageQuestions.validation.stateLabel}:** ${entry.coverageQuestions.validation.note}`, '');
+    }
+    if (entry.observationItems.length > 0) {
+      lines.push(heading(level + 1, 'Reported observations'), '');
+      for (const item of entry.observationItems) {
+        lines.push(`Observation: ${item.categoryLabel} · ${item.basisLabel} · ${item.subject}`, '');
+        lines.push(...claimBlock(item.claim, sources, level + 2));
+      }
+    }
+    if (entry.canonicalObservationClaims.length === 0 && entry.coverageQuestions.observations?.note) {
+      lines.push(heading(level + 1, 'Reported observations'), '', `**${entry.coverageQuestions.observations.stateLabel}:** ${entry.coverageQuestions.observations.note}`, '');
+    }
+    lines.push(...claimSection('Lessons', entry.lessonClaims, sources, level + 1));
+    if (entry.lessonClaims.length === 0 && entry.coverageQuestions.lessons?.note) {
+      lines.push(heading(level + 1, 'Lessons'), '', `**${entry.coverageQuestions.lessons.stateLabel}:** ${entry.coverageQuestions.lessons.note}`, '');
+    }
+    if (entry.aliasObservationRelations.length > 0) {
+      lines.push(heading(level + 1, 'Duplicate observation representations'), '');
+      for (const relation of entry.aliasObservationRelations) {
+        lines.push(`Duplicate of \`${relation.target.id}\`: ${relation.reason}`, '');
+        lines.push(...claimBlock(relation.claim, sources, level + 2));
+      }
+    }
+    const aliasIds = new Set(entry.aliasObservationClaims.map((claim) => claim.id));
+    lines.push(...claimSection('Reviewed legacy details', entry.researchOnlyClaims.filter((claim) => !aliasIds.has(claim.id)), sources, level + 1));
+  } else if (entry.operatingModels.length > 0) {
     lines.push(heading(level + 1, 'Where people stay involved'), '');
     lines.push(
       `Each scope pairs its normal attention boundary with supporting evidence. See the [supervision definitions](${canonicalUrl('/definitions#supervision')}) for the level mapping and limits.`,
@@ -215,7 +260,7 @@ export function entryMarkdown(entry: EntryView, level = 1): string[] {
     lines.push('');
   }
 
-  const sections: ReadonlyArray<readonly [string, readonly ClaimView[]]> = [
+  const sections: ReadonlyArray<readonly [string, readonly ClaimView[]]> = entry.isPilot ? [] : [
     ['Overview', entry.summary ? [entry.summary] : []],
     ['How it works', entry.workflowClaims],
     ['Supervision evidence', entry.supervisionClaims],

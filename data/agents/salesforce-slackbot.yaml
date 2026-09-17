@@ -38,9 +38,8 @@ primitives:
 - name: Permission-aware context
   desc: Agent visibility is bounded by the invoking employee's permissions
 lessons_learned:
-- Dogfood internally first ('customer zero') before shipping externally
-- Make permission-awareness a construction property, not a prompt instruction; the agent sees only what the employee
-  can see
+- Salesforce used Slackbot internally before its phased customer rollout and describes itself as customer zero.
+- Salesforce says Slackbot uses Slack roles and access permissions to limit the information it surfaces.
 sources:
 - id: salesforce-slackbot-source-1
   title: Salesforce announces general availability of Slackbot
@@ -118,9 +117,11 @@ evidence:
   lessons_learned.0:
   - source_id: salesforce-slackbot-source-1
     relation: supports
+    locator: Preserved content.md, lines 88-90,104-108
   lessons_learned.1:
   - source_id: salesforce-slackbot-source-1
     relation: supports
+    locator: Preserved content.md, lines 36,72
   architecture.interfaces:
   - source_id: salesforce-slackbot-source-1
     relation: supports
@@ -132,12 +133,14 @@ claim_metadata:
     confidence_reason: 'The source describes an employee agent that prepares drafts and contextual work for human use.'
     valid_at: '2026-01-14'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The launch post includes an internal-use account alongside the rollout dates; it does
+      not demonstrate that internal-first release is best for other products.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The product announcement makes this permission claim but does not expose the enforcement
+      implementation or independently test its effectiveness.

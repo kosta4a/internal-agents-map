@@ -53,6 +53,14 @@ const ENTRIES = [
   },
 ] as const;
 
+const PILOT_IDS = [
+  'github-qubot',
+  'notion-custom-agents',
+  'microsoft-prassistant',
+  'doordash-code-review',
+  'ycombinator-agent-infra',
+] as const;
+
 async function structuredData(page: Page): Promise<Record<string, unknown>> {
   const text = await page.locator('script[type="application/ld+json"]').innerText();
   return JSON.parse(text) as Record<string, unknown>;
@@ -186,6 +194,49 @@ test.describe('reported results', () => {
   });
 });
 
+test.describe('page-content pilot', () => {
+  for (const id of PILOT_IDS) {
+    test(`${id} exposes the reviewed reading order and exports`, async ({ page, request }) => {
+      await page.goto(`/agents/${id}`);
+      for (const selector of ['#purpose', '#how-it-works', '#human-involvement', '#implementation', '#validation', '#results', '#lessons', '#sources']) {
+        await expect(page.locator(selector), selector).toBeVisible();
+      }
+      await expect(page.locator('#how-it-works .claim-label').first()).not.toBeEmpty();
+      await expect(page.locator('#purpose a[href="#sources"]')).toBeVisible();
+      const ids = await page.locator('[data-claim-id]').evaluateAll((nodes) => nodes.map((node) => node.id));
+      expect(new Set(ids).size).toBe(ids.length);
+      expect((await request.get(`/agents/${id}.md`)).status()).toBe(200);
+    });
+  }
+
+  test('keeps lessons separate from YC’s reviewed empty observations state', async ({ page }) => {
+    await page.goto('/agents/ycombinator-agent-infra');
+    await expect(page.locator('#results')).toContainText('Unreported');
+    await expect(page.locator('#results .claim')).toHaveCount(0);
+    await expect(page.locator('#lessons .claim')).toHaveCount(2);
+  });
+
+  test('shows one reading-flow representation of Notion’s aliased count', async ({ page }) => {
+    await page.goto('/agents/notion-custom-agents');
+    await expect(page.locator('#results .claim', { hasText: 'More than 3,000 internal Custom Agents' })).toHaveCount(1);
+    await page.locator('details.claim-details > summary').click();
+    await expect(page.getByText('Duplicate representation of').first()).toBeVisible();
+  });
+
+  test('captures all five pages for desktop and mobile review', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'no-javascript', 'Desktop and mobile captures cover visual review.');
+    for (const id of PILOT_IDS) {
+      await page.goto(`/agents/${id}`);
+      await page.evaluate(async () => document.fonts.ready);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+      await page.screenshot({
+        path: testInfo.outputPath(`pilot-${testInfo.project.name}-${id}.png`),
+        fullPage: true,
+      });
+    }
+  });
+});
+
 test.describe('lesson attribution', () => {
   test('shows reported opinions and catalog interpretations without field labels', async ({ page }) => {
     await page.goto('/agents/strongdm-software-factory');
@@ -193,9 +244,9 @@ test.describe('lesson attribution', () => {
       page.locator('#claim-strongdm-software-factory--lessons-learned-2 .claim-attribution'),
     ).toHaveText('Reported opinion');
 
-    await page.goto('/agents/sentry-junior');
+    await page.goto('/agents/coinbase-forge-mux');
     await expect(
-      page.locator('#claim-sentry-junior--lessons-learned-3 .claim-attribution'),
+      page.locator('#claim-coinbase-forge-mux--lessons-learned-2 .claim-attribution'),
     ).toHaveText('Catalog interpretation');
   });
 });

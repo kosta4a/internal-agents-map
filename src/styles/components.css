@@ -592,6 +592,9 @@
 .architecture { margin-top: 16px; }
 .architecture dt { white-space: nowrap; }
 .architecture .is-unreported { color: var(--sand-9); }
+.architecture .is-unreported span { display: block; margin-top: 4px; font-size: var(--text-sm); }
+.review-state { padding: 14px 16px; background: var(--sand-2); border: .5px solid var(--sand-6); border-radius: 8px; color: var(--sand-11); }
+.research-only-claim p { margin: 6px 0 0; }
 .architecture-caveats {
   display: block;
   margin-top: 8px;

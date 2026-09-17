@@ -46,7 +46,7 @@ primitives:
 - name: Session/Harness/Sandbox split
   desc: Durable identity, disposable loop, isolated execution; swap any layer independently
 - name: River (public-by-default)
-  desc: Slack-native coding agent in public channels only; visibility drives adoption
+  desc: River works in shared Slack threads whose history can be searched and used to update skills
 - name: Skills as files
   desc: Written-down knowledge mined from successful patterns and public transcripts
 key_metrics:
@@ -54,10 +54,12 @@ key_metrics:
 - 3,536 River-coauthored PRs merged; 1 in 8 merged PRs company-wide
 - Median session 19 min; median 50 tool calls/session
 lessons_learned:
-- Agent-friendly is human-friendly; monorepo, reproducible envs, written skills, and fast CI help both
-- Local agents have a ceiling; private windows mean only the person at the keyboard learns anything
-- Session survival is critical; cells die, sandboxes die, machines die; the conversation doesn't
-- Treat agents as profiles, not platforms; a new agent is a new bundle on the same substrate
+- Shopify says its monorepo, reproducible environments, written skills, and CI improvements benefited both
+  engineers and agents.
+- Shopify uses shared River threads and the run corpus to update skills, prompts, and defaults for later work.
+- Aquifer stores session identity and its event log in Postgres so a fresh worker can continue the same conversation.
+- Shopify adds agent variants as profiles containing prompts, skills, extensions, sandbox policy, and model
+  defaults on Aquifer.
 sources:
 - id: shopify-internal-agents-source-1
   title: Under the River
@@ -108,6 +110,7 @@ evidence:
   primitives.1:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 71-79,87
   primitives.2:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -126,15 +129,19 @@ evidence:
   lessons_learned.0:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 24-25,38-47
   lessons_learned.1:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 57,71,79,87
   lessons_learned.2:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 116-134
   lessons_learned.3:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 142
   architecture.interfaces:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -148,25 +155,29 @@ claim_metadata:
       Aquifer profile and is described as often having no human in the loop.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The retrospective identifies these as existing human-development priorities made more
+      urgent by agents; it does not quantify each contribution.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The article describes mining earlier runs and preserving searchable threads, replacing
+      the vague claim that private agents cannot teach anyone.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The session and lifecycle sections explicitly separate the durable log from disposable
+      cells; they do not claim every external side effect is automatically recoverable.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The profile section enumerates the bundle contents and explains how a new bundle becomes
+      an internal agent product.
   headline_metric:
     metric_scope: Merged River-coauthored PRs across Shopify
     denominator: All Shopify merged pull requests

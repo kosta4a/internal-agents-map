@@ -113,10 +113,10 @@ describe('the Markdown export of a note', () => {
     expect(markdown).toContain('Source: https://internal-agents.com/notes/stop-a-run');
     expect(markdown).toContain('[[1]](https://internal-agents.com/notes/stop-a-run#source-stripe)');
     expect(markdown).toContain(
-      'At the limit → Return the branch, check results, and verified findings that exist.',
+      '**Budget exhausted** Stop and return the current work, failed checks, and reason for stopping.',
     );
     expect(markdown).toContain(
-      'Our illustration of a possible control flow. Each source uses different checks and limits.',
+      'Our proposed control flow. A passing check still leaves any required human approval in place.',
     );
     for (const source of note.sources) expect(markdown).toContain(source.url);
   });

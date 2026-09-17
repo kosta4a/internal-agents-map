@@ -13,7 +13,7 @@
     "test": "node --test tests/negotiation.test.mjs",
     "test:unit": "vitest run && node --test tests/negotiation.test.mjs",
     "test:e2e": "playwright test",
-    "verify": "uv run --locked python scripts/build.py --check && uv run --locked python scripts/archive_sources.py --check && npm run check && npm run test:unit && npm run build && uv run --locked python scripts/check_site.py --root dist && uv run --locked python -m unittest discover -s tests && uv run --locked ruff check . && uv run --locked ruff format --check . && uv run --locked python scripts/check_private_data.py && uv run --locked python scripts/check_links.py --local && npm run test:e2e && git diff --check"
+    "verify": "uv run --locked python scripts/build.py --check && uv run --locked python scripts/content_coverage.py --check && uv run --locked python scripts/archive_sources.py --check && npm run check && npm run test:unit && npm run build && uv run --locked python scripts/check_site.py --root dist && uv run --locked python -m unittest discover -s tests && uv run --locked ruff check . && uv run --locked ruff format --check . && uv run --locked python scripts/check_private_data.py && uv run --locked python scripts/check_links.py --local && npm run test:e2e && git diff --check"
   },
   "dependencies": {
     "@radix-ui/colors": "3.0.0",

@@ -248,6 +248,64 @@ class BuildTests(unittest.TestCase):
                 self.assertEqual(claim["provenance"], "catalog-judgment")
                 self.assertTrue(claim["valid_at"])
 
+    def test_page_content_pilot_is_complete_and_preserves_primitive_names(self) -> None:
+        pilot = [record for record in self.records if record.get("page_content")]
+        self.assertEqual(len(pilot), 5)
+        catalog = build.normalize(self.records, self.companies)
+        claims = {
+            claim["field"]: claim
+            for claim in catalog["claims"]
+            if claim["approach_id"] == "github-qubot"
+        }
+        self.assertEqual(claims["primitives.0"]["id"], "github-qubot--primitives-0")
+        self.assertEqual(claims["primitives.0"]["display_name"], "Start a Qubot run")
+        for record in pilot:
+            page = record["page_content"]
+            self.assertEqual(set(page["questions"]), build.PAGE_QUESTIONS)
+            self.assertEqual(set(page["implementation_fields"]), build.ARCHITECTURE_FIELDS)
+            self.assertNotIn(
+                "not-reviewed",
+                [value["state"] for value in page["questions"].values()]
+                + [value["state"] for value in page["implementation_fields"].values()],
+            )
+
+    def test_page_content_rejects_unsupported_reported_and_duplicate_chains(self) -> None:
+        record = copy.deepcopy(
+            next(item for item in self.records if item["id"] == "notion-custom-agents")
+        )
+        sources = {source["id"] for source in record["sources"]}
+        for link in record["evidence"]["summary"]:
+            link["relation"] = "contextualizes"
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            build.validate_page_content(record, "fixture.yaml", sources)
+
+        record = copy.deepcopy(
+            next(item for item in self.records if item["id"] == "notion-custom-agents")
+        )
+        record["page_content"]["observations"]["headline_metric"] = {
+            "duplicate_of": "key_metrics.0",
+            "reason": "Fixture cycle.",
+        }
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            build.validate_page_content(record, "fixture.yaml", sources)
+
+    def test_page_content_accepts_all_four_review_states(self) -> None:
+        record = copy.deepcopy(next(item for item in self.records if item["id"] == "github-qubot"))
+        questions = record["page_content"]["questions"]
+        questions["human_involvement"] = {
+            "state": "not-applicable",
+            "claim_paths": [],
+            "note": "Fixture scope has no human step.",
+        }
+        questions["lessons"] = {
+            "state": "not-reviewed",
+            "claim_paths": [],
+            "note": "Review the next capture.",
+        }
+        build.validate_page_content(
+            record, "fixture.yaml", {source["id"] for source in record["sources"]}
+        )
+
     def test_valid_markdown_only_capture(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

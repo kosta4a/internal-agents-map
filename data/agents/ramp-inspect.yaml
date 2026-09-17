@@ -24,9 +24,9 @@ rubric:
   state: durable-session
   identity: mixed
   evidence_strength: mixed
-summary: A background coding agent that closes the loop on verifying its own work; runs tests, reviews telemetry,
-  queries feature flags, visually verifies the frontend; and serves as the platform hosting many internal agents,
-  some of which monitor production and propose fixes (built on top of Inspect, not Inspect itself).
+summary: Inspect runs coding tasks in prepared remote environments at Ramp. It can run tests, read telemetry
+  and feature flags, and inspect the frontend. Ramp also builds other agents on its platform, including agents
+  that monitor production and propose fixes.
 headline_metric: 75% of Ramp's merged PRs raised by Inspect sessions (May 2026)
 architecture:
   sandbox: Modal sandboxes; per-repo images rebuilt every 30 min from snapshots; warm-on-keystroke; a pool of warm
@@ -48,9 +48,9 @@ architecture:
     self-approval); production merges retain human review
 primitives:
 - name: Modal sandbox + snapshots
-  desc: Pre-warmed full dev envs; fast cold start; effectively free to run
+  desc: Repository images and snapshots prepare dependencies and build state before sessions start
 - name: OpenCode runtime
-  desc: Server-first agent with a typed SDK + plugin system; code is its own source of truth
+  desc: OpenCode runs as a server with a typed SDK and plugin interfaces
 - name: Multiplayer sessions
   desc: Any number of people in one session; each change attributed to its author
 key_metrics:
@@ -67,12 +67,12 @@ key_metrics:
 - More than 80% of Inspect is written in Inspect sessions
 - 'Design goal: session speed should be limited only by model-provider time-to-first-token'
 lessons_learned:
-- Own the tooling; it only has to work on your code, which lets you build something more powerful than off-the-shelf
-- Work in public spaces to create virality loops; let the product do the talking, don't mandate
-- Ramp argues that a fast background agent can add remote resources and concurrency to the same model
-- Move as much as possible into the image-build step so users never wait on setup
-- The v1 Chrome extension saw little adoption; the pivot to a centrally configured remote dev environment with a
-  coding agent on top drove adoption
+- Ramp argues that controlling an internal tool lets it tailor the system to its own codebase.
+- Ramp credits visible use in shared channels with helping Inspect spread without a usage mandate.
+- Ramp values remote agent sessions for concurrent work without tying up a developer's laptop.
+- Ramp builds repository images ahead of a request, then synchronizes recent code when a session starts.
+- Inspect adoption grew after Ramp changed it from a Chrome extension into a centrally configured remote development
+  environment.
 sources:
 - id: ramp-inspect-source-1
   title: Why We Built Our Own Background Agent (Inspect)
@@ -171,9 +171,11 @@ evidence:
   primitives.0:
   - source_id: ramp-inspect-source-1
     relation: supports
+    locator: Preserved content.md, lines 32-43
   primitives.1:
   - source_id: ramp-inspect-source-1
     relation: supports
+    locator: Preserved content.md, lines 46-54
   primitives.2:
   - source_id: ramp-inspect-source-1
     relation: supports
@@ -227,19 +229,23 @@ evidence:
   lessons_learned.0:
   - source_id: ramp-inspect-source-1
     relation: supports
+    locator: Preserved content.md, lines 26
   lessons_learned.1:
   - source_id: ramp-inspect-source-1
     relation: supports
+    locator: Preserved content.md, lines 24,104
   lessons_learned.2:
   - source_id: ramp-inspect-source-1
     relation: supports
+    locator: Preserved content.md, lines 16-22
   lessons_learned.3:
   - source_id: ramp-inspect-source-1
     relation: supports
+    locator: Preserved content.md, lines 36-43,69-72
   lessons_learned.4:
   - source_id: ramp-inspect-source-5
     relation: supports
-    locator: Why build your own background coding agent? section
+    locator: Preserved content.md, lines 58-66,82-90
   architecture.interfaces:
   - source_id: ramp-inspect-source-1
     relation: supports
@@ -252,31 +258,35 @@ claim_metadata:
       human review.
     valid_at: 2026-05
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The author gives codebase specificity as a reason to build Inspect; the post does not
+      establish superiority over every available external tool.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The adoption account reports the absence of a mandate and the use of public work; it does
+      not separate visibility from improvements in the product.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The article describes simultaneous sessions and calls background operation better for
+      this use. It does not supply a general local-versus-remote benchmark.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The image process includes cloning, dependencies, setup, and snapshots on a 30-minute
+      cadence. A final synchronization remains, so setup is not literally eliminated.
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The source reports that v1 saw little adoption and that the November 2025 pivot to a remote
-      dev environment preceded rapid adoption.
+    confidence_reason: The retrospective reports the November 2025 pivot and subsequent usage. It does not isolate
+      which part of the change caused the increase.
   headline_metric:
     metric_scope: Ramp merged PRs raised by Inspect sessions by May 2026
     valid_at: 2026-05

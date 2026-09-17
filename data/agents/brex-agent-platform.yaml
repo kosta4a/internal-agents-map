@@ -59,11 +59,14 @@ key_metrics:
 - QA covers every support interaction; one person using AI instead of five QA specialists
 - KYC adverse-media accuracy 85% → 88%
 lessons_learned:
-- Target 40% automation, not 100%; the last mile drives investments that often yield zero value
-- Brex reports that it manages the internal platform with practices used for an external product
-- Don't skip the human in the middle; end-to-end automation fails on accuracy
-- Map workflows to the discrete steps a human would take, then translate each to LLM instructions
-- Architecture beats vendor; legal/data approvals should follow data-handling characteristics, not the tool name
+- Brex's CTO recommends automating a useful portion of a workflow before pursuing complete automation.
+- Brex assigns a systems engineering team to maintain its internal agent platform and shares capabilities with
+  the customer product.
+- Brex automates high-confidence fraud cases and sends the remaining cases to analysts with AI-generated findings.
+- Brex operations staff and engineers translated KYC procedures into individual decisions and instructions,
+  retaining human quality checks.
+- Brex groups legal approvals by data retention, training use, and segregation requirements, with controls
+  agreed by product and legal teams.
 sources:
 - id: brex-agent-platform-source-1
   title: 'Agent, Human, Ops: How Brex Is Changing Roles and Workflows'
@@ -142,18 +145,23 @@ evidence:
   lessons_learned.0:
   - source_id: brex-agent-platform-source-1
     relation: supports
+    locator: Preserved content.md, lines 153-159
   lessons_learned.1:
   - source_id: brex-agent-platform-source-1
     relation: supports
+    locator: Preserved content.md, lines 38-40
   lessons_learned.2:
   - source_id: brex-agent-platform-source-1
     relation: supports
+    locator: Preserved content.md, lines 159
   lessons_learned.3:
   - source_id: brex-agent-platform-source-1
     relation: supports
+    locator: Preserved content.md, lines 195-205
   lessons_learned.4:
   - source_id: brex-agent-platform-source-1
     relation: supports
+    locator: Preserved content.md, lines 54-60
   architecture.interfaces:
   - source_id: brex-agent-platform-source-1
     relation: supports
@@ -203,24 +211,29 @@ claim_metadata:
     kind: opinion
     provenance: reported
     confidence: medium
-    confidence_reason: The case study attributes the architecture-first approval stance to Brex's team; it is not an independent comparison of vendors or legal review methods.
+    confidence_reason: The interview contrasts a 40% target with 100% and describes fraud cases still routed
+      to analysts. These are the CTO's priorities, not measured optimal targets.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The interview identifies the platform team and explains how new external MCP tools become
+      available internally.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The fraud example names the automation boundary. It does not establish that all complete
+      automation fails on accuracy.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The interview describes a joint, line-by-line review of operating procedures and subsequent
+      human review of LLM work.
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The approval tracks and defined controls are described in the interview; vendor identity
+      alone is not the stated basis for those tracks.

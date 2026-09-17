@@ -139,6 +139,16 @@ describe('record Markdown', () => {
       expect(markdown).toContain(`${relation.relationLabel} · [${relation.number}]`);
     }
   });
+
+  it('exports pilot states and duplicate representations explicitly', () => {
+    const notion = recordMarkdown(catalog, 'notion-custom-agents');
+    expect(notion).toContain('## Duplicate observation representations');
+    expect(notion).toContain('Duplicate of `notion-custom-agents--headline-metric`');
+    const yc = recordMarkdown(catalog, 'ycombinator-agent-infra');
+    expect(yc).toContain('## Reported observations');
+    expect(yc).toContain('Unreported:');
+    expect(yc.indexOf('## Lessons')).toBeGreaterThan(yc.indexOf('## Reported observations'));
+  });
 });
 
 describe('lesson attribution in Markdown', () => {
@@ -257,7 +267,9 @@ describe('the results of an entry in Markdown', () => {
       const entry = entryView(catalog, approach.id);
       if (entry.resultStatementClaims.length === 0) continue;
       const markdown = recordMarkdown(catalog, approach.id);
-      expect(markdown, approach.id).toContain('## Reported outcomes and statements');
+      expect(markdown, approach.id).toContain(
+        entry.isPilot ? '## Reported observations' : '## Reported outcomes and statements',
+      );
       for (const claim of entry.resultStatementClaims) {
         const position = markdown.indexOf(claim.text.trim());
         const block = markdown.slice(position, markdown.indexOf('\n### ', position + 1));

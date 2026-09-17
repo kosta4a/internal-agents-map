@@ -38,13 +38,22 @@ architecture:
   knowledge: Grounded findings tied to evidence
 primitives:
 - name: Grounded findings
-  desc: High-confidence, evidence-backed comments rather than blanket commentary
+  desc: Filters review candidates for evidence, confidence, and an actionable file-and-line location
+- {name: Automatic review trigger, desc: Opening a pull request can automatically start the review alongside human reviewers}
+- {name: Lead scout, desc: A scout reads the diff and produces focused investigation leads without trying to verify them}
+- {name: Deep reviewers, desc: Two reviewers investigate the scout's leads and drop the ones that do not hold up}
+- {name: Disprove-it pass, desc: Before publication the system tries to falsify each candidate finding and drops claims that do not survive}
+- {name: Optional fixer, desc: "A person can tag the agent on a review comment; a remote VM applies the requested change and pushes a reviewable commit to the pull request"}
+- {name: Evaluation loop, desc: Changes are tested on real past review misses and high-severity incidents before production acceptance data is checked}
 key_metrics:
 - 10,000+ PRs reviewed in a typical week across 56 repositories
 - 60.2% action rate on settled high/critical findings (measured sample)
+- Roughly $3 average cost per review
+- Findings posted about 7 minutes after a pull request opens on average
 lessons_learned:
-- Optimize for attention; minimize noisy comments; comment only with grounded, high-confidence findings
-- Measure whether engineers actually act on findings (action rate), not comment volume
+- DoorDash favors fewer actionable review comments, accepting that this policy will miss some issues.
+- DoorDash's reported acceptance rate describes how engineers use published findings; it cannot count issues
+  the reviewer missed.
 sources:
 - id: doordash-code-review-source-1
   title: How DoorDash built an AI code reviewer engineers actually listen to
@@ -82,6 +91,19 @@ evidence:
   primitives.0:
   - source_id: doordash-code-review-source-1
     relation: supports
+    locator: Preserved content.md, lines 56-68,166
+  primitives.1:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, line 23'}
+  primitives.2:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, lines 42–44'}
+  primitives.3:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, lines 42–46'}
+  primitives.4:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, lines 58–68'}
+  primitives.5:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, lines 131–144'}
+  primitives.6:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, lines 170–180'}
   key_metrics.0:
   - source_id: doordash-code-review-source-1
     relation: supports
@@ -90,12 +112,18 @@ evidence:
   - source_id: doordash-code-review-source-1
     relation: supports
     locator: Preserved content.md, lines 27
+  key_metrics.2:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, lines 29, 129'}
+  key_metrics.3:
+  - {source_id: doordash-code-review-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
   lessons_learned.0:
   - source_id: doordash-code-review-source-1
     relation: supports
+    locator: Preserved content.md, lines 56-68,166
   lessons_learned.1:
   - source_id: doordash-code-review-source-1
     relation: supports
+    locator: Preserved content.md, lines 56-68
   architecture.interfaces:
   - source_id: doordash-code-review-source-1
     relation: supports
@@ -107,15 +135,17 @@ claim_metadata:
     confidence_reason: The source describes automated findings that engineers evaluate within the pull-request workflow.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The precision-over-recall section states the tradeoff; the later comment-quality discussion
+      requires a concrete file, line, and action point.
   lessons_learned.1:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The report ties acceptance to its precision-first policy. A denominator of published comments
+      does not measure recall over all defects.
   headline_metric:
     metric_scope: Typical weekly PR reviews across 56 onboarded repositories
   key_metrics.0:
@@ -124,3 +154,46 @@ claim_metadata:
     metric_scope: Settled high and critical findings that led to code changes before merge
     denominator: 2,256 settled high and critical findings
     measurement_method: Whether the human changed the code before merge in response to the finding
+  key_metrics.2:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: DoorDash reports its current average review cost without an independent audit.
+    metric_scope: Average cost of the current staged review workflow
+    unit: USD per review
+  key_metrics.3:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: DoorDash reports average posting latency without a distribution or independent audit.
+    metric_scope: Time from pull-request opening to a posted finding
+    unit: minutes
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [doordash-code-review-source-1]
+  workflow_scope: Pull request opening → staged review → published finding and optional fix
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.1, primitives.2, primitives.3, primitives.5]}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, primitives.5]}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.tool_access, architecture.knowledge, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.4, primitives.6]}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2, key_metrics.3]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1]}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: The legacy placeholder is retained in research details; the source says the design is model-agnostic but names no current model.}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: "The remote VM is documented, but its isolation guarantees are not."}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: unreported, claim_paths: [], note: Context-window management is not documented as a separate mechanism.}
+    credentials: {state: unreported, claim_paths: [], note: Credential handling is not documented.}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: mechanism, primitives.1: workflow, primitives.2: workflow, primitives.3: workflow, primitives.4: validation, primitives.5: workflow, primitives.6: validation}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: Typical weekly reviews across 56 repositories}
+    key_metrics.0: {duplicate_of: headline_metric, reason: "Same review count, repository population, period, and qualification as the headline observation."}
+    key_metrics.1: {category: effectiveness, basis: reported-measurement, subject: Settled high and critical findings that led to code changes}
+    key_metrics.2: {category: cost-latency, basis: reported-measurement, subject: Average cost of the current review workflow}
+    key_metrics.3: {category: cost-latency, basis: reported-measurement, subject: Average time from PR opening to a posted finding}

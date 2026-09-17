@@ -61,6 +61,15 @@ export interface ArchitectureRowView {
   readonly field: string;
   readonly label: string;
   readonly claim: ClaimView | null;
+  readonly state?: string;
+  readonly note?: string | null;
+}
+
+export interface CoverageAnswerView {
+  readonly state: string;
+  readonly stateLabel: string;
+  readonly note: string | null;
+  readonly claimAnchors: readonly { readonly anchor: string; readonly label: string }[];
 }
 
 export interface ClaimView {
@@ -69,6 +78,7 @@ export interface ClaimView {
   readonly field: string;
   readonly label: string;
   readonly text: string;
+  readonly displayName: string | null;
   readonly kind: ClaimKind;
   readonly kindLabel: string;
   readonly provenanceLabel: string;
@@ -165,7 +175,12 @@ export interface EntryView {
   readonly interfaces: readonly TermView[];
   readonly invocation: readonly TermView[];
   readonly operatingModels: readonly OperatingModelView[];
+  readonly isPilot: boolean;
+  readonly workflowScope: string | null;
+  readonly coverageQuestions: Readonly<Record<string, CoverageAnswerView>>;
   readonly workflowClaims: readonly ClaimView[];
+  readonly mechanismClaims: readonly ClaimView[];
+  readonly validationClaims: readonly ClaimView[];
   readonly supervisionClaims: readonly ClaimView[];
   readonly architectureClaims: readonly ClaimView[];
   /** The architecture table: one row per field, reported or not. */
@@ -175,6 +190,11 @@ export interface EntryView {
   /** Claims of a metric field that state a fact, an inference, or an opinion. */
   readonly resultStatementClaims: readonly ClaimView[];
   readonly lessonClaims: readonly ClaimView[];
+  readonly canonicalObservationClaims: readonly ClaimView[];
+  readonly observationItems: readonly { readonly claim: ClaimView; readonly categoryLabel: string; readonly basisLabel: string; readonly subject: string }[];
+  readonly aliasObservationClaims: readonly ClaimView[];
+  readonly aliasObservationRelations: readonly { readonly claim: ClaimView; readonly target: ClaimView; readonly reason: string }[];
+  readonly researchOnlyClaims: readonly ClaimView[];
   /** Claims that no section above classifies. They keep every claim reachable. */
   readonly otherClaims: readonly ClaimView[];
   readonly claims: readonly ClaimView[];
@@ -295,8 +315,9 @@ function claimView(claim: Claim, numbers: ReadonlyMap<string, number>, sources: 
     id: claim.id,
     anchor: `claim-${claim.id}`,
     field: claim.field,
-    label: fieldLabel(claim.field),
+    label: claim.display_name ?? fieldLabel(claim.field),
     text: claim.text,
+    displayName: claim.display_name ?? null,
     kind: claim.kind,
     kindLabel: termLabel(claim.kind),
     provenanceLabel: termLabel(claim.provenance),
@@ -387,19 +408,77 @@ export function entryView(catalog: Catalog, id: string): EntryView {
 
   const of = (test: (claim: ClaimView) => boolean) => claims.filter(test);
   const summary = claims.find((claim) => claim.field === 'summary') ?? null;
-  const workflowClaims = of((claim) => claim.field.startsWith('primitives.'));
+  const page = approach.page_content;
+  const byField = new Map(claims.map((claim) => [claim.field, claim]));
+  const fromPaths = (paths: readonly string[]) =>
+    paths
+      .map((path) => byField.get(path))
+      .filter((claim): claim is ClaimView => Boolean(claim));
+  const legacyWorkflowClaims = of((claim) => claim.field.startsWith('primitives.'));
+  const workflowClaims = page ? fromPaths(page.questions.workflow.claim_paths) : legacyWorkflowClaims;
+  const mechanismClaims = page
+    ? of((claim) => page.primitive_roles[claim.field] === 'mechanism')
+    : [];
+  const validationClaims = page
+    ? of((claim) => page.primitive_roles[claim.field] === 'validation')
+    : [];
   const supervisionClaims = of((claim) => claim.field.startsWith('operating_models.'));
-  const architectureClaims = of((claim) => claim.field.startsWith('architecture.'));
+  const allArchitectureClaims = of((claim) => claim.field.startsWith('architecture.'));
+  const architectureClaims = page
+    ? allArchitectureClaims.filter((claim) => {
+        const key = claim.field.slice('architecture.'.length) as keyof typeof page.implementation_fields;
+        return page.implementation_fields[key]?.state === 'reported';
+      })
+    : allArchitectureClaims;
   const resultClaims = of(
     (claim) => claim.field === 'headline_metric' || claim.field.startsWith('key_metrics.'),
   );
-  const metricClaims = resultClaims.filter((claim) => claim.isMetric);
-  const resultStatementClaims = resultClaims.filter((claim) => !claim.isMetric);
   const lessonClaims = of((claim) => claim.field.startsWith('lessons_learned.'));
+  const canonicalObservationClaims = page
+    ? resultClaims.filter((claim) => !page.observations[claim.field]?.duplicate_of)
+    : resultClaims;
+  const aliasObservationClaims = page
+    ? resultClaims.filter((claim) => Boolean(page.observations[claim.field]?.duplicate_of))
+    : [];
+  const aliasObservationRelations = page
+    ? aliasObservationClaims.map((claim) => ({
+        claim,
+        target: byField.get(page.observations[claim.field]!.duplicate_of!)!,
+        reason: page.observations[claim.field]!.reason ?? 'Duplicate representation.',
+      }))
+    : [];
+  const observationItems = page
+    ? canonicalObservationClaims.map((claim) => {
+        const observation = page.observations[claim.field]!;
+        return {
+          claim,
+          categoryLabel: termLabel(observation.category!),
+          basisLabel: termLabel(observation.basis!),
+          subject: observation.subject!,
+        };
+      })
+    : [];
+  const metricClaims = canonicalObservationClaims.filter((claim) => claim.isMetric);
+  const resultStatementClaims = canonicalObservationClaims.filter((claim) => !claim.isMetric);
   const placed = new Set(
-    [summary, ...workflowClaims, ...supervisionClaims, ...architectureClaims, ...resultClaims, ...lessonClaims]
+    [summary, ...workflowClaims, ...mechanismClaims, ...validationClaims, ...supervisionClaims, ...architectureClaims, ...canonicalObservationClaims, ...lessonClaims]
       .filter((claim): claim is ClaimView => claim !== null)
       .map((claim) => claim.id),
+  );
+  const researchOnlyClaims = page ? claims.filter((claim) => !placed.has(claim.id)) : [];
+  const coverageQuestions = Object.fromEntries(
+    Object.entries(page?.questions ?? {}).map(([key, disposition]) => [
+      key,
+      {
+        state: disposition.state,
+        stateLabel: termLabel(disposition.state),
+        note: disposition.note ?? null,
+        claimAnchors: disposition.claim_paths
+          .map((path) => byField.get(path))
+          .filter((claim): claim is ClaimView => Boolean(claim))
+          .map((claim) => ({ anchor: claim.anchor, label: claim.displayName ?? claim.label })),
+      },
+    ]),
   );
 
   return {
@@ -432,7 +511,12 @@ export function entryView(catalog: Catalog, id: string): EntryView {
       level: model.level,
       levelLabel: levelLabel(model.level),
     })),
+    isPilot: Boolean(page),
+    workflowScope: page?.workflow_scope ?? null,
+    coverageQuestions,
     workflowClaims,
+    mechanismClaims,
+    validationClaims,
     supervisionClaims,
     architectureClaims,
     architectureRows: ARCHITECTURE_FIELDS.map((key) => {
@@ -441,12 +525,19 @@ export function entryView(catalog: Catalog, id: string): EntryView {
         field,
         label: fieldLabel(field),
         claim: architectureClaims.find((claim) => claim.field === field) ?? null,
+        state: page?.implementation_fields[key].state,
+        note: page?.implementation_fields[key].note ?? null,
       };
     }),
     metricClaims,
     resultStatementClaims,
     lessonClaims,
-    otherClaims: claims.filter((claim) => !placed.has(claim.id)),
+    canonicalObservationClaims,
+    observationItems,
+    aliasObservationClaims,
+    aliasObservationRelations,
+    researchOnlyClaims,
+    otherClaims: page ? [] : claims.filter((claim) => !placed.has(claim.id)),
     claims,
     sources,
     relatedEntries: relatedEntries(catalog, approach),

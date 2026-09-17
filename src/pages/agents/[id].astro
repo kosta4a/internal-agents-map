@@ -44,11 +44,12 @@ const graph = structuredData([
 // Without a reported workflow the entry has no "How it works" material to show.
 const hasHowItWorks = entry.workflowClaims.length > 0;
 const invocation = entry.invocation.filter((item) => item.id !== 'unknown');
-const hasImplementation = entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
+const hasImplementation = entry.isPilot || entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
 const hasResults =
   entry.metricClaims.length > 0 ||
   entry.resultStatementClaims.length > 0 ||
-  entry.lessonClaims.length > 0;
+  entry.isPilot ||
+  (!entry.isPilot && entry.lessonClaims.length > 0);
 const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length > 0;
 ---
 <SiteLayout title={title} description={description} path={entry.path} structuredData={graph}>
@@ -56,13 +57,13 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
     <header class="entry-header">
       <CompanyLogo company={entry.companyView} size={40} eager />
       <h1>{entry.agentName}</h1>
-      {entry.summary ? (
+      {entry.summary && !entry.isPilot ? (
         <>
           <p class="lede" id={entry.summary.anchor} data-claim-id={entry.summary.id}>{entry.summary.text}</p>
         </>
-      ) : (
+      ) : !entry.summary ? (
         <p class="lede">This entry has no summary claim yet.</p>
-      )}
+      ) : null}
       {entry.supportingSystemNote && (
         <div class="notice">
           <strong>Supporting infrastructure</strong>
@@ -113,12 +114,23 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       </dl>
     </header>
 
+    {entry.isPilot && (
+      <section class="entry-section" id="purpose" aria-labelledby="purpose-title">
+        <h2 id="purpose-title">Purpose</h2>
+        {entry.summary && <Claim claim={entry.summary} showLabel={false} />}
+        <p class="section-note"><a href="#sources">Check the reviewed sources and claim details</a>.</p>
+      </section>
+    )}
+
     {hasHowItWorks && (
       <section class="entry-section" id="how-it-works" aria-labelledby="how-it-works-title">
         <h2 id="how-it-works-title">How it works</h2>
-        <p class="section-note">The workflow the sources report for this implementation.</p>
+        <p class="section-note">
+          {entry.workflowScope ? `Representative workflow: ${entry.workflowScope}.` : 'The workflow the sources report for this implementation.'}
+          {' '}<a href="#sources">Research details</a>
+        </p>
         <div class="step-panel">
-          {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+          {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={entry.isPilot} />)}
         </div>
       </section>
     )}
@@ -134,6 +146,9 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
           The catalog records no execution workflow for this entry, so the scopes below describe
           access to the system rather than work it completes on its own.
         </p>
+      )}
+      {entry.isPilot && entry.coverageQuestions.human_involvement?.note && (
+        <p class="review-state"><strong>{entry.coverageQuestions.human_involvement.stateLabel}:</strong> {entry.coverageQuestions.human_involvement.note}</p>
       )}
       {entry.operatingModels.length > 0 && (
         <ul class="scope-list">
@@ -172,7 +187,9 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
                   )}
                 </dd>
               ) : (
-                <dd class="is-unreported">N/A</dd>
+                <dd class="is-unreported">
+                  {row.state ? <><strong>{row.state === 'not-applicable' ? 'Not applicable' : row.state === 'not-reviewed' ? 'Not reviewed' : 'Not reported'}</strong>{row.note && <span>{row.note}</span>}</> : 'N/A'}
+                </dd>
               )}
             </>
           ))}
@@ -183,24 +200,56 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
             {entry.otherClaims.map((claim) => <Claim claim={claim} />)}
           </>
         )}
+        {entry.mechanismClaims.length > 0 && (
+          <>
+            <h3>Mechanisms</h3>
+            {entry.mechanismClaims.map((claim) => <Claim claim={claim} />)}
+          </>
+        )}
+      </section>
+    )}
+
+    {entry.isPilot && (
+      <section class="entry-section" id="validation" aria-labelledby="validation-title">
+        <h2 id="validation-title">Validation and failure handling</h2>
+        {entry.validationClaims.length > 0 ? (
+          <div class="step-panel">{entry.validationClaims.map((claim) => <Claim claim={claim} />)}</div>
+        ) : entry.coverageQuestions.validation?.claimAnchors.length ? (
+          <p class="review-state">
+            <strong>{entry.coverageQuestions.validation.stateLabel}:</strong>{' '}
+            {entry.coverageQuestions.validation.claimAnchors.map((claim, index) => (
+              <>{index > 0 && ', '}<a href={`#${claim.anchor}`}>{claim.label}</a></>
+            ))}
+          </p>
+        ) : (
+          <p class="review-state"><strong>{entry.coverageQuestions.validation?.stateLabel}:</strong> {entry.coverageQuestions.validation?.note}</p>
+        )}
       </section>
     )}
 
     {hasResults && (
       <section class="entry-section" id="results" aria-labelledby="results-title">
-        <h2 id="results-title">Reported results and limitations</h2>
+        <h2 id="results-title">{entry.isPilot ? 'Reported observations' : 'Reported results and limitations'}</h2>
         <p class="section-note">
           The catalog records what the sources report, with the scope and the denominator of every
           figure. A qualification below limits the figure it sits under.
         </p>
-        {entry.metricClaims.map((claim) => <Claim claim={claim} />)}
-        {entry.resultStatementClaims.length > 0 && (
+        {entry.isPilot ? entry.observationItems.map((item) => (
+          <div class="observation-item">
+            <p class="section-note"><strong>{item.categoryLabel}</strong> · {item.basisLabel} · {item.subject}</p>
+            <Claim claim={item.claim} />
+          </div>
+        )) : entry.metricClaims.map((claim) => <Claim claim={claim} />)}
+        {!entry.isPilot && entry.resultStatementClaims.length > 0 && (
           <>
             <h3>Reported outcomes and statements</h3>
             {entry.resultStatementClaims.map((claim) => <Claim claim={claim} showKind={true} />)}
           </>
         )}
-        {entry.lessonClaims.length > 0 && (
+        {entry.isPilot && entry.observationItems.length === 0 && (
+          <p class="review-state"><strong>{entry.coverageQuestions.observations?.stateLabel}:</strong> {entry.coverageQuestions.observations?.note}</p>
+        )}
+        {!entry.isPilot && entry.lessonClaims.length > 0 && (
           <>
             <h3>Lessons and interpretation</h3>
             <div class="step-panel">
@@ -213,6 +262,17 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       </section>
     )}
 
+    {entry.isPilot && (
+      <section class="entry-section" id="lessons" aria-labelledby="lessons-title">
+        <h2 id="lessons-title">Lessons</h2>
+        {entry.lessonClaims.length > 0 ? (
+          <div class="step-panel">{entry.lessonClaims.map((claim) => <Claim claim={claim} showLabel={false} mark="circle-check" />)}</div>
+        ) : (
+          <p class="review-state"><strong>{entry.coverageQuestions.lessons?.stateLabel}:</strong> {entry.coverageQuestions.lessons?.note}</p>
+        )}
+      </section>
+    )}
+
     <section class="entry-section" id="sources" aria-labelledby="sources-title">
       <h2 id="sources-title">Sources and research details</h2>
       <p class="section-note">
@@ -220,7 +280,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
         repository, so a changed or removed page stays checkable.
       </p>
       <SourceList sources={entry.sources} />
-      <ResearchDetails claims={entry.claims} />
+      <ResearchDetails claims={entry.claims} researchOnlyClaims={entry.researchOnlyClaims} aliasRelations={entry.aliasObservationRelations} />
     </section>
 
     <section class="entry-section" id="related" aria-labelledby="related-title">

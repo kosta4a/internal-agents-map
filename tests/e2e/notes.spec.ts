@@ -18,6 +18,11 @@ async function structuredData(page: Page): Promise<Record<string, unknown>> {
   return JSON.parse(text) as Record<string, unknown>;
 }
 
+/** HTML typography curls quotation marks; the export keeps the author's Markdown. */
+function comparableProse(text: string): string {
+  return text.replace(/\*\*/g, '').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
+}
+
 /** Every fragment link on the page must reach an element of that page. */
 async function assertFragmentsResolve(page: Page): Promise<void> {
   const fragments = await page
@@ -64,10 +69,9 @@ test.describe('one note', () => {
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
 
     await expect(page.locator('figure.note-diagram')).toHaveCount(1);
-    await expect(page.getByText('Apply the run limit')).toBeVisible();
-    await expect(
-      page.getByText('Our illustration of a possible control flow.', { exact: false }),
-    ).toBeVisible();
+    await expect(page.locator('.note-branches')).toContainText('Checks fail; budget remains');
+    await expect(page.locator('.note-branches')).toContainText('Budget exhausted');
+    await expect(page.locator('figure figcaption')).toContainText('proposed control flow');
 
     await expect(page.locator('#source-stripe')).toBeVisible();
     await expect(page.locator('.note-sources ol > li')).toHaveCount(3);
@@ -99,6 +103,31 @@ test.describe('one note', () => {
     await page.locator('.note-next a[href="/notes/review-noise"]').click();
     await expect(page.locator('h1')).toHaveText('More comments can mean more work');
   });
+});
+
+test.describe('every note as a document', () => {
+  for (const slug of NOTE_SLUGS) {
+    test(`${slug} preserves its sources and structured content in the export`, async ({ page, request }) => {
+      await page.goto(`/notes/${slug}`);
+      await assertFragmentsResolve(page);
+      const response = await request.get(`/notes/${slug}.md`);
+      expect(response.status()).toBe(200);
+      const markdown = comparableProse(await response.text());
+      const article = page.locator('.note-detail > article');
+      // Compare what is present, without requiring every article to use a diagram or quotation.
+      const blocks = await article.locator('h1, h2, figure, th, td').allInnerTexts();
+      for (const block of blocks) {
+        expect(markdown).toContain(comparableProse(block));
+      }
+      const sources = await article.locator('.note-sources ol a').evaluateAll((links) =>
+        links.map((link) => (link as HTMLAnchorElement).href),
+      );
+      for (const source of sources) expect(markdown).toContain(source);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+        (page.viewportSize()?.width ?? 0) + 1,
+      );
+    });
+  }
 });
 
 test.describe('the entry page', () => {

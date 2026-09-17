@@ -40,9 +40,10 @@ primitives:
 - name: Investigation-to-fix loop
   desc: Payment trace → root-cause hypothesis → proposed code fix as a PR
 lessons_learned:
-- Start where correctness is observable; payment investigation produces artifacts (a trace, a hypothesis, a diff)
-  that can be checked
-- An ops agent that can prepare a fix (not just a report) closes the loop from investigation to code
+- Flex retains investigation audit records and tool traces that engineers can inspect when a diagnosis is incomplete
+  or wrong.
+- Flex routes high-confidence diagnoses to a coding sub-agent and PR review, medium-confidence cases to an
+  engineering ticket, and inconclusive cases to a report.
 sources:
 - id: flex-investigation-agent-source-1
   title: The Flex AI Investigation Agent for HSA/FSA payments
@@ -79,9 +80,11 @@ evidence:
   lessons_learned.0:
   - source_id: flex-investigation-agent-source-1
     relation: supports
+    locator: Preserved content.md, lines 152-157
   lessons_learned.1:
   - source_id: flex-investigation-agent-source-1
     relation: supports
+    locator: Preserved content.md, lines 99-113
   architecture.interfaces:
   - source_id: flex-investigation-agent-source-1
     relation: supports
@@ -93,15 +96,17 @@ claim_metadata:
     confidence_reason: The source describes a trace, diagnosis, and proposed pull request returned for review.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The audit section distinguishes the query, timing, and response log from the reasoning
+      and tool trace; these records support inspection rather than prove correctness.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The three confidence branches are described explicitly, including validation before a
+      PR and the prohibition on the agent merging or deploying.
   architecture.sandbox:
     kind: inference
     provenance: catalog-judgment

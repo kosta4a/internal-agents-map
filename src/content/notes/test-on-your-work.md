@@ -26,46 +26,24 @@ sources:
     note: Failure scenarios and checks on model judges.
 ---
 
-<section aria-labelledby="what-the-teams-report">
+<section aria-labelledby="reconstruct-the-task-without-the-answer">
 
-## What the teams report
+## Reconstruct the task without the answer
 
-Databricks builds benchmark tasks from actual code changes. It removes solution details from task descriptions so the agent cannot copy the historical solution. It also keeps relevant tests separate. People check each sample. [[1]](#source-1)
+Databricks builds coding tasks from actual pull requests. It rewrites the task description around the desired outcome, removes explanations of the historical solution, and keeps the relevant tests separate. People check each candidate sample. Without that separation, a successful run could reflect access to the answer rather than the ability to solve the task. [[1]](#source-1)
 
-The team revises tests when they reject a valid alternative solution. A useful test must check required behavior without requiring the original implementation. [[1]](#source-1)
-
-Uber evaluates uReview with a curated benchmark and feedback from engineers. Its benchmark concerns review findings, while Databricks evaluates code changes. Their scores are not interchangeable. [[2]](#source-2)
-
-<blockquote cite="https://www.databricks.com/blog/costar-how-we-ship-ai-agents-databricks-fast-without-breaking-things"><p>“every bug we find in production becomes a new scenario”</p></blockquote>
-
-<p class="quote-credit">Databricks, on its coSTAR evaluation method. <a href="#source-3">[3]</a></p>
-
-<figure class="note-diagram">
-  <div class="note-flow">
-    <div class="note-node"><span>01</span><strong>Past task</strong><small>Remove the solution hints</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node"><span>02</span><strong>Agent run</strong><small>Capture the result</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node note-node-accent"><span>03</span><strong>Evaluation</strong><small>Check the required properties</small></div>
-  </div>
-  <p class="note-diagram-tail">A new failure can become another test case.</p>
-  <figcaption>Our illustration of a possible evaluation cycle. It combines ideas from the reports, not one shared implementation.</figcaption>
-</figure>
+The original tests also need inspection. Databricks found tests that rejected valid alternative implementations and rewrote them by hand. A benchmark can therefore fail in either direction: solution hints make it too easy, while tests tied to one implementation reject correct work. [[1]](#source-1)
 
 </section>
 
-<section class="note-observation" aria-labelledby="the-test-set-needs-review-too">
+<section aria-labelledby="review-the-judge-as-well-as-the-agent">
 
-<p class="eyebrow">Our observation</p>
+## Review the judge as well as the agent
 
-## The test set needs review too
+In coSTAR, Databricks records agent traces and scores them with model judges. A separate loop compares those judges with human assessments and refines them against a curated set of examples. The team explicitly reports continuing costs for human labeling and recalibration, plus failures that existing judges do not cover. [[3]](#source-3)
 
-A test case needs a clear task, an initial state, and a way to assess the result. Past work can supply these parts.
+Uber's uReview evaluates a different output: review findings against annotated commits, supplemented by engineer feedback. Its precision and recall concern detected issues; Databricks' coding benchmark concerns completed code changes. Their scores cannot be substituted for each other. [[2]](#source-2)
 
-Databricks also checks model judges against human judgments in coSTAR. Agreement on a sample can reveal judge drift, but the human labels and sample still define what the check covers. [[3]](#source-3)
-
-Past cases cannot cover every future failure. Leakage can overstate performance, narrow tests can reject valid work, and a model judge can repeat model errors.
-
-<p class="note-question"><strong>A question for your build</strong>Which past failure must the next version avoid?</p>
+Our reading is that a reusable past task needs a preserved starting state, a clear request, and an assessment that accepts valid alternatives. Human agreement on one set of examples can expose judge errors, but it cannot establish coverage of unseen failures. coSTAR adds production failures as new scenarios precisely because the original suite remains incomplete. [[3]](#source-3)
 
 </section>

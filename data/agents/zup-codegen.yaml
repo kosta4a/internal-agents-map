@@ -21,9 +21,9 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: CodeGen is Zup's internal coding agent, described in a paper by its builders. They report that targeted tool design,
-  such as string-replacement edits over full-file rewrites, and layered safety guardrails mattered more than prompt engineering.
-  Progressive human oversight drove adoption.
+summary: CodeGen is Zup's internal coding agent. In the preserved paper abstract, its authors attribute reliability
+  improvements to editing tools and layered controls, and adoption to progressive human oversight. The abstract
+  provides no measurements or definitions of those oversight modes.
 architecture:
   harness: Constrained editing tools; state-management concerns; progressive levels of human oversight
   model: Not specified (see paper)
@@ -31,12 +31,13 @@ architecture:
   credentials: Layered safety controls
 primitives:
 - name: Constrained editing tools
-  desc: Tools that limit what the agent can change, vs. unconstrained generation
+  desc: String-replacement edits instead of full-file rewrites, combined with layered safety controls
 - name: Progressive oversight
-  desc: Levels of human review that increase trust over time
+  desc: Progressive oversight modes reported by the authors; the preserved abstract does not define the boundaries
 lessons_learned:
-- Targeted tool design and layered safety controls matter more than prompt tweaks
-- Progressive levels of human oversight help build trust before granting autonomy
+- Zup's authors report larger reliability gains from targeted editing tools and layered controls than from
+  prompt changes in CodeGen.
+- Zup's authors attribute organic adoption partly to progressive human oversight modes.
 sources:
 - id: zup-codegen-source-1
   title: Building an Internal Coding Agent at Zup
@@ -55,6 +56,7 @@ evidence:
   summary:
   - source_id: zup-codegen-source-1
     relation: supports
+    locator: Preserved content.md, lines 18
   architecture.harness:
   - source_id: zup-codegen-source-1
     relation: supports
@@ -70,15 +72,19 @@ evidence:
   primitives.0:
   - source_id: zup-codegen-source-1
     relation: supports
+    locator: Preserved content.md, lines 18
   primitives.1:
   - source_id: zup-codegen-source-1
     relation: supports
+    locator: Preserved content.md, lines 18
   lessons_learned.0:
   - source_id: zup-codegen-source-1
     relation: supports
+    locator: Preserved content.md, lines 18
   lessons_learned.1:
   - source_id: zup-codegen-source-1
     relation: supports
+    locator: Preserved content.md, lines 18
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -88,12 +94,14 @@ claim_metadata:
       form: continuous steering, per-run work-product review, and outcome review are all consistent with it.'
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The preserved abstract makes that comparison and names string-replacement edits, but contains
+      no experiment details or numerical results to assess it independently.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The abstract states this conclusion without specifying the modes, their review boundaries,
+      or an adoption measurement method.

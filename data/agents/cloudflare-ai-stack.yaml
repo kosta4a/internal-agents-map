@@ -48,7 +48,7 @@ primitives:
 - name: MCP Server Portal
   desc: One OAuth aggregation point for all MCP tools
 - name: Code Mode
-  desc: Collapse N tool schemas into 2 calls to hold token overhead constant at scale
+  desc: Searches tool schemas through a portal and exposes a separate execution function
 - name: AGENTS.md
   desc: Structured, generated repo context (runtime, nav, conventions, boundaries, deps)
 - name: AI Code Reviewer
@@ -59,12 +59,14 @@ key_metrics:
 - 10,952 merge requests in the week of March 23, 2026, nearly double the Q4 baseline; four-week average above 8,700
 - 295 teams using agentic AI tools
 lessons_learned:
-- Centralize through a proxy early; direct-to-gateway looks simpler but blocks per-user attribution, model cataloging,
-  and policy later
-- Without structured data, agents are working blind; they read code but can't see the system around it (Backstage
-  / AGENTS.md)
-- Tool schemas eat context (34 GitLab tools ≈ 7.5% of a 200K window); collapse them at the portal
-- 'Frontier + open-source hybrid: route a growing share of workloads to cheaper self-hosted models'
+- Cloudflare added user attribution, model discovery, and permission checks at a shared proxy without changing
+  client configurations.
+- Cloudflare exposes service ownership and dependencies through Backstage and writes repository conventions
+  into AGENTS.md files.
+- Cloudflare replaced upfront tool schemas with portal search and execution functions after measuring their
+  context overhead.
+- Cloudflare uses frontier models for most complex coding work and Workers AI for selected workloads, including
+  documentation review and context-file generation.
 sources:
 - id: cloudflare-ai-stack-source-1
   title: The AI engineering stack we built internally
@@ -135,6 +137,7 @@ evidence:
   primitives.1:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+    locator: Preserved content.md, lines 179-189
   primitives.2:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
@@ -160,15 +163,19 @@ evidence:
   lessons_learned.0:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+    locator: Preserved content.md, lines 105
   lessons_learned.1:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+    locator: Preserved content.md, lines 195-212
   lessons_learned.2:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+    locator: Preserved content.md, lines 179-189
   lessons_learned.3:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
+    locator: Preserved content.md, lines 84-103
   architecture.interfaces:
   - source_id: cloudflare-ai-stack-source-1
     relation: supports
@@ -207,22 +214,26 @@ claim_metadata:
     valid_at: '2026'
     metric_scope: Teams using agentic AI tools and coding assistants in the reported 30-day snapshot
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The proxy retrospective names these later additions and explains why the existing Worker
+      provided one place to introduce them.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The report connects missing ownership and repository context to these two mechanisms,
+      including incorrect test commands and local conventions.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The Code Mode section reports 15,000 tokens for 34 GitLab schemas and names the two replacement
+      portal functions; it does not measure an accuracy gain.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The workload breakdown and named Workers AI tasks support this division; future growth
+      of open-model traffic is presented as an expectation.

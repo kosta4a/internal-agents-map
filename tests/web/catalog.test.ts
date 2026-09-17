@@ -98,6 +98,15 @@ describe('the published catalog', () => {
       for (const id of item.source_ids) expect(sources.has(id)).toBe(true);
     }
   });
+
+  it('publishes exactly five reviewed page-content records', () => {
+    const pilot = catalog.approaches.filter((item) => item.page_content);
+    expect(pilot).toHaveLength(5);
+    for (const item of pilot) {
+      expect(Object.keys(item.page_content!.questions)).toHaveLength(7);
+      expect(Object.keys(item.page_content!.implementation_fields)).toHaveLength(8);
+    }
+  });
 });
 
 describe('catalog validation', () => {

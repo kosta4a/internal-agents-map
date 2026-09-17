@@ -47,6 +47,11 @@ screens. Show the branch, loop, comparison, or shared state that matters to the 
 Omit the diagram when it would only repeat the prose. Mark arrows as decorative when
 the text already gives the order.
 
+Choose the form after identifying what a reader must compare or follow. A conditional
+retry needs visible exit and retry branches; parallel reviewers need a shared input;
+worker recovery needs storage outside the workers. A table can explain differences
+between two discovery designs. An article about review cost may need only prose.
+
 Captions identify the illustration as ours and explain any simplification. Do not
 invent scores, proportions, or performance improvements. A conceptual quadrant needs
 named axes and a clear statement that positions are illustrative.
@@ -59,3 +64,9 @@ description, eyebrow, lede, summary, reading time, reading order, publication da
 `src/content.config.ts` stops the build when a field is missing, and the build adds the
 note to the index, the routes, the sitemap, and the Markdown exports. No route list,
 allowlist, or page template needs an edit. Then run `npm run verify`.
+
+Read the notes together before finishing an editorial pass. Check for repeated
+openings, quotations that add no evidence, identical diagrams, and closing questions
+that restate the article. Record source checks and editorial decisions separately
+from automated validation; tests can check reading and export integrity, not whether
+the argument is useful.

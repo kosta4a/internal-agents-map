@@ -14,7 +14,7 @@ domains:
 - code-review
 autonomy: drafts-reviewed
 operating_models:
-- scope: work context → merge-ready pull request
+- scope: coding task → pull request handed to an engineer for review
   attention_boundary: work-product-review
 rubric:
   invocation:
@@ -47,12 +47,14 @@ architecture:
     production pull requests require human review
 primitives:
 - name: One-shot end-to-end agent
-  desc: From work context to merge-ready PR in one shot, with human approval
+  desc: Prepares a branch for human review and returns after a limited number of CI repair attempts
 key_metrics:
 - Over 1,000 completely minion-produced PRs merged per week in Part 1, with human review and no human-written code
 lessons_learned:
-- One-shot end-to-end coding agents work at scale when humans retain review/approval
-- Let the agent locate the right repo/workspace itself rather than pre-scoping it
+- Stripe's Minions produce changes unattended, then return them for engineer review; failed runs can receive
+  further instructions.
+- Stripe starts Minions in prewarmed devboxes with recent copies of its main repositories and prepared development
+  services.
 sources:
 - id: stripe-minions-source-1
   title: 'Minions: Stripe''s one-shot end-to-end coding agents'
@@ -216,8 +218,10 @@ evidence:
   primitives.0:
   - source_id: stripe-minions-source-1
     relation: supports
+    locator: Preserved content.md, lines 50
   - source_id: stripe-minions-source-2
     relation: supports
+    locator: Preserved content.md, lines 94-98
   key_metrics.0:
   - source_id: stripe-minions-source-1
     relation: supports
@@ -230,11 +234,11 @@ evidence:
   lessons_learned.0:
   - source_id: stripe-minions-source-1
     relation: supports
+    locator: Preserved content.md, lines 14-18,50
   lessons_learned.1:
-  - source_id: stripe-minions-source-1
-    relation: supports
   - source_id: stripe-minions-source-2
     relation: supports
+    locator: Preserved content.md, lines 24-32
   architecture.interfaces:
   - source_id: stripe-minions-source-1
     relation: supports
@@ -247,15 +251,17 @@ claim_metadata:
     confidence_reason: The source explicitly states that humans review and approve production pull requests.
     valid_at: '2026-02-20'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: Part 1 distinguishes unattended implementation from human PR review and explicitly describes
+      another instruction cycle when the result is insufficient.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: Part 2 describes proactive repository cloning and environment setup; it does not say the
+      agent chooses the repository or provisions its own workspace.
   headline_metric:
     metric_scope: Weekly merged PRs completely produced by Minions; Part 2 report, up from Part 1
     confidence: medium

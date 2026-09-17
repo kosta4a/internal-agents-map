@@ -10,7 +10,7 @@
 > original implementation phase; the release follow-up records the later work.
 >
 > The user separately authorized removing Browserbase's bb entry. That removal
-> is implemented locally and recorded below; it is not pending plan work.
+> was included in the initial release and is recorded below.
 >
 > Executor: read the whole plan, preserve existing changes, follow the phases in
 > order, and record verification before marking the plan complete. Source
@@ -23,7 +23,10 @@
 - Risk: medium. Reclassification changes the public data vocabulary and filters.
 - Depends on: completed Plans 003, 006, and 007.
 - Category: content correctness, information architecture, and data contracts.
-- Status: DONE on 2026-09-16. All seven phases were implemented and committed on the
+- Status: DONE locally after the editorial follow-up on 2026-09-17. The follow-up
+  resolves unfinished lesson reasoning, repetitive note structures, and the overview's
+  contradiction of the reconciled monday.com classifications. These latest edits are
+  uncommitted and have not been published. The original implementation was committed on the
   isolated `codex/plan-008-reconcile` branch, then squash-merged into `main` as
   `15bacb9` after PR #2 (`bcaff15`). The initial release passed local verification
   and 371 production response checks. The later Phase 1 corrections from the shared
@@ -39,8 +42,9 @@ proposed correction; a Codex session captured an earlier snapshot of that work a
 Claude session reconciled the results into the shared working tree:
 
 - The Codex branch (taxonomy migration, generated statistics, lessons and attribution,
-  notes revision, supervision definitions) was adopted as the base; its implementation
-  matches the plan's requirements for Phases 2–6.
+  notes revision, supervision definitions) was adopted as the base. The later audit
+  found that its lesson rewrites, note structures, and overview prose did not fully
+  satisfy Phases 3–5; the editorial follow-up below completes those requirements.
 - The later, verifier-backed Phase 1 corrections that postdate the captured baseline
   were re-applied on top: Microsoft's rename and interface correction, Ramp
   (state/identity/invocation/summary), Stripe (invocation/summary), monday.com
@@ -112,20 +116,21 @@ record edits and `DESIGN.md` are outside that backup.
 Browserbase's removal retires its examples from the review. Apply the same
 editorial criteria to the remaining entries; do not restore bb to illustrate a fix.
 
-## Current state and file responsibilities
+## Planning baseline and file responsibilities
 
-After the Browserbase removal, the catalog has 41 entries, 36 organizations,
-109 source records, and seven published notes. The claim count is changing during
-Phase 1 and must be derived from regenerated output rather than treated as a fixed
-acceptance target.
+This section, including its confirmed examples, describes the proposal's baseline.
+After the Browserbase removal it had 41 entries, 36 organizations, 109 source records,
+and seven published notes. The later Retool removal leaves 40 entries, 35 organizations,
+and 107 source records. The execution records below give the verified final counts.
 
 - `data/agents/*.yaml` owns authored claims, classifications, sources, and evidence.
 - `data/companies.yaml` owns organization identities and logo references. It must
   join to active entries in both directions; an unused organization is invalid.
 - `scripts/build.py` validates records and generates `data/agents.json`,
   `docs/landscape.md`, and marked sections of README, patterns, and adoption docs.
-- `src/lib/catalog.ts` validates the normalized data. Its current catalog schema
-  version is 5. `src/lib/exports.ts` has a separate compact-index schema version 1.
+- `src/lib/catalog.ts` validates the normalized data. The baseline used catalog schema
+  version 5; `src/lib/exports.ts` used compact-index schema version 1. Phase 2 migrated
+  these to versions 6 and 2.
 - `src/lib/entry-view.ts` groups claims for pages; `Claim.astro`, `ResearchDetails.astro`,
   and `src/pages/agents/[id].astro` control visible attribution and qualifications.
 - `src/lib/guide-content.ts` owns shared guide text. The guide Astro pages and
@@ -133,8 +138,8 @@ acceptance target.
 - `src/lib/definitions.ts` selects and explains chart placements.
 - `src/lib/search.ts`, `src/scripts/directory.ts`, and `AgentCard.astro` implement
   the directory's single search box, facets, and shareable filter URLs.
-- `src/content/notes/*.md` owns the seven notes. `docs/notes-writing.md` defines
-  their current rigid structure. `updatedAt` is available for substantive edits.
+- `src/content/notes/*.md` owns the seven notes. `docs/notes-writing.md` defined
+  their rigid structure at the baseline. `updatedAt` is available for substantive edits.
 - `CONTRIBUTING.md`, `data/schema.md`, `templates/agent.yaml`, and the repository
   intake skill must agree about how future records are authored.
 
@@ -486,17 +491,20 @@ requires a separate action outside this plan. Do not claim a local change is liv
   documentation, and tests. Route-manifest version is unchanged.
 - [x] Numeric catalog findings are generated from one counting convention, with the unit
   stated and approval checkpoints distinguished from continuous steering.
-- [x] No active lesson uses the exact boilerplate confidence reason, "The catalog derives
-  this observation from the linked sources." Every retained interpretation has a reason.
+- [x] Every retained lesson has a supporting source passage and a claim-specific
+  confidence explanation. Reported practices, attributed opinions, and catalog
+  inferences are distinguished; replacing one shared disclaimer with another is insufficient.
 - [x] Source opinions and catalog interpretation are distinguishable in HTML and Markdown.
-- [x] All seven notes have completed source and editorial review; quotations remain exact.
+- [x] All seven notes have completed source and collective editorial review; their
+  structures and diagrams fit their subjects, quotations remain exact, and HTML and
+  Markdown preserve the same content.
 - [x] Definitions publishes every attention boundary and the entry/Methodology links resolve.
 - [x] Both generators and `npm run verify` exit 0; `git diff --check` is clean.
 - [x] Browserbase remains absent from active data, site pages, filters, notes, and assets.
 - [x] Existing unrelated work and archive artifacts are preserved; status and verification
   evidence are recorded in this file and `plans/README.md`.
 
-## Execution record
+## Initial implementation record
 
 Completed locally on 2026-09-16 in the isolated worktree at
 `/private/tmp/internal-agents-map-plan008`, branch `codex/plan-008-reconcile`.
@@ -537,6 +545,50 @@ The original checkout now follows released `main`; temporary worktrees, release
 branches, and redundant stashes were retired after verification. Their original
 state and Git history remain in verified local recovery bundles. The Areal/Sand
 design, `DESIGN.md`, and PR #2's illustrations are retained.
+
+## Editorial follow-up — 2026-09-16–17
+
+The user requested a complete resolution after an audit found four remaining gaps
+at `e10443b`: stale monday.com supervision prose, generic lesson confidence reasons,
+repetitive note structures, and unsupported prescriptions or promotional abstractions.
+This follow-up is complete in the local checkout; its changes are uncommitted and
+have not been published. The release results above apply to the earlier revisions.
+
+- Reviewed all 100 lessons across 29 entries against preserved passages. The resulting
+  set contains 70 reported practices, 24 attributed opinions, and 6 catalog inferences.
+  Every lesson has a distinct explanation and an archive locator. Existing lesson
+  indexes and claim links are retained. The [passage inventory](../docs/lesson-review-2026-09.md)
+  records the decisions, including corrections to source attribution and unsupported
+  claims about workspace setup, customer follow-up, credentials, and platform migrations.
+- Reviewed all 40 summaries and their component descriptions; 18 records needed
+  wording corrections. Claims about cost, credential isolation, automatic improvement,
+  and approval boundaries now match the documented scope. Sevbot's contradictory
+  execution wording is explicitly qualified, with medium confidence.
+- Corrected the patterns overview: Morphex is exception-only/L5 and Atlas is unknown.
+  Revised recovery and adoption examples to separate persistence, human acceptance,
+  and claimed outcomes from properties the sources do not establish.
+- Rewrote all seven notes. Three diagrams show a conditional retry, parallel reviewers,
+  and shared external state. Tool discovery uses a comparison table; the other notes
+  use prose. One exact quotation remains. The repeated observation panels and closing
+  questions are gone, while slugs, citations, related entries, and publication dates remain.
+- Updated contribution, schema, intake, and note-writing guidance to require evidence
+  specific to the claim and structures appropriate to the material. Browser tests now
+  compare all seven notes' headings, figures, table cells, and citations with their
+  Markdown exports and check viewport width across the three browser projects.
+
+Verification on 2026-09-17: `npm run verify` passed with 147 Vitest tests, 14 Node negotiation tests,
+196 Python tests, and 304 browser tests with 38 expected skips. Type checking reported
+no errors and 19 existing deprecation hints. Generated-content, archive, artifact,
+privacy, formatting, local-link, and whitespace checks passed. Desktop and mobile
+visual review covered the three diagrams and the discovery table; table spacing and
+column widths were adjusted after inspection.
+
+The generated catalog contains 40 approaches, 35 organizations, 35 logos,
+590 claims, and 107 declared source captures. Removing Spotify's unsupported
+credentials field accounts for the one fewer claim. Astro built 52 pages and 51 canonical
+routes. Catalog, compact-index, and route-manifest schemas remain 6, 2, and 1.
+Browserbase and Retool remain absent from active membership. Source captures and
+retrieval metadata are unchanged; this review did not claim new source verification.
 
 ## Evidence gaps and scope limits
 

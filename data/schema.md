@@ -201,6 +201,13 @@ evidence:
 
 The relation is `supports`, `contradicts`, or `contextualizes`. Use a stable locator when one exists. For preserved sources, `Preserved content.md, lines 23–27` refers to the immutable artifact in that source's capture bundle, including its archive header. A locator must identify the supporting passage, not merely a broad topic. For source code, record the commit, path, and line. For a talk, record the timestamp.
 
+For each lesson, use claim metadata to distinguish a reported practice (`fact`,
+`reported`), an attributed preference (`opinion`, `reported`), and a catalog inference
+(`inference`, `catalog-judgment`). Its `confidence_reason` names the supporting
+observation and any missing link in the reasoning. A generic claim that the source
+supports the lesson does not explain that reasoning. The lesson text must also carry
+its scope: a team's implementation is not a recommendation for every organization.
+
 Use `claim_metadata` when the default classification is not correct:
 
 ```yaml
@@ -222,6 +229,35 @@ A metric's `valid_at` can identify a dated reported observation, but does not by
 Claim kinds are `fact`, `metric`, `inference`, and `opinion`. Provenance values are `reported`, `observed`, `inferred`, and `catalog-judgment`. Confidence values are `high`, `medium`, `low`, and `unverified`.
 
 Metric metadata can also include `value`, `unit`, `reported_by`, `metric_scope`, `denominator`, and `measurement_method`. The generated export uses the company as `reported_by` when a reported metric does not override it.
+
+## Optional reviewed page content
+
+`page_content` version 1 records an editorial review without changing existing claim
+identities. It is optional during the pilot. `reviewed_at` is a full `YYYY-MM-DD` date,
+and `source_ids` lists the entry sources actually read. `questions` contains exactly
+`purpose`, `workflow`, `human_involvement`, `implementation`, `validation`,
+`observations`, and `lessons`. `implementation_fields` contains all eight architecture
+keys. Every disposition has a `state`, `claim_paths`, and optionally a `note`.
+
+States are `reported`, `unreported`, `not-applicable`, and `not-reviewed`. Reported
+slots require one or more same-entry claims supported by a reviewed source. All other
+states require no claim paths and a concrete note; for `not-reviewed`, the note is the
+next research action. A reported workflow also requires `workflow_scope`.
+
+`primitive_roles` classifies every primitive as `workflow`, `mechanism`, or
+`validation`; the workflow question lists every workflow primitive in reading order.
+`observations` covers the headline and every key metric. A canonical observation has a
+`category` (`effectiveness`, `adoption-output`, `cost-latency`,
+`implementation-scale`, or `runtime-capacity`), a `basis`
+(`reported-measurement`, `qualitative`, `estimate`, or `target`), and a specific
+`subject`. A duplicate representation instead has `duplicate_of` and `reason`.
+Targets must be same-entry canonical observations; self references, cycles, and chains
+are invalid. Confirm equal subject, statement/value, period, scope, and qualifications
+before marking a duplicate.
+
+Run `uv run --locked python scripts/content_coverage.py --check` to validate the
+coverage view, or add `--output <path>` to write deterministic JSON. Records without
+the optional block are reported as `legacy-unassessed`.
 
 ## Collection rules
 

@@ -47,22 +47,24 @@ primitives:
 - name: Forge
   desc: 'Custom harness: Slack bug discussion → Linear issue → drafted fix → PR pushed back for review'
 - name: Mux
-  desc: Concurrency layer; one human coordinates many isolated coding agents, each in its own worktree/branch/terminal
+  desc: One person coordinates coding agents with separate worktrees, branches, and terminals
 key_metrics:
 - 'Mux: 600+ users including engineers, PMs, and designers (335 active, 197 power users)'
 - 5% of all PRs merged come from in-house background agents (Feb 2026)
 - Wallet rewrite PR review times reduced from 150 hours to 15 hours (self-reported; period and method not documented)
 - 'Speed run: about 100 participants opened about 70 PRs in 15 minutes (opened, not merged; single event)'
 lessons_learned:
-- Support a portfolio of harnesses (Claude Code, OpenCode, Cursor, Copilot) rather than standardizing on one
-- Keep the system of record (Linear) as the agent's structured context; conversation can be the input, Linear stays
-  durable
-- Simple per-agent worktree/branch/terminal isolation is a pragmatic alternative to full sandboxing for concurrent
-  coding
-- Security requirements that blocked cloud background agents motivated the in-house, Slack-native harness build
-- Give background agents the same tools and context as engineers through a Slack-native interface
-- Spread adoption through visible team experiments, such as PR speed runs and shared Slack channels, rather than
-  mandates
+- Coinbase engineers use Mux alongside Claude Code, OpenCode, Cursor, and other internal agents.
+- Coinbase stores requirements and work status in Linear; its Slack workflow creates an issue before Forge
+  drafts a fix.
+- Mux gives concurrent agents separate worktrees, branches, and terminals. This separates edits; it does not
+  establish a security sandbox.
+- Coinbase reports that security requirements prevented it from using available cloud background agents and
+  motivated its internal harness.
+- Coinbase describes its Slack harness as giving agents the same tools and context as engineers, with a PR
+  returned to the thread.
+- Chintan Turakhia favors demonstrations and shared experiments for adoption, citing PR speed runs and a Cursor
+  Wins channel.
 sources:
 - id: coinbase-forge-mux-source-1
   title: 'Coding had a concurrency problem: how Mux helped solve it'
@@ -179,6 +181,7 @@ evidence:
   primitives.1:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+    locator: Preserved content.md, lines 20-26
   key_metrics.0:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -201,27 +204,30 @@ evidence:
   lessons_learned.0:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+    locator: Preserved content.md, lines 12,24
   lessons_learned.1:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
+    locator: Preserved content.md, lines 32-36
   lessons_learned.2:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+    locator: Preserved content.md, lines 26
   lessons_learned.3:
   - source_id: coinbase-forge-mux-source-5
     relation: supports
-    locator: Preserved content.md, line 120
+    locator: Preserved content.md, lines 120
   lessons_learned.4:
   - source_id: coinbase-forge-mux-source-3
     relation: supports
-    locator: Preserved content.md, line 11
+    locator: Preserved content.md, lines 11
   lessons_learned.5:
-  - source_id: coinbase-forge-mux-source-4
-    relation: supports
-    locator: Preserved content.md, line 25
   - source_id: coinbase-forge-mux-source-5
     relation: supports
-    locator: Preserved content.md, lines 170–172
+    locator: Preserved content.md, lines 170-172
+  - source_id: coinbase-forge-mux-source-4
+    relation: supports
+    locator: Preserved content.md, lines 23-25
   architecture.interfaces:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -234,38 +240,43 @@ claim_metadata:
       back to Slack for review; no source documents a build step.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The Mux article explicitly describes a portfolio of tools in use. It does not compare
+      that portfolio with a single-harness policy.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The workflow account names Linear as the record of work and traces the Slack message through
+      issue creation to a PR returned for review.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The source describes git and terminal separation but no access-control boundary between
+      agents, so sandbox equivalence would be an unsupported inference.
   lessons_learned.3:
     kind: fact
     provenance: reported
     confidence: high
-    confidence_reason: The episode writeup states the security requirement as the reason for the in-house build.
-    valid_at: '2026-03'
+    confidence_reason: The episode writeup gives that constraint as the reason for the in-house build at the
+      time of the interview.
+    valid_at: 2026-03
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this design guidance from the builder's description of the harness.
+    confidence_reason: The company post states the tools-and-context claim and the Slack-to-PR workflow, but
+      supplies no tool-by-tool access comparison.
     valid_at: '2026'
   lessons_learned.5:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this adoption guidance from the episode accounts of speed runs and shared
-      channels.
+    confidence_reason: The interview writeup attributes this preference to Turakhia and names the examples; it
+      does not isolate their effect from other adoption work.
     valid_at: '2026'
   headline_metric:
     kind: metric

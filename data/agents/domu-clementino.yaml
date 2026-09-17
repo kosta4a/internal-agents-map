@@ -54,10 +54,12 @@ primitives:
 key_metrics:
 - ~35 integrations organized into skills
 lessons_learned:
-- Separate reusable capabilities (tools/skills/memory) from the interface layer; prompt size drops while capability
-  is preserved
-- 'Model memory explicitly: conversation context, persistent facts, RAG, and live state have different lifecycles'
-- Gate customer-impacting actions behind human approvals rather than trusting the model
+- Domu separated Slack handling from Clementino's tools, skills, memory, and core, then reused the toolkit
+  in Claude Cowork.
+- Clementino shares conversation context, persistent facts, retrieval knowledge, and live system state across
+  its Slack and desktop interfaces.
+- Clementino routes customer-facing actions through visible Slack approvals, including requests started from
+  the desktop.
 sources:
 - id: domu-clementino-source-1
   title: Why we split our internal agent in two
@@ -119,12 +121,15 @@ evidence:
   lessons_learned.0:
   - source_id: domu-clementino-source-1
     relation: supports
+    locator: Preserved content.md, lines 54-72,98
   lessons_learned.1:
   - source_id: domu-clementino-source-1
     relation: supports
+    locator: Preserved content.md, lines 64-72,90
   lessons_learned.2:
   - source_id: domu-clementino-source-1
     relation: supports
+    locator: Preserved content.md, lines 78,92
   architecture.interfaces:
   - source_id: domu-clementino-source-1
     relation: supports
@@ -150,20 +155,23 @@ claim_metadata:
       describe whether anyone reviews their output.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The refactor and both interfaces are described directly. A reported prompt reduction accompanied
+      the change, but its cause is left for a later post.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The toolkit section enumerates four memory layers stored in common tables; the two surfaces
+      use that shared memory.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The author explicitly names invoices, outbound emails, and contract changes and says the
+      initiating surface does not bypass the approval path.
   headline_metric:
     metric_scope: Clementino toolkit integration modules organized into skills
   key_metrics.0:

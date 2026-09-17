@@ -53,16 +53,18 @@ primitives:
 - name: Validation loop
   desc: Bounded iteration with feedback on failure; deterministic systems control test execution
 - name: Dash
-  desc: Dropbox context-engineering system feeding agents across the SDLC
+  desc: Nova is expanding its context sources, including Dash and MCP-based integrations
 key_metrics:
 - 'Flaky-test remediation (Deflaker): 100+ validation runs'
 - Predecessor Goose-based migrator used across thousands of migration entries before workflows moved onto Nova
 - Dozens of agents launchable from one runbook
 lessons_learned:
-- Platform value exceeds code generation; validation, guardrails, and context matter as much
-- Context, validation, and guardrails reinforce each other to make background work trustworthy
-- Not every step belongs in the agent loop; deterministic systems should control test execution and timing
-- Integrate with existing engineering infrastructure rather than building separate AI-specific workflows
+- Dropbox attributes much of Nova's usefulness to its surrounding execution and validation infrastructure.
+- Nova can return failed validation results to the agent and continue the session to repair the proposed change.
+- Dropbox moved CI triggering outside the agent after seeing waits of hours and validation against the wrong
+  tests.
+- Nova reuses Dropbox's Bazel and on-premise validation paths because those systems support its monorepo development
+  workflow.
 sources:
 - id: dropbox-nova-source-1
   title: Introducing Nova, our internal platform for coding agents
@@ -136,6 +138,7 @@ evidence:
   primitives.1:
   - source_id: dropbox-nova-source-1
     relation: supports
+    locator: Preserved content.md, lines 30,82
   key_metrics.0:
   - source_id: dropbox-nova-source-1
     relation: supports
@@ -151,15 +154,19 @@ evidence:
   lessons_learned.0:
   - source_id: dropbox-nova-source-1
     relation: supports
+    locator: Preserved content.md, lines 78
   lessons_learned.1:
   - source_id: dropbox-nova-source-1
     relation: supports
+    locator: Preserved content.md, lines 26
   lessons_learned.2:
   - source_id: dropbox-nova-source-1
     relation: supports
+    locator: Preserved content.md, lines 80
   lessons_learned.3:
   - source_id: dropbox-nova-source-1
     relation: supports
+    locator: Preserved content.md, lines 20-22,55
   architecture.interfaces:
   - source_id: dropbox-nova-source-1
     relation: supports
@@ -180,25 +187,29 @@ claim_metadata:
       agents; the exact review boundary of those sessions is not further specified.
     valid_at: '2026-05-22'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The retrospective explicitly makes this assessment and names context files, tests, caching,
+      isolation, and retry loops; it provides no controlled component comparison.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The session example describes optional validation commands and continuation on failure,
+      making the feedback mechanism explicit.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The retrospective names these failure modes and explains that surrounding workflows trigger
+      CI and call the agent back for repair.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: Dropbox gives its repository shape and existing build infrastructure as reasons for integration,
+      rather than a separate agent-only workflow.
   headline_metric:
     metric_scope: Migration-owner orchestration of dozens of agents from a shared runbook; qualitative capacity
       description

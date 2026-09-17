@@ -31,10 +31,9 @@ rubric:
   state: durable-session
   identity: unknown
   evidence_strength: mixed
-summary: An agent system built around OpenAI's internal Codex. A person defines the
-  outcome; Codex implements the change and babysits CI until green; domain-specialist
-  agents review each change behind risk-tiered routing; and a per-change deploy agent
-  handholds approved changes to production and builds its own monitoring dashboards.
+summary: An agent system built around OpenAI's internal Codex. A person defines the task; coding agents implement
+  it and respond to CI results; specialist agents review changes under risk-based routing. A human approves
+  production deployment before an agent manages the rollout and monitors its results.
 headline_metric: Almost all OpenAI employees used Codex and ChatGPT Work weekly as of
   the September 2026 report (self-reported).
 architecture:
@@ -66,9 +65,8 @@ primitives:
     reviews or a mandated human review, while opted-in low-risk areas use an agent
     that auto-approves pull requests
 - name: Per-change deploy agent
-  desc: After a human approves production, an assigned agent handholds the change to
-    full rollout; it decides which signals mean success or failure, builds its own
-    monitoring dashboard, and watches production signals
+  desc: After human approval for production, an agent manages the rollout, builds a monitoring dashboard, and
+    watches signals of success or failure
 - name: Perf harness with Synthetics A/B
   desc: A perf harness sends problematic pull requests to the Synthetics A/B framework
     to evaluate performance implications
@@ -81,10 +79,9 @@ key_metrics:
 - Some build-test-deploy systems saw about a 10x load increase within roughly six
   months (self-reported)
 lessons_learned:
-- Longer-running /goal tasks drove adoption; one long-running agent that spins off
-  other agents reduces the surface a person manages
-- Role-specific and team-specific plugins spread adoption beyond a generic coding
-  agent
+- OpenAI's desktop lead attributes some adoption growth to longer-running tasks and an agent that coordinates
+  sub-agents.
+- OpenAI's desktop lead says role-specific and team-specific plugins helped people adapt agents to their work.
 sources:
 - id: openai-factory-article
   title: "Inside OpenAI's agentic software factory"
@@ -221,10 +218,11 @@ evidence:
   summary:
   - source_id: openai-factory-article
     relation: supports
-    locator: "Preserved content.md, lines 138-186 (pipeline steps 1-8)"
+    locator: Preserved content.md, lines 141-177
   - source_id: openai-harness-engineering-post
     relation: contextualizes
-    locator: "Preserved content.md, lines 46-48 (one OpenAI team's repository runs review predominantly agent-to-agent; a single team's account, not the company-wide pipeline)"
+    locator: Preserved content.md, lines 46-48 (one OpenAI team's repository runs review predominantly agent-to-agent;
+      a single team's account, not the company-wide pipeline)
   headline_metric:
   - source_id: openai-factory-article
     relation: supports
@@ -310,10 +308,12 @@ evidence:
   primitives.2:
   - source_id: openai-factory-article
     relation: supports
-    locator: "Preserved content.md, lines 165-175 (agentic deploy)"
+    locator: Preserved content.md, lines 159-177
   - source_id: hn-zbrock-internal-adoption
     relation: contextualizes
-    locator: "Preserved content.md, lines 12 and 16 (harness-engineering co-author: many internal teams adopted the same practices; some run centralized agent-mediated integration queues and local Codex threads that monitor CI; no self-built deploy dashboards described)"
+    locator: 'Preserved content.md, lines 12 and 16 (harness-engineering co-author: many internal teams adopted
+      the same practices; some run centralized agent-mediated integration queues and local Codex threads that
+      monitor CI; no self-built deploy dashboards described)'
   primitives.3:
   - source_id: openai-factory-article
     relation: supports
@@ -336,11 +336,11 @@ evidence:
   lessons_learned.0:
   - source_id: openai-factory-article
     relation: supports
-    locator: "Preserved content.md, lines 52-56 (Andrew Ambrosino on long-running tasks and agents spinning off agents)"
+    locator: Preserved content.md, lines 52-56
   lessons_learned.1:
   - source_id: openai-factory-article
     relation: supports
-    locator: "Preserved content.md, line 64 (role-specific and team-specific plugins are created and distributed)"
+    locator: Preserved content.md, lines 64-66
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -399,9 +399,11 @@ claim_metadata:
     kind: opinion
     provenance: reported
     confidence: high
-    confidence_reason: "Stated explanation by the Codex desktop lead in the reported interviews."
+    confidence_reason: Andrew Ambrosino offers this explanation in the reported interview. The adoption timeline
+      does not isolate the effect of longer runs from other product changes.
   lessons_learned.1:
     kind: opinion
     provenance: reported
     confidence: high
-    confidence_reason: "Stated explanation by the Codex desktop lead in the reported interviews."
+    confidence_reason: Ambrosino describes teams distributing workflows and explains why a generic agent alone
+      was insufficient; this is his adoption assessment.

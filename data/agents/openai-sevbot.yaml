@@ -24,10 +24,9 @@ rubric:
   state: unknown
   identity: dedicated-agent
   evidence_strength: secondary-only
-summary: OpenAI's internal incident-response agent, built on Codex. When an incident is
-  detected, the bot wakes up, collects context, determines possible mitigations without
-  executing any, and answers developers' questions in the incident Slack channel; an
-  engineer can tell it to apply a chosen mitigation.
+summary: OpenAI's internal incident-response agent, built on Codex. When an incident is detected, it collects
+  context, proposes mitigations, and answers questions in the incident Slack channel. The report describes
+  an engineer instructing it to apply a chosen mitigation.
 architecture:
   sandbox: unknown
   harness: Built on top of Codex
@@ -36,12 +35,11 @@ architecture:
   - slack
 primitives:
 - name: Propose-only mitigation
-  desc: The bot determines possible mitigations but never executes any; an engineer
-    tells it to apply a specific mitigation
+  desc: Proposes mitigations in the incident channel; an engineer can instruct it to apply a specific mitigation
 key_metrics: []
 lessons_learned:
-- OpenAI's stated goal is that Sevbot mitigates routine outages autonomously with
-  humans reviewing its actions on return; as of the report, on-call duty remains
+- OpenAI describes autonomous mitigation of routine outages as a goal for Sevbot; on-call duty still exists
+  in the reported deployment.
 sources:
 - id: openai-sevbot-article
   title: "Inside OpenAI's agentic software factory"
@@ -89,13 +87,17 @@ evidence:
   summary:
   - source_id: openai-sevbot-article
     relation: supports
-    locator: "Preserved content.md, lines 188-193 (pipeline step 9: respond to outages)"
+    locator: Preserved content.md, lines 183-195
   - source_id: crtsh-sevbot-certificates
     relation: supports
-    locator: "Preserved content.md, lines 13-41 (certificate table for sevbot.api.openai.com; earliest not-before 2025-11-20 at lines 37-41, with renewals through 2026-08-01; evidences a deployed OpenAI service under the Sevbot name, not its incident-response behavior)"
+    locator: Preserved content.md, lines 13-41 (certificate table for sevbot.api.openai.com; earliest not-before
+      2025-11-20 at lines 37-41, with renewals through 2026-08-01; evidences a deployed OpenAI service under
+      the Sevbot name, not its incident-response behavior)
   - source_id: github-sevbot-pr
     relation: supports
-    locator: "Preserved content.md, lines 21-27 (initial commit '[SEVBot] Optionize initialized notification tolerance', 219a67a, 2026-03-24, authored by an OpenAI employee and co-authored by Codex; evidences internal Sevbot-branded engineering work)"
+    locator: Preserved content.md, lines 21-27 (initial commit '[SEVBot] Optionize initialized notification tolerance',
+      219a67a, 2026-03-24, authored by an OpenAI employee and co-authored by Codex; evidences internal Sevbot-branded
+      engineering work)
   operating_models.0:
   - source_id: openai-sevbot-article
     relation: supports
@@ -119,17 +121,17 @@ evidence:
   primitives.0:
   - source_id: openai-sevbot-article
     relation: supports
-    locator: "Preserved content.md, lines 190-193 (mitigation bullet list)"
+    locator: Preserved content.md, lines 191-193
   lessons_learned.0:
   - source_id: openai-sevbot-article
     relation: supports
-    locator: "Preserved content.md, line 195 (goal of autonomous action on routine outages; oncall duty is not a thing of the past)"
+    locator: Preserved content.md, lines 195
 claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: high
-    confidence_reason: "The article enumerates the boundary: Sevbot proposes mitigations and never executes any; an engineer commands the application."
+    confidence: medium
+    confidence_reason: "The article says Sevbot proposes mitigations and that an engineer can tell it to apply one. This supports an engineer-controlled mitigation path; the source's 'never executes any' wording is read as a limit on autonomous execution."
     valid_at: "2026-09"
   architecture.sandbox:
     kind: inference
@@ -145,5 +147,6 @@ claim_metadata:
     kind: fact
     provenance: reported
     confidence: high
-    confidence_reason: "The stated goal and the current on-call state are reported directly."
-    valid_at: "2026-09"
+    confidence_reason: The source explicitly contrasts the hoped-for autonomous response with the continuing
+      on-call requirement, so the goal must not read as current behavior.
+    valid_at: 2026-09

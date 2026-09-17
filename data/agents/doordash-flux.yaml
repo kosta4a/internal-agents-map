@@ -62,21 +62,23 @@ primitives:
 - name: DataExplorer
   desc: Identifies schemas, generates grounded SQL, validates via EXPLAIN before execution
 - name: Maturity model
-  desc: Workflows → agents → deep-agent hierarchies → swarms; governance hardens as control decentralizes
+  desc: Deterministic workflows and single agents are in use; deep agents are being developed and tested; swarms
+    remain research
 key_metrics:
 - 130,000 engineering tasks automated in one month
 - 25,000+ automated code reviews per week
 - 300+ playbooks; 10,000+ invocations per week
 lessons_learned:
-- Start narrow to earn trust; began with automated code review before CI triage, on-call, maintenance, ticket-driven
-  dev
-- Make the work visible; public Slack threads drove adoption; private per-run channels did not build team habits
-- Playbooks need enablement; workshops and hackathons turn repeated operational work into reusable playbooks
-- Earn complexity by exhausting simpler primitives first; keep swarms at the research frontier until governance
-  catches up
-- Deterministic verification before probabilistic judgment; SQL linting and EXPLAIN before deeper validation; LLM-as-judge
-  + DeepEval
-- Log provenance so any answer traces back to source queries, documents, and inter-agent activity
+- DoorDash first used Flux for code review, then expanded into CI triage, on-call work, maintenance, and ticket-driven
+  development.
+- DoorDash credits a move from private run channels to public Slack threads with helping teams learn to use
+  Flux.
+- DoorDash ran workshops and hackathons to help teams turn recurring operational tasks into Flux playbooks.
+- DoorDash reports deterministic workflows and single agents in use, deep agents under development, and swarms
+  as research on its analytical platform.
+- DoorDash's analytical platform uses SQL linting and EXPLAIN checks, with separate model judges for response
+  quality.
+- DoorDash describes recording the queries, documents, and agent interactions behind an analytical answer.
 sources:
 - id: doordash-flux-source-1
   title: Delegating Engineering Work To Cloud-Based Agents (Flux)
@@ -165,6 +167,7 @@ evidence:
   primitives.4:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 66
   key_metrics.0:
   - source_id: doordash-flux-source-1
     relation: supports
@@ -180,21 +183,27 @@ evidence:
   lessons_learned.0:
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Preserved content.md, lines 85
   lessons_learned.1:
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Preserved content.md, lines 86
   lessons_learned.2:
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Preserved content.md, lines 87
   lessons_learned.3:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 58-66
   lessons_learned.4:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 80-82
   lessons_learned.5:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 94
   architecture.interfaces:
   - source_id: doordash-flux-source-3
     relation: supports
@@ -207,35 +216,41 @@ claim_metadata:
       of agent output.
     valid_at: '2025-11-11'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The Flux retrospective lists the initial workflow and later uses; the sequence alone does
+      not prove that this rollout order caused adoption.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The authors describe the visibility change and its observed adoption pattern, without
+      a controlled comparison of channel choices.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The retrospective names these activities and the work they supported, rather than reporting
+      that a playbook library appeared automatically.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The architecture article distinguishes these deployment stages. Its swarm discussion identifies
+      governance and explainability as unresolved work.
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The validation sections distinguish query checks from LLM-as-judge and DeepEval assessments;
+      a valid query is not proof of a correct business answer.
   lessons_learned.5:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The provenance discussion names these records as the audit trail; recording them does
+      not itself establish that the answer is correct.
   headline_metric:
     metric_scope: Engineering tasks automated in one reported month; calendar measurement month unspecified
     valid_at: '2026-08-11'

@@ -36,15 +36,18 @@ primitives:
 - name: Director's Journal
   desc: 'Structured working memory: findings, decisions, questions, hypotheses'
 - name: Critic's Review
-  desc: A truth filter with credibility scores over submitted findings
+  desc: A model critiques submitted findings, inspects cited evidence, and assigns credibility scores
 - name: Critic's Timeline
-  desc: A chronological, deduped, conflict-resolved synthesis retained across steps
+  desc: A model consolidates a timeline, removes duplicate events, and weighs conflicting findings between rounds
 key_metrics:
 - Handles multi-agent runs spanning hundreds of requests and megabytes of output
 lessons_learned:
-- Don't pass all information at every step; build structured summaries agents can reliably build on
-- Separate expert agents (produce) from critic agents (evaluate); corroborated findings are prioritized
-- Context management becomes its own subsystem once runs get long
+- Slack passes a director journal, reviewed findings, and a consolidated timeline between investigation rounds
+  instead of forwarding the full message history.
+- Slack's Experts gather evidence; a Critic checks their findings and can inspect the original tool calls and
+  results.
+- Slack's context channels preserve information across investigation rounds, but the report does not establish
+  recovery after a worker restart.
 sources:
 - id: slack-context-system-source-1
   title: Managing context in long-running agentic applications
@@ -110,13 +113,11 @@ evidence:
   primitives.1:
   - source_id: slack-context-system-source-1
     relation: supports
-  - source_id: slack-context-system-source-2
-    relation: supports
+    locator: Preserved content.md, lines 119-142
   primitives.2:
   - source_id: slack-context-system-source-1
     relation: supports
-  - source_id: slack-context-system-source-2
-    relation: supports
+    locator: Preserved content.md, lines 196-226
   key_metrics.0:
   - source_id: slack-context-system-source-1
     relation: supports
@@ -127,18 +128,15 @@ evidence:
   lessons_learned.0:
   - source_id: slack-context-system-source-1
     relation: supports
-  - source_id: slack-context-system-source-2
-    relation: supports
+    locator: Preserved content.md, lines 36-42,272
   lessons_learned.1:
   - source_id: slack-context-system-source-1
     relation: supports
-  - source_id: slack-context-system-source-2
-    relation: supports
+    locator: Preserved content.md, lines 119-142,172-176
   lessons_learned.2:
   - source_id: slack-context-system-source-1
     relation: supports
-  - source_id: slack-context-system-source-2
-    relation: supports
+    locator: Preserved content.md, lines 272-284
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -148,20 +146,23 @@ claim_metadata:
       attention boundary.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The context article enumerates the three channels and explicitly says no other message
+      history is passed forward.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The review-tools section describes both responsibilities and the Critic's access to evidence.
+      The Critic is still a model and can make errors.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The source describes what is passed between invocations, without documenting a durable
+      session or recovery protocol; the state rubric therefore remains unknown.
   headline_metric:
     metric_scope: Complex security investigations requiring tailored multi-agent context; qualitative workload scale
   key_metrics.0:

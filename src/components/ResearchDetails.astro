@@ -6,9 +6,13 @@ import type { ClaimView } from '../lib/entry-view';
 
 interface Props {
   claims: readonly ClaimView[];
+  researchOnlyClaims?: readonly ClaimView[];
+  aliasRelations?: readonly { readonly claim: ClaimView; readonly target: ClaimView; readonly reason: string }[];
 }
 
-const { claims } = Astro.props;
+const { claims, researchOnlyClaims = [], aliasRelations = [] } = Astro.props;
+const researchOnly = new Set(researchOnlyClaims.map((claim) => claim.id));
+const aliasById = new Map(aliasRelations.map((item) => [item.claim.id, item]));
 ---
 <details class="claim-details">
   <summary>
@@ -18,7 +22,20 @@ const { claims } = Astro.props;
   <ol class="ledger">
     {claims.map((claim) => (
       <li>
-        <a class="ledger-title" href={`#${claim.anchor}`}>{claim.label}</a>
+        {researchOnly.has(claim.id) ? (
+          <div id={claim.anchor} data-claim-id={claim.id} class="research-only-claim">
+            <strong>{claim.label}</strong>
+            <p>{claim.text}</p>
+            {aliasById.get(claim.id) && (
+              <p>
+                Duplicate representation of <a href={`#${aliasById.get(claim.id)!.target.anchor}`}>{aliasById.get(claim.id)!.target.label}</a>.{' '}
+                {aliasById.get(claim.id)!.reason}
+              </p>
+            )}
+          </div>
+        ) : (
+          <a class="ledger-title" href={`#${claim.anchor}`}>{claim.label}</a>
+        )}
         <dl>
           <dt>Statement type</dt>
           <dd>{claim.kindLabel}</dd>

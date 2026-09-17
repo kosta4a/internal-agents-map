@@ -8,7 +8,7 @@ This page summarizes reported operating practices in the catalog. These reports 
 
 These observations draw on 40 catalog entries. The entry is the counting unit; platforms and components can both appear. The evidence is uneven, and most sources are company reports.
 
-21 entries list Slack as an interface. The entry autonomy distribution is 21 `drafts-reviewed`, 7 `human-in-loop`, 7 `autonomous`, 1 `assistive`, and 4 `unknown`.
+24 entries list Slack as an interface. The entry autonomy distribution is 21 `drafts-reviewed`, 7 `human-in-loop`, 7 `autonomous`, 1 `assistive`, and 4 `unknown`.
 
 <!-- END ADOPTION SNAPSHOT -->
 
@@ -50,15 +50,16 @@ The catalog contains activity metrics, adoption metrics, and outcome metrics. Th
 
 - Sessions and tool calls show use.
 - Created pull requests show output.
-- Accepted changes and action rates show that a person used the output.
+- Accepted changes show that output entered a workflow, sometimes through automatic merging.
+- Comment action rates describe how authors responded to published findings.
 - Cycle time and incident results can show an operational effect.
 - Review time and escaped defects can show hidden cost.
 
-Sierra distinguishes use from value in its report. DoorDash reports action rates for review findings. Replit reports output with review, revert, and incident measures. These examples support a broader metric set. They do not make the reported measurements independent.
+Sierra reports session activity alongside examples of changed work. DoorDash reports action rates for review findings. Replit reports output with review, revert, and incident measures. These examples support a broader metric set. They do not make the reported measurements independent.
 
 ## Expect work to move
 
-Spotify reports that increased coding output added review pressure. Harvey reports more emphasis on review, prioritization, and coordination as implementation becomes faster.
+Spotify reports that increased coding output added review pressure. Harvey identifies coordination, retained context, and ownership as challenges when people and agents share work; its report does not quantify a shift in review effort.
 
 When one step speeds up, inspect the next step. Track waiting time, review effort, rework, and operational failures. A higher output count alone does not show a better process.
 

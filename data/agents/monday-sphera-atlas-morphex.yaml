@@ -27,8 +27,9 @@ rubric:
   state: mixed
   identity: dedicated-agent
   evidence_strength: secondary-only
-summary: An internal agent system on Amazon Bedrock where agents have identities, managers, scopes, and performance
-  scores; Atlas ships features, Morphex ships PRs autonomously.
+summary: An internal agent system on Amazon Bedrock with agent identities, assigned managers, and evaluation
+  scores. Atlas prepares feature changes; Morphex can merge and ship changes that pass the required checks
+  without human review.
 headline_metric: 'Morphex: 19 of 20 PRs merge without human review'
 architecture:
   sandbox: Amazon EKS, one pod per active session; a remote sandbox tests each PR before review; EFS workspace mount
@@ -62,11 +63,14 @@ key_metrics:
 - Per-engineer PR throughput increased by more than 50%
 - Guardrails catches ~25% of agent PRs before human review; low single-digit revert rate
 lessons_learned:
-- Evals from day one; should have been day one, not month nine
-- monday.com chose file-based memory (MEMORY.md and daily diaries) instead of vector retrieval for these agents
-- Remote-sandbox every PR before human review, with production-traffic replay
-- The existing auth/identity/deploy pipeline applies to agents; reuse it
-- AI engineering is building the feedback loops that let imperfect agents be trusted safely
+- monday.com says it introduced evaluations too late, after growing PR volume made informal review inadequate.
+- monday.com replaced unsuccessful transcript retrieval experiments with per-agent MEMORY.md files and daily
+  diaries read at session start.
+- monday.com added remote sandbox checks and production-traffic replay after Atlas changes passed local tests
+  but failed in CI.
+- Morphex uses the same repository, CI, Guardrails checks, and revert protocols as monday engineers.
+- monday.com uses blocking automated reviewers for engineering standards and feeds evaluation results back
+  into the agent harness.
 sources:
 - id: monday-sphera-atlas-morphex-source-1
   title: 'AI Teammates: how monday.com runs production AI agents on Amazon Bedrock'
@@ -94,6 +98,7 @@ evidence:
   summary:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 114-130,150
   headline_metric:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
@@ -150,18 +155,23 @@ evidence:
   lessons_learned.0:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 114-116,188
   lessons_learned.1:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 118-120
   lessons_learned.2:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 122-124
   lessons_learned.3:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 150
   lessons_learned.4:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
+    locator: Preserved content.md, lines 116,128-130
   architecture.interfaces:
   - source_id: monday-sphera-atlas-morphex-source-1
     relation: supports
@@ -183,30 +193,35 @@ claim_metadata:
       two quarters.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
-  lessons_learned.1:
     kind: opinion
     provenance: reported
     confidence: medium
-    confidence_reason: The case study reports monday.com's choice and rationale for its own agents; it does not compare that design with vector retrieval in other workloads.
+    confidence_reason: The authors describe replacing a looks-fine standard with deterministic metrics and model-scored
+      evaluations, and explicitly regret waiting until month nine.
+  lessons_learned.1:
+    kind: fact
+    provenance: reported
+    confidence: medium
+    confidence_reason: The memory section describes failed context stuffing and vector retrieval for Atlas, then
+      names the file lifecycle. It does not compare retrieval methods on other workloads.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The sandbox section states the observed failure and the checks run before Atlas requests
+      human review.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The Morphex section names the shared controls and says automatic merges depend on passing
+      the gates.
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The article describes the evaluation feedback and Guardrails reviewers separately; these
+      mechanisms do not guarantee that every accepted change is safe.
   headline_metric:
     metric_scope: Morphex PRs that merge automatically after CI and Guardrails pass
     denominator: Morphex pull requests; sample size and period not supplied

@@ -67,12 +67,12 @@ primitives:
     termination, and the spec is open source
 key_metrics: []
 lessons_learned:
-- Treat generated code like an ML model snapshot; judge it only by externally observable
-  behavior and never by semantic inspection of the source
-- The seed, validation harness, and feedback loop run until the holdout scenarios pass
-  and stay passing
-- Tokens are the fuel; if the factory has not spent at least $1,000 on tokens per human
-  engineer in a day, it has room for improvement
+- StrongDM advocates evaluating generated code through observable behavior while treating its internal structure
+  as opaque.
+- StrongDM describes a specification, validation harness, and feedback loop that stops when holdout scenarios
+  pass and remain passing.
+- StrongDM proposes spending at least $1,000 in tokens per human engineer per day as an operating benchmark
+  for its software factory.
 sources:
 - id: strongdm-factory-overview
   title: "Software Factories And The Agentic Moment"
@@ -242,15 +242,15 @@ evidence:
   lessons_learned.0:
   - source_id: strongdm-factory-techniques
     relation: supports
-    locator: "Code treated like an ML model snapshot, opaque and judged by externally observable behavior"
+    locator: Preserved content.md, lines 45
   lessons_learned.1:
   - source_id: strongdm-factory-principles
     relation: supports
-    locator: "Termination condition"
+    locator: Preserved content.md, lines 12-34
   lessons_learned.2:
   - source_id: strongdm-factory-overview
     relation: supports
-    locator: "Token spend benchmark"
+    locator: Preserved content.md, lines 23
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -273,15 +273,18 @@ claim_metadata:
     kind: opinion
     provenance: reported
     confidence: high
-    confidence_reason: "The team states this stance directly on the Techniques page."
+    confidence_reason: The techniques page explicitly compares code with an opaque model snapshot; this is a
+      stated evaluation philosophy, not proof that source review has no value.
   lessons_learned.1:
-    kind: opinion
+    kind: fact
     provenance: reported
     confidence: high
-    confidence_reason: "The team states the termination condition directly on the Principles page."
+    confidence_reason: The principles page states the loop and termination condition. It does not document who
+      handles a run that fails to converge.
   lessons_learned.2:
     kind: opinion
     provenance: reported
     confidence: high
-    confidence_reason: "A stated benchmark for factory operation, not a measured result."
-    valid_at: "2026-02"
+    confidence_reason: The overview presents the amount as a principle, without cost-benefit measurements that
+      would justify it as a target for other teams.
+    valid_at: 2026-02

@@ -30,6 +30,17 @@ summary: Custom Agents is Notion's platform for building agents in a Notion work
   first. Staff in IT ticketing, supply chain procurement, and recruiting build their own agents. One early
   internal agent triages bugs posted in Slack into task-database entries.
 headline_metric: More than 3,000 internal Custom Agents by end of alpha testing
+architecture:
+  harness: Shared Custom Agents harness with team-owned tools and evaluations
+  tool_access: Agents start without access; owners grant resource and tool permissions for the intended work
+  interfaces: [slack]
+  knowledge: Workspace pages and connected resources granted to the individual agent
+  credentials: Deterministic resource and action permissions; risky runtime actions require owner confirmation
+  context_mgmt: Tool definitions and progressive disclosure expose capabilities as needed
+primitives:
+- {name: Slack bug-triage agent, desc: "A documented internal agent receives a bug posted in Slack, routes it to the responsible team, creates a task-database entry, and replies in the triggering channel"}
+- {name: Default-deny permission model, desc: Each Custom Agent starts without access to most resources and receives explicit page, integration, tool, and action permissions}
+- {name: Risk confirmation and remediation, desc: Potentially risky runtime actions pause for confirmation from the agent owner, who can also delete an incorrect Slack message}
 key_metrics:
 - More than 3,000 internal Custom Agents by end of alpha testing
 - Notion's security team is one of the most active internal users
@@ -71,6 +82,24 @@ evidence:
   - source_id: notion-custom-agents-source-2
     relation: supports
     locator: Preserved content.md, lines 51
+  architecture.harness:
+  - {source_id: notion-custom-agents-source-1, relation: supports, locator: 'Preserved content.md, lines 405, 609'}
+  architecture.tool_access:
+  - {source_id: notion-custom-agents-source-2, relation: supports, locator: 'Preserved content.md, lines 22–37'}
+  architecture.interfaces:
+  - {source_id: notion-custom-agents-source-1, relation: supports, locator: 'Preserved content.md, line 609'}
+  architecture.knowledge:
+  - {source_id: notion-custom-agents-source-2, relation: supports, locator: 'Preserved content.md, lines 30–37'}
+  architecture.credentials:
+  - {source_id: notion-custom-agents-source-2, relation: supports, locator: 'Preserved content.md, lines 22–45'}
+  architecture.context_mgmt:
+  - {source_id: notion-custom-agents-source-1, relation: supports, locator: 'Preserved content.md, lines 707–717'}
+  primitives.0:
+  - {source_id: notion-custom-agents-source-1, relation: supports, locator: 'Preserved content.md, line 609'}
+  primitives.1:
+  - {source_id: notion-custom-agents-source-2, relation: supports, locator: 'Preserved content.md, lines 22–37'}
+  primitives.2:
+  - {source_id: notion-custom-agents-source-2, relation: supports, locator: 'Preserved content.md, lines 41–47'}
   key_metrics.0:
   - source_id: notion-custom-agents-source-2
     relation: supports
@@ -114,3 +143,31 @@ claim_metadata:
     confidence: medium
     confidence_reason: Participants give differing approximate rebuild counts for harness, framework, and feature;
       not a precise engineering inventory.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [notion-custom-agents-source-1, notion-custom-agents-source-2]
+  workflow_scope: Internal Slack bug report → routed task-database entry
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.0]}
+    human_involvement: {state: reported, claim_paths: [primitives.2]}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.tool_access, architecture.interfaces, architecture.knowledge, architecture.credentials, architecture.context_mgmt]}
+    validation: {state: reported, claim_paths: [primitives.2]}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2]}
+    lessons: {state: unreported, claim_paths: [], note: The record contains no separate lessons claim after review of both captures.}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: The captures do not identify one model for this representative workflow.}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: Execution isolation for the representative workflow is not documented.}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: reported, claim_paths: [architecture.credentials]}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: workflow, primitives.1: mechanism, primitives.2: validation}
+  observations:
+    headline_metric: {category: implementation-scale, basis: reported-measurement, subject: Internal Custom Agents at the end of alpha testing}
+    key_metrics.0: {duplicate_of: headline_metric, reason: "Same count, population, period, and qualification as the headline observation."}
+    key_metrics.1: {category: adoption-output, basis: qualitative, subject: Notion security team's internal Custom Agent use}
+    key_metrics.2: {category: implementation-scale, basis: estimate, subject: Rebuilds of Notion's agent harness and framework}

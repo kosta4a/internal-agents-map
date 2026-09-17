@@ -19,7 +19,7 @@ The catalog currently contains 40 entries. These are catalog classifications, no
 | Supporting pattern | 2 |
 
 - 15 entries document a concrete execution environment.
-- 21 entries list Slack as an interface.
+- 24 entries list Slack as an interface.
 - State duration is unknown for 24, durable-session for 8, cross-session-memory for 3, mixed for 4, and run-only for 1 approaches.
 - Autonomy is classified as drafts-reviewed for 21, human-in-loop for 7, autonomous for 7, assistive for 1, and unknown for 4 approaches.
 
@@ -57,7 +57,7 @@ Some entries document a concrete execution environment. Reported examples includ
 
 The remaining entries either omit the detail or describe no separate execution environment. This absence is an evidence gap. It is not proof that no isolation exists.
 
-Several reported designs separate durable work state from temporary compute. Sierra keeps conversation state and checkpoints outside its runners. WorkOS separates its orchestrator from its containers. Spotify runs work in constrained Kubernetes containers. These examples support a useful comparison question: what survives when a worker stops?
+Several reported designs separate durable work state from temporary compute. Shopify stores session identity and an event log in Postgres while replacing idle workers. Sierra restores runner state from checkpoints and ordered events. Sentry pauses near a serverless deadline and queues a continuation. The saved record determines what can resume: a conversation, workspace files, and completed actions in external systems require different recovery mechanisms.
 
 ## Harnesses and model choice
 
@@ -125,7 +125,7 @@ The catalog adapts [Dan Shapiro's five levels of AI-assisted software developmen
 
 The workflow is always the unit of assessment. For example, an autonomous pull-request approval step can use exception-only supervision without making the organization's complete software process a dark factory. Broad platforms remain unclassified when their sources do not identify one consistent attention boundary.
 
-The current sample is strongly Level 3-shaped: most documented workflows return work products, diffs, or pull requests to people for review. monday.com's Atlas/Morphex workflow is the clearest Level 4 case in the current evidence. WorkOS Project Horizon returns work products for review, while PostHog StampHog reaches an exception-only boundary only within its narrowly scoped eligible-pull-request approval workflow.
+Work-product review is the most common documented boundary in this sample. WorkOS Project Horizon returns changes to people for review. monday.com's Morphex has an exception-only boundary for its automatic merge workflow; Atlas remains unknown because the source mixes a human-review workflow with plans for confidence-based automatic merging. PostHog StampHog also has an exception-only boundary, scoped to eligible-pull-request approval. These examples describe separate workflows, even when they share a company or platform.
 
 ## Metrics
 

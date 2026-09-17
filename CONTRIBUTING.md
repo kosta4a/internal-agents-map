@@ -148,6 +148,17 @@ retention, and takedown rules.
 - Preserve conflicting reports when they refer to different dates or methods.
 - Do not treat an undocumented field as evidence that a feature is absent.
 - Never assign an operating level without naming the workflow scope. Treat it as a dated catalog judgment, not a reported company fact.
+- Review each lesson against a specific source passage. Describe a reported practice as
+  `fact`/`reported`, attribute a team's preference as `opinion`/`reported`, and reserve
+  `inference`/`catalog-judgment` for an actual catalog inference.
+- Explain what supports that particular claim in `confidence_reason`, including the
+  unresolved step when there is one. Rewording a shared disclaimer is not a review.
+  Add a locator to the supporting passage and keep advice bounded to its reported case.
+- When adopting `page_content`, read every listed source and answer all seven reader
+  questions plus all eight architecture fields. Use `reported`, `unreported`,
+  `not-applicable`, or `not-reviewed` as defined in `data/schema.md`; keep a next action
+  for unfinished review. Classify primitives by workflow role and observations by
+  category, basis, and subject. Confirm duplicate observations manually.
 
 When you edit `docs/patterns.md` or `docs/adoption-lessons.md`, compare similar approach types and deployment stages. State the sample size. Include counterexamples before you call a pattern common.
 

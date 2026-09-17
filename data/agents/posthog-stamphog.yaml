@@ -56,10 +56,12 @@ key_metrics:
   quarter
 - 20% of PRs approved by StampHog in the July 28, 2026 report, at approximately $300 per month in tokens
 lessons_learned:
-- Use deterministic controls for known risks and allow the LLM to make approval stricter, never more permissive
-- Calibrate thresholds and deny categories from repository history rather than treating small diffs as inherently
-  safe
-- Fail closed and preserve retry state when dependencies, credentials, or concurrent reviewer bots are unavailable
+- StampHog's deterministic eligibility gates remain authoritative; its model reviewer can impose stricter conditions
+  but cannot relax those gates.
+- PostHog calibrated StampHog's thresholds and deny categories against repository history, including small
+  changes with sensitive effects.
+- StampHog withholds approval on backend errors or pending reviewer-bot work and retains its label so a later
+  push can retry.
 sources:
 - id: posthog-stamphog-source-1
   title: Stop being the code review bottleneck
@@ -175,16 +177,15 @@ evidence:
   lessons_learned.0:
   - source_id: posthog-stamphog-source-3
     relation: supports
-    locator: commit 988c9031bb93c74bafcdfb670c01497c79a4f644, tools/pr-approval-agent/README.md, How it works
+    locator: Preserved content.md, lines 119-125
   lessons_learned.1:
   - source_id: posthog-stamphog-source-3
     relation: supports
-    locator: commit 988c9031bb93c74bafcdfb670c01497c79a4f644, tools/pr-approval-agent/README.md, Tiers and Empirical
-      basis
+    locator: Preserved content.md, lines 202-214
   lessons_learned.2:
   - source_id: posthog-stamphog-source-3
     relation: supports
-    locator: commit 988c9031bb93c74bafcdfb670c01497c79a4f644, tools/pr-approval-agent/README.md, Usage
+    locator: Preserved content.md, lines 19
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -233,17 +234,20 @@ claim_metadata:
     denominator: PostHog PRs in the report's scope
     measurement_method: Company-reported production usage and token spend
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The source code explicitly implements and documents this safety invariant.
+    confidence_reason: The pinned implementation documents that direction of authority explicitly. Passing a
+      gate alone is not a model approval.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The source code documents calibration against historical approval outcomes.
+    confidence_reason: The empirical-basis section names the historical PR sample and explains why size alone
+      cannot determine eligibility.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The source code explicitly documents fail-closed and retry behavior.
+    confidence_reason: The usage section distinguishes ERROR and WAIT from substantive refusals, retaining the
+      trigger label without granting approval.

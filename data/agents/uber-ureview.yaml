@@ -58,9 +58,11 @@ key_metrics:
 - Approximately 1,500 developer hours reportedly saved per week, based on an assumed 10-minute second review per
   processed commit
 lessons_learned:
-- Prefer fewer high-confidence findings over high comment volume
-- Combine prompts with deterministic filtering, deduplication, evaluation, and feedback instrumentation
-- Roll out gradually by team and assistant while tracking precision, recall, usefulness, and false positives
+- Uber favors fewer useful review comments and suppresses categories that engineers consistently rate poorly.
+- uReview uses separate stages to generate, grade, filter, and consolidate comments, then records developer
+  feedback.
+- Uber introduced uReview by team or assistant, tracking benchmark precision and recall alongside addressed
+  comments and reported false positives.
 sources:
 - id: uber-ureview-source-1
   title: 'uReview: Scalable, Trustworthy GenAI for Code Review at Uber'
@@ -151,15 +153,15 @@ evidence:
   lessons_learned.0:
   - source_id: uber-ureview-source-1
     relation: supports
-    locator: Precision Is More Valuable than Volume
+    locator: Preserved content.md, lines 128-140
   lessons_learned.1:
   - source_id: uber-ureview-source-1
     relation: supports
-    locator: Guardrails Are Just as Important as Prompts
+    locator: Preserved content.md, lines 132-138
   lessons_learned.2:
   - source_id: uber-ureview-source-1
     relation: supports
-    locator: Trust Grows with Gradual Rollout
+    locator: Preserved content.md, lines 146-148
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -231,17 +233,20 @@ claim_metadata:
     denominator: Over 10,000 commits per week
     measurement_method: Processed commits multiplied by an assumed 10 minutes for a second human review
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: high
-    confidence_reason: The article states this lesson directly and documents the associated mechanisms.
+    confidence_reason: The precision section describes confidence ratings, category pruning, and duplicate removal.
+      The preference is specific to uReview's reported feedback.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The article states this lesson directly and documents the pipeline.
+    confidence_reason: The guardrail and feedback sections name those stages and the rating and addressed-comment
+      signals; they do not claim every stage is deterministic.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The article states this lesson directly and describes the rollout telemetry.
+    confidence_reason: The rollout section names the release units, measures, and threshold adjustments used
+      for go/hold decisions.

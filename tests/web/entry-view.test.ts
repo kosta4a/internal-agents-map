@@ -25,12 +25,15 @@ describe('every entry', () => {
       const placed = new Set([
         ...(entry.summary ? [entry.summary.id] : []),
         ...entry.workflowClaims.map((claim) => claim.id),
+        ...entry.mechanismClaims.map((claim) => claim.id),
+        ...entry.validationClaims.map((claim) => claim.id),
         ...entry.supervisionClaims.map((claim) => claim.id),
         ...entry.architectureClaims.map((claim) => claim.id),
         ...entry.metricClaims.map((claim) => claim.id),
         ...entry.resultStatementClaims.map((claim) => claim.id),
         ...entry.lessonClaims.map((claim) => claim.id),
         ...entry.otherClaims.map((claim) => claim.id),
+        ...entry.researchOnlyClaims.map((claim) => claim.id),
       ]);
       expect(placed.size).toBe(approach.claim_ids.length);
       expect([...placed].sort()).toEqual([...approach.claim_ids].sort());
@@ -304,6 +307,37 @@ describe('a supporting system', () => {
     const entry = entryView(catalog, 'plaid-internal-mcp-server');
     expect(entry.workflowClaims.length).toBe(0);
     expect(entry.supportingSystemNote).toContain('no execution workflow');
+  });
+});
+
+describe('page-content pilot reading model', () => {
+  const ids = ['github-qubot', 'notion-custom-agents', 'microsoft-prassistant', 'doordash-code-review', 'ycombinator-agent-infra'];
+
+  it('uses explicit workflow roles and preserves primitive names', () => {
+    for (const id of ids) {
+      const entry = entryView(catalog, id);
+      expect(entry.isPilot).toBe(true);
+      expect(entry.workflowScope).toBeTruthy();
+      expect(entry.workflowClaims.length).toBeGreaterThan(0);
+      for (const claim of entry.workflowClaims) expect(claim.displayName).toBeTruthy();
+    }
+    expect(entryView(catalog, 'doordash-code-review').mechanismClaims.map((claim) => claim.field)).toContain('primitives.0');
+  });
+
+  it('separates validation, lessons, canonical observations, and aliases', () => {
+    expect(entryView(catalog, 'github-qubot').validationClaims.length).toBeGreaterThan(0);
+    const notion = entryView(catalog, 'notion-custom-agents');
+    expect(notion.aliasObservationClaims.map((claim) => claim.field)).toEqual(['key_metrics.0']);
+    expect(notion.canonicalObservationClaims.map((claim) => claim.field)).not.toContain('key_metrics.0');
+    const yc = entryView(catalog, 'ycombinator-agent-infra');
+    expect(yc.canonicalObservationClaims).toHaveLength(0);
+    expect(yc.lessonClaims.length).toBeGreaterThan(0);
+  });
+
+  it('keeps legacy entries on their existing path', () => {
+    const legacy = entryView(catalog, 'block-builderbot');
+    expect(legacy.isPilot).toBe(false);
+    expect(legacy.researchOnlyClaims).toEqual([]);
   });
 });
 

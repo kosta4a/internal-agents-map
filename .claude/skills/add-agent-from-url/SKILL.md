@@ -28,6 +28,18 @@ the work. Classify structural type separately from invocation: the first identif
 system, while the second identifies how work starts or proceeds. Keep metric scopes, dates,
 denominators, and methods where reported.
 
+For each lesson, locate the supporting passage and distinguish a reported practice,
+an attributed opinion, and a catalog inference in both wording and claim metadata.
+Write a claim-specific confidence reason that identifies the evidence and any
+unsupported step. Do not turn a company's preference into general advice or reuse
+one confidence disclaimer across unrelated lessons.
+
+When the record opts into `page_content`, review the seven reader questions and all
+eight architecture fields against the captures actually read. Record explicit review
+states, a named workflow scope, primitive roles, and observation category/basis/subject.
+Leave a concrete next action for `not-reviewed`; never infer `unreported` from a blank
+legacy field. Confirm duplicate representations have identical scope and qualifications.
+
 Search `data/agents/` with `rg` for the organization, system, and aliases before choosing Add.
 A matching system calls for Update, not a duplicate or exclusion.
 

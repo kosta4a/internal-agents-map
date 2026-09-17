@@ -15,7 +15,8 @@ verification gate, and update the status row when finished.
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
 | [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
 | [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
-| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; initial release `15bacb9` and reconciled follow-up `b6ae5c4` published 2026-09-16; CI and production checks passed |
+| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; editorial follow-up included with the approved Plan 009 merge. Earlier releases: `15bacb9`, `b6ae5c4` |
+| [009](009-agent-page-content-pilot.md) | Pilot a shared content standard on five agent pages | P1 | L | 008 editorial follow-up | DONE; user approved merge to main on 2026-09-17 |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -43,6 +44,10 @@ sheet is recorded in the plan.
 
 ## Dependency notes
 
+- Plan 009 builds on the existing uncommitted 2026-09-17 editorial follow-up. It pilots
+  coverage states, operational workflows, observations, and export parity on Qubot,
+  Notion, Microsoft's reviewer, DoorDash's reviewer, and YC. Its working-tree baseline
+  is recorded under `plans/009-*`; inherited edits must be preserved and kept distinct.
 - Plan 008 covers all nine findings from the 2026-09-16 content review. Evidence
   corrections precede taxonomy, generated summaries, lessons, notes, and reader
   guidance. Implementation and publication were authorized after the proposal;
@@ -145,6 +150,24 @@ worktrees and both release branches were removed after confirming that their wor
 was integrated or preserved in verified local recovery bundles. Both redundant
 stashes were retired after the successful CI and production checks. `DESIGN.md`
 and the original audit HTML were verified byte-identical to the backed-up originals.
+
+## Plan 008 editorial follow-up
+
+The implementation audit at `e10443b` found unresolved lesson reasoning, repetitive
+notes, stale monday.com supervision prose, and unsupported advice. The local follow-up
+reviews all 100 lessons, all 40 summaries and their components, and all seven notes
+against preserved evidence. Lessons now carry claim-specific explanations and source
+locators; notes use three distinct diagrams, a comparison table, or prose as appropriate.
+The [follow-up review](../docs/lesson-review-2026-09.md) records the editorial decisions
+and the 100-lesson passage inventory.
+
+On 2026-09-17, `npm run verify` passed with 147 Vitest, 14 Node, 196 Python, and 304 browser tests,
+plus 38 expected skips. Desktop and mobile visual review covered the revised diagrams
+and table. Counts are 40 approaches, 35 organizations, 590 claims, 107 source
+captures, 52 built pages, and 51 canonical routes. Removing Spotify's unsupported
+credentials field accounts for the one fewer claim. The archives remain unchanged.
+These changes are included with the user-approved Plan 009 merge to main.
+The production checks in the earlier release record apply to those earlier revisions.
 
 ## Verification history
 

@@ -50,11 +50,9 @@ key_metrics:
 - ~1,500 pull requests merged per week (~15% of all production code changes at Block)
 - '"What used to take months now takes days"'
 lessons_learned:
-- Concentrate investment on orchestration, context, and the environment; let engineers focus on the problems worth
-  solving
-- 'Meet people in Slack: tag @builderbot with a short description and it works in the thread'
-- Multi-player real-time collaboration lets humans steer research, planning, and implementation rather than only
-  reviewing after the fact
+- Block's engineering lead credits Builderbot with handling scaffolding while engineers make product decisions.
+- A Slack mention starts Builderbot in the existing thread, where colleagues can follow the work.
+- Several people can steer Builderbot while it researches, plans, and implements a change.
 sources:
 - id: block-builderbot-source-1
   title: Block rolls out Builderbot, a new suite of AI-native tools that changes the way we ship
@@ -170,12 +168,15 @@ evidence:
   lessons_learned.0:
   - source_id: block-builderbot-source-1
     relation: supports
+    locator: Preserved content.md, lines 26
   lessons_learned.1:
   - source_id: block-builderbot-source-1
     relation: supports
+    locator: Preserved content.md, lines 16
   lessons_learned.2:
   - source_id: block-builderbot-source-1
     relation: supports
+    locator: Preserved content.md, lines 16
   architecture.interfaces:
   - source_id: block-builderbot-source-1
     relation: supports
@@ -187,20 +188,23 @@ claim_metadata:
     confidence_reason: The source explicitly describes end-to-end implementation ending in a reviewed pull request.
     valid_at: '2026-06-21'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: Brad Axen describes this division of work in the launch post; his account does not isolate
+      its effect on delivery time.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The launch post describes tagging @builderbot with a task and working in that same Slack
+      thread.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The reported collaboration happens during execution, so it includes more than a final
+      artifact review.
   architecture.sandbox:
     kind: inference
     provenance: catalog-judgment

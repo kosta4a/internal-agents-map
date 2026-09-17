@@ -93,3 +93,13 @@ claim_metadata:
     metric_scope: "The work measured by this metric"
     denominator: "The relevant total, when available"
     measurement_method: "The reported collection method, when available"
+
+# Optional pilot contract. Copy the full example from data/schema.md only after reading
+# every source listed in source_ids. Record all seven question states, all eight
+# architecture-field states, every primitive role, and every observation axis. Do not
+# turn a missing value into "unreported" until the source review is complete.
+# page_content:
+#   version: 1
+#   reviewed_at: "2026-08-12"
+#   source_ids: [company-agent-source-1]
+#   workflow_scope: "task input → reviewed output"

@@ -69,6 +69,7 @@ ALLOWED_TOP_LEVEL = REQUIRED | {
     "aliases",
     "family_id",
     "relationships",
+    "page_content",
 }
 ARCHITECTURE_FIELDS = {
     "sandbox",
@@ -80,6 +81,25 @@ ARCHITECTURE_FIELDS = {
     "credentials",
     "context_mgmt",
 }
+PAGE_QUESTIONS = {
+    "purpose",
+    "workflow",
+    "human_involvement",
+    "implementation",
+    "validation",
+    "observations",
+    "lessons",
+}
+REVIEW_STATES = {"reported", "unreported", "not-applicable", "not-reviewed"}
+PRIMITIVE_ROLES = {"workflow", "mechanism", "validation"}
+OBSERVATION_CATEGORIES = {
+    "effectiveness",
+    "adoption-output",
+    "cost-latency",
+    "implementation-scale",
+    "runtime-capacity",
+}
+OBSERVATION_BASES = {"reported-measurement", "qualitative", "estimate", "target"}
 SOURCE_FIELDS = {
     "id",
     "title",
@@ -607,6 +627,136 @@ def validate_evidence(record: dict, filename: str, source_ids: set[str]) -> None
             die(f"{filename}: claim metadata 'value' for {path!r} must be a number or string.")
 
 
+def validate_page_content(record: dict, filename: str, source_ids: set[str]) -> None:
+    """Validate the optional editorial coverage contract against this record's claims."""
+    page = record.get("page_content")
+    if page is None:
+        return
+    page = require_exact_fields(
+        page,
+        {
+            "version",
+            "reviewed_at",
+            "source_ids",
+            "questions",
+            "implementation_fields",
+            "primitive_roles",
+            "observations",
+        },
+        {"workflow_scope"},
+        "page_content",
+        filename,
+    )
+    if page["version"] != 1:
+        die(f"{filename}: page_content.version must be 1.")
+    if not isinstance(page["reviewed_at"], str) or len(page["reviewed_at"]) != 10:
+        die(f"{filename}: page_content.reviewed_at must use YYYY-MM-DD.")
+    validate_date(page["reviewed_at"], "page_content.reviewed_at", filename)
+    require_string_list(page["source_ids"], "page_content.source_ids", filename)
+    reviewed = set(page["source_ids"])
+    if len(reviewed) != len(page["source_ids"]) or reviewed - source_ids:
+        die(f"{filename}: page_content.source_ids must be unique sources belonging to this entry.")
+    claims = claim_fields(record)
+
+    def disposition(value: Any, field: str, allowed_paths: set[str] | None = None) -> dict:
+        value = require_exact_fields(value, {"state", "claim_paths"}, {"note"}, field, filename)
+        if value["state"] not in REVIEW_STATES:
+            die(f"{filename}: {field}.state is invalid.")
+        require_string_list(value["claim_paths"], f"{field}.claim_paths", filename, nonempty=False)
+        paths = value["claim_paths"]
+        if len(paths) != len(set(paths)) or any(path not in claims for path in paths):
+            die(f"{filename}: {field}.claim_paths contains a duplicate or unknown claim path.")
+        if allowed_paths is not None and set(paths) - allowed_paths:
+            die(f"{filename}: {field}.claim_paths contains a claim outside its allowed field.")
+        note = value.get("note")
+        if note is not None and (not isinstance(note, str) or not note.strip()):
+            die(f"{filename}: {field}.note must be a non-empty string when present.")
+        if value["state"] == "reported":
+            if not paths:
+                die(f"{filename}: {field} reported state requires claim_paths.")
+            for path in paths:
+                supports = {
+                    link["source_id"]
+                    for link in record["evidence"][path]
+                    if link.get("relation", "supports") == "supports"
+                }
+                if not supports & reviewed:
+                    die(
+                        f"{filename}: {field} reported claim {path!r} lacks support from a reviewed source."
+                    )
+        elif paths:
+            die(f"{filename}: {field} {value['state']} state requires empty claim_paths.")
+        elif not note:
+            die(f"{filename}: {field} {value['state']} state requires a note.")
+        return value
+
+    questions = page["questions"]
+    if not isinstance(questions, dict) or set(questions) != PAGE_QUESTIONS:
+        die(f"{filename}: page_content.questions must contain exactly the seven reader questions.")
+    for key, value in questions.items():
+        disposition(value, f"page_content.questions.{key}")
+    if questions["workflow"]["state"] == "reported" and (
+        not isinstance(page.get("workflow_scope"), str) or not page["workflow_scope"].strip()
+    ):
+        die(f"{filename}: page_content.workflow_scope is required for a reported workflow.")
+
+    fields = page["implementation_fields"]
+    if not isinstance(fields, dict) or set(fields) != ARCHITECTURE_FIELDS:
+        die(
+            f"{filename}: page_content.implementation_fields must contain all eight architecture fields."
+        )
+    for key, value in fields.items():
+        disposition(value, f"page_content.implementation_fields.{key}", {f"architecture.{key}"})
+
+    roles = page["primitive_roles"]
+    expected_primitives = {f"primitives.{i}" for i, _ in enumerate(record.get("primitives") or [])}
+    if not isinstance(roles, dict) or set(roles) != expected_primitives:
+        die(f"{filename}: page_content.primitive_roles must classify every primitive exactly once.")
+    if any(role not in PRIMITIVE_ROLES for role in roles.values()):
+        die(f"{filename}: page_content.primitive_roles contains an invalid role.")
+    workflow_paths = page["questions"]["workflow"]["claim_paths"]
+    if any(roles.get(path) != "workflow" for path in workflow_paths) or set(workflow_paths) != {
+        path for path, role in roles.items() if role == "workflow"
+    }:
+        die(
+            f"{filename}: workflow claim_paths must name exactly the workflow primitives in reading order."
+        )
+
+    observations = page["observations"]
+    expected_observations = ({"headline_metric"} if record.get("headline_metric") else set()) | {
+        f"key_metrics.{i}" for i, _ in enumerate(record.get("key_metrics") or [])
+    }
+    if not isinstance(observations, dict) or set(observations) != expected_observations:
+        die(f"{filename}: page_content.observations must describe every observation claim.")
+    duplicates: dict[str, str] = {}
+    for path, value in observations.items():
+        value = require_exact_fields(
+            value,
+            set(),
+            {"category", "basis", "subject", "duplicate_of", "reason"},
+            f"page_content.observations.{path}",
+            filename,
+        )
+        if "duplicate_of" in value:
+            target = value["duplicate_of"]
+            if target not in expected_observations or target == path:
+                die(f"{filename}: observation {path!r} has an invalid duplicate target.")
+            if not isinstance(value.get("reason"), str) or not value["reason"].strip():
+                die(f"{filename}: duplicate observation {path!r} requires a reason.")
+            duplicates[path] = target
+        else:
+            if (
+                value.get("category") not in OBSERVATION_CATEGORIES
+                or value.get("basis") not in OBSERVATION_BASES
+            ):
+                die(f"{filename}: observation {path!r} has an invalid category or basis.")
+            if not isinstance(value.get("subject"), str) or not value["subject"].strip():
+                die(f"{filename}: observation {path!r} requires a subject.")
+    for source, target in duplicates.items():
+        if target in duplicates:
+            die(f"{filename}: duplicate observation {source!r} may not form a chain or cycle.")
+
+
 def validate_record(record: dict, path: Path, global_sources: set[str]) -> None:
     filename = path.name
     missing = sorted(REQUIRED - set(record))
@@ -724,6 +874,7 @@ def validate_record(record: dict, path: Path, global_sources: set[str]) -> None:
     if first_source.get("role", "evidence") != "evidence":
         die(f"{filename}: first public evidence must use a source with the evidence role.")
     validate_evidence(record, filename, local_sources)
+    validate_page_content(record, filename, local_sources)
     metadata = record.get("claim_metadata") or {}
     for index, _ in enumerate(operating_models):
         claim_path = f"operating_models.{index}"
@@ -1435,6 +1586,9 @@ def normalize(records: list[dict], companies: list[dict]) -> dict:
                 "valid_at": meta.get("valid_at"),
                 "evidence": links,
             }
+            if path.startswith("primitives."):
+                item = record["primitives"][int(path.split(".")[1])]
+                claim["display_name"] = item["name"]
             if claim["kind"] == "metric" and claim["provenance"] == "reported":
                 claim["reported_by"] = meta.get("reported_by", record["company"])
             for field in ("value", "unit", "metric_scope", "denominator", "measurement_method"):

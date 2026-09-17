@@ -27,46 +27,33 @@ sources:
     note: Checkpoints and event replay after inactivity.
 ---
 
-<section aria-labelledby="what-the-teams-report">
+<section aria-labelledby="what-the-next-worker-reads">
 
-## What the teams report
+## What the next worker reads
 
-Shopify keeps the conversation and session record in Postgres. A worker can stop, and a new worker can read the same history under the same session identity. [[1]](#source-1)
-
-Sentry’s Junior pauses before a serverless timeout. It places a continuation task in a queue so another run can continue. The report describes task continuation, not recovery of every local file. [[2]](#source-2)
-
-Sierra uses checkpoints and ordered events to restore a runner after inactivity. Event replay can restore recorded state; it cannot infer an external action that was never recorded. [[3]](#source-3)
-
-<blockquote cite="https://shopify.engineering/under-the-river"><p>“Cells die, sandboxes die, machines die. The conversation doesn't.”</p></blockquote>
-
-<p class="quote-credit">Shopify, on session survival. <a href="#source-1">[1]</a></p>
+Shopify's Aquifer keeps session identity and an append-only event log in Postgres. An idle worker can exit; a fresh worker reads the same conversation when the next interaction arrives. [[1]](#source-1)
 
 <figure class="note-diagram">
-  <div class="note-flow">
-    <div class="note-node"><span>01</span><strong>Worker A</strong><small>Reads and updates the record</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node"><span>02</span><strong>Worker stops</strong><small>Saved state remains</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node note-node-accent"><span>03</span><strong>Worker B</strong><small>Reads the saved state</small></div>
+  <div class="note-reviewers">
+    <div class="note-node"><strong>Worker A</strong><small>Records events, then exits.</small></div>
+    <div class="note-node"><strong>Worker B</strong><small>Reads the session when work resumes.</small></div>
   </div>
-  <p class="note-diagram-tail">The saved record exists outside the worker.</p>
-  <figcaption>Our illustration of work that survives a worker stop. Each team saves and restores different state.</figcaption>
+  <div class="note-shared-state"><strong>Shared Postgres session</strong><span>The identity and event log remain outside either worker.</span></div>
+  <figcaption>Our illustration of Aquifer's reported separation of workers and session state.</figcaption>
 </figure>
+
+Sentry's Junior pauses near a serverless deadline and queues a continuation task. Its intended pause point is the end of a tool result. This describes task continuation; it does not document recovery of every local file. [[2]](#source-2)
+
+Sierra's Agency restores a hibernated runner by replaying ordered events from its last checkpoint. The application-specific runner decides what goes into the checkpoint and subsequent events. That choice determines what replay can restore. [[3]](#source-3)
 
 </section>
 
-<section class="note-observation" aria-labelledby="a-saved-record-needs-a-clear-scope">
+<section aria-labelledby="conversation-files-and-effects">
 
-<p class="eyebrow">Our observation</p>
+## Conversation, files, and effects
 
-## A saved record needs a clear scope
+These mechanisms preserve different records. A restored conversation does not imply that a workspace file survived. A restored file does not establish whether an earlier request completed in another system.
 
-A conversation, a workspace file, and an action in another system are different kinds of state. Each needs its own record and recovery method.
-
-Conversation history can restore the exchange. Durable storage can restore a file. An idempotency key or receipt can establish whether an external action completed.
-
-The reports preserve different records, so “resume” has no single scope across these systems.
-
-<p class="note-question"><strong>A question for your build</strong>What must the next worker know before it can continue?</p>
+Our inference is that recovery needs to identify which of these records the next worker can trust. For an external action, a receipt or an idempotency mechanism may be needed to distinguish a completed request from one that needs retrying. The reports above do not establish that their session recovery provides this property for every connected tool.
 
 </section>

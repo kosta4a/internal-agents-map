@@ -27,8 +27,8 @@ rubric:
   state: durable-session
   identity: mixed
   evidence_strength: detailed-primary
-summary: One company-wide cloud agent; Sierra moved from per-employee laptop agents to one shared runtime (app
-  server, Agency, runners) behind an MCP Gateway to 45 systems.
+summary: Pinecone is Sierra's shared agent interface for employee work. It routes requests to a model, harness,
+  and environment, runs sessions on Agency, and connects to company systems through an MCP Gateway.
 headline_metric: More than 75,000 sessions created by 600 people in the month preceding the report
 architecture:
   sandbox: Agency layer reconciles recoverable Kubernetes runners; conversation/events/checkpoints stay durable
@@ -58,11 +58,13 @@ key_metrics:
 - More than 75,000 sessions created by 600 people in the month preceding the report
 - 70% of company PRs opened through Pinecone in the month preceding the report
 lessons_learned:
-- Collapse departmental bots into one agent; cross-functional jobs don't respect org-chart boundaries
-- Own the routing/context/workflow layer; let models be interchangeable (different models win at planning, coding,
-  prose)
-- Enforce permissions at the tool-call layer via a gateway, not via prompt instructions
-- Session counts and tool calls are usage, not value; track business outcomes instead
+- Pinecone presents one entry point while a classifier chooses the repository, environment, harness, and model
+  for the task.
+- Sierra wraps Codex and Claude Code behind a common runner protocol and can change routing defaults centrally.
+- Sierra's gateway audits customer-data access and blocks sensitive access spanning multiple customers in a
+  session; some CLI access uses separate read-only tokens.
+- Sierra's session total measures use of Pinecone; it does not by itself measure time saved or the quality of
+  completed work.
 sources:
 - id: sierra-pinecone-source-1
   title: 'Pinecone: harnessing the wisdom of the workforce'
@@ -101,8 +103,10 @@ evidence:
   summary:
   - source_id: sierra-pinecone-source-1
     relation: supports
+    locator: Preserved content.md, lines 56-74
   - source_id: sierra-pinecone-source-2
     relation: supports
+    locator: Preserved content.md, lines 14-32
   headline_metric:
   - source_id: sierra-pinecone-source-1
     relation: supports
@@ -154,19 +158,19 @@ evidence:
   lessons_learned.0:
   - source_id: sierra-pinecone-source-1
     relation: supports
+    locator: Preserved content.md, lines 56-60
   lessons_learned.1:
   - source_id: sierra-pinecone-source-1
     relation: supports
-  - source_id: sierra-pinecone-source-3
-    relation: supports
+    locator: Preserved content.md, lines 120-124
   lessons_learned.2:
   - source_id: sierra-pinecone-source-2
     relation: supports
-  - source_id: sierra-pinecone-source-3
-    relation: supports
+    locator: Preserved content.md, lines 52-66,93
   lessons_learned.3:
   - source_id: sierra-pinecone-source-1
     relation: supports
+    locator: Preserved content.md, lines 118,136-141
   architecture.interfaces:
   - source_id: sierra-pinecone-source-1
     relation: supports
@@ -179,25 +183,29 @@ claim_metadata:
       supervision.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The single-agent section describes routing behind the interface, so one employee-facing
+      agent does not imply one model or execution environment.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The retrospective describes shared adapters and configurable defaults; it supports interchangeable
+      harnesses without claiming every model fits every task.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The gateway article describes provenance checks and scoped CLI tokens. These bound particular
+      actions without making every permitted action safe.
   lessons_learned.3:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The source reports session volume and centralized cost oversight, but provides no method
+      for converting each session into time saved or a quality measure.
   headline_metric:
     metric_scope: Pinecone users and sessions in the month preceding the report; calendar month unspecified
   key_metrics.0:

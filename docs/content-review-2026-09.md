@@ -1,6 +1,10 @@
 # Content review, 2026-09-16
 
 This review implements Phase 1 of [Plan 008](../plans/008-reconcile-content-and-classifications.md).
+The subsequent [lesson and note follow-up](lesson-review-2026-09.md) records the
+100-lesson passage review, further summary corrections, and the seven note rewrites.
+The classifications and reconciliation below describe this initial Phase 1 pass.
+
 It covered every active entry in `data/agents/` against the preserved source captures in
 `archive/sources/`. For each entry, a reviewer read the record and every preserved capture and
 assessed `rubric.state`, `rubric.identity`, `rubric.invocation`, `autonomy`, each scoped

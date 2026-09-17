@@ -385,35 +385,6 @@ const {
 
 /* Notes use the same fine rules, type, and restrained diagram accents. */
 .notes { font-size: 14px; }
-.notes .note-observation {
-  padding: 0;
-  margin: 32px 0;
-}
-.notes .note-observation .eyebrow,
-.notes .note-observation h2 {
-  display: inline;
-  font-size: 16px;
-  margin: 0;
-}
-.notes .note-observation .eyebrow { color: var(--sand-10); }
-.notes .note-observation .eyebrow::after { content: ": "; }
-/* The findings under the title form one panel: a row each, divided. */
-.notes .note-observation > h2 ~ p:not(.note-question) {
-  margin: 0;
-  padding: 16px;
-  background: var(--sand-3);
-  border-top: .5px solid var(--sand-6);
-}
-.notes .note-observation > h2 + p:not(.note-question) {
-  margin-top: 16px;
-  border-top: 0;
-  border-radius: 14px 14px 0 0;
-}
-.notes .note-observation > p:not(.note-question):has(+ .note-question) {
-  border-radius: 0 0 14px 14px;
-}
-.notes .note-observation > :first-child { margin-top: 0; }
-.notes .note-observation > :last-child { margin-bottom: 0; }
 .notes .note-meta { font-size: 12px; color: var(--sand-10); }
 .notes .guide-header { padding-bottom: 32px; }
 .notes .guide-header > * { max-width: 680px; }
@@ -432,29 +403,39 @@ const {
 .notes section { padding: 32px 0; }
 .notes blockquote { margin: 32px 0 8px; padding: 8px 0 0; font-size: 16px; }
 .notes .quote-credit { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+.notes table { width: 100%; table-layout: fixed; border-spacing: 0; margin: 24px 0; border: .5px solid var(--sand-6); border-radius: 14px; overflow: hidden; }
+.notes th, .notes td { padding: 12px; text-align: left; vertical-align: top; line-height: 1.5; overflow-wrap: anywhere; }
+.notes th { background: var(--sand-3); font-weight: 500; }
+.notes th:first-child { width: 30%; }
+.notes tbody td { border-top: .5px solid var(--sand-6); }
 .notes .note-diagram { margin: 32px 0 0; }
-.note-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
-.note-arrow { display: none; }
 .note-node {
   min-width: 0;
   background: var(--sand-3);
   border-radius: 14px;
   padding: 16px;
 }
-.note-node > span { display: block; color: var(--muted); font-size: 14px; margin-bottom: 8px; }
 .note-node strong { display: block; font-size: 16px; font-weight: 400; line-height: 1.4; }
 .note-node small { display: block; color: var(--muted); font-size: 14px; line-height: 1.5; margin-top: 6px; }
-.note-node-accent strong { color: var(--link); }
 .note-diagram-tail { margin-top: 16px; font-size: 14px; }
+.note-reviewers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+/* Branch labels carry the conditions in both the page and the text export. */
+.notes .note-branches { list-style: none; margin: 0 0 0 16px; padding: 16px 0 0 20px; border-left: 1px solid var(--sand-6); }
+.note-branches li { position: relative; padding: 12px 16px; background: var(--sand-3); border-radius: 14px; }
+.note-branches li + li { margin-top: 12px; }
+.note-branches li::before { content: ""; position: absolute; top: 24px; left: -20px; width: 20px; border-top: 1px solid var(--sand-6); }
+.note-branches strong, .note-shared-state strong { display: block; font-weight: 500; }
+.note-branches span, .note-shared-state span { display: block; margin-top: 6px; color: var(--sand-10); }
+.note-shared-state { position: relative; margin-top: 16px; padding: 16px; border: 1px solid var(--sand-6); border-radius: 14px; text-align: center; }
+.note-shared-state::before, .note-shared-state::after { content: ""; position: absolute; top: -17px; height: 16px; border-left: 1px solid var(--sand-6); }
+.note-shared-state::before { left: 25%; }
+.note-shared-state::after { left: 75%; }
 .notes .note-diagram figcaption {
   margin-top: 16px;
   font-size: 12px;
   color: var(--sand-10);
 }
 .notes figcaption { font-size: 14px; margin-top: 16px; }
-.note-question { margin: 16px 0 0; font-size: 14px; color: var(--sand-12); }
-.note-question strong { font-weight: 400; color: var(--sand-10); }
-.note-question strong::after { content: ": "; }
 .guide .note-sources > h2 { margin-bottom: 16px; }
 .note-related-title { margin-top: 32px; font-size: 16px; }
 .note-sources ol { padding-left: 24px; margin: 0; font-size: 14px; }
@@ -462,18 +443,6 @@ const {
 .note-sources li span { display: block; color: var(--muted); margin-top: 8px; }
 .note-sources .resource-links { font-size: 14px; }
 .note-next { display: grid; gap: 12px; padding: 24px 0 32px; font-size: 14px; }
-.note-versions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
-.note-versions > div {
-  min-width: 0;
-  background: var(--sand-3);
-  border-radius: 14px;
-  padding: 16px;
-}
-.note-versions .diagram-number { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
-.note-versions strong { display: block; font-size: 16px; line-height: 1.4; font-weight: 400; }
-.note-versions p { font-size: 14px; color: var(--muted); line-height: 1.5; margin-top: 6px; }
-/* The design the report settles on, marked the way an accented step is. */
-.note-versions .note-version-current strong { color: var(--link); }
 
 @media (max-width: 600px) {
   .guide-header h1 { font-size: 32px; }
@@ -511,11 +480,9 @@ const {
   .workflow-node { padding: 16px 12px; }
   .workflow-node .eyebrow { font-size: 12px; }
   .workflow-node strong { font-size: 14px; }
-  .notes .note-diagram { padding: 24px; }
-  .note-flow { grid-template-columns: 1fr; gap: 16px; }
-  .note-node > span { margin-bottom: 8px; }
-  .note-arrow { transform: rotate(90deg); width: fit-content; }
-  .note-versions { grid-template-columns: 1fr; gap: 16px; }
+  .notes .note-diagram { padding: 0; }
+  .note-reviewers { gap: 8px; }
+  .note-reviewers .note-node { padding: 12px; }
   .note-meta span { display: block; margin: 8px 0 0; }
 }
 </style>

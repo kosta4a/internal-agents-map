@@ -2,7 +2,7 @@
 title: Separate the search from the check
 description: DoorDash changed how its agents divide a code review. An observation on shared context, investigation, and verification.
 eyebrow: 03 / Agent roles
-lede: The division of work can matter more than the number of agents.
+lede: DoorDash gives a scout the search and two reviewers the verification.
 summary: DoorDash changed how its agents divide a code review. Each design exposed a different problem.
 readingTime: 2 min read
 order: 3
@@ -17,43 +17,34 @@ sources:
     note: The “How we got here” section describes all three designs.
 ---
 
-<section aria-labelledby="what-doordash-reports">
+<section aria-labelledby="two-designs-that-missed-findings">
 
-## What DoorDash reports
+## Two designs that missed findings
 
-DoorDash first used specialist reviewers. They found local errors but missed problems across system boundaries because no reviewer held the wider change context.
+DoorDash first assigned code review to specialists for security, tests, performance, and other areas. They found local mistakes but missed changes that crossed system boundaries. No specialist held the wider context.
 
-The next design gave two reviewers broader context and broad responsibilities. Each had too much to check, and some findings were lost.
-
-The third design added a scout. It passes candidate issues and supporting context to two reviewers. The reviewers own investigation and verification; the scout does not. [[1]](#source-doordash)
-
-<blockquote cite="https://careersatdoordash.com/blog/doordash-built-an-ai-code-reviewer-engineers-actually-listen-to/"><p>“The lead scout's job isn't to verify anything.”</p></blockquote>
-
-<p class="quote-credit">DoorDash, on the scout’s role. <a href="#source-doordash">[1]</a></p>
-
-<figure class="note-diagram">
-  <div class="note-versions">
-    <div><span class="diagram-number">Version 1</span><strong>Specialists</strong><p>Narrow context</p></div>
-    <div><span class="diagram-number">Version 2</span><strong>Broad reviewers</strong><p>Too much to check</p></div>
-    <div class="note-version-current"><span class="diagram-number">Version 3</span><strong>Scout → Reviewers</strong><p>Find leads, then verify</p></div>
-  </div>
-  <figcaption>Our illustration of the three reported designs. The sequence does not represent measured performance.</figcaption>
-</figure>
+The second version gave two general reviewers the whole change. They could see those relationships, but each had too much to investigate in one session. Some real findings were lost among the work of reading, tracing, and checking. [[1]](#source-doordash)
 
 </section>
 
-<section class="note-observation" aria-labelledby="each-role-needs-a-clear-result">
+<section aria-labelledby="a-shared-list-of-leads">
 
-<p class="eyebrow">Our observation</p>
+## A shared list of leads
 
-## Each role needs a clear result
+The third version puts a scout before the two reviewers. It identifies suspicious changes and produces investigation leads. The reviewers trace those leads, verify the evidence, and drop candidates that do not hold up. [[1]](#source-doordash)
 
-A candidate issue and a verified issue are different work products. Separate roles can make the handoff and responsibility explicit.
+<figure class="note-diagram">
+  <div class="note-node"><strong>Scout: candidate issues</strong><small>Read the diff and describe what needs investigation.</small></div>
+  <p class="note-diagram-tail">The leads go to two reviewers working in parallel.</p>
+  <div class="note-reviewers">
+    <div class="note-node"><strong>Reviewer A</strong><small>Investigate leads and verify findings.</small></div>
+    <div class="note-node"><strong>Reviewer B</strong><small>Investigate leads and verify findings.</small></div>
+  </div>
+  <figcaption>Our illustration of the reported handoff. The scout's output is a set of leads, not verified bugs.</figcaption>
+</figure>
 
-This design may help when a broad search precedes a detailed check. It may add unnecessary work when one agent can complete both steps.
+This gives the handoff a specific work product. A reviewer can examine a candidate and its context without treating the scout's suspicion as a conclusion. The distinction matters because another agent's confidence is not evidence that a bug exists.
 
-The version sequence reports design changes, not a controlled comparison. It does not measure whether the third design improved review quality or cost.
-
-<p class="note-question"><strong>A question for your build</strong>What must each agent produce before the next agent can use its result?</p>
+DoorDash credits the change with improving its reviewer. The version history, however, does not isolate the effect of the scout from other changes. It supplies a concrete response to overloaded reviewers, without measuring whether this arrangement is better or cheaper for a different review workload.
 
 </section>

@@ -51,12 +51,13 @@ primitives:
 - name: Loops
   desc: Scheduled or event-driven agent runs that execute recurring work
 lessons_learned:
-- Keep the agent close to the source of work (Intercom, Slack, Linear); the best workflows live where work already
-  happens
-- Gradual autonomy; start by asking for suggestions, observe, add guidance, only automate once proven reliable
-- Break work into small steps to keep coding agents focused and successful
-- One Linear engineer reports that agent mistakes reveal possible failure modes during review
-- Close the loop; auto-notify the customer when their request ships
+- Linear's customer-support workflow carries Intercom conversations into issues and delegates coding work from
+  those issues.
+- Linear recommends starting with agent suggestions, observing the results, and adding guidance before enabling
+  automatic operation.
+- One Linear engineer reports better results when he breaks coding work into small, targeted steps.
+- A Linear engineer finds agent mistakes useful for identifying possible failure modes during his review.
+- Linear completion events notify the originating support workflow, where a person follows up with the customer.
 sources:
 - id: linear-agent-source-1
   title: How we built Linear Agent
@@ -171,18 +172,23 @@ evidence:
   lessons_learned.0:
   - source_id: linear-agent-source-2
     relation: supports
+    locator: Preserved content.md, lines 28-38,60
   lessons_learned.1:
   - source_id: linear-agent-source-2
     relation: supports
+    locator: Preserved content.md, lines 134
   lessons_learned.2:
   - source_id: linear-agent-source-2
     relation: supports
+    locator: Preserved content.md, lines 98
   lessons_learned.3:
   - source_id: linear-agent-source-2
     relation: supports
+    locator: Preserved content.md, lines 60
   lessons_learned.4:
   - source_id: linear-agent-source-2
     relation: supports
+    locator: Preserved content.md, lines 70,102
   architecture.interfaces:
   - source_id: linear-agent-source-2
     relation: supports
@@ -195,30 +201,35 @@ claim_metadata:
       issue.
     valid_at: '2026-08-11'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The workflow retains customer messages, metadata, and attachments before delegation; it
+      documents how context moves between the systems.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The article presents this as its rollout advice, without a defined reliability threshold
+      or measured comparison of rollout strategies.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The account attributes the practice to Matthijs Wolting; it does not report a benchmark
+      across task sizes.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: The article attributes this reaction to Mingjie and describes continued human ownership
+      of the issue.
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The cited source supports the described practice; the catalog limits this interpretation to the documented implementation and does not infer causal or universal superiority.
+    confidence_reason: Completed issues reopen related Intercom requests or notify the Slack thread. In both
+      examples, the support team performs the customer follow-up.
   architecture.sandbox:
     kind: inference
     provenance: catalog-judgment
