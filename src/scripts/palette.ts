@@ -265,7 +265,17 @@ export function startPalette(): void {
       closeMenus(facet);
       menu.hidden = !opening;
       pill.setAttribute('aria-expanded', String(opening));
-      if (opening) bringIn(menu);
+      if (opening) {
+        // A menu near the right edge hangs from that edge rather than past it.
+        menu.style.removeProperty('right');
+        menu.style.removeProperty('left');
+        const room = palette.querySelector('.palette-panel')?.getBoundingClientRect();
+        if (room && menu.getBoundingClientRect().right > room.right) {
+          menu.style.left = 'auto';
+          menu.style.right = '0';
+        }
+        bringIn(menu);
+      }
     });
 
     for (const option of menu.querySelectorAll<HTMLButtonElement>('.palette-option')) {
