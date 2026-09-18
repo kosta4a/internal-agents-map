@@ -909,7 +909,10 @@
   .caveats, .architecture, .claim-details dl, .concept-combination dl {
     display: block;
     margin-top: 12px;
-    padding: 16px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
   }
   .ledger, .ledger > li, .evidence, .evidence li { display: block; }
   .ledger > li + li { margin-top: 16px; }

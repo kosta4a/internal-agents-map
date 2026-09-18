@@ -101,13 +101,13 @@ const {
 /* The two axes carry the same hairline as the square they divide. */
 .quadrant-cell:nth-child(odd) { border-right: .5px solid var(--sand-6); }
 .quadrant-cell:nth-child(-n+2) { border-bottom: .5px solid var(--sand-6); }
-.quadrant-cell h3 { position: absolute; top: var(--cell-inset); left: var(--cell-inset); right: var(--cell-inset); margin: 0; font-size: var(--text-xs); line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
-.quadrant-cell h3 span { display: block; margin-bottom: 4px; color: var(--muted); font-size: var(--text-xs); line-height: 1.35; font-weight: 400; }
+.quadrant-cell h3 { position: absolute; top: var(--cell-inset); left: var(--cell-inset); right: var(--cell-inset); margin: 0; font-size: 14px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
+.quadrant-cell h3 span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 14px; line-height: 1.35; font-weight: 400; }
 .quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: var(--cell-inset); }
 /* The two right-hand cells read from the edge they sit against. */
 .quadrant-cell:nth-child(2) h3, .quadrant-cell:nth-child(4) h3 { text-align: right; }
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
-.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: var(--text-xs); padding-left: 20px; }
+.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 20px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
 .quadrant-assistants li { left: 12%; top: 15%; }
 .quadrant-assistants li:nth-child(2) { left: 33%; top: 37%; }
@@ -124,8 +124,8 @@ const {
 }
 .quadrant-cell a { display: block; line-height: 1.35; text-decoration: none; }
 .quadrant-cell a:hover { color: var(--sand-10); }
-.quadrant-cell li strong { display: block; font-size: var(--text-xs); font-weight: 500; line-height: 1.35; }
-.quadrant-cell li span { display: block; font-size: var(--text-xs); line-height: 1.35; margin-top: 4px; }
+.quadrant-cell li strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.35; }
+.quadrant-cell li span { display: block; font-size: 14px; line-height: 1.35; margin-top: 4px; }
 .quadrant-cell .reference-marker { color: var(--sand-10); }
 .quadrant-cell .reference-marker strong { color: var(--sand-12); }
 /* A reference names a class of product: breaking it reads as two of them. */
@@ -241,6 +241,7 @@ const {
   overflow: hidden;
 }
 .scope-figure svg { display: block; width: 100%; height: auto; }
+.scope-figure .scope-portrait { display: none; }
 .scope-frame { fill: none; stroke: var(--sand-6); stroke-width: .5; }
 /* The viewBox is the body's own width, so a label reads at its stated size. */
 .scope-label { fill: var(--muted); font-size: 14px; letter-spacing: -.01em; }
@@ -465,8 +466,32 @@ const {
    * A drawn label lives in a viewBox that halves on a narrow screen, so its
    * number doubles to land back at the size the rest of the page reads at.
    */
-  .scope-label { font-size: 28px; }
-  .cycle-scene text, .exchange-scene text { font-size: 28px; }
+  .scope-figure .scope-wide { display: none; }
+  .scope-figure .scope-portrait { display: block; }
+  /* A label is 14px on the screen: the number is the viewBox's own scale away. */
+  .scope-portrait .scope-label { font-size: 14px; }
+  /*
+   * Everything written inside a figure reads at 14px, whatever the page around
+   * it does: a drawing is read as a whole, not as body text.
+   */
+  .place-panel figcaption strong,
+  .place-panel figcaption span,
+  .place-machine-title,
+  .place-callout,
+  .workflow-stack .workflow-node .eyebrow,
+  .workflow-stack .workflow-node strong,
+  .note-diagram .note-node > span,
+  .note-diagram .note-node strong,
+  .note-diagram .note-node small,
+  .note-diagram .note-versions .diagram-number,
+  .note-diagram .note-versions strong,
+  .note-diagram .note-versions p,
+  .note-diagram .note-branches strong,
+  .note-diagram .note-branches span,
+  .notes .note-diagram figcaption,
+  .note-diagram .note-diagram-tail { font-size: 14px; }
+  .cycle-scene text { font-size: 30px; }
+  .exchange-scene text { font-size: 29px; }
   /* The machines stand one above the other, and the link between them turns. */
   .place-scene { flex-direction: column; align-items: center; }
   .place-link { transform: rotate(90deg); }
@@ -488,11 +513,11 @@ const {
   }
   .quadrant-y-axis span { position: static; writing-mode: horizontal-tb; transform: none; }
   .quadrant-plot { aspect-ratio: .82; }
-  .quadrant-cell h3 { font-size: var(--text-xs); left: 6px; right: 6px; top: 6px; }
+  .quadrant-cell h3 { left: 6px; right: 6px; top: 6px; }
   .quadrant-cell h3 span { display: none; }
   .quadrant-cell:nth-child(n+3) h3 { bottom: 6px; }
-  .quadrant-cell li { font-size: var(--text-xs); padding-left: 16px; }
-  .quadrant-cell li span { font-size: var(--text-xs); }
+  .quadrant-cell li { padding-left: 16px; }
+
   .quadrant-cell .reference-marker { white-space: normal; overflow-wrap: anywhere; }
   .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
   .quadrant-cell .reference-marker::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }

@@ -80,26 +80,47 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
       <p><Inline parts={scope.definition} /></p>
     </div>
     <figure class="scope-figure">
-      <svg viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel} data-signals>
+      <svg class="scope-wide" viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel} data-signals>
         <rect class="scope-frame" x="0.5" y="0.5" width="683" height="384" rx="15.5"/>
         <text class="scope-label" x="20" y="36">Organization</text>
         <path class="scope-link signal-path" id="scope-link-0" d="M202 192 C 296 192, 340 106, 456 106"/>
         <path class="scope-link signal-path" id="scope-link-1" d="M202 192 C 296 192, 340 192, 456 192"/>
         <path class="scope-link signal-path" id="scope-link-2" d="M202 192 C 296 192, 340 278, 456 278"/>
         <circle class="scope-node scope-agent" cx="190" cy="192" r="10"/>
-        <text class="scope-label" x="190" y="168" text-anchor="middle">Agent</text>
+        <text class="scope-label" x="190" y="164" text-anchor="middle">Agent</text>
         <circle class="scope-node" cx="462" cy="106" r="6"/>
         <circle class="scope-node" cx="462" cy="192" r="6"/>
         <circle class="scope-node" cx="462" cy="278" r="6"/>
-        <text class="scope-label" x="484" y="111">Knowledge</text>
-        <text class="scope-label" x="484" y="197">Tools</text>
-        <text class="scope-label" x="484" y="283">Workflows</text>
+        <text class="scope-label" x="488" y="111">Knowledge</text>
+        <text class="scope-label" x="488" y="197">Tools</text>
+        <text class="scope-label" x="488" y="283">Workflows</text>
         <circle class="signal scope-signal" r="3" data-link="scope-link-0" data-delay="0" opacity="0"/>
         <circle class="signal scope-signal" r="3" data-link="scope-link-1" data-delay=".5" opacity="0"/>
         <circle class="signal scope-signal" r="3" data-link="scope-link-2" data-delay="1" opacity="0"/>
         <circle class="signal scope-signal" r="3" data-link="scope-link-0" data-delay="1.6" data-return opacity="0"/>
         <circle class="signal scope-signal" r="3" data-link="scope-link-1" data-delay="2.1" data-return opacity="0"/>
         <circle class="signal scope-signal" r="3" data-link="scope-link-2" data-delay="2.6" data-return opacity="0"/>
+      </svg>
+      <svg class="scope-portrait" viewBox="0 0 342 300" aria-hidden="true" data-signals>
+        <rect class="scope-frame" x="0.5" y="0.5" width="341" height="299" rx="15.5"/>
+        <text class="scope-label" x="16" y="28">Organization</text>
+        <path class="scope-link signal-path" id="scope-tall-0" d="M171 96 C 171 150, 70 150, 70 206"/>
+        <path class="scope-link signal-path" id="scope-tall-1" d="M171 96 C 171 150, 171 150, 171 206"/>
+        <path class="scope-link signal-path" id="scope-tall-2" d="M171 96 C 171 150, 272 150, 272 206"/>
+        <circle class="scope-node scope-agent" cx="171" cy="86" r="10"/>
+        <text class="scope-label" x="171" y="62" text-anchor="middle">Agent</text>
+        <circle class="scope-node" cx="70" cy="212" r="6"/>
+        <circle class="scope-node" cx="171" cy="212" r="6"/>
+        <circle class="scope-node" cx="272" cy="212" r="6"/>
+        <text class="scope-label" x="70" y="244" text-anchor="middle">Knowledge</text>
+        <text class="scope-label" x="171" y="244" text-anchor="middle">Tools</text>
+        <text class="scope-label" x="272" y="244" text-anchor="middle">Workflows</text>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-0" data-delay="0" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-1" data-delay=".5" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-2" data-delay="1" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-0" data-delay="1.6" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-1" data-delay="2.1" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-2" data-delay="2.6" data-return opacity="0"/>
       </svg>
     </figure>
     {scope.body.map((block) => <p><Inline parts={block} /></p>)}
