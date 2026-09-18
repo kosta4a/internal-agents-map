@@ -80,6 +80,7 @@
   text-decoration: none;
 }
 .nav-links {
+  position: relative;
   display: grid;
   gap: 12px;
 }
@@ -114,11 +115,9 @@
   position: relative;
   color: var(--sand-12);
 }
-.nav-links a[aria-current="page"]::before {
-  content: "";
+.nav-dot {
   position: absolute;
   left: -12px;
-  top: 50%;
   width: 6px;
   height: 6px;
   margin-top: -3px;

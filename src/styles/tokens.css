@@ -116,6 +116,12 @@ details[open] > summary::before { transform: rotate(90deg); }
 @media (max-width: 800px) {
   .lede { margin-top: 16px; }
 }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes page-leave { to { opacity: 0; filter: blur(6px); } }
+  @keyframes page-arrive { from { opacity: 0; filter: blur(6px); } }
+  ::view-transition-old(root) { animation: page-leave 160ms var(--ease-out) both; }
+  ::view-transition-new(root) { animation: page-arrive 220ms var(--ease-out) both; }
+}
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
 }
