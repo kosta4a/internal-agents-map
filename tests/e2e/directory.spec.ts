@@ -165,6 +165,8 @@ test.describe('the directory with javascript', () => {
     await expect(page.locator('#contents .contents-title')).toHaveCount(1);
     await expect(links).toHaveCount(count);
     await page.locator('[data-palette-open]').click();
+    const filters = page.locator('.palette-filter-open');
+    if (await filters.isVisible()) await filters.click();
     await page.locator('.palette-pill').first().click();
     await expect(page.locator('.palette-menu').first()).toBeVisible();
   });

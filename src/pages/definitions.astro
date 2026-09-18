@@ -220,7 +220,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
         <thead><tr><th>Boundary</th><th>Level</th><th>Human attention</th><th>Interpretation</th></tr></thead>
         <tbody>
           {supervision.rows.map((row) => (
-            <tr><th scope="row">{row.label}</th><td>{row.level}</td><td>{row.attention}</td><td>{row.meaning}</td></tr>
+            <tr><th scope="row">{row.label}</th><td data-label="Level"><span>{row.level}</span></td><td data-label="Human attention"><span>{row.attention}</span></td><td data-label="Interpretation"><span>{row.meaning}</span></td></tr>
           ))}
         </tbody>
       </table>
@@ -236,7 +236,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
         <thead><tr><th>Type</th><th>What it means</th></tr></thead>
         <tbody>
           {APPROACH_TYPE_DEFINITIONS.map((item) => (
-            <tr><th scope="row">{item.label}</th><td>{item.meaning}</td></tr>
+            <tr><th scope="row">{item.label}</th><td data-label="What it means"><span>{item.meaning}</span></td></tr>
           ))}
         </tbody>
       </table>
@@ -248,7 +248,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
         <thead><tr><th>Mode</th><th>What it means</th></tr></thead>
         <tbody>
           {INVOCATION_DEFINITIONS.map((item) => (
-            <tr><th scope="row">{item.label}</th><td>{item.meaning}</td></tr>
+            <tr><th scope="row">{item.label}</th><td data-label="What it means"><span>{item.meaning}</span></td></tr>
           ))}
         </tbody>
       </table>

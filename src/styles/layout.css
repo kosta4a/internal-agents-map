@@ -115,7 +115,7 @@
 .nav-links a:hover { color: var(--accent); }
 .nav-links a[aria-current="page"] {
   position: relative;
-  color: var(--sand-12);
+  color: var(--blue-9);
 }
 .nav-dot {
   position: absolute;
@@ -124,7 +124,7 @@
   height: 6px;
   margin-top: -3px;
   border-radius: 50%;
-  background: var(--sand-12);
+  background: var(--blue-9);
 }
 .nav-links .contribute-link { color: var(--link); }
 .sidebar-note {

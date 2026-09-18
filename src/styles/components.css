@@ -380,12 +380,12 @@
 }
 /* The action that carries the reader onward. */
 .button-solid {
-  background: var(--sand-12);
-  color: var(--sand-1);
+  background: var(--blue-9);
+  color: #fff;
 }
 /* Already dark, so this one lifts toward the page instead of away from it. */
 @media (hover: hover) {
-.button-solid:hover { background: var(--sand-11); }
+.button-solid:hover { background: var(--blue-10); }
 }
 
 @media (hover: hover) {
@@ -394,12 +394,12 @@
 /* The bar that closes an entry sits below the last section, not above one. */
 .page-back-end {
   margin: 24px 0 0;
-  background: var(--sand-12);
-  color: var(--sand-1);
+  background: var(--blue-9);
+  color: #fff;
 }
 /* Already dark, so this one lifts toward the page instead of away from it. */
 @media (hover: hover) {
-.page-back-end:hover { background: var(--sand-11); }
+.page-back-end:hover { background: var(--blue-10); }
 }
 .entry-header { padding-bottom: 8px; }
 .entry-header h1 {
@@ -901,32 +901,90 @@
   .stats { gap: 32px; margin-top: 24px; }
   .entry-top { align-items: start; }
   .entry-header .lede { font-size: var(--text-md); }
-  /* A narrow screen runs each field into one wrapped line instead of two rows. */
-  .caveats, .claim-details dl {
+  /*
+   * A narrow screen has no room for two columns, so each field stands over its
+   * value and the pairs are set apart. The rules that divided the columns would
+   * be stray lines here, so they go.
+   */
+  .caveats, .architecture, .claim-details dl, .concept-combination dl {
     display: block;
     margin-top: 12px;
+    padding: 16px;
   }
   .ledger, .ledger > li, .evidence, .evidence li { display: block; }
   .ledger > li + li { margin-top: 16px; }
-  .claim-details dl { margin: 0; padding: 16px; }
-  .claim-details dt, .claim-details dd { padding: 0; border-top: 0; }
-  /* Stacked fields are no longer a grid, so the table's rules would be stray lines. */
-  .caveats {
-    border: 0;
-    border-radius: 0;
-  }
-  .caveats dt, .caveats dd {
+  .claim-details dl { margin: 0; }
+  .caveats, .concept-combination dl { border: 0; border-radius: 0; padding: 0; }
+  .caveats dt, .caveats dd,
+  .architecture dt, .architecture dd,
+  .claim-details dt, .claim-details dd,
+  .concept-combination dt, .concept-combination dd {
+    display: block;
     padding: 0;
     border: 0;
     background: none;
   }
-  .caveats dt, .claim-details dt { display: inline; }
-  .caveats dt::after, .claim-details dt::after { content: ": "; }
-  .caveats dd, .claim-details dd { display: inline; }
-  .caveats dd::after, .claim-details dd::after {
-    content: "";
+  /* Each pair keeps the table's two rows: its name on sand, its value on white. */
+  .caveats dt, .architecture dt, .claim-details dt, .concept-combination dt {
+    padding: 10px 12px;
+    background: var(--sand-3);
+    border: .5px solid var(--sand-6);
+    border-bottom: 0;
+    border-radius: 12px 12px 0 0;
+    color: var(--ink);
+  }
+  .caveats dd, .architecture dd, .claim-details dd, .concept-combination dd {
+    padding: 10px 12px;
+    background: #fff;
+    border: .5px solid var(--sand-6);
+    border-radius: 0 0 12px 12px;
+  }
+  .caveats dt:not(:first-of-type),
+  .architecture dt:not(:first-of-type),
+  .claim-details dt:not(:first-of-type) { margin-top: 12px; }
+  .concept-combination dl > div { display: block; }
+  .concept-combination dl > div + div { margin-top: 12px; }
+  .evidence .relation, .evidence .citation-source { padding: 0; border: 0; }
+  .evidence .relation { color: var(--muted); }
+  .evidence li + li { margin-top: 12px; }
+  .evidence { padding-top: 12px; }
+  /* A real table stacks the same way, each cell named by the column it left. */
+  .classification-table { border: 0; border-radius: 0; }
+  .classification-table table,
+  .classification-table tbody,
+  .classification-table tr,
+  .classification-table th,
+  .classification-table td { display: block; }
+  .classification-table thead { display: none; }
+  .classification-table tbody tr { padding: 0; border: 0; }
+  .classification-table tbody tr + tr { margin-top: 16px; }
+  .classification-table tbody th {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-weight: 500;
+  }
+  .classification-table tbody td {
+    margin-top: 12px;
+    padding: 0;
+    border: 0;
+  }
+  .classification-table tbody td::before {
+    content: attr(data-label);
     display: block;
-    height: 5px;
+    padding: 10px 12px;
+    background: var(--sand-3);
+    border: .5px solid var(--sand-6);
+    border-radius: 12px 12px 0 0;
+    color: var(--ink);
+  }
+  .classification-table tbody td > span {
+    display: block;
+    padding: 10px 12px;
+    background: #fff;
+    border: .5px solid var(--sand-6);
+    border-top: 0;
+    border-radius: 0 0 12px 12px;
   }
   .claim { padding: 16px 0; }
   .sources li { padding: 8px 0; }
@@ -1043,6 +1101,7 @@
 }
 #palette-input::placeholder { color: rgba(255, 255, 255, .4); }
 #palette-input::-webkit-search-cancel-button { display: none; }
+.palette-round, .palette-filters-foot { display: none; }
 .palette-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; }
 .palette-facet { flex: none; }
 .palette-facet { position: relative; }
@@ -1163,6 +1222,57 @@
   .claim-details dt,
   .claim-details dd { padding: 12px 14px; }
   .palette-pill { height: 32px; padding: 0 10px 0 14px; }
+  /* The key hint gives way to two controls, and the filters become a sheet. */
+  .palette-hint { display: none; }
+  .palette-round {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .1);
+    color: rgba(255, 255, 255, .8);
+  }
+  .palette-round:active { background: rgba(255, 255, 255, .2); }
+  .palette-filters {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 16px;
+    overflow-y: auto;
+    background: rgba(20, 19, 17, .82);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+  }
+  .palette-filters.is-open { display: flex; }
+  .palette-facet { width: 100%; }
+  .palette-pill { width: 100%; justify-content: space-between; }
+  .palette-menu {
+    position: static;
+    width: auto;
+    margin-top: 4px;
+    background: rgba(28, 27, 24, .92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  .palette-filters-foot { display: block; margin-top: auto; padding-top: 12px; }
+  .palette-apply {
+    display: block;
+    width: 100%;
+    height: 44px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--sand-12);
+    font-size: var(--text-md);
+  }
+  .palette-apply[disabled] { opacity: .4; }
   .palette { padding: 16px; align-content: center; }
   .palette-panel { height: 65vh; max-height: calc(100vh - 32px); }
 }

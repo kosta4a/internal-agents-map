@@ -198,11 +198,15 @@ export function startPalette(): void {
   let leaving: { stop: () => void; finished: Promise<unknown> } | undefined;
 
   let transition = 0;
+  /** True while a close is still running, when the palette is neither open nor shut. */
+  let closing = false;
   const close = (): void => {
-    if (palette.hidden) return;
+    if (palette.hidden || closing) return;
     const version = ++transition;
+    closing = true;
     closeMenus();
     if (reducedMotion() || !panel) {
+      closing = false;
       settle();
       return;
     }
@@ -215,6 +219,7 @@ export function startPalette(): void {
     const done = (): void => {
       if (ended || version !== transition) return;
       ended = true;
+      closing = false;
       leaving?.stop();
       palette.style.removeProperty('opacity');
       settle();
@@ -224,13 +229,16 @@ export function startPalette(): void {
   };
 
   const open = (): void => {
-    if (!palette.hidden) return;
+    // A palette still closing is on its way out, not open: it reopens from there.
+    if (!palette.hidden && !closing) return;
     transition += 1;
+    closing = false;
     // A finished close keeps its fill on the palette and would hide this open.
     leaving?.stop();
     palette.style.removeProperty('opacity');
     opener = document.activeElement;
     palette.hidden = false;
+    sheet(false);
     apply();
     input.focus();
     input.select();
@@ -292,9 +300,19 @@ export function startPalette(): void {
         }
         // The panel's head is pinned, so only its foot moves as the list changes.
         apply(true);
+        if (apply_) apply_.disabled = !FACETS.some((facet) => chosen[facet].size > 0);
       });
     }
   }
+
+  // On a phone the filters are a sheet the search row opens and the foot closes.
+  const apply_ = palette.querySelector<HTMLButtonElement>('.palette-apply');
+  const sheet = (open: boolean): void => {
+    filters?.classList.toggle('is-open', open);
+    if (!open) closeMenus();
+  };
+  palette.querySelector('.palette-filter-open')?.addEventListener('click', () => sheet(true));
+  apply_?.addEventListener('click', () => sheet(false));
 
   input.addEventListener('input', () => apply());
   input.addEventListener('keydown', (event) => {
