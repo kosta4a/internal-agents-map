@@ -261,7 +261,7 @@ const {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
   padding: 16px;
   margin: 0;
   background: #fff;
@@ -270,7 +270,7 @@ const {
 }
 .guide .place-panel figcaption { margin: 0; font-size: var(--text-sm); line-height: 1.4; }
 .place-panel figcaption strong { display: block; color: var(--ink); font-weight: 500; }
-.place-panel figcaption span { display: block; margin-top: 10px; color: var(--muted); }
+.place-panel figcaption span { display: block; margin-top: 8px; color: var(--muted); }
 .place-scene { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 4px; }
 .place-scene-wide { display: block; }
 .exchange-scene, .cycle-scene { height: auto; }
@@ -490,14 +490,20 @@ const {
   .note-diagram .note-branches span,
   .notes .note-diagram figcaption,
   .note-diagram .note-diagram-tail { font-size: 14px; }
+  .notes table, .note-branches, .note-shared-state { font-size: 14px; }
+  .guide-faq details, .concept-combination dl, .guide .classification-table { font-size: 14px; }
   .cycle-scene text { font-size: 30px; }
   .exchange-scene text { font-size: 29px; }
   /* The machines stand one above the other, and the link between them turns. */
-  .place-scene { flex-direction: column; align-items: center; }
-  .place-link { transform: rotate(90deg); }
+  .place-scene { flex-direction: column; align-items: center; gap: 6px; }
+  /* Turning the arrow does not turn the space it holds, so the difference
+     between its length and its thickness is reserved above and below. */
+  .place-link { grid-template-rows: auto; gap: 0; width: 64px; height: 12px; margin: 26px 0; transform: rotate(90deg); }
+  .place-link .place-machine-title { display: none; }
   .place-machine { flex: none; width: var(--box-width); max-width: 100%; }
   .place-callout { top: calc(var(--title-row) + var(--title-gap) + var(--box-height) / 2 + var(--dot-size) / 2 + 6px); }
   .place-callout svg { display: none; }
+  .place-callout { gap: 10px; }
 
   /* The three questions stack as label-over-value pairs, like the catalog tables. */
   .concept-combination dl { display: block; border: 0; border-radius: 0; overflow: visible; }
@@ -528,7 +534,7 @@ const {
   .quadrant-cell h3 { left: 12px; right: 12px; top: 12px; }
   .quadrant-cell h3 span { display: none; }
   .quadrant-cell:nth-child(n+3) h3 { bottom: 12px; }
-  .quadrant-cell li { padding-left: 16px; }
+  .quadrant-cell li { padding-left: 20px; }
   .quadrant-x-axis, .quadrant-y-axis { display: none; }
 
   .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }

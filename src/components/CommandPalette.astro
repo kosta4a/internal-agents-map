@@ -100,7 +100,7 @@ const groups = [
             <li>
               <button type="button" class="palette-option" data-value={group.id} aria-pressed="false">
                 <span>{group.label}</span>
-                <Icon name="circle-check" size={16} />
+                <Icon name="check" size={16} />
               </button>
             </li>
           ))}
@@ -118,7 +118,7 @@ const groups = [
               <li>
                 <button type="button" class="palette-option" data-value={term.id} aria-pressed="false">
                   <span>{term.label}</span>
-                  <Icon name="circle-check" size={16} />
+                  <Icon name="check" size={16} />
                 </button>
               </li>
             ))}
@@ -127,6 +127,7 @@ const groups = [
       ))}
       <div class="palette-filters-foot">
         <button type="button" class="palette-apply" disabled>Apply filters</button>
+        <button type="button" class="palette-back">Go back</button>
       </div>
     </div>
     <div class="palette-results" id="palette-results" role="listbox" aria-label="Results">

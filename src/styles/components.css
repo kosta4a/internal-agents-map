@@ -782,7 +782,7 @@
 /* Sources */
 .sources {
   padding-left: 16px;
-  font-size: var(--text-sm);
+  font-size: 14px;
   margin: 16px 0 0;
 }
 .sources li { padding: 12px 0; }
@@ -898,7 +898,13 @@
   .related-list, .doc-links { grid-template-columns: minmax(0, 1fr); }
   .intro > h1 + p { display: none; }
   .intro { padding-bottom: 24px; }
-  .stats { gap: 32px; margin-top: 24px; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 16px;
+    margin-top: 24px;
+  }
+  .stat + .stat { border-left: 0; padding-left: 0; }
   .entry-top { align-items: start; }
   .entry-header .lede { font-size: var(--text-md); }
   /*
@@ -906,7 +912,7 @@
    * value and the pairs are set apart. The rules that divided the columns would
    * be stray lines here, so they go.
    */
-  .caveats, .architecture, .claim-details dl, .concept-combination dl {
+  .caveats, .architecture, .concept-combination dl {
     display: block;
     margin-top: 12px;
     padding: 0;
@@ -914,13 +920,9 @@
     border-radius: 0;
     background: none;
   }
-  .ledger, .ledger > li, .evidence, .evidence li { display: block; }
-  .ledger > li + li { margin-top: 16px; }
-  .claim-details dl { margin: 0; }
   .caveats, .concept-combination dl { border: 0; border-radius: 0; padding: 0; }
   .caveats dt, .caveats dd,
   .architecture dt, .architecture dd,
-  .claim-details dt, .claim-details dd,
   .concept-combination dt, .concept-combination dd {
     display: block;
     padding: 0;
@@ -928,7 +930,7 @@
     background: none;
   }
   /* Each pair keeps the table's two rows: its name on sand, its value on white. */
-  .caveats dt, .architecture dt, .claim-details dt, .concept-combination dt {
+  .caveats dt, .architecture dt, .concept-combination dt {
     padding: 10px 12px;
     background: var(--sand-3);
     border: .5px solid var(--sand-6);
@@ -936,21 +938,18 @@
     border-radius: 12px 12px 0 0;
     color: var(--ink);
   }
-  .caveats dd, .architecture dd, .claim-details dd, .concept-combination dd {
+  .caveats dd:last-of-type,
+  .architecture dd:last-of-type { border-bottom: .5px solid var(--sand-6); }
+  .caveats dd, .architecture dd, .concept-combination dd {
     padding: 10px 12px;
     background: #fff;
     border: .5px solid var(--sand-6);
     border-radius: 0 0 12px 12px;
   }
   .caveats dt:not(:first-of-type),
-  .architecture dt:not(:first-of-type),
-  .claim-details dt:not(:first-of-type) { margin-top: 12px; }
+  .architecture dt:not(:first-of-type) { margin-top: 12px; }
   .concept-combination dl > div { display: block; }
   .concept-combination dl > div + div { margin-top: 12px; }
-  .evidence .relation, .evidence .citation-source { padding: 0; border: 0; }
-  .evidence .relation { color: var(--muted); }
-  .evidence li + li { margin-top: 12px; }
-  .evidence { padding-top: 12px; }
   /* A real table stacks the same way, each cell named by the column it left. */
   .classification-table { border: 0; border-radius: 0; }
   .classification-table table,
@@ -1213,18 +1212,42 @@
 @media (hover: hover) {
   .palette-item:hover { background: rgba(255, 255, 255, .1); }
 }
-.palette-item-title { min-width: 0; }
+.palette-item-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .palette-item-detail { flex: none; color: rgba(255, 255, 255, .45); }
 .palette-empty { padding: 24px 8px; color: rgba(255, 255, 255, .45); font-size: var(--text-sm); }
 @media (max-width: 800px) {
   /* A pill is a touch target here, so it carries four more than it reads. */
   .tag { padding: 4px 11px; }
+  /* A table or a panel is dense, so it holds the size the page reads at
+     rather than the larger one a phone gives running text. */
+  .entry-facts { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+  .classification-table,
+  .claim-details,
+  .caveats,
+  .architecture,
+  .concept-combination dl,
+  .evidence,
+  .ledger,
+  .ledger-title,
+  .step-panel,
+  .claim-text,
+  .claim-label,
+  .review-state,
+  .doc-card,
+  .related-card,
+  .tag,
+  .architecture-note,
+  .claim-details summary,
+  .organization-connections { font-size: 14px; }
   .icon { width: 20px; height: 20px; }
-  .classification-table th,
-  .classification-table td,
-  .claim-details dt,
-  .claim-details dd { padding: 12px 14px; }
-  .palette-pill { height: 32px; padding: 0 10px 0 14px; }
+  .palette-pill { height: 40px; padding: 0 10px 0 14px; font-size: 16px; }
+  .palette-pill { justify-content: flex-start; }
+  #filters .search-shortcut, .search-launcher .search-shortcut { font-size: 16px; }
+  /* A finger, not a pointer: the page's own actions carry a full touch target. */
+  .button, .page-back { height: 44px; padding: 0 14px; }
+  .palette-pill .icon { margin-left: auto; }
+  .palette-pill-count { min-width: 24px; height: 24px; border-radius: 999px; }
+  .palette-option { min-height: 40px; font-size: 16px; }
   /* The key hint gives way to two controls, and the filters become a sheet. */
   .palette-hint { display: none; }
   .palette-round {
@@ -1249,9 +1272,7 @@
     gap: 8px;
     padding: 16px;
     overflow-y: auto;
-    background: rgba(20, 19, 17, .82);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    background: #1a1917;
   }
   .palette-filters.is-open { display: flex; }
   .palette-facet { width: 100%; }
@@ -1264,18 +1285,18 @@
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }
-  .palette-filters-foot { display: block; margin-top: auto; padding-top: 12px; }
-  .palette-apply {
+  .palette-filters-foot { display: grid; gap: 8px; margin-top: auto; padding-top: 12px; }
+  .palette-apply, .palette-back {
     display: block;
     width: 100%;
-    height: 44px;
+    height: 40px;
     border: 0;
     border-radius: 10px;
-    background: #fff;
-    color: var(--sand-12);
-    font-size: var(--text-md);
+    font-size: 16px;
   }
+  .palette-apply { background: #fff; color: var(--sand-12); }
   .palette-apply[disabled] { opacity: .4; }
+  .palette-back { background: rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .8); }
   .palette { padding: 16px; align-content: center; }
   .palette-panel { height: 65vh; max-height: calc(100vh - 32px); }
 }
