@@ -13,7 +13,6 @@ import {
   WORK_MODES_DESCRIPTION,
   DEFINITIONS_CHART,
   DEFINITIONS_DESCRIPTION,
-  DEFINITIONS_EYEBROW,
   DEFINITIONS_HEADING,
   DEFINITIONS_INTRO,
   DEFINITIONS_LEDE,
@@ -68,7 +67,6 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
   structuredData={graph}
 >
   <header class="guide-header">
-    <p class="eyebrow">{DEFINITIONS_EYEBROW}</p>
     <h1>{DEFINITIONS_HEADING}</h1>
     <p class="lede">{DEFINITIONS_LEDE}</p>
     {DEFINITIONS_INTRO.map((block) => <p><Inline parts={block} /></p>)}
