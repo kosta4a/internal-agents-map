@@ -276,6 +276,9 @@
 .entry-box:hover h3 a { color: var(--sand-11); }
 .entry-box:hover .entry-summary { color: var(--sand-9); }
 .entry-box:hover .tag { color: var(--sand-9); }
+/* An accent badge is not dimmed with the rest: it stands as it is. */
+.entry-box:hover .tags > .tag:first-child,
+.entry-box:hover .tags > .tag-company { color: var(--blue-9); }
 }
 /* The heading link covers the container, so the whole card opens the entry. */
 .entry-box h3 a::after {
