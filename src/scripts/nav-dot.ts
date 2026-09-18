@@ -4,7 +4,7 @@
 import { animate } from 'motion';
 
 /** How long the dot takes to cross to its new link. */
-const TRAVEL_SECONDS = 0.44;
+const TRAVEL_SECONDS = 0.38;
 /** How far the dot bows out of the straight line on its way. */
 const ARC = 7;
 

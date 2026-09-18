@@ -18,7 +18,7 @@
   position: sticky;
   top: 96px;
   align-self: start;
-  font-size: 14px;
+  font-size: var(--text-sm);
 }
 .contents[hidden] { display: none; }
 .contents-title {
@@ -73,7 +73,7 @@
   background: linear-gradient(to bottom, #fff 60%, rgba(255, 255, 255, 0));
 }
 .brand {
-  font-size: 16px;
+  font-size: var(--text-md);
   font-weight: 500;
   line-height: 1;
   color: var(--ink);
@@ -88,7 +88,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--muted);
   text-decoration: none;
   width: fit-content;
@@ -126,7 +126,7 @@
 }
 .nav-links .contribute-link { color: var(--link); }
 .sidebar-note {
-  font-size: 12px;
+  font-size: var(--text-xs);
   color: var(--muted);
   margin-top: 32px;
 }
@@ -142,7 +142,7 @@
 .page-shell { padding-bottom: 48px; }
 footer {
   color: var(--sand-10);
-  font-size: 14px;
+  font-size: var(--text-sm);
   margin-top: 32px;
 }
 /* The invite reads first, straight after the page it follows; the imprint
@@ -183,7 +183,7 @@ footer a { color: inherit; }
     flex-wrap: wrap;
     gap: 12px 24px;
     margin-top: 16px;
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
   .sidebar-note { display: none; }
   .footer-inner {
