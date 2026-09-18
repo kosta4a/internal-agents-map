@@ -236,7 +236,7 @@ footer a { color: inherit; }
     min-height: 44px;
     width: auto;
   }
-  .nav-links a[aria-current="page"] { color: var(--sand-12); }
+  .nav-links a[aria-current="page"] { color: var(--blue-9); }
   .nav-links .icon { width: 20px; height: 20px; }
   .sidebar-note { display: none; }
   .footer-inner {

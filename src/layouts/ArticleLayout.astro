@@ -278,7 +278,7 @@ const {
 .place-machine, .place-link {
   --title-row: 20px;
   --title-gap: 8px;
-  --box-width: 264px;
+  --box-width: 240px;
   --box-height: calc(var(--box-width) * 9 / 16);
   --dot-size: 18px;
   position: relative;
@@ -309,7 +309,7 @@ const {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: calc(var(--title-row) + var(--title-gap) + var(--box-height) / 2 + var(--dot-size) / 2 + 6px);
+  top: calc(var(--title-row) + var(--title-gap) + var(--box-height) + 6px);
   display: grid;
   justify-items: center;
   gap: 6px;
@@ -317,7 +317,7 @@ const {
   font-size: var(--text-sm);
   color: var(--blue-9);
 }
-.place-callout svg { display: block; width: 12px; height: 74px; fill: none; stroke: var(--blue-9); stroke-width: 1; }
+.place-callout svg { display: block; width: 12px; height: 28px; fill: none; stroke: var(--blue-9); stroke-width: 1; }
 /* A running agent is not a still one, so its mark breathes. */
 @keyframes place-pulse {
   from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
@@ -495,7 +495,19 @@ const {
   /* The machines stand one above the other, and the link between them turns. */
   .place-scene { flex-direction: column; align-items: center; }
   .place-link { transform: rotate(90deg); }
-  .place-machine { flex: none; }
+  .place-machine { flex: none; width: var(--box-width); max-width: 100%; }
+  .place-callout { top: calc(var(--title-row) + var(--title-gap) + var(--box-height) / 2 + var(--dot-size) / 2 + 6px); }
+  .place-callout svg { display: none; }
+
+  /* The three questions stack as label-over-value pairs, like the catalog tables. */
+  .concept-combination dl { display: block; border: 0; border-radius: 0; overflow: visible; }
+  .concept-combination dl > div { display: block; }
+  .concept-combination dl > div + div { margin-top: 12px; }
+  .concept-combination dl > div dt, .concept-combination dl > div dd { border: .5px solid var(--sand-6); }
+  .concept-combination dl > div dt { border-radius: 12px 12px 0 0; }
+  .concept-combination dl > div dd { background: #fff; border-top: 0; border-radius: 0 0 12px 12px; }
+  .concept-combination dl > div:last-child dt { border-bottom: .5px solid var(--sand-6); }
+  .concept-combination dl > div:last-child dd { border-bottom: .5px solid var(--sand-6); border-top: 0; }
 }
 @media (max-width: 600px) {
   .guide-header h1 { font-size: var(--text-xl); }
@@ -513,24 +525,37 @@ const {
   }
   .quadrant-y-axis span { position: static; writing-mode: horizontal-tb; transform: none; }
   .quadrant-plot { aspect-ratio: .82; }
-  .quadrant-cell h3 { left: 6px; right: 6px; top: 6px; }
+  .quadrant-cell h3 { left: 12px; right: 12px; top: 12px; }
   .quadrant-cell h3 span { display: none; }
-  .quadrant-cell:nth-child(n+3) h3 { bottom: 6px; }
+  .quadrant-cell:nth-child(n+3) h3 { bottom: 12px; }
   .quadrant-cell li { padding-left: 16px; }
+  .quadrant-x-axis, .quadrant-y-axis { display: none; }
 
-  .quadrant-cell .reference-marker { white-space: normal; overflow-wrap: anywhere; }
   .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
   .quadrant-cell .reference-marker::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
-  .quadrant-cell li:nth-child(2) { left: 22%; }
-  .quadrant-assistants li:nth-child(2) { left: 28%; }
-  .quadrant-ready li span { display: none; }
-  .quadrant-x-axis, .quadrant-y-axis { font-size: var(--text-xs); }
+  /* Each name holds one line here, so the narrow plot is placed name by name:
+     clear of the region titles, clear of each other, and clear of every edge.
+     A name in a right-hand region hangs off the right so it cannot run out. */
+  .quadrant-cell li[data-chart-approach-id="doordash-code-review"] { left: 10%; top: 34%; }
+  .quadrant-cell li[data-chart-approach-id="stripe-minions"] { left: 56%; top: 54%; }
+  .quadrant-cell li[data-chart-approach-id="posthog-stamphog"] { left: 10%; top: 72%; }
+  .quadrant-cell li[data-chart-approach-id="ramp-inspect"] { left: 64%; top: 86%; }
+  .quadrant-cell li[data-chart-approach-id="brex-agent-platform"] { left: 10%; top: 34%; }
+  .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: auto; right: 12px; top: 54%; }
+  .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 10%; top: 72%; }
+  .quadrant-cell li[data-chart-reference="deep-research"] { left: 7%; top: 8%; }
+  .quadrant-cell li[data-chart-reference="ready-made-task"] { left: 7%; top: 50%; }
+  .quadrant-cell li[data-chart-reference="general-assistant"] { left: auto; right: 12px; top: 32%; }
+  .quadrant-cell li span { display: none; }
+  .quadrant-cell li strong { font-weight: 400; }
+  .quadrant-cell li,
+  .quadrant-cell li[data-chart-approach-id],
+  .quadrant-cell li[data-chart-reference] { max-width: none; white-space: nowrap; }
   .quadrant-legend { gap: 8px 16px; }
   .core-definition { padding: 40px 20px; }
   .concept-pair { grid-template-columns: 1fr; }
   .concept-pair figure + figure { border-left: 0; border-top: 1px solid var(--sand-6); }
   .concept-pair svg { max-width: 320px; margin: auto; }
-  .concept-combination dl { grid-template-columns: max-content minmax(0, 1fr); }
   .workflow-node { padding: 16px 12px; }
   .workflow-node .eyebrow { font-size: var(--text-xs); }
   .workflow-node strong { font-size: var(--text-sm); }
