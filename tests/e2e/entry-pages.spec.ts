@@ -281,6 +281,9 @@ test.describe('page-content pilot', () => {
 
   test('captures all five pages for desktop and mobile review', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === 'no-javascript', 'Desktop and mobile captures cover visual review.');
+    // Five pages, each loaded, its fonts awaited and captured whole: more than
+    // one test's worth of work, and past the default allowance on a slow runner.
+    test.slow();
     for (const id of PILOT_IDS) {
       await page.goto(`/agents/${id}`);
       await page.evaluate(async () => document.fonts.ready);
