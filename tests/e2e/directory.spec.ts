@@ -135,6 +135,8 @@ test.describe('the directory with javascript', () => {
     // A document replacement would erase this marker and mask the regression.
     await page.evaluate(() => { Object.assign(window, { navigationMarker: true }); });
     for (const path of ['/notes', '/']) {
+      const menu = page.locator('.nav-toggle');
+      if (await menu.isVisible()) await menu.click();
       await page.locator(`a[href="${path}"]`).first().click();
       await expect(page).toHaveURL(new RegExp(`${path}$`));
       expect(await page.evaluate(() => 'navigationMarker' in window)).toBe(true);

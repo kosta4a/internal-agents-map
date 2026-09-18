@@ -117,7 +117,7 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
     {entry.profile.sectionOrder.map((section) => <EntrySection entry={entry} section={section} />)}
 
     {entry.isPilot && showQuestion(entry, 'validation') &&
-      (entry.validationClaims.length > 0 || entry.coverageQuestions.validation?.claimAnchors.length) && (
+      (entry.validationClaims.length > 0 || (entry.coverageQuestions.validation?.claimAnchors.length ?? 0) > 0) && (
       <section class="entry-section" id="validation" aria-labelledby="validation-title">
         <h2 id="validation-title">{entry.profile.validation}</h2>
         {entry.validationClaims.length > 0 ? (

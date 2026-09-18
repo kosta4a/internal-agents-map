@@ -1155,8 +1155,16 @@
 .palette-item-detail { flex: none; color: rgba(255, 255, 255, .45); }
 .palette-empty { padding: 24px 8px; color: rgba(255, 255, 255, .45); font-size: var(--text-sm); }
 @media (max-width: 800px) {
+  /* A pill is a touch target here, so it carries four more than it reads. */
+  .tag { padding: 4px 11px; }
+  .icon { width: 20px; height: 20px; }
+  .classification-table th,
+  .classification-table td,
+  .claim-details dt,
+  .claim-details dd { padding: 12px 14px; }
+  .palette-pill { height: 32px; padding: 0 10px 0 14px; }
   .palette { padding: 16px; align-content: center; }
-  .palette-panel { max-height: calc(100vh - 32px); }
+  .palette-panel { height: 65vh; max-height: calc(100vh - 32px); }
 }
 
 /* Separate the infrastructure group when all records are shown. */
