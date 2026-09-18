@@ -20,10 +20,10 @@ const { sources } = Astro.props;
       {(source.preservedUrl || source.archivedUrl) && (
         <div class="source-archives">
           {source.preservedUrl && (
-            <a href={source.preservedUrl}>Preserved copy <span class="link-arrow">↗</span></a>
+            <a href={source.preservedUrl}>Preserved copy</a>
           )}
           {source.archivedUrl && (
-            <a href={source.archivedUrl}>Wayback snapshot <span class="link-arrow">↗</span></a>
+            <a href={source.archivedUrl}>Wayback snapshot</a>
           )}
         </div>
       )}

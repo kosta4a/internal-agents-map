@@ -25,12 +25,15 @@ describe('every entry', () => {
       const placed = new Set([
         ...(entry.summary ? [entry.summary.id] : []),
         ...entry.workflowClaims.map((claim) => claim.id),
+        ...entry.mechanismClaims.map((claim) => claim.id),
+        ...entry.validationClaims.map((claim) => claim.id),
         ...entry.supervisionClaims.map((claim) => claim.id),
         ...entry.architectureClaims.map((claim) => claim.id),
         ...entry.metricClaims.map((claim) => claim.id),
         ...entry.resultStatementClaims.map((claim) => claim.id),
         ...entry.lessonClaims.map((claim) => claim.id),
         ...entry.otherClaims.map((claim) => claim.id),
+        ...entry.researchOnlyClaims.map((claim) => claim.id),
       ]);
       expect(placed.size).toBe(approach.claim_ids.length);
       expect([...placed].sort()).toEqual([...approach.claim_ids].sort());
@@ -158,7 +161,7 @@ describe('block-builderbot', () => {
 
   it('is not labelled as supporting infrastructure', () => {
     expect(entry.isSupportingSystem).toBe(false);
-    expect(entry.supportingSystemNote).toBeNull();
+    expect(entry.profile.section).toBe('agents');
   });
 });
 
@@ -194,8 +197,8 @@ describe('plaid-internal-mcp-server', () => {
 
   it('is labelled as supporting infrastructure', () => {
     expect(entry.isSupportingSystem).toBe(true);
-    expect(entry.approachTypeLabel).toBe('Supporting pattern');
-    expect(entry.supportingSystemNote).toContain('supporting infrastructure');
+    expect(entry.approachTypeLabel).toBe('Component');
+    expect(entry.profile.section).toBe('infrastructure');
   });
 
   it('keeps coding-tool adoption apart from server adoption', () => {
@@ -247,9 +250,10 @@ describe('the directory model', () => {
 
   it('carries the derived level next to every attention boundary', () => {
     const ureview = cards.find((card) => card.id === 'uber-ureview')!;
-    expect(ureview.boundaries).toEqual([{ id: 'work-product-review', label: 'Work product review', level: 3 }]);
+    expect(ureview.boundaries).toEqual([{ id: 'work-product-review', label: 'Work-product review', level: 3 }]);
     for (const card of cards) {
-      expect(card.boundaries.length).toBeGreaterThan(0);
+      if (card.catalogSection === 'agents') expect(card.boundaries.length).toBeGreaterThan(0);
+      else expect(card.boundaries).toEqual([]);
       for (const boundary of card.boundaries) {
         expect(boundary.level === null).toBe(boundary.id === 'unknown');
       }
@@ -273,37 +277,50 @@ describe('directory card summaries', () => {
   });
 });
 
-describe('a supporting system', () => {
-  /** The entries the catalog classifies as shared infrastructure. */
-  const supporting = catalog.approaches
-    .map((approach) => entryView(catalog, approach.id))
-    .filter((entry) => entry.isSupportingSystem);
-
-  it('says a workflow is missing only where the record reports none', () => {
-    expect(supporting.length).toBeGreaterThan(0);
-    for (const entry of supporting) {
-      expect(entry.supportingSystemNote, entry.id).toContain('supporting infrastructure');
-      expect(entry.supportingSystemNote, entry.id).toContain(entry.approachTypeLabel.toLowerCase());
-      if (entry.workflowClaims.length === 0) {
-        expect(entry.supportingSystemNote, entry.id).toContain('no execution workflow');
-      } else {
-        expect(entry.supportingSystemNote, entry.id).not.toContain('no execution workflow');
-      }
+describe('collection profiles', () => {
+  it('leads infrastructure with architecture and keeps operational scopes in research', () => {
+    for (const approach of catalog.approaches.filter((item) => item.catalog_section === 'infrastructure')) {
+      const entry = entryView(catalog, approach.id);
+      expect(entry.profile.sectionOrder[0]).toBe('implementation');
+      expect(entry.profile.workflow).toBe('Documented uses');
+      expect(entry.supervisionClaims).toEqual([]);
+      for (const claim of entry.claims.filter((claim) => claim.field.startsWith('operating_models.'))) expect(entry.researchOnlyClaims).toContainEqual(claim);
     }
   });
+  it('keeps task-performing Horizon and Slack in agents', () => {
+    for (const id of ['workos-project-horizon', 'slack-context-system']) expect(entryView(catalog, id).profile.section).toBe('agents');
+  });
+});
 
-  it('does not deny the workflow that workos-project-horizon reports', () => {
-    const entry = entryView(catalog, 'workos-project-horizon');
-    expect(entry.isSupportingSystem).toBe(true);
-    expect(entry.workflowClaims.length).toBeGreaterThan(0);
-    expect(entry.supportingSystemNote).not.toMatch(/not an agent|no execution workflow/);
-    expect(entry.supportingSystemNote).toContain('workflow');
+describe('page-content pilot reading model', () => {
+  it('covers the whole catalog with explicit workflow roles', () => {
+    for (const approach of catalog.approaches) {
+      const entry = entryView(catalog, approach.id);
+      expect(entry.isPilot, approach.id).toBe(true);
+      const workflowReported = entry.coverageQuestions.workflow?.state === 'reported';
+      expect(entry.workflowClaims.length > 0, approach.id).toBe(workflowReported);
+      if (workflowReported) {
+        expect(entry.workflowScope, approach.id).toBeTruthy();
+        for (const claim of entry.workflowClaims) expect(claim.displayName, approach.id).toBeTruthy();
+      }
+    }
+    expect(entryView(catalog, 'doordash-code-review').mechanismClaims.map((claim) => claim.field)).toContain('primitives.0');
   });
 
-  it('keeps the notice on plaid-internal-mcp-server, which reports no workflow', () => {
-    const entry = entryView(catalog, 'plaid-internal-mcp-server');
-    expect(entry.workflowClaims.length).toBe(0);
-    expect(entry.supportingSystemNote).toContain('no execution workflow');
+  it('separates validation, lessons, canonical observations, and aliases', () => {
+    expect(entryView(catalog, 'github-qubot').validationClaims.length).toBeGreaterThan(0);
+    const notion = entryView(catalog, 'notion-custom-agents');
+    expect(notion.aliasObservationClaims.map((claim) => claim.field)).toEqual(['key_metrics.0']);
+    expect(notion.canonicalObservationClaims.map((claim) => claim.field)).not.toContain('key_metrics.0');
+    const yc = entryView(catalog, 'ycombinator-agent-infra');
+    expect(yc.canonicalObservationClaims).toHaveLength(0);
+    expect(yc.lessonClaims.length).toBeGreaterThan(0);
+  });
+
+  it('leaves no record on the legacy path', () => {
+    for (const approach of catalog.approaches) {
+      expect(entryView(catalog, approach.id).isPilot, approach.id).toBe(true);
+    }
   });
 });
 
@@ -315,10 +332,6 @@ describe('the results of an entry', () => {
       claim.kind !== 'metric',
   );
   const grouped = catalog.approaches.map((approach) => entryView(catalog, approach.id));
-
-  it('finds the metric fields that hold a statement of another kind', () => {
-    expect(statements.length).toBe(7);
-  });
 
   it('leaves only metrics under the reported metrics', () => {
     for (const entry of grouped) {

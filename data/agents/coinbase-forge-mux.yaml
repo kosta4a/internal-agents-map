@@ -1,23 +1,23 @@
 id: coinbase-forge-mux
 company: Coinbase
-agent_name: Forge / Mux
+agent_name: Forge
 aliases:
 - Claudebot
 - Claude bot
-approach_type: agent-system
+approach_type: agent
 deployment_stage: scaled
 year: 2026
 first_public_evidence:
   date: '2026'
-  source_id: coinbase-forge-mux-source-1
-last_reviewed_at: '2026-09-15'
+  source_id: coinbase-forge-mux-source-2
+last_reviewed_at: '2026-09-17'
 status: internal
 domains:
 - coding
 - code-review
 autonomy: drafts-reviewed
 operating_models:
-- scope: Slack, GitHub, or Linear request → reviewed pull request and build
+- scope: Slack, GitHub, or Linear request → drafted fix and pull request pushed back for review
   attention_boundary: work-product-review
 rubric:
   invocation:
@@ -26,43 +26,53 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: Forge, started as Claudebot, turns a Slack/GitHub/Linear discussion into a Linear issue, fix, PR, and
-  one-off build; Mux lets employees run many coding agents concurrently; as of February 2026, 5% of all PRs
-  merged company-wide come from these background agents.
-headline_metric: '5% of all PRs merged come from in-house background agents (Feb 2026)'
+summary: Forge, previously Claudebot, turns employee discussions into Linear issues, drafted fixes and pull requests
+  returned for review. Coinbase separately uses Mux to host concurrent coding-agent workspaces.
+headline_metric: 5% of all PRs merged come from in-house background agents (Feb 2026)
 architecture:
-  sandbox: Mux gives each concurrent agent its own git worktree, branch, and terminal
+  sandbox: 'Separate Mux platform context: concurrent agents receive separate git worktrees, branches and terminals.
+    The sources do not establish this as Forge’s execution environment.'
   harness: Portfolio approach; Claude Code, OpenCode, Cursor, and Copilot rather than one harness; Forge is a custom
     Slack-native harness with the same tools and context as engineers, invokable from Slack, GitHub, and Linear;
     built in-house because security requirements blocked cloud background agents
-  model: Portfolio across multiple providers; the Slack agent Claude bot can use multiple underlying models despite
-    its name
+  model: The Slack agent Claude bot can use multiple underlying models despite its name; the documented portfolio
+    spans harnesses (Claude Code, OpenCode, Cursor, Copilot), and no source names the models' providers
   interfaces:
   - slack
   - github
   - linear
   tool_access: Linear treated as the structured product context / source of truth
   knowledge: Linear as the durable structured-context layer for product work
+  context_mgmt: Slack discussions become labelled, sized Linear issues that carry the work context; the feedback
+    pipeline summarizes recordings into a reviewable issue before an agent acts
 primitives:
 - name: Forge
-  desc: 'Custom harness: Slack bug discussion → Linear issue → fix → PR → one-off build'
+  desc: 'Custom harness: Slack bug discussion → Linear issue → drafted fix → PR pushed back for review'
 - name: Mux
-  desc: Concurrency layer; one human coordinates many isolated coding agents, each in its own worktree/branch/terminal
+  desc: One person coordinates coding agents with separate worktrees, branches, and terminals
+- name: Orchestrate concurrent agents
+  desc: 'Separate Mux context: An engineer runs several agents in parallel, each on its own worktree, and reviews,
+    gives feedback, and merges as each finishes'
 key_metrics:
 - 'Mux: 600+ users including engineers, PMs, and designers (335 active, 197 power users)'
 - 5% of all PRs merged come from in-house background agents (Feb 2026)
 - Wallet rewrite PR review times reduced from 150 hours to 15 hours (self-reported; period and method not documented)
 - 'Speed run: about 100 participants opened about 70 PRs in 15 minutes (opened, not merged; single event)'
+- 'Mux: 5,068 merged PRs across 461 repositories and 10 orgs'
+- Mux users show 3.5x more merged PRs per engineer than baseline (39.6 vs 11.4); the post cautions users may skew
+  toward already-high-output engineers
 lessons_learned:
-- Support a portfolio of harnesses (Claude Code, OpenCode, Cursor, Copilot) rather than standardizing on one
-- Keep the system of record (Linear) as the agent's structured context; conversation can be the input, Linear stays
-  durable
-- Simple per-agent worktree/branch/terminal isolation is a pragmatic alternative to full sandboxing for concurrent
-  coding
-- Security requirements that blocked cloud background agents motivated the in-house, Slack-native harness build
-- Give background agents the same tools and context as engineers through a Slack-native interface
-- Spread adoption through visible team experiments, such as PR speed runs and shared Slack channels, rather than
-  mandates
+- Coinbase engineers use Mux alongside Claude Code, OpenCode, Cursor, and other internal agents.
+- Coinbase stores requirements and work status in Linear; its Slack workflow creates an issue before Forge drafts
+  a fix.
+- Mux gives concurrent agents separate worktrees, branches, and terminals. This separates edits; it does not establish
+  a security sandbox.
+- Coinbase reports that security requirements prevented it from using available cloud background agents and motivated
+  its internal harness.
+- Coinbase describes its Slack harness as giving agents the same tools and context as engineers, with a PR returned
+  to the thread.
+- Chintan Turakhia favors demonstrations and shared experiments for adoption, citing PR speed runs and a Cursor
+  Wins channel.
 sources:
 - id: coinbase-forge-mux-source-1
   title: 'Coding had a concurrency problem: how Mux helped solve it'
@@ -96,7 +106,7 @@ sources:
   capture:
     manifest_path: archive/sources/coinbase-forge-mux-source-3/metadata.json
 - id: coinbase-forge-mux-source-4
-  title: 'How Coinbase scaled AI to 1,000+ engineers (How I AI, with Chintan Turakhia)'
+  title: How Coinbase scaled AI to 1,000+ engineers (How I AI, with Chintan Turakhia)
   url: https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers
   canonical_url: https://www.lennysnewsletter.com/p/how-coinbase-scaled-ai-to-1000-engineers
   kind: podcast
@@ -127,16 +137,9 @@ evidence:
     relation: supports
     locator: Preserved content.md, line 11
   summary:
-  - source_id: coinbase-forge-mux-source-1
-    relation: supports
   - source_id: coinbase-forge-mux-source-2
     relation: supports
-  - source_id: coinbase-forge-mux-source-3
-    relation: supports
-    locator: Preserved content.md, line 11
-  - source_id: coinbase-forge-mux-source-5
-    relation: supports
-    locator: Preserved content.md, lines 114–126
+    locator: 'The feedback loop: Slack discussion to Linear issue and Forge pull request'
   headline_metric:
   - source_id: coinbase-forge-mux-source-3
     relation: supports
@@ -170,6 +173,13 @@ evidence:
   architecture.knowledge:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
+  architecture.context_mgmt:
+  - source_id: coinbase-forge-mux-source-2
+    relation: supports
+    locator: Preserved content.md, line 34
+  - source_id: coinbase-forge-mux-source-5
+    relation: supports
+    locator: Preserved content.md, lines 102–110
   primitives.0:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
@@ -179,6 +189,11 @@ evidence:
   primitives.1:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+    locator: Preserved content.md, lines 20-26
+  primitives.2:
+  - source_id: coinbase-forge-mux-source-1
+    relation: supports
+    locator: Preserved content.md, line 20
   key_metrics.0:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -198,30 +213,41 @@ evidence:
   - source_id: coinbase-forge-mux-source-5
     relation: supports
     locator: Preserved content.md, line 170
+  key_metrics.4:
+  - source_id: coinbase-forge-mux-source-1
+    relation: supports
+    locator: Preserved content.md, line 31
+  key_metrics.5:
+  - source_id: coinbase-forge-mux-source-1
+    relation: supports
+    locator: Preserved content.md, lines 32–34
   lessons_learned.0:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+    locator: Preserved content.md, lines 12,24
   lessons_learned.1:
   - source_id: coinbase-forge-mux-source-2
     relation: supports
+    locator: Preserved content.md, lines 32-36
   lessons_learned.2:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
+    locator: Preserved content.md, lines 26
   lessons_learned.3:
   - source_id: coinbase-forge-mux-source-5
     relation: supports
-    locator: Preserved content.md, line 120
+    locator: Preserved content.md, lines 120
   lessons_learned.4:
   - source_id: coinbase-forge-mux-source-3
     relation: supports
-    locator: Preserved content.md, line 11
+    locator: Preserved content.md, lines 11
   lessons_learned.5:
-  - source_id: coinbase-forge-mux-source-4
-    relation: supports
-    locator: Preserved content.md, line 25
   - source_id: coinbase-forge-mux-source-5
     relation: supports
-    locator: Preserved content.md, lines 170–172
+    locator: Preserved content.md, lines 170-172
+  - source_id: coinbase-forge-mux-source-4
+    relation: supports
+    locator: Preserved content.md, lines 23-25
   architecture.interfaces:
   - source_id: coinbase-forge-mux-source-1
     relation: supports
@@ -230,75 +256,224 @@ claim_metadata:
     kind: inference
     provenance: catalog-judgment
     confidence: high
-    confidence_reason: The source describes delegated implementation that returns a pull request and build for human
-      review.
+    confidence_reason: The sources describe delegated implementation that drafts a fix and pushes a pull request
+      back to Slack for review; no source documents a build step.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The Mux article explicitly describes a portfolio of tools in use. It does not compare that
+      portfolio with a single-harness policy.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The workflow account names Linear as the record of work and traces the Slack message through
+      issue creation to a PR returned for review.
   lessons_learned.2:
     kind: inference
     provenance: catalog-judgment
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The source describes git and terminal separation but no access-control boundary between agents,
+      so sandbox equivalence would be an unsupported inference.
   lessons_learned.3:
     kind: fact
     provenance: reported
     confidence: high
-    confidence_reason: The episode writeup states the security requirement as the reason for the in-house build.
-    valid_at: '2026-03'
+    confidence_reason: The episode writeup gives that constraint as the reason for the in-house build at the time
+      of the interview.
+    valid_at: 2026-03
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this design guidance from the builder's description of the harness.
+    confidence_reason: The company post states the tools-and-context claim and the Slack-to-PR workflow, but supplies
+      no tool-by-tool access comparison.
     valid_at: '2026'
   lessons_learned.5:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this adoption guidance from the episode accounts of speed runs and shared
-      channels.
+    confidence_reason: The interview writeup attributes this preference to Turakhia and names the examples; it does
+      not isolate their effect from other adoption work.
     valid_at: '2026'
   headline_metric:
     kind: metric
     provenance: reported
     confidence: medium
-    confidence_reason: Self-reported share stated by the engineering leader who built the harness; measurement
-      method and period not documented. A thread reply says the share covers the whole company.
-    valid_at: '2026-02'
+    confidence_reason: Self-reported share stated by the engineering leader who built the harness; measurement method
+      and period not documented. The preserved tweet says only 'all PRs merged'; no preserved reply establishes
+      a company-wide scope.
+    valid_at: 2026-02
     metric_scope: PRs merged by in-house background agents
-    denominator: All PRs merged company-wide
+    denominator: All PRs merged; the scope beyond engineering is not documented in the preserved capture
   key_metrics.0:
     metric_scope: Registered Mux users including engineers, PMs, and designers; 335 active and 197 power users
   key_metrics.1:
     kind: metric
     provenance: reported
     confidence: medium
-    confidence_reason: Self-reported share stated by the engineering leader who built the harness; measurement
-      method and period not documented. A thread reply says the share covers the whole company.
-    valid_at: '2026-02'
+    confidence_reason: Self-reported share stated by the engineering leader who built the harness; measurement method
+      and period not documented. The preserved tweet says only 'all PRs merged'; no preserved reply establishes
+      a company-wide scope.
+    valid_at: 2026-02
     metric_scope: PRs merged by in-house background agents
-    denominator: All PRs merged company-wide
+    denominator: All PRs merged; the scope beyond engineering is not documented in the preserved capture
   key_metrics.2:
     kind: metric
     provenance: reported
     confidence: low
     confidence_reason: The episode description states the reduction without a date, denominator, or measurement
       method.
-    valid_at: '2026-03'
+    valid_at: 2026-03
     metric_scope: PR review times for the wallet rewrite effort
   key_metrics.3:
     kind: metric
     provenance: reported
     confidence: medium
     confidence_reason: Described by the organizer as a single event; explicitly pull requests opened, not merged.
-    valid_at: '2026-03'
+    valid_at: 2026-03
     metric_scope: Pull requests opened during one speed-run session
+  key_metrics.4:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Coinbase reported the aggregate in its own engineering blog without independent verification
+      or a measurement window.
+    metric_scope: Mux merged pull requests across repositories and organizations
+  key_metrics.5:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Self-reported comparison whose own text cautions that Mux users likely skew toward engineers
+      who were already high-output and AI-forward; no cohort method is documented.
+    metric_scope: Merged pull requests per engineer for Mux users compared with a baseline of non-users
+    denominator: Engineers not using Mux at the time of the comparison (11.4 merged PRs)
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids:
+  - coinbase-forge-mux-source-1
+  - coinbase-forge-mux-source-2
+  - coinbase-forge-mux-source-3
+  - coinbase-forge-mux-source-4
+  - coinbase-forge-mux-source-5
+  workflow_scope: Slack bug discussion → Forge issue, drafted fix and reviewed pull request
+  questions:
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.0
+      note: The parallel-session Mux example remains in research details and has its own infrastructure record.
+    human_involvement:
+      state: reported
+      claim_paths:
+      - operating_models.0
+      - primitives.2
+      note: 'The documented checkpoint is the pull-request review: Forge pushes the PR back to Slack for review,
+        and the orchestrating engineer reviews, gives feedback, and merges each parallel result.'
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.model
+      - architecture.sandbox
+      - architecture.tool_access
+      - architecture.knowledge
+      - architecture.context_mgmt
+      - architecture.interfaces
+    validation:
+      state: unreported
+      claim_paths: []
+      note: No automated check of agent output is documented; the documented check is the human pull-request review
+        cited with human involvement.
+    observations:
+      state: unreported
+      claim_paths: []
+      note: The collected adoption metrics describe Mux, broader background agents or company experiments; they
+        do not isolate Forge outcomes.
+    lessons:
+      state: reported
+      claim_paths:
+      - lessons_learned.0
+      - lessons_learned.1
+      - lessons_learned.2
+      - lessons_learned.3
+      - lessons_learned.4
+      - lessons_learned.5
+  implementation_fields:
+    model:
+      state: reported
+      claim_paths:
+      - architecture.model
+      note: Multiple underlying models are stated; the documented portfolio spans harnesses, and no source names
+        model providers.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+    sandbox:
+      state: unreported
+      claim_paths: []
+      note: The old worktree claim concerns Mux and is retained in research details; Forge sandbox implementation
+        is unreported.
+    tool_access:
+      state: reported
+      claim_paths:
+      - architecture.tool_access
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: reported
+      claim_paths:
+      - architecture.context_mgmt
+    credentials:
+      state: unreported
+      claim_paths: []
+      note: No capture documents credential handling for the agents; the security requirements that blocked cloud
+        background agents are described without their mechanism.
+    interfaces:
+      state: reported
+      claim_paths:
+      - architecture.interfaces
+      note: Slack, GitHub, and Linear are named as invocation surfaces for Forge.
+  primitive_roles:
+    primitives.0: workflow
+    primitives.1: mechanism
+    primitives.2: mechanism
+  observations:
+    headline_metric:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Share of all merged pull requests produced by in-house background agents
+    key_metrics.0:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Registered Mux users including engineers, PMs, and designers, with active and power-user counts
+    key_metrics.1:
+      duplicate_of: headline_metric
+      reason: 'Identical statement, period, scope, and denominator as the headline: the same 5% share of merged
+        PRs from the same tweet.'
+    key_metrics.2:
+      category: cost-latency
+      basis: reported-measurement
+      subject: PR review times for the wallet rewrite effort
+    key_metrics.3:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Pull requests opened during one speed-run session
+    key_metrics.4:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Mux merged pull requests across repositories and organizations
+    key_metrics.5:
+      category: effectiveness
+      basis: reported-measurement
+      subject: Merged pull requests per engineer for Mux users compared with non-user baseline

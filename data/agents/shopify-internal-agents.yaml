@@ -1,33 +1,32 @@
 id: shopify-internal-agents
 company: Shopify
-agent_name: Aquifer / River
+agent_name: Aquifer
 approach_type: platform
 deployment_stage: scaled
 year: 2026
 first_public_evidence:
   date: '2026'
   source_id: shopify-internal-agents-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-17'
 status: internal
 domains:
 - coding
 - code-review
-- research
-- security
 autonomy: drafts-reviewed
 operating_models:
-- scope: River coding request → reviewed pull request
-  attention_boundary: work-product-review
+- scope: River coding request → River-opened, River-coauthored pull request
+  attention_boundary: unknown
 rubric:
   invocation:
   - event-driven
   - interactive
-  state: unknown
+  state: durable-session
   identity: unknown
   evidence_strength: detailed-primary
 summary: The Aquifer agent platform (session/harness/sandbox split) powers River, a Slack-native coding agent, plus
-  research, migration, and app-security agents.
-headline_metric: 1 in 8 merged PRs company-wide coauthored by River
+  PR-review and headless Vanilla agent profiles; other teams have requested research, migration, and compliance-scan
+  agents.
+headline_metric: 'River use example: 1 in 8 merged PRs company-wide coauthored by River'
 architecture:
   sandbox: An execution environment (filesystem, shell, repo, build/test) separated from the harness; Shopify credits
     the brain-and-hands framing to Anthropic
@@ -36,29 +35,40 @@ architecture:
   model: The design lets Shopify change the model without changing the sandbox
   interfaces:
   - slack
-  - github
   tool_access: Repo + tests + data warehouse + production traces + PR creation; a gateway credentials proxy
   knowledge: Monorepo 'World' (code + skills + conventions + intent docs + runbooks + AGENTS.md); Nix reproducible
     envs; Slack-transcript corpus mining
-  credentials: Gateway credentials proxy; per-profile sandbox policies; Shopify SSO
+  credentials: Gateway credentials proxy and per-profile sandbox policies; the source does not name an SSO mechanism.
   context_mgmt: Skills loaded on-demand as files, updatable per session; session survival across cell/sandbox/machine
     death
 primitives:
 - name: Session/Harness/Sandbox split
   desc: Durable identity, disposable loop, isolated execution; swap any layer independently
 - name: River (public-by-default)
-  desc: Slack-native coding agent in public channels only; visibility drives adoption
+  desc: River works in shared Slack threads whose history can be searched and used to update skills
 - name: Skills as files
   desc: Written-down knowledge mined from successful patterns and public transcripts
+- name: Take a request in a public channel
+  desc: A person @-mentions River with a question or task in a public Slack channel; River works only in the open
+- name: Work the problem in the open
+  desc: River reads files, runs queries and tests, and posts partial findings to the thread
+- name: Absorb a mid-thread redirect
+  desc: A second person drops in with a constraint or redirect; River incorporates it without losing the conversation
+    and continues
+- name: Leave a reusable transcript
+  desc: The finished thread stays searchable so the next person starts from it, and observed patterns feed back
+    into skills
 key_metrics:
 - 'River: 59,918 sessions / 30 days across 5,170 Slack channels'
 - 3,536 River-coauthored PRs merged; 1 in 8 merged PRs company-wide
-- Median session 19 min; median 50 tool calls/session
+- 'River: Median session 19 min; median 50 tool calls/session'
 lessons_learned:
-- Agent-friendly is human-friendly; monorepo, reproducible envs, written skills, and fast CI help both
-- Local agents have a ceiling; private windows mean only the person at the keyboard learns anything
-- Session survival is critical; cells die, sandboxes die, machines die; the conversation doesn't
-- Treat agents as profiles, not platforms; a new agent is a new bundle on the same substrate
+- Shopify says its monorepo, reproducible environments, written skills, and CI improvements benefited both engineers
+  and agents.
+- Shopify uses shared River threads and the run corpus to update skills, prompts, and defaults for later work.
+- Aquifer stores session identity and its event log in Postgres so a fresh worker can continue the same conversation.
+- Shopify adds agent variants as profiles containing prompts, skills, extensions, sandbox policy, and model defaults
+  on Aquifer.
 sources:
 - id: shopify-internal-agents-source-1
   title: Under the River
@@ -74,6 +84,7 @@ evidence:
   operating_models.0:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 65, 83, 140
   summary:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -108,9 +119,26 @@ evidence:
   primitives.1:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 71-79,87
   primitives.2:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+  primitives.3:
+  - source_id: shopify-internal-agents-source-1
+    relation: supports
+    locator: Preserved content.md, lines 69, 75
+  primitives.4:
+  - source_id: shopify-internal-agents-source-1
+    relation: supports
+    locator: Preserved content.md, lines 65, 76
+  primitives.5:
+  - source_id: shopify-internal-agents-source-1
+    relation: supports
+    locator: Preserved content.md, lines 77-78
+  primitives.6:
+  - source_id: shopify-internal-agents-source-1
+    relation: supports
+    locator: Preserved content.md, lines 71, 79
   key_metrics.0:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -126,15 +154,19 @@ evidence:
   lessons_learned.0:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 24-25,38-47
   lessons_learned.1:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 57,71,79,87
   lessons_learned.2:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 116-134
   lessons_learned.3:
   - source_id: shopify-internal-agents-source-1
     relation: supports
+    locator: Preserved content.md, lines 142
   architecture.interfaces:
   - source_id: shopify-internal-agents-source-1
     relation: supports
@@ -142,29 +174,35 @@ claim_metadata:
   operating_models.0:
     kind: inference
     provenance: catalog-judgment
-    confidence: medium
-    confidence_reason: The source documents pull-request creation but does not establish outcome-only supervision.
+    confidence: unverified
+    confidence_reason: The source documents River-opened, River-coauthored pull requests that are later merged,
+      but no passage establishes that a person reviews the work product on each run; PR review runs as a separate
+      Aquifer profile and is described as often having no human in the loop.
     valid_at: '2026'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The retrospective identifies these as existing human-development priorities made more urgent
+      by agents; it does not quantify each contribution.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The article describes mining earlier runs and preserving searchable threads, replacing the
+      vague claim that private agents cannot teach anyone.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The session and lifecycle sections explicitly separate the durable log from disposable cells;
+      they do not claim every external side effect is automatically recoverable.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The profile section enumerates the bundle contents and explains how a new bundle becomes
+      an internal agent product.
   headline_metric:
     metric_scope: Merged River-coauthored PRs across Shopify
     denominator: All Shopify merged pull requests
@@ -177,3 +215,123 @@ claim_metadata:
     measurement_method: river_sessions domain table for reported session-linked counts
   key_metrics.2:
     metric_scope: Median River session duration and tool calls per session
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids:
+  - shopify-internal-agents-source-1
+  workflow_scope: 'One River thread: public @river request through worked findings, a human redirect, and a searchable
+    transcript'
+  questions:
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.3
+      - primitives.4
+      - primitives.5
+      - primitives.6
+      note: The article documents exactly one representative workflow, the well-going public River thread; PR review
+        and the headless Vanilla profile are separate Aquifer profiles, not steps of this run.
+    human_involvement:
+      state: not-applicable
+      claim_paths: []
+      note: There is no single platform-wide agent review boundary. Scoped downstream operating-model claims remain
+        in research details; access controls are described separately.
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.sandbox
+      - architecture.model
+      - architecture.tool_access
+      - architecture.knowledge
+      - architecture.credentials
+      - architecture.context_mgmt
+      - architecture.interfaces
+    validation:
+      state: unreported
+      claim_paths: []
+      note: Tests River runs are part of its work, and CI improvements serve human developers; no check of River's
+        own output is documented.
+    observations:
+      state: reported
+      claim_paths:
+      - headline_metric
+      - key_metrics.0
+      - key_metrics.1
+      - key_metrics.2
+    lessons:
+      state: reported
+      claim_paths:
+      - lessons_learned.0
+      - lessons_learned.1
+      - lessons_learned.2
+      - lessons_learned.3
+  implementation_fields:
+    model:
+      state: reported
+      claim_paths:
+      - architecture.model
+      note: The documented content is the swap design; no specific model is named.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+    sandbox:
+      state: reported
+      claim_paths:
+      - architecture.sandbox
+      note: The brain-and-hands framing the claim credits to Anthropic appears in the capture only as an unnamed
+        linked essay.
+    tool_access:
+      state: reported
+      claim_paths:
+      - architecture.tool_access
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: reported
+      claim_paths:
+      - architecture.context_mgmt
+    credentials:
+      state: reported
+      claim_paths:
+      - architecture.credentials
+      note: The credentials proxy and per-profile sandbox policy are documented; Shopify SSO is not named in the
+        capture.
+    interfaces:
+      state: reported
+      claim_paths:
+      - architecture.interfaces
+      note: Slack is named; the capture documents pull-request creation but never names GitHub as the host.
+  primitive_roles:
+    primitives.0: mechanism
+    primitives.1: mechanism
+    primitives.2: mechanism
+    primitives.3: workflow
+    primitives.4: workflow
+    primitives.5: workflow
+    primitives.6: workflow
+  observations:
+    headline_metric:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Company-wide merged pull requests coauthored by River
+    key_metrics.0:
+      category: adoption-output
+      basis: reported-measurement
+      subject: River sessions and distinct Slack channels over a recent 30-day period
+    key_metrics.1:
+      category: adoption-output
+      basis: reported-measurement
+      subject: River-coauthored merged pull requests and their company-wide share in a recent 30-day period
+    key_metrics.2:
+      category: cost-latency
+      basis: reported-measurement
+      subject: Median River session duration and median tool calls per session

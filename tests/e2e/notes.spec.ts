@@ -18,6 +18,11 @@ async function structuredData(page: Page): Promise<Record<string, unknown>> {
   return JSON.parse(text) as Record<string, unknown>;
 }
 
+/** HTML typography curls quotation marks; the export keeps the author's Markdown. */
+function comparableProse(text: string): string {
+  return text.replace(/\*\*/g, '').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
+}
+
 /** Every fragment link on the page must reach an element of that page. */
 async function assertFragmentsResolve(page: Page): Promise<void> {
   const fragments = await page
@@ -64,10 +69,9 @@ test.describe('one note', () => {
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
 
     await expect(page.locator('figure.note-diagram')).toHaveCount(1);
-    await expect(page.getByText('Apply the run limit')).toBeVisible();
-    await expect(
-      page.getByText('Our illustration of a possible control flow.', { exact: false }),
-    ).toBeVisible();
+    await expect(page.locator('.note-branches')).toContainText('Checks fail; budget remains');
+    await expect(page.locator('.note-branches')).toContainText('Budget exhausted');
+    await expect(page.locator('figure figcaption')).toContainText('proposed control flow');
 
     await expect(page.locator('#source-stripe')).toBeVisible();
     await expect(page.locator('.note-sources ol > li')).toHaveCount(3);
@@ -77,7 +81,7 @@ test.describe('one note', () => {
   test('sends its catalog links to the entry pages', async ({ page }) => {
     await page.goto('/notes/stop-a-run');
     for (const id of ['stripe-minions', 'dropbox-nova', 'doordash-code-review']) {
-      await expect(page.locator(`a[href="/agents/${id}"]`)).toHaveCount(1);
+      await expect(page.locator(`main a[href="/agents/${id}"]`)).toHaveCount(1);
     }
     await expect(page.locator('a[href*="index.html"]')).toHaveCount(0);
   });
@@ -89,17 +93,41 @@ test.describe('one note', () => {
     expect(article?.url).toBe('https://internal-agents.com/notes/stop-a-run');
     expect(article?.headline).toBe('When should an agent stop?');
     expect(article?.datePublished).toBe('2026-09-11');
-    // The note has never been changed since publication, so it claims no update.
-    expect(article?.dateModified).toBeUndefined();
+    expect(article?.dateModified).toBe('2026-09-16');
     expect(graph.map((node) => node['@type'])).toContain('BreadcrumbList');
   });
 
   test('offers a way back and a way on', async ({ page }) => {
     await page.goto('/notes/stop-a-run');
-    await expect(page.locator('a.note-back[href="/notes"]')).toBeVisible();
+    await expect(page.locator('.note-next a[href="/notes"]')).toBeVisible();
     await page.locator('.note-next a[href="/notes/review-noise"]').click();
     await expect(page.locator('h1')).toHaveText('More comments can mean more work');
   });
+});
+
+test.describe('every note as a document', () => {
+  for (const slug of NOTE_SLUGS) {
+    test(`${slug} preserves its sources and structured content in the export`, async ({ page, request }) => {
+      await page.goto(`/notes/${slug}`);
+      await assertFragmentsResolve(page);
+      const response = await request.get(`/notes/${slug}.md`);
+      expect(response.status()).toBe(200);
+      const markdown = comparableProse(await response.text());
+      const article = page.locator('.note-detail > article');
+      // Compare what is present, without requiring every article to use a diagram or quotation.
+      const blocks = await article.locator('h1, h2, figure, th, td').allInnerTexts();
+      for (const block of blocks) {
+        expect(markdown).toContain(comparableProse(block));
+      }
+      const sources = await article.locator('.note-sources ol a').evaluateAll((links) =>
+        links.map((link) => (link as HTMLAnchorElement).href),
+      );
+      for (const source of sources) expect(markdown).toContain(source);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+        (page.viewportSize()?.width ?? 0) + 1,
+      );
+    });
+  }
 });
 
 test.describe('the entry page', () => {
@@ -138,10 +166,22 @@ test.describe('the Definitions guide', () => {
 
   test('keeps the diagrams in the initial HTML', async ({ page }) => {
     await page.goto('/definitions');
-    await expect(page.locator('.core-definition svg')).toHaveCount(1);
-    await expect(page.locator('.concept-pair svg')).toHaveCount(4);
+    await expect(page.locator('.scope-figure svg')).toHaveCount(2);
+    await expect(page.locator('.place-panel')).toHaveCount(4);
     await expect(page.locator('.workflow-figure')).toHaveCount(1);
     await assertFragmentsResolve(page);
+  });
+
+  test('explains scoped supervision and separates type from invocation', async ({ page }) => {
+    await page.goto('/definitions#supervision');
+    await expect(page.locator('#supervision')).toBeVisible();
+    // Boundaries, structural types, and invocation modes each state their own table.
+    await expect(page.locator('#supervision .classification-table')).toHaveCount(3);
+    await expect(page.locator('#supervision table').first().locator('tbody tr')).toHaveCount(5);
+    await expect(page.locator('#supervision')).toContainText('Continuous steering');
+    await expect(page.locator('#supervision')).toContainText('Exception-only');
+    await expect(page.locator('#supervision')).toContainText('Approach types');
+    await expect(page.locator('#supervision')).toContainText('Work modes');
   });
 });
 
@@ -158,6 +198,6 @@ test.describe('the Methodology guide', () => {
     );
     await expect(page.locator('a[href="/definitions"]')).not.toHaveCount(0);
     await expect(page.locator('a[href="/notes"]')).not.toHaveCount(0);
-    await expect(page.locator('section')).toHaveCount(7);
+    await expect(page.locator('main section')).toHaveCount(8);
   });
 });

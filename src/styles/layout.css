@@ -2,48 +2,135 @@
 /* ABOUTME: Ported from templates/site.css, including its responsive behaviour. */
 .page-shell {
   display: grid;
-  grid-template-columns: 224px minmax(0, 800px);
-  gap: 64px;
-  max-width: 1248px;
-  padding: 56px 32px 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 684px) minmax(0, 1fr);
+  gap: 40px;
+  padding: 64px 32px 0;
   margin: auto;
+}
+.sidebar {
+  width: 224px;
+  justify-self: end;
+}
+/* The rail mirrors the sidebar: same width, same distance from the column. */
+.contents {
+  width: 224px;
+  justify-self: start;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  font-size: var(--text-sm);
+}
+.contents[hidden] { display: none; }
+.contents-title {
+  margin: 0 0 8px;
+  padding: 0 12px;
+  color: var(--sand-10);
+}
+.contents ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.contents li { margin: 0; }
+.contents a {
+  display: block;
+  padding: 8px 12px;
+  color: var(--sand-10);
+  text-decoration: none;
+}
+/* Hovering an entry speaks for itself; the ground stays for what is in view. */
+.contents a:hover { color: var(--sand-12); }
+/* The sections in view read as one block, so a run of them shares its corners. */
+.contents li.is-visible {
+  background: var(--sand-3);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .contents li {
+    transition: background-color .25s ease-out, border-radius .25s ease-out;
+  }
+}
+.contents li.is-visible a { color: var(--sand-12); }
+.contents li.is-visible:not(li.is-visible + li) {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.contents li.is-visible:not(:has(+ li.is-visible)) {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .sidebar nav {
   position: sticky;
-  top: 48px;
+  top: 96px;
+}
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 68px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: .5px solid var(--sand-6);
 }
 .brand {
-  display: block;
+  font-size: var(--text-md);
+  font-weight: 500;
+  line-height: 1;
   color: var(--ink);
-  font-size: 17px;
-  line-height: 1.25;
-  font-weight: 600;
   text-decoration: none;
-  letter-spacing: -.03em;
-}
-.brand-mark {
-  display: block;
-  color: var(--blue);
-  font-size: 26px;
-  margin-bottom: 12px;
 }
 .nav-links {
+  position: relative;
   display: grid;
   gap: 12px;
-  margin-top: 36px;
 }
 .nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-sm);
   color: var(--muted);
   text-decoration: none;
   width: fit-content;
 }
-.nav-links a:hover { color: var(--blue); }
-.nav-links a[aria-current="page"] { color: var(--link); }
+/* The mark keeps its size while the label wraps or grows. */
+.nav-links .icon { flex: none; }
+/* A link that leaves the site fills the rail, so its arrow sits at the edge. */
+.nav-links .nav-external {
+  width: 100%;
+  justify-content: space-between;
+}
+/* The outward arrow is a hint at the edge, not part of the label. It steps
+   forward when the row is hovered. */
+.nav-links .nav-external > .icon { color: var(--sand-6); }
+.nav-links .nav-external:hover > .icon { color: var(--sand-10); }
+.nav-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-links a[aria-current="page"] {
+  position: relative;
+  color: var(--blue-9);
+}
+.nav-dot {
+  position: absolute;
+  left: -12px;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--blue-9);
+}
 .nav-links .contribute-link { color: var(--link); }
 .sidebar-note {
-  font-size: 12px;
+  font-size: var(--text-xs);
   color: var(--muted);
-  margin-top: 64px;
+  margin-top: 32px;
 }
 .skip-link {
   position: absolute;
@@ -54,77 +141,107 @@
   z-index: 10;
 }
 .skip-link:focus { top: 12px; }
+.page-shell { padding-bottom: 48px; }
 footer {
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 48px;
+  color: var(--sand-10);
+  font-size: var(--text-sm);
+  margin-top: 32px;
 }
+/* The invite reads first, straight after the page it follows; the imprint
+   closes the band beneath it. */
 .footer-inner {
-  max-width: 1248px;
-  padding: 24px 32px 32px;
+  width: min(684px, 100% - 64px);
+  padding: 0 0 32px;
   margin: auto;
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
 }
-.footer-brand small {
-  display: block;
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--muted);
-}
-.footer-brand small a { color: inherit; }
-.contribution-invite {
-  max-width: 480px;
-  font-size: 14px;
-}
-.contribution-invite strong {
-  color: var(--ink);
-  font-weight: 550;
-}
-.contribution-invite p { margin-top: 8px; }
-.contribution-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-  margin-top: 12px;
-}
+footer small { font-size: inherit; }
+footer a { color: inherit; }
 @media (max-width: 1050px) {
   .page-shell {
     grid-template-columns: 180px minmax(0, 1fr);
     gap: 32px;
   }
+  .sidebar { width: auto; }
+  .contents { display: none; }
+  .footer-inner {
+    width: auto;
+    padding: 24px 32px 32px calc(32px + 180px + 32px);
+  }
+}
+/* Two bars that fold into a cross. */
+.nav-toggle { display: none; }
+.nav-toggle-bars {
+  display: grid;
+  gap: 5px;
+  width: 20px;
+}
+.nav-toggle-bars span {
+  display: block;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--sand-12);
+  transform-origin: center;
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars span:first-child { transform: translateY(3.25px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+@media (prefers-reduced-motion: no-preference) {
+  .nav-toggle-bars span { transition: transform 200ms var(--ease-out); }
 }
 @media (max-width: 800px) {
+  .topbar { justify-content: space-between; }
+  .nav-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    border: 0;
+    background: none;
+  }
+  /* The menu covers the page below the bar that opens it. */
+  .sidebar {
+    position: fixed;
+    inset: 68px 0 0;
+    z-index: 19;
+    /* Stated rather than left to the containing block, which a captured
+       element does not always give the whole screen. */
+    width: 100%;
+    margin: 0;
+    padding: 8px 24px 24px;
+    overflow-y: auto;
+    background: #fff;
+  }
+  .sidebar { display: none; }
+  .sidebar.is-open { display: block; }
+  /* The menu is the page here, so it is not held apart from the change. */
+  .sidebar, .topbar { view-transition-name: none; }
+  .nav-dot { display: none; }
   .page-shell {
     display: block;
-    padding: 24px 22px 0;
+    padding: 24px 24px 0;
   }
-  .sidebar {
-    border-bottom: 1px solid var(--rule);
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-  }
+  /* No sidebar column to clear, so the footer sits on the page's own margin. */
+  .footer-inner { width: auto; padding: 24px; }
   .sidebar nav { position: static; }
-  .brand { font-size: 16px; }
-  .brand br { display: none; }
-  .brand-mark {
-    display: inline-block;
-    margin-right: 8px;
-    font-size: 20px;
-  }
   .nav-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 22px;
-    margin-top: 16px;
-    font-size: 13px;
+    display: grid;
+    gap: 0;
+    margin-top: 8px;
+    font-size: var(--text-md);
   }
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    width: auto;
+  }
+  .nav-links a[aria-current="page"] { color: var(--blue-9); }
+  .nav-links .icon { width: 20px; height: 20px; }
   .sidebar-note { display: none; }
   .footer-inner {
     flex-wrap: wrap;
-    padding-right: 22px;
-    padding-left: 22px;
+    padding-right: 24px;
+    padding-left: 24px;
   }
 }

@@ -3,6 +3,10 @@
 Reviewed on 2026-09-11 against all 39 approaches in `data/agents.json` and the three
 current note templates. This is an editorial review, not a new site page.
 
+On 2026-09-16, Browserbase's bb entry and its example in the published tool-discovery note were
+removed at the maintainer's request. Browserbase references below record the original assessment;
+the preserved source remains available for that history.
+
 ## Selected for the site
 
 The user selected N2, N3, N4, and N6. These are now authored as notes 04–07.
@@ -136,7 +140,7 @@ adds too little to justify its own note.
 | [Atlassian — Rovo Dev (RovoDev)](landscape.md#atlassian-rovo-dev) | Support N6 | Evaluation | Internal feedback data and a defined Jira-to-PR workflow; keep training data separate from evaluation data. |
 | [Block — Builderbot](landscape.md#block-builderbot) | Later | Shared work | Live human steering and ticket-to-PR integration; does not establish that multiple agents outperform one. |
 | [Brex — Internal Agent Platform](landscape.md#brex-agent-platform) | Later | Workflow ownership | Operations staff build and test workflows; useful non-engineering example, with secondary-only evidence. |
-| [Browserbase — bb](landscape.md#browserbase-bb) | N1, N2, N3 | Access, recovery, context | Proxy checks session scope; source also describes conversation recovery and task-specific skills. |
+| [Browserbase — bb (removed)](../archive/sources/browserbase-bb-source-1/content.md) | N1, N2, N3 | Access, recovery, context | Proxy checks session scope; source also describes conversation recovery and task-specific skills. |
 | [Cloudflare — Internal AI engineering stack](landscape.md#cloudflare-ai-stack) | N3; support N1 | Tool discovery | Concrete schema overhead and search/execute design; the token reduction is not an accuracy result. |
 | [Coinbase — Forge / Mux](landscape.md#coinbase-forge-mux) | Later | Shared work and isolation | Linear preserves work context; worktrees separate concurrent edits but are not security sandboxes. |
 | [Databricks — coSTAR and internal engineering agents](landscape.md#databricks-costar) | N6 | Evaluation | Real codebase tasks, separate tests, manual sample review, and checks aligned with expert judgment. |
@@ -158,7 +162,7 @@ adds too little to justify its own note.
 | [PostHog — StampHog](landscape.md#posthog-stamphog) | N4; support N1 | Fixed eligibility gates | Pinned implementation documents hard gates that a model cannot relax. |
 | [Ramp — Inspect](landscape.md#ramp-inspect) | Later | Prepared environments and adoption | Warm environments and a product pivot are concrete; do not isolate one cause for adoption gains. |
 | [Replit — Manager agent (agent-of-agents)](landscape.md#replit-manager-agent) | Later | Outcome measures and delegation | Review, reversion, and incident measures can extend the outcome theme; self-reported and not a controlled comparison. |
-| [Retool — RetoolGPT](landscape.md#retool-retoolgpt) | Support N1 | Read-only scope | A useful simple access boundary; insufficient detail for a separate runtime note. |
+| [Retool — RetoolGPT (removed)](../archive/sources/retool-retoolgpt-source-1/content.md) | Support N1 | Read-only scope | A useful simple access boundary; insufficient detail for a separate runtime note. The preserved source remains available after the entry's eligibility review. |
 | [Salesforce — Slackbot](landscape.md#salesforce-slackbot) | Support N1 | Permission-aware access | Employee permissions constrain visibility; implementation detail is limited. |
 | [Sentry — Junior](landscape.md#sentry-junior) | N1, N2, N3 | Access, recovery, tool discovery | Proxy credentials, continuation after timeouts, and progressive tool lookup are documented mechanisms. |
 | [Shopify — Aquifer / River](landscape.md#shopify-internal-agents) | N2; support N3; later | Durable work and shared platform | Session/harness/sandbox split is explicit; profiles and shared knowledge could support a later note. |

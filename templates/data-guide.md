@@ -3,11 +3,12 @@
 No account, API key, or agent registration is required. These are public static files.
 
 1. Fetch [the compact index](https://internal-agents.com/agents/index.json).
-2. Match `company`, `agent_name`, `approach_type`, or `domains` to your question.
+2. Select `catalog_section` (`agents` or `infrastructure`), then match `company`, `agent_name`, `approach_type`, `domains`, or `rubric.invocation`
+   to your question. Structural type and invocation are independent; invocation is an agent facet.
 3. Follow an entry's `json_url` or `markdown_url` to retrieve its evidence.
 4. Cite original publisher URLs and retain relevant dates and qualifications.
 
-The compact index has its own `schema_version: 1` and an `approaches` array. Each
+The compact index has its own `schema_version: 3` and an `approaches` array. Each
 entry includes identification and filter fields, `last_reviewed_at`, a human-readable
 `url`, and links to the individual JSON and Markdown representations.
 
@@ -21,7 +22,7 @@ do not infer facts from an agent's name or fill in unknown fields.
 Markdown is also available by sending `Accept: text/markdown` to a published HTML
 page. HTML is the default; an explicit `.md` URL always returns Markdown. Negotiated
 responses use `Vary: Accept`. Filters and URL fragments do not reduce the exported
-catalog; use individual records for selective retrieval.
+collection; use individual records for selective retrieval. `/index.md` holds Agents and `/infrastructure.md` holds Infrastructure. The historical `/agents.json` and `/agents/index.json` endpoints retain both collections.
 
 Distinguish reported facts from catalog judgments. Keep provenance, confidence,
 metric scopes, denominators, dates, and all evidence relations, including

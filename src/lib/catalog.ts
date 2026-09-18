@@ -4,7 +4,7 @@
 import catalogText from '../../data/agents.json?raw';
 
 /** The only catalog schema this website reads. */
-export const CATALOG_SCHEMA_VERSION = 5;
+export const CATALOG_SCHEMA_VERSION = 7;
 
 const CATALOG_FILE = 'data/agents.json';
 
@@ -35,6 +35,31 @@ export interface Claim {
   readonly measurement_method?: string | null;
   readonly unit?: string | null;
   readonly value?: string | number | null;
+  readonly display_name?: string;
+}
+
+export type ReviewState = 'reported' | 'unreported' | 'not-applicable' | 'not-reviewed';
+export interface CoverageDisposition {
+  readonly state: ReviewState;
+  readonly claim_paths: readonly string[];
+  readonly note?: string;
+}
+export interface ObservationMetadata {
+  readonly category?: 'effectiveness' | 'adoption-output' | 'cost-latency' | 'implementation-scale' | 'runtime-capacity';
+  readonly basis?: 'reported-measurement' | 'qualitative' | 'estimate' | 'target';
+  readonly subject?: string;
+  readonly duplicate_of?: string;
+  readonly reason?: string;
+}
+export interface PageContent {
+  readonly version: 1;
+  readonly reviewed_at: string;
+  readonly source_ids: readonly string[];
+  readonly workflow_scope?: string;
+  readonly questions: Readonly<Record<'purpose' | 'workflow' | 'human_involvement' | 'implementation' | 'validation' | 'observations' | 'lessons', CoverageDisposition>>;
+  readonly implementation_fields: Readonly<Record<'model' | 'harness' | 'sandbox' | 'tool_access' | 'knowledge' | 'context_mgmt' | 'credentials' | 'interfaces', CoverageDisposition>>;
+  readonly primitive_roles: Readonly<Record<string, 'workflow' | 'mechanism' | 'validation'>>;
+  readonly observations: Readonly<Record<string, ObservationMetadata>>;
 }
 
 export interface SourceCapture {
@@ -100,12 +125,22 @@ export interface Rubric {
   readonly evidence_strength: string;
 }
 
+export type CatalogSection = 'agents' | 'infrastructure';
+
+/** Collection is always derived from the structural type, never editorially duplicated. */
+export function catalogSection(type: string): CatalogSection {
+  if (type === 'agent' || type === 'agent-system') return 'agents';
+  if (['platform', 'supporting-pattern', 'orchestration-system'].includes(type)) return 'infrastructure';
+  throw new Error(`Unknown approach type "${type}".`);
+}
+
 export interface Approach {
   readonly id: string;
   readonly company: string;
   readonly company_id: string;
   readonly agent_name: string;
   readonly approach_type: string;
+  readonly catalog_section: CatalogSection;
   readonly deployment_stage: string;
   readonly year: number | null;
   readonly last_reviewed_at: string;
@@ -119,6 +154,18 @@ export interface Approach {
   readonly interfaces?: readonly string[];
   readonly aliases?: readonly string[];
   readonly relationships?: readonly Relationship[];
+  readonly page_content?: PageContent;
+}
+
+/** Count one family once and deduplicate shared source URLs within a collection. */
+export function collectionCounts(catalog: Catalog, section: CatalogSection) {
+  const approaches = catalog.approaches.filter((item) => item.catalog_section === section);
+  const sources = new Map(catalog.sources.map((source) => [source.id, source]));
+  return {
+    entries: approaches.length,
+    organizations: new Set(approaches.map((item) => item.company_id)).size,
+    sources: new Set(approaches.flatMap((item) => item.source_ids).map((id) => sources.get(id)?.canonical_url ?? sources.get(id)?.url)).size,
+  };
 }
 
 export interface Catalog {
@@ -184,6 +231,9 @@ export function validateCatalog(value: unknown): Catalog {
 
   const usedCompanies = new Set<string>();
   for (const approach of catalog.approaches) {
+    if (approach.catalog_section !== catalogSection(approach.approach_type)) {
+      fail(`approach "${approach.id}" has inconsistent catalog_section.`);
+    }
     const company = companies.get(approach.company_id);
     if (!company) {
       fail(`approach "${approach.id}" lists unknown company "${approach.company_id}".`);
@@ -195,6 +245,11 @@ export function validateCatalog(value: unknown): Catalog {
       );
     }
     usedCompanies.add(approach.company_id);
+    for (const relationship of approach.relationships ?? []) {
+      if (!['built-on', 'component-of', 'related-to'].includes(relationship.type) || relationship.approach_id === approach.id) {
+        fail(`approach "${approach.id}" has an invalid relationship target or type.`);
+      }
+    }
     for (const claimId of approach.claim_ids) {
       const claim = claims.get(claimId);
       if (!claim) fail(`approach "${approach.id}" lists unknown claim "${claimId}".`);
@@ -208,6 +263,41 @@ export function validateCatalog(value: unknown): Catalog {
     for (const sourceId of approach.source_ids) {
       if (!sources.has(sourceId)) {
         fail(`approach "${approach.id}" lists unknown source "${sourceId}".`);
+      }
+    }
+    if (approach.page_content) {
+      const page = approach.page_content;
+      if (page.version !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(page.reviewed_at)) {
+        fail(`approach "${approach.id}" has invalid page_content version or review date.`);
+      }
+      const fields = new Map(
+        approach.claim_ids.map((claimId) => claims.get(claimId)!).map((claim) => [claim.field, claim]),
+      );
+      const reviewed = new Set(page.source_ids);
+      if (page.source_ids.some((sourceId) => !approach.source_ids.includes(sourceId))) {
+        fail(`approach "${approach.id}" page_content lists a foreign reviewed source.`);
+      }
+      const dispositions = [
+        ...Object.values(page.questions),
+        ...Object.values(page.implementation_fields),
+      ];
+      for (const disposition of dispositions) {
+        if (!['reported', 'unreported', 'not-applicable', 'not-reviewed'].includes(disposition.state)) {
+          fail(`approach "${approach.id}" page_content has an invalid review state.`);
+        }
+        for (const path of disposition.claim_paths) {
+          const claim = fields.get(path);
+          if (!claim) fail(`approach "${approach.id}" page_content lists unknown claim path "${path}".`);
+          if (disposition.state === 'reported' && !claim.evidence.some((item) => item.relation === 'supports' && reviewed.has(item.source_id))) {
+            fail(`approach "${approach.id}" page_content claim "${path}" lacks reviewed support.`);
+          }
+        }
+      }
+      for (const [path, observation] of Object.entries(page.observations)) {
+        if (!fields.has(path)) fail(`approach "${approach.id}" observation "${path}" does not resolve.`);
+        if (observation.duplicate_of && !page.observations[observation.duplicate_of]) {
+          fail(`approach "${approach.id}" observation "${path}" has a missing duplicate target.`);
+        }
       }
     }
   }

@@ -36,12 +36,17 @@ Optional identity fields include `aliases` and `family_id`. Use `relationships` 
 
 ### Approach types
 
-- `task-agent`: An agent that performs a bounded task.
-- `background-agent`: An agent that runs after delegation or an event.
-- `agent-system`: A set of related agents with shared infrastructure.
-- `platform`: Infrastructure that supports several agents or workflows.
-- `orchestration-system`: A system that coordinates other agents.
-- `supporting-pattern`: An implemented design that supports agent operation.
+- `agent`: One task-performing system. It may be invoked interactively, in the
+  background, on a schedule, or by an event. Internal subagents do not by themselves
+  turn an agent into an agent system.
+- `agent-system`: A documented family of related agents with shared infrastructure.
+- `platform`: Reusable infrastructure that supports several agents or workflows.
+- `orchestration-system`: A system whose primary responsibility is coordinating agents.
+- `supporting-pattern`: A narrower implemented component that enables agent operation.
+
+Classify a compound entry by its documented primary responsibility and explain its
+components. Invocation is independent of structural type; an event trigger does not
+by itself establish unattended execution.
 
 ### Autonomy values
 
@@ -72,6 +77,10 @@ The build derives the level from the attention boundary:
 
 Never render or interpret a level without its scope. Compound systems can have multiple scoped assessments. Use `unknown` rather than averaging different workflows or guessing from `autonomy`, invocation mode, output volume, or company identity.
 
+The boundary describes required human attention, not tool authority or elapsed unattended
+execution. Record permissions and publication controls in the supported claims. A Level 5
+workflow can still be unable to merge, deploy, spend, or act in production without approval.
+
 Each `operating_models.N` item is an evidence-linked inference with `catalog-judgment` provenance. Its claim metadata must include `confidence`, `confidence_reason`, and `valid_at`. The level itself is generated and is never authored as a reported company fact.
 
 ## Comparison rubric
@@ -86,6 +95,10 @@ The rubric organizes different definitions and designs. It does not determine wh
 | `evidence_strength` | `detailed-primary`, `limited-primary`, `secondary-only`, `mixed`, or `unknown`. |
 
 Evidence strength describes the available detail. It does not measure whether a claim is true. A company article can provide detailed architecture and still contain marketing claims.
+
+Structural type and invocation answer different questions. `approach_type` identifies what
+kind of system the record describes. `rubric.invocation` identifies how work starts or proceeds.
+Do not infer either field from the other, and use `unknown` when the source is silent.
 
 ## Optional description fields
 
@@ -115,7 +128,12 @@ The join runs both ways. Every `company` value in `data/agents/` must have a reg
 
 Logo files live in `public/logos/<id>.svg` or `public/logos/<id>.png`. The build rejects an SVG larger than 64 KiB and a PNG larger than 128 KiB or narrower than 128 pixels. An SVG needs a `viewBox`. It must not hold a DOCTYPE, an ENTITY declaration, a script, a `foreignObject`, an `on*` attribute, a `javascript:` value, or a non-fragment `href`. The intrinsic size comes from the `viewBox` or from the PNG header.
 
-The build derives the `companies` collection into `data/agents.json` (schema version 5) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
+The build derives the `companies` collection into `data/agents.json` (schema version 7) and adds `company_id` to every approach. Each company record carries `id`, `name`, `homepage`, and `logo`. The `logo` is `null` when no asset exists. Otherwise it is a descriptor with `path`, `media_type`, `width`, `height`, `bytes`, `sha256`, `source_url`, and `accessed_at`. The build derives the hash, the byte count, and the size from the asset. Never author them.
+
+Schema 6 replaces the old `task-agent` and `background-agent` approach types with
+`agent`. Consumers that used those values should filter structural type with
+`approach_type: agent` and use `rubric.invocation` to distinguish interactive,
+background, scheduled, and event-driven operation. The compact index schema is 3.
 
 ## Source records
 
@@ -183,6 +201,13 @@ evidence:
 
 The relation is `supports`, `contradicts`, or `contextualizes`. Use a stable locator when one exists. For preserved sources, `Preserved content.md, lines 23–27` refers to the immutable artifact in that source's capture bundle, including its archive header. A locator must identify the supporting passage, not merely a broad topic. For source code, record the commit, path, and line. For a talk, record the timestamp.
 
+For each lesson, use claim metadata to distinguish a reported practice (`fact`,
+`reported`), an attributed preference (`opinion`, `reported`), and a catalog inference
+(`inference`, `catalog-judgment`). Its `confidence_reason` names the supporting
+observation and any missing link in the reasoning. A generic claim that the source
+supports the lesson does not explain that reasoning. The lesson text must also carry
+its scope: a team's implementation is not a recommendation for every organization.
+
 Use `claim_metadata` when the default classification is not correct:
 
 ```yaml
@@ -205,6 +230,38 @@ Claim kinds are `fact`, `metric`, `inference`, and `opinion`. Provenance values 
 
 Metric metadata can also include `value`, `unit`, `reported_by`, `metric_scope`, `denominator`, and `measurement_method`. The generated export uses the company as `reported_by` when a reported metric does not override it.
 
+## Optional reviewed page content
+
+`page_content` version 1 records an editorial review without changing existing claim
+identities. It is optional during the pilot. `reviewed_at` is a full `YYYY-MM-DD` date,
+and `source_ids` lists the entry sources actually read. `questions` contains exactly
+`purpose`, `workflow`, `human_involvement`, `implementation`, `validation`,
+`observations`, and `lessons`. `implementation_fields` contains all eight architecture
+keys. Every disposition has a `state`, `claim_paths`, and optionally a `note`.
+
+States are `reported`, `unreported`, `not-applicable`, and `not-reviewed`. Reported
+slots require one or more same-entry claims supported by a reviewed source. All other
+states require no claim paths and a concrete note; for `not-reviewed`, the note is the
+next research action. A reported workflow also requires `workflow_scope`.
+
+`primitive_roles` classifies every primitive as `workflow`, `mechanism`, or
+`validation`; the workflow question lists every workflow primitive in reading order.
+`observations` covers the headline and every key metric. A canonical observation has a
+`category` (`effectiveness`, `adoption-output`, `cost-latency`,
+`implementation-scale`, or `runtime-capacity`), a `basis`
+(`reported-measurement`, `qualitative`, `estimate`, or `target`), and a specific
+`subject`. A duplicate representation instead has `duplicate_of` and `reason`.
+Targets must be same-entry canonical observations; self references, cycles, and chains
+are invalid. Confirm equal subject, statement/value, period, scope, and qualifications
+before marking a duplicate. The working criterion: an alias must add nothing the
+canonical lacks. A component of a compound observation can alias the compound;
+an observation carrying an extra qualification or absence note cannot, however
+similar its number.
+
+Run `uv run --locked python scripts/content_coverage.py --check` to validate the
+coverage view, or add `--output <path>` to write deterministic JSON. Records without
+the optional block are reported as `legacy-unassessed`.
+
 ## Collection rules
 
 1. Resolve the approach identity before you extract claims.
@@ -219,3 +276,19 @@ Normalize URLs and remove tracking parameters. Link mirrors and translations wit
 
 Run `uv run python scripts/build.py` after each data change. Run
 `uv run python scripts/build.py --check` to verify committed output.
+
+## Collection migration (catalog 7 / compact index 3)
+
+The build derives `catalog_section`: `agent` and `agent-system` become `agents`;
+`platform`, `supporting-pattern`, and `orchestration-system` become `infrastructure`.
+Do not author this field. Unknown structural types fail validation. Existing fields,
+IDs, claim anchors, and detail URLs remain available. `/agents.json` and
+`/agents/index.json` retain their historical names and include both collections.
+Consumers must select `catalog_section` explicitly for agent counts or comparisons.
+One agent family counts once, not as an estimated number of constituent agents.
+
+`/` and `/index.md` represent Agents. `/infrastructure` and `/infrastructure.md`
+represent Infrastructure. `/?collection=all` shows two labeled groups. Legacy
+infrastructure type queries on `/` switch to All while retaining OR filters.
+Seven `page_content.questions` keys remain the common evidence contract; HTML and
+Markdown apply collection profiles without changing evidence or hiding unknowns.

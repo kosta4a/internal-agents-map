@@ -24,7 +24,21 @@ memory. Without readable evidence, report Needs evidence and identify the missin
 
 Extract the organization, internal workflow, and what the team built or adapted. Record the
 implementation or use that the source describes, its date, and the publisher's relationship to
-the work. Keep metric scopes, dates, denominators, and methods where reported.
+the work. Classify structural type separately from invocation: the first identifies the kind of
+system, while the second identifies how work starts or proceeds. Keep metric scopes, dates,
+denominators, and methods where reported.
+
+For each lesson, locate the supporting passage and distinguish a reported practice,
+an attributed opinion, and a catalog inference in both wording and claim metadata.
+Write a claim-specific confidence reason that identifies the evidence and any
+unsupported step. Do not turn a company's preference into general advice or reuse
+one confidence disclaimer across unrelated lessons.
+
+When the record opts into `page_content`, review the seven reader questions and all
+eight architecture fields against the captures actually read. Record explicit review
+states, a named workflow scope, primitive roles, and observation category/basis/subject.
+Leave a concrete next action for `not-reviewed`; never infer `unreported` from a blank
+legacy field. Confirm duplicate representations have identical scope and qualifications.
 
 Search `data/agents/` with `rg` for the organization, system, and aliases before choosing Add.
 A matching system calls for Update, not a duplicate or exclusion.
@@ -62,7 +76,8 @@ access restrictions or weaken validation.
 
 For operating models, record the task scope and documented human review boundary. Each assessment
 needs dated claim metadata with `catalog-judgment` provenance. Levels are derived by the build.
-Do not derive them from autonomy labels or average different workflows.
+Do not derive them from autonomy labels or average different workflows. Human attention is not
+tool authority or unattended runtime; record permissions and publication controls as separate claims.
 
 Regenerate the data and the repository documents with `uv run python scripts/build.py`. Then run
 `npm run verify`, which holds the archive, generated-output, website build, artifact, privacy,

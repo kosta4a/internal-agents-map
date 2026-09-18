@@ -15,6 +15,12 @@ verification gate, and update the status row when finished.
 | [005](005-discovery-and-delivery.md) | Discovery and delivery for internal-agents.com | P1 | M | 004 | DONE |
 | [006](006-publish-entry-pages-with-astro.md) | Publish discoverable entry pages on Astro | P1 | L | 004, 005 | DONE |
 | [007](007-show-company-logos.md) | Show a company logo on every catalog surface | P2 | M | 006 | DONE |
+| [008](008-reconcile-content-and-classifications.md) | Reconcile catalog evidence, classifications, and editorial guidance | P1 | L | 003, 006, 007 | DONE; editorial follow-up included with the approved Plan 009 merge. Earlier releases: `15bacb9`, `b6ae5c4` |
+| [009](009-agent-page-content-pilot.md) | Pilot a shared content standard on five agent pages | P1 | L | 008 editorial follow-up | DONE; user approved merge to main on 2026-09-17 |
+| [010](010-page-content-batch-2.md) | Apply the page-content standard to a second reviewed batch | P1 | M | 009 | DONE on 2026-09-17; 10 of 40 records reviewed |
+| [011](011-page-content-catalog-completion.md) | Complete the page-content standard across the catalog | P1 | L | 009, 010 | DONE on 2026-09-17; all 40 records reviewed |
+| [012](012-separate-agents-and-infrastructure.md) | Give agents and infrastructure distinct places in one catalog | P1 | L | 008–011 | DONE on 2026-09-17; independently verified on isolated branch `codex/plan-012-agents-infrastructure`; not published |
+| [013](013-add-company-pages.md) | Add company pages within the existing design | P2 | M | 012 + approved UI removals | DONE on 2026-09-17; independent full verification and desktop/mobile design review passed |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale)
@@ -42,6 +48,24 @@ sheet is recorded in the plan.
 
 ## Dependency notes
 
+- Plan 013 adds derived company pages reached from record metadata, with no new
+  menu item. It preserves Plan 012’s collections and the subsequent user-requested
+  UI removals. It narrowly supersedes Plan 007’s deferral of company hubs.
+
+- Plan 012 follows the twelve-record source recheck. It preserves infrastructure
+  research as a separate collection, corrects identities before assigning collection
+  membership, and replaces the universal page notice with appropriate content profiles.
+  It supersedes the earlier plans' single undifferentiated directory and supporting
+  notice decisions; their evidence-preservation and shared content contracts remain.
+
+- Plan 009 builds on the existing uncommitted 2026-09-17 editorial follow-up. It pilots
+  coverage states, operational workflows, observations, and export parity on Qubot,
+  Notion, Microsoft's reviewer, DoorDash's reviewer, and YC. Its working-tree baseline
+  is recorded under `plans/009-*`; inherited edits must be preserved and kept distinct.
+- Plan 008 covers all nine findings from the 2026-09-16 content review. Evidence
+  corrections precede taxonomy, generated summaries, lessons, notes, and reader
+  guidance. Implementation and publication were authorized after the proposal;
+  the OpenAI records, company/logo work, and Browserbase removal are included.
 - Plan 003 research can run alongside Plan 002; final generation and validation use both changes.
 - Plan 004 builds on the corrected catalog and verification from Plans 002–003.
   Generate the static page first, then connect publication to the existing validation job.
@@ -97,7 +121,76 @@ The rollback target for later changes is `internal-agents-ilockpa0i-nen-labs.ver
 Still open: an editorial pass on entry summaries, and Search Console submission of the
 updated sitemap.
 
-## Latest verification
+## Plan 008 release record
+
+On 2026-09-16, PR #2 was squash-merged as `bcaff15`, followed by the Plan 008 squash
+commit `15bacb9`. Vercel deployment `dpl_GXqrAs68W3N13poDbZYxCT8J6RuM`
+(`internal-agents-ny8qg9srd-nen-labs.vercel.app`) served that revision at
+<https://internal-agents.com/>. The complete local suite passed, and
+`scripts/check_delivery.py https://internal-agents.com --root dist` passed all
+371 deployed response checks. `DESIGN.md`, the Areal/Sand redesign, and PR #2's
+guide illustrations were retained.
+
+GitHub run `35144506397` was canceled after hanging before the browser tests:
+the global setup waited synchronously for `astro preview` to exit. Astro's CLI
+automatically backgrounds itself in an agent environment, which masked the problem
+locally. The follow-up uses Astro's preview API in a Playwright-managed server,
+with readiness, shutdown, suite, and CI job timeouts.
+
+The checkout comparison also found fourteen records with later Phase 1 corrections
+that were absent from `15bacb9`. Those records and their generated output are retained
+with the expanded [content review](../docs/content-review-2026-09.md).
+[The original page audit](agent-page-content-audit.html) is kept unchanged as a
+historical report: its published-site baseline predates Plan 008 and is not the
+current catalog inventory.
+
+The follow-up was published as `b6ae5c4` on 2026-09-16. The full verification suite
+passed locally and on the GitHub Linux runner:
+[Validate catalog run 35149597395](https://github.com/steel-experiments/internal-agents-map/actions/runs/35149597395).
+It includes 147 Vitest, 14 Node, 196 Python, and 283 Playwright tests, with 38
+expected browser-project skips. The revised catalog contains 40 approaches,
+35 organizations, 591 claims, and 107 preserved source captures; Astro built
+52 pages and 51 canonical routes.
+
+Vercel deployment `dpl_G5XMQcKkCc4B2CDuidVYUFQ7FYg5`
+(`internal-agents-f3v0me4iw-nen-labs.vercel.app`) became production, and the complete
+delivery audit again passed all 371 checks. The missing-build error and preview
+process cleanup were also checked locally, including cleanup after failed tests.
+Rollback to the initial Plan 008 release is available through deployment
+`dpl_GXqrAs68W3N13poDbZYxCT8J6RuM`.
+
+The original checkout was fast-forwarded to the released `main`. All four temporary
+worktrees and both release branches were removed after confirming that their work
+was integrated or preserved in verified local recovery bundles. Both redundant
+stashes were retired after the successful CI and production checks. `DESIGN.md`
+and the original audit HTML were verified byte-identical to the backed-up originals.
+
+## Plan 008 editorial follow-up
+
+The implementation audit at `e10443b` found unresolved lesson reasoning, repetitive
+notes, stale monday.com supervision prose, and unsupported advice. The local follow-up
+reviews all 100 lessons, all 40 summaries and their components, and all seven notes
+against preserved evidence. Lessons now carry claim-specific explanations and source
+locators; notes use three distinct diagrams, a comparison table, or prose as appropriate.
+The [follow-up review](../docs/lesson-review-2026-09.md) records the editorial decisions
+and the 100-lesson passage inventory.
+
+On 2026-09-17, `npm run verify` passed with 147 Vitest, 14 Node, 196 Python, and 304 browser tests,
+plus 38 expected skips. Desktop and mobile visual review covered the revised diagrams
+and table. Counts are 40 approaches, 35 organizations, 590 claims, 107 source
+captures, 52 built pages, and 51 canonical routes. Removing Spotify's unsupported
+credentials field accounts for the one fewer claim. The archives remain unchanged.
+These changes are included with the user-approved Plan 009 merge to main.
+The production checks in the earlier release record apply to those earlier revisions.
+
+## Verification history
+
+2026-09-16: Plan 008 completed on the isolated `codex/plan-008-reconcile` branch.
+The catalog has 40 approaches, 35 organizations, and 107 declared source captures.
+The ordered generation and `npm run verify` gate passed: 147 Vitest tests, 14 Node
+negotiation tests, 196 Python tests, and 283 Playwright tests with 38 expected skips;
+Astro built 52 pages and 51 canonical routes. This verification preceded the
+publication recorded above.
 
 2026-09-09: Plans 002 and 003 applied and reviewed in the current checkout. All 97
 tests and required checks pass, including the concurrently added email-address
@@ -112,3 +205,20 @@ are generated from the catalog. All 116 tests and required checks pass; the firs
 validation/deployment workflow succeeded and all six public assets match the
 reviewed release. Desktop/mobile, keyboard, no-JavaScript, URL/history, subdirectory,
 and live-browser checks passed. See [website maintenance](../docs/site.md).
+
+## Plan 012 implementation review
+
+Implemented and independently verified on 2026-09-17 in
+`/Users/nikola/dev/steel/internal-agents-map-plan-012`, branch
+`codex/plan-012-agents-infrastructure`. The catalog now has 43 agent/family records
+and 13 infrastructure records, 900 claims, 109 distinct publisher URLs, and 111
+preserved captures. All 40 original records, 774 original claim anchors, and 107
+original source IDs/URLs remain available.
+
+The independent `npm run verify` passed: 158 Vitest, 14 negotiation, 201 Python,
+and 517 browser tests, with 47 expected browser-project skips. Generated data,
+coverage, archives, Astro/TypeScript, 69 built pages and 68 canonical routes,
+artifact parity, Ruff, privacy, local links, and whitespace checks passed. Desktop
+and mobile visual review covered collection browsing, infrastructure/agent/family
+profiles, and search. See the classification review ledger for source decisions.
+Implementation is approved locally; this record does not claim merge or deployment.

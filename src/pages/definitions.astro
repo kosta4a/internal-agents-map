@@ -2,24 +2,27 @@
 // ABOUTME: The Definitions guide: the scope of the map, the chart, and the terms.
 // ABOUTME: Chart placements come from the catalog, so lost evidence removes a marker.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import Icon from '../components/Icon.astro';
 import Inline from '../components/Inline.astro';
-import Topography from '../components/Topography.astro';
 import { loadCatalog } from '../lib/catalog';
 import { placements, placementsByCell } from '../lib/definitions';
 import {
   ASSISTANT_REFERENCES,
+  APPROACH_TYPE_DEFINITIONS,
+  WORK_DOMAIN_DESCRIPTION,
+  WORK_MODES_DESCRIPTION,
   DEFINITIONS_CHART,
   DEFINITIONS_DESCRIPTION,
-  DEFINITIONS_EYEBROW,
   DEFINITIONS_HEADING,
   DEFINITIONS_INTRO,
-  DEFINITIONS_JUMP_LINKS,
   DEFINITIONS_LEDE,
   DEFINITIONS_QUESTIONS,
   DEFINITIONS_SCOPE,
+  SUPERVISION_DEFINITIONS,
   DEFINITIONS_TERMS,
   DEFINITIONS_TITLE,
   DEFINITIONS_WORKFLOW,
+  INVOCATION_DEFINITIONS,
   READY_REFERENCES,
   REFERENCE_PLACEMENTS,
   inlineHref,
@@ -50,6 +53,7 @@ const workflow = DEFINITIONS_WORKFLOW;
 const chart = DEFINITIONS_CHART;
 const terms = DEFINITIONS_TERMS;
 const questions = DEFINITIONS_QUESTIONS;
+const supervision = SUPERVISION_DEFINITIONS;
 const [task, work, result] = workflow.steps;
 const [breadth, adaptation] = chart.dimensions;
 const [localFigure, cloudFigure] = terms.place.figures;
@@ -63,60 +67,95 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
   structuredData={graph}
 >
   <header class="guide-header">
-    <Topography />
-    <p class="eyebrow">{DEFINITIONS_EYEBROW}</p>
     <h1>{DEFINITIONS_HEADING}</h1>
     <p class="lede">{DEFINITIONS_LEDE}</p>
     {DEFINITIONS_INTRO.map((block) => <p><Inline parts={block} /></p>)}
-    <div class="resource-links">{DEFINITIONS_JUMP_LINKS.map((link) => <a href={`#${link.fragment}`}>{link.label}</a>)}</div>
   </header>
+  <p class="section-note">The agent comparisons below exclude shared infrastructure. Explore <a href="/infrastructure">platforms and components</a> separately.</p>
   <section id="terms">
-    <p class="eyebrow">{scope.eyebrow}</p>
     <h2>{scope.heading}</h2>
     <div class="core-definition">
-      <div><span class="definition-label">{scope.definitionLabel}</span><p><Inline parts={scope.definition} /></p></div>
-      <svg viewBox="0 0 300 210" role="img" aria-label={scope.diagramLabel}><rect x="12" y="12" width="276" height="186" rx="2"/><text x="30" y="38">Organization</text><path class="agent-links" pathLength="1" d="M150 94 L60 149 M150 94 L150 149 M150 94 L240 149"/><circle class="agent-dot" cx="150" cy="94" r="9"/><text x="150" y="72" text-anchor="middle">Agent</text><circle cx="60" cy="149" r="5"/><circle cx="150" cy="149" r="5"/><circle cx="240" cy="149" r="5"/><text x="60" y="177" text-anchor="middle">Knowledge</text><text x="150" y="177" text-anchor="middle">Tools</text><text x="240" y="177" text-anchor="middle">Workflows</text></svg>
+      <p><Inline parts={scope.definition} /></p>
     </div>
+    <figure class="scope-figure">
+      <svg class="scope-wide" viewBox="0 0 684 385" role="img" aria-label={scope.diagramLabel} data-signals>
+        <rect class="scope-frame" x="0.5" y="0.5" width="683" height="384" rx="15.5"/>
+        <text class="scope-label" x="20" y="36">Organization</text>
+        <path class="scope-link signal-path" id="scope-link-0" d="M202 192 C 296 192, 340 106, 456 106"/>
+        <path class="scope-link signal-path" id="scope-link-1" d="M202 192 C 296 192, 340 192, 456 192"/>
+        <path class="scope-link signal-path" id="scope-link-2" d="M202 192 C 296 192, 340 278, 456 278"/>
+        <circle class="scope-node scope-agent" cx="190" cy="192" r="10"/>
+        <text class="scope-label" x="190" y="164" text-anchor="middle">Agent</text>
+        <circle class="scope-node" cx="462" cy="106" r="6"/>
+        <circle class="scope-node" cx="462" cy="192" r="6"/>
+        <circle class="scope-node" cx="462" cy="278" r="6"/>
+        <text class="scope-label" x="488" y="111">Knowledge</text>
+        <text class="scope-label" x="488" y="197">Tools</text>
+        <text class="scope-label" x="488" y="283">Workflows</text>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-0" data-delay="0" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-1" data-delay=".5" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-2" data-delay="1" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-0" data-delay="1.6" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-1" data-delay="2.1" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-link-2" data-delay="2.6" data-return opacity="0"/>
+      </svg>
+      <svg class="scope-portrait" viewBox="0 0 342 300" aria-hidden="true" data-signals>
+        <rect class="scope-frame" x="0.5" y="0.5" width="341" height="299" rx="15.5"/>
+        <text class="scope-label" x="16" y="28">Organization</text>
+        <path class="scope-link signal-path" id="scope-tall-0" d="M171 96 C 171 150, 70 150, 70 206"/>
+        <path class="scope-link signal-path" id="scope-tall-1" d="M171 96 C 171 150, 171 150, 171 206"/>
+        <path class="scope-link signal-path" id="scope-tall-2" d="M171 96 C 171 150, 272 150, 272 206"/>
+        <circle class="scope-node scope-agent" cx="171" cy="86" r="10"/>
+        <text class="scope-label" x="171" y="58" text-anchor="middle">Agent</text>
+        <circle class="scope-node" cx="70" cy="212" r="6"/>
+        <circle class="scope-node" cx="171" cy="212" r="6"/>
+        <circle class="scope-node" cx="272" cy="212" r="6"/>
+        <text class="scope-label" x="70" y="248" text-anchor="middle">Knowledge</text>
+        <text class="scope-label" x="171" y="248" text-anchor="middle">Tools</text>
+        <text class="scope-label" x="272" y="248" text-anchor="middle">Workflows</text>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-0" data-delay="0" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-1" data-delay=".5" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-2" data-delay="1" opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-0" data-delay="1.6" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-1" data-delay="2.1" data-return opacity="0"/>
+        <circle class="signal scope-signal" r="3" data-link="scope-tall-2" data-delay="2.6" data-return opacity="0"/>
+      </svg>
+    </figure>
     {scope.body.map((block) => <p><Inline parts={block} /></p>)}
     <h3>{scope.agentHeading}</h3>
     {scope.agentBody.map((block) => <p><Inline parts={block} /></p>)}
   </section>
   <section id="overlap">
-    <p class="eyebrow">{workflow.eyebrow}</p>
     <h2>{workflow.heading}</h2>
     <p><Inline parts={workflow.intro} /></p>
     <figure class="workflow-figure">
-      <div class="workflow-node"><span class="eyebrow">{task.label}</span><strong>{task.value}</strong></div>
-      <div class="workflow-connector" aria-hidden="true">↓</div>
-      <div class="workflow-node workflow-context"><span class="eyebrow">{work.label}</span><strong>{work.value}</strong></div>
-      <div class="workflow-connector" aria-hidden="true">↓</div>
-      <div class="workflow-node"><span class="eyebrow">{result.label}</span><strong>{result.value}</strong></div>
+      <div class="workflow-stack">
+        <div class="workflow-node"><span class="eyebrow">{task.label}</span><strong>{task.value}</strong></div>
+        <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 32"><path d="M6 0 V31 M2 26.5 L6 31 L10 26.5"/></svg></div>
+        <div class="workflow-node workflow-context"><span class="eyebrow">{work.label}</span><strong>{work.value}</strong></div>
+        <div class="workflow-connector" aria-hidden="true"><svg viewBox="0 0 12 32"><path d="M6 0 V31 M2 26.5 L6 31 L10 26.5"/></svg></div>
+        <div class="workflow-node"><span class="eyebrow">{result.label}</span><strong>{result.value}</strong></div>
+      </div>
       <figcaption><Inline parts={workflow.caption} /></figcaption>
     </figure>
     <p><Inline parts={workflow.closing} /></p>
-    <div class="resource-links"><a href={inlineHref(workflow.catalogLink)}>{workflow.catalogLink.text}</a></div>
+    <a class="button" href={inlineHref(workflow.catalogLink)}><span>{workflow.catalogLink.text}</span><Icon name="layers-two" /></a>
   </section>
   <section id="quadrant">
-    <p class="eyebrow">{chart.eyebrow}</p>
     <h2>{chart.heading}</h2>
     <p><Inline parts={chart.intro} /></p>
     <div class="dimension-intro">
-      <div><span class="dimension-axis-label">{breadth.axisLabel}</span><h3>{breadth.heading}</h3>
-        <div class="dimension-scale"><span>{breadth.scale.from}</span><span aria-hidden="true">→</span><span>{breadth.scale.to}</span></div>
-        <p><Inline parts={breadth.description} /></p></div>
-      <div><span class="dimension-axis-label">{adaptation.axisLabel}</span><h3>{adaptation.heading}</h3>
-        <div class="dimension-scale"><span>{adaptation.scale.from}</span><span aria-hidden="true">→</span><span>{adaptation.scale.to}</span></div>
-        <p><Inline parts={adaptation.description} /></p></div>
+      <div><h3>{breadth.heading}</h3><p><Inline parts={breadth.description} /></p></div>
+      <div><h3>{adaptation.heading}</h3><p><Inline parts={adaptation.description} /></p></div>
     </div>
     <figure class="quadrant-figure">
       <div class="quadrant-legend" aria-label="Marker legend"><span><i class="catalog-marker" aria-hidden="true"></i>{chart.legend.catalog}</span><span><i class="reference-marker-key" aria-hidden="true"></i>{chart.legend.reference}</span></div>
       <div class="quadrant-chart">
-        <div class="quadrant-y-axis">{chart.verticalAxis}</div>
+        <div class="quadrant-y-axis"><span>{chart.verticalAxis.from}</span><span>{chart.verticalAxis.to}</span></div>
         <div class="quadrant-plot">
-          <div class="quadrant-cell">
+          <div class="quadrant-cell quadrant-specialized">
             <h3><span>{chart.cells.specialized.scope}</span>{chart.cells.specialized.title}</h3>
             <ul>
-              {cells.specialized.length === 0 && <li>{chart.emptyCell}</li>}
               {cells.specialized.map((item) => (
                 <li data-chart-approach-id={item.id}>
                   <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
@@ -124,10 +163,9 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
               ))}
             </ul>
           </div>
-          <div class="quadrant-cell">
+          <div class="quadrant-cell quadrant-shared">
             <h3><span>{chart.cells.shared.scope}</span>{chart.cells.shared.title}</h3>
             <ul>
-              {cells.shared.length === 0 && <li>{chart.emptyCell}</li>}
               {cells.shared.map((item) => (
                 <li data-chart-approach-id={item.id}>
                   <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
@@ -135,10 +173,9 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
               ))}
             </ul>
           </div>
-          <div class="quadrant-cell">
+          <div class="quadrant-cell quadrant-ready">
             <h3><span>{chart.cells.ready.scope}</span>{chart.cells.ready.title}</h3>
             <ul>
-              {cells.ready.length === 0 && <li>{chart.emptyCell}</li>}
               {cells.ready.map((item) => (
                 <li data-chart-approach-id={item.id}>
                   <a href={item.path} title={item.reason}><strong>{item.company}</strong><span>{item.agentName}</span></a>
@@ -149,7 +186,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
               ))}
             </ul>
           </div>
-          <div class="quadrant-cell">
+          <div class="quadrant-cell quadrant-assistants">
             <h3><span>{chart.cells.assistants.scope}</span>{chart.cells.assistants.title}</h3>
             <ul>
               {ASSISTANT_REFERENCES.map((item) => (
@@ -164,7 +201,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     </figure>
     {chart.body.map((block) => <p><Inline parts={block} /></p>)}
     <details class="placement-notes">
-      <summary>{chart.notesSummary}</summary>
+      <summary><span>{chart.notesSummary}</span><Icon name="chevron-down" /></summary>
       <ul>
         {placed.map((item) => (
           <li>
@@ -183,7 +220,7 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
             <p>{item.reason}</p>
             <div>
               {item.links.map((link, index) => (
-                <>{index > 0 && ' · '}<a href={link.url}>{link.label} <span class="link-arrow">↗</span></a></>
+                <>{index > 0 && ' · '}<a href={link.url}><Icon name="arrow-upright" />{link.label}</a></>
               ))}
             </div>
           </li>
@@ -193,33 +230,149 @@ const [foregroundFigure, backgroundFigure] = terms.participation.figures;
     <h3>{chart.builtHeading}</h3>
     {chart.builtBody.map((block) => <p><Inline parts={block} /></p>)}
   </section>
+  <section id="supervision">
+    <h2>{supervision.heading}</h2>
+    <p><Inline parts={supervision.intro} /></p>
+    <p><Inline parts={supervision.source} /></p>
+    <div class="classification-table" role="region" aria-label="Supervision levels" tabindex="0">
+      <table>
+        <thead><tr><th>Boundary</th><th>Level</th><th>Human attention</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          {supervision.rows.map((row) => (
+            <tr><th scope="row">{row.label}</th><td data-label="Level"><span>{row.level}</span></td><td data-label="Human attention"><span>{row.attention}</span></td><td data-label="Interpretation"><span>{row.meaning}</span></td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p><Inline parts={supervision.limits} /></p>
+    <p><Inline parts={supervision.scope} /></p>
+    <h3>Work domains</h3>
+    <p>{WORK_DOMAIN_DESCRIPTION}</p>
+    <h3>Approach types</h3>
+    <p>Approach type answers what kind of system the entry describes. It is independent of how work starts.</p>
+    <div class="classification-table term-table" role="region" aria-label="Approach types" tabindex="0">
+      <table>
+        <thead><tr><th>Type</th><th>What it means</th></tr></thead>
+        <tbody>
+          {APPROACH_TYPE_DEFINITIONS.map((item) => (
+            <tr><th scope="row">{item.label}</th><td data-label="What it means"><span>{item.meaning}</span></td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <h3>Work modes</h3>
+    <p>{WORK_MODES_DESCRIPTION}</p>
+    <div class="classification-table term-table" role="region" aria-label="Work modes" tabindex="0">
+      <table>
+        <thead><tr><th>Mode</th><th>What it means</th></tr></thead>
+        <tbody>
+          {INVOCATION_DEFINITIONS.map((item) => (
+            <tr><th scope="row">{item.label}</th><td data-label="What it means"><span>{item.meaning}</span></td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
   <section id="terminology">
-    <p class="eyebrow">{terms.eyebrow}</p>
     <h2>{terms.heading}</h2>
     <p><Inline parts={terms.intro} /></p>
     <h3>{terms.place.heading}</h3>
     <p class="concept-definition"><Inline parts={terms.place.definition} /></p>
-    <div class="concept-pair">
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={localFigure.label}><rect x="70" y="25" width="160" height="92" rx="3"/><path d="M55 128 H245 M120 117 V128 M180 117 V128"/><circle class="agent-dot" cx="150" cy="65" r="9"/><text x="150" y="98" text-anchor="middle">Agent runs here</text></svg><figcaption><strong>{localFigure.term}</strong><span>{localFigure.caption}</span></figcaption></figure>
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={cloudFigure.label}><rect x="20" y="60" width="70" height="45" rx="2"/><path d="M12 114 H98 M90 82 H175"/><rect x="175" y="25" width="105" height="90" rx="3"/><circle class="agent-dot" cx="227" cy="55" r="9"/><text x="227" y="83" text-anchor="middle">Agent runs</text><text x="227" y="99" text-anchor="middle">here</text><text x="55" y="139" text-anchor="middle">Your device</text><text x="227" y="139" text-anchor="middle">Remote computer</text></svg><figcaption><strong>{cloudFigure.term}</strong><span>{cloudFigure.caption}</span></figcaption></figure>
+    <div class="place-panels">
+      <figure class="place-panel">
+        <figcaption><strong>{localFigure.term}</strong><span>{localFigure.caption}</span></figcaption>
+        <div class="place-scene" role="img" aria-label={localFigure.label}>
+          <div class="place-machine">
+            <span class="place-machine-title">Your computer</span>
+            <div class="place-box"><i class="place-agent-dot" aria-hidden="true"></i></div>
+            <span class="place-callout"><svg viewBox="0 0 12 28" aria-hidden="true"><path d="M6 28 V1 M2 5.5 L6 1 L10 5.5"/></svg><span>Agent runs here</span></span>
+          </div>
+        </div>
+      </figure>
+      <figure class="place-panel">
+        <figcaption><strong>{cloudFigure.term}</strong><span>{cloudFigure.caption}</span></figcaption>
+        <div class="place-scene" role="img" aria-label={cloudFigure.label}>
+          <div class="place-machine">
+            <span class="place-machine-title">Your computer</span>
+            <div class="place-box"></div>
+          </div>
+          <div class="place-link">
+            <span class="place-machine-title"></span>
+            <svg class="place-arrow" viewBox="0 0 64 12" aria-hidden="true"><path d="M7 6 H57 M7 6 L13 2 M7 6 L13 10 M57 6 L51 2 M57 6 L51 10"/></svg>
+          </div>
+          <div class="place-machine">
+            <span class="place-machine-title">Remote computer</span>
+            <div class="place-box"><i class="place-agent-dot" aria-hidden="true"></i></div>
+            <span class="place-callout"><svg viewBox="0 0 12 28" aria-hidden="true"><path d="M6 28 V1 M2 5.5 L6 1 L10 5.5"/></svg><span>Agent runs here</span></span>
+          </div>
+        </div>
+      </figure>
     </div>
     {terms.place.body.map((block) => <p><Inline parts={block} /></p>)}
     <h3>{terms.participation.heading}</h3>
     <p class="concept-definition"><Inline parts={terms.participation.definition} /></p>
-    <div class="concept-pair">
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={foregroundFigure.label}><circle cx="55" cy="32" r="8"/><path d="M40 57 Q55 37 70 57 M55 65 V125 M245 65 V125 M75 72 H225 L219 68 M225 91 H75 L81 87 M75 110 H225 L219 106"/><circle class="agent-dot" cx="245" cy="40" r="9"/><text x="55" y="145" text-anchor="middle">You</text><text x="245" y="145" text-anchor="middle">Agent</text></svg><figcaption><strong>{foregroundFigure.term}</strong><span>{foregroundFigure.caption}</span></figcaption></figure>
-      <figure><svg viewBox="0 0 300 150" role="img" aria-label={backgroundFigure.label}><path d="M65 65 H110 L104 61 M190 65 H235 L229 61"/><circle cx="40" cy="65" r="6"/><rect x="110" y="30" width="80" height="70" stroke-dasharray="3 4"/><circle class="agent-dot" cx="150" cy="65" r="9"/><rect x="235" y="50" width="28" height="30"/><path d="M241 65 L247 71 L257 59"/><text x="40" y="129" text-anchor="middle">Trigger</text><text x="150" y="129" text-anchor="middle">Agent works</text><text x="249" y="129" text-anchor="middle">Result</text></svg><figcaption><strong>{backgroundFigure.term}</strong><span>{backgroundFigure.caption}</span></figcaption></figure>
+    <div class="place-panels">
+      <figure class="place-panel">
+        <figcaption><strong>{foregroundFigure.term}</strong><span>{foregroundFigure.caption}</span></figcaption>
+        <div class="place-scene place-scene-wide" role="img" aria-label={foregroundFigure.label}>
+          <svg class="exchange-scene" viewBox="0 0 652 280" aria-hidden="true" data-signals="5">
+            <path class="exchange-strand" id="exchange-0" d="M66 130 H160 C 250 130, 250 50, 326 50 C 402 50, 402 130, 492 130 H586"/>
+            <path class="exchange-strand" id="exchange-1" d="M66 130 H586"/>
+            <path class="exchange-strand" id="exchange-2" d="M66 130 H160 C 250 130, 250 210, 326 210 C 402 210, 402 130, 492 130 H586"/>
+            <circle class="exchange-you" cx="56" cy="130" r="10"/>
+            <circle class="exchange-agent" cx="596" cy="130" r="10"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-0" data-delay="0" opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-1" data-delay=".5" opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-2" data-delay="1" opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-0" data-delay="1.6" data-return opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-1" data-delay="2.1" data-return opacity="0"/>
+            <circle class="signal exchange-signal" r="3" data-link="exchange-2" data-delay="2.6" data-return opacity="0"/>
+            <text class="scope-label" x="56" y="170" text-anchor="middle">You</text>
+            <text class="scope-label" x="596" y="170" text-anchor="middle">Agent</text>
+          </svg>
+        </div>
+      </figure>
+      <figure class="place-panel">
+        <figcaption><strong>{backgroundFigure.term}</strong><span>{backgroundFigure.caption}</span></figcaption>
+        <div class="place-scene place-scene-wide" role="img" aria-label={backgroundFigure.label}>
+          <svg class="cycle-scene" viewBox="0 0 668 280" aria-hidden="true">
+            <path class="cycle-link" id="cycle-in" d="M0 140 H126"/>
+            <path class="cycle-link" id="cycle-work" d="M154 140 H302"/>
+            <path class="cycle-link" id="cycle-out" d="M350 140 H566"/>
+            <circle class="cycle-trigger" cx="140" cy="140" r="12"/>
+            <circle class="cycle-trigger-on" cx="140" cy="140" r="12" opacity="0"/>
+            <circle class="cycle-agent" cx="326" cy="140" r="22"/>
+            <path class="cycle-spinner" d="M326 128 A12 12 0 0 1 338 140" opacity="0"/>
+            <circle class="cycle-result" cx="580" cy="140" r="12"/>
+            <circle class="cycle-result-dot" cx="580" cy="140" r="6" opacity="0"/>
+            <circle class="cycle-signal" r="4" opacity="0"/>
+            <text class="scope-label" x="140" y="186" text-anchor="middle">Trigger</text>
+            <text class="scope-label" x="326" y="186" text-anchor="middle">Agent</text>
+            <text class="scope-label" x="580" y="186" text-anchor="middle">Result</text>
+          </svg>
+        </div>
+      </figure>
     </div>
     {terms.participation.body.map((block) => <p><Inline parts={block} /></p>)}
-    <aside class="concept-combination"><span class="definition-label">{terms.combination.label}</span><p><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
+    <aside class="concept-combination"><p class="combination-title">{terms.combination.label}<br /><Inline parts={terms.combination.lede} /></p><dl>{terms.combination.pairs.map((pair) => <div><dt>{pair.label}</dt><dd>{pair.value}</dd></div>)}</dl><p class="combination-note">{terms.combination.note}</p></aside>
     <h3 id={terms.autonomy.id}>{terms.autonomy.heading}</h3>
     {terms.autonomy.body.map((block) => <p><Inline parts={block} /></p>)}
-    <blockquote>{terms.autonomy.quote}</blockquote>
-    <p><Inline parts={terms.autonomy.closing} /></p>
+    <p><Inline parts={terms.autonomy.lead} /> “{terms.autonomy.quote}” <Inline parts={terms.autonomy.closing} /></p>
   </section>
-  <section id="faq" class="guide-faq">
-    <p class="eyebrow">{questions.eyebrow}</p>
+  <section id="faq" class="guide-faq" data-exclusive>
     <h2>{questions.heading}</h2>
-    {questions.items.map((item) => <details><summary>{item.question}</summary><p><Inline parts={item.answer} /></p></details>)}
+    {questions.items.map((item) => (
+      <details>
+        <summary><span>{item.question}</span><Icon name="chevron-down" /></summary>
+        <p><Inline parts={item.answer} /></p>
+      </details>
+    ))}
   </section>
 </ArticleLayout>
+<script>
+  import { startSignals } from '../scripts/signals';
+  import { startWorkCycle } from '../scripts/work-cycle';
+
+  startSignals();
+  startWorkCycle();
+</script>

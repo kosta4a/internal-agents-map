@@ -1,6 +1,7 @@
 // ABOUTME: Holds the text of the two guides: headings, paragraphs, list items, and links.
 // ABOUTME: The HTML pages and their Markdown exports render the same values from here.
 
+import { termLabel } from './labels';
 import { SITE_NAME } from './metadata';
 import { canonicalUrl, entryPath, guidePath, notesIndexPath } from './routes';
 
@@ -118,7 +119,7 @@ export const REFERENCE_PLACEMENTS: readonly ReferencePlacement[] = [
   },
 ];
 
-/** The reference markers that belong in the "ready-made task agents" region. */
+/** The reference markers that belong in the ready-made focused-agent region. */
 export const READY_REFERENCES = REFERENCE_PLACEMENTS.filter(
   (item) => item.id === 'deep-research' || item.id === 'ready-made-task',
 );
@@ -202,7 +203,7 @@ export const METHODOLOGY_SECTIONS: readonly GuideSection[] = [
         'Each case describes a system that a named organization built or adapted for its own teams. Public sources must describe its implementation or use.',
       ],
       [
-        'We also include platforms and supporting tools that help teams build internal agents. A product name is optional. Commercial systems can qualify when sources describe the internal build or adaptation. General adoption claims are insufficient.',
+        'We maintain platforms and supporting tools in a separate Infrastructure collection, alongside the default Agents collection. A product name is optional. Commercial systems can qualify when sources describe the internal build or adaptation. General adoption claims are insufficient.',
       ],
     ],
   },
@@ -255,7 +256,7 @@ export const METHODOLOGY_SECTIONS: readonly GuideSection[] = [
       ],
       [
         'The levels do not rank companies or measure quality. See ',
-        { text: 'Definitions', path: guidePath('definitions') },
+        { text: 'the supervision definitions', path: `${guidePath('definitions')}#supervision` },
         ' for the terms and framework.',
       ],
     ],
@@ -320,9 +321,7 @@ export interface AxisScale {
 
 /** One of the two questions the chart asks about an implementation. */
 export interface ChartDimension {
-  readonly axisLabel: string;
   readonly heading: string;
-  readonly scale: AxisScale;
   readonly description: TextBlock;
 }
 
@@ -346,6 +345,17 @@ export interface GuideQuestion {
   readonly answer: TextBlock;
 }
 
+export interface ClassificationDefinition {
+  readonly id: string;
+  readonly label: string;
+  readonly meaning: string;
+}
+
+export interface SupervisionDefinition extends ClassificationDefinition {
+  readonly level: string;
+  readonly attention: string;
+}
+
 const MINIONS_PATH = entryPath('stripe-minions');
 const MINIONS_PART_ONE =
   'https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents';
@@ -367,8 +377,59 @@ export const DEFINITIONS_INTRO: readonly TextBlock[] = [
 export const DEFINITIONS_JUMP_LINKS: readonly JumpLink[] = [
   { label: 'Internal agents ↓', fragment: 'terms' },
   { label: 'How agents fit ↓', fragment: 'quadrant' },
+  { label: 'Supervision ↓', fragment: 'supervision' },
   { label: 'Other terms ↓', fragment: 'terminology' },
 ];
+
+export const WORK_DOMAIN_DESCRIPTION =
+  'Work domain describes the kind of work an entry supports, such as coding, code review, support, or finance operations. One entry can cover several domains. This differs from workflow breadth, which describes how narrowly or broadly the system works.';
+
+export const WORK_MODES_DESCRIPTION =
+  'Work modes describe how work starts or proceeds. Interactive (foreground) and background describe participation; scheduled and event-driven describe triggers. One system can support several modes, such as event-driven background work.';
+
+export const APPROACH_TYPE_DEFINITIONS: readonly ClassificationDefinition[] = [
+  { id: 'agent', label: termLabel('agent'), meaning: 'One system that carries out tasks.' },
+  { id: 'agent-system', label: termLabel('agent-system'), meaning: 'A documented family of independently useful agents; internal subagents alone do not establish a family.' },
+  { id: 'platform', label: termLabel('platform'), meaning: 'Reusable infrastructure for several agents or workflows.' },
+  { id: 'orchestration-system', label: termLabel('orchestration-system'), meaning: 'A system whose primary role is coordinating agents.' },
+  { id: 'supporting-pattern', label: termLabel('supporting-pattern'), meaning: 'A narrower implemented component that enables agent operation.' },
+];
+
+export const INVOCATION_DEFINITIONS: readonly ClassificationDefinition[] = [
+  { id: 'interactive', label: termLabel('interactive'), meaning: 'A person starts and exchanges messages with the system. This is foreground participation while those exchanges continue.' },
+  { id: 'background', label: termLabel('background'), meaning: 'Work continues without continuous interaction after it starts.' },
+  { id: 'scheduled', label: termLabel('scheduled'), meaning: 'A time rule starts the work.' },
+  { id: 'event-driven', label: termLabel('event-driven'), meaning: 'A system event starts the work.' },
+  { id: 'unknown', label: termLabel('unknown'), meaning: 'The collected evidence does not establish how work starts or proceeds.' },
+];
+
+export const SUPERVISION_DEFINITIONS = {
+  heading: 'Supervision: where human attention returns',
+  intro: [
+    'The catalog assesses one documented workflow at a time. The boundary records when human attention normally returns during a successful run.',
+  ] as TextBlock,
+  source: [
+    'Levels 2–5 adapt ',
+    {
+      text: "Dan Shapiro’s five levels of AI-assisted software development",
+      href: 'https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-autocomplete-to-the-software-factory/',
+    },
+    '. Levels 0–1 describe manual work and discrete assistance, outside the internal-agent workflows assessed here.',
+  ] as TextBlock,
+  rows: [
+    { id: 'continuous-steering', label: termLabel('continuous-steering'), level: '2', attention: 'A person pairs with the agent throughout execution.', meaning: 'The person repeatedly guides the work as it proceeds.' },
+    { id: 'work-product-review', label: termLabel('work-product-review'), level: '3', attention: 'A person reviews the draft or implementation.', meaning: 'The agent produces work, but review returns to the produced artifact.' },
+    { id: 'outcome-review', label: termLabel('outcome-review'), level: '4', attention: 'A person evaluates tests, behavior, or outcomes.', meaning: 'The normal review boundary is the result rather than routine implementation inspection.' },
+    { id: 'exception-only', label: termLabel('exception-only'), level: '5', attention: 'A person returns when the system raises an exception.', meaning: 'A normal successful run does not require routine human review.' },
+    { id: 'unknown', label: termLabel('unknown'), level: '—', attention: 'Not established by the collected evidence.', meaning: 'The normal review boundary is undocumented or has not been assessed. Unknown does not mean no human supervision.' },
+  ] as readonly SupervisionDefinition[],
+  limits: [
+    'Attention is separate from authority. A background run can still lack permission to publish, merge, spend money, or act in production. A level also does not state how long the system runs unattended.',
+  ] as TextBlock,
+  scope: [
+    'A level describes the named workflow and evidence date. It does not rank a company, maturity, autonomy, or output quality. One system can therefore have several scoped levels.',
+  ] as TextBlock,
+} as const;
 
 /** Section 01: what the map calls an internal agent. */
 export const DEFINITIONS_SCOPE = {
@@ -399,7 +460,7 @@ export const DEFINITIONS_SCOPE = {
     [
       'Real systems often combine model-directed steps with programmed automation. A coding agent might decide how to fix a problem while a fixed pipeline runs tests and prepares the result for review.',
     ],
-    ['The map includes these agents alongside the platforms and supporting systems that enable them.'],
+    ['The map separates task-performing Agents from the reusable Infrastructure that enables them. Notes draw lessons across both collections.'],
   ] as readonly TextBlock[],
 } as const;
 
@@ -431,7 +492,7 @@ export const DEFINITIONS_WORKFLOW = {
     'What makes this internal is its role in Stripe’s engineering work. Its cloud execution and unattended operation describe other aspects of the same system.',
   ] as TextBlock,
   catalogLink: {
-    text: 'Explore Minions in the catalog →',
+    text: 'Explore Minions in the catalog',
     path: MINIONS_PATH,
   } as InlineLink,
 } as const;
@@ -443,37 +504,33 @@ export const DEFINITIONS_CHART = {
   intro: ['Two questions help explain the different approaches in the map:'] as TextBlock,
   dimensions: [
     {
-      axisLabel: 'Horizontal axis · work breadth',
-      heading: 'How broad is the work?',
-      scale: { from: 'One workflow', to: 'Many workflows' },
+      heading: 'Horizontal axis indicates how broad the work is.',
       description: [
-        'Focused agents follow one defined workflow. Broader agents support many kinds of work or provide a shared platform.',
+        'Focused agents follow one defined workflow. Broader agents perform many kinds of work. Shared platforms have a separate infrastructure index.',
       ],
     },
     {
-      axisLabel: 'Vertical axis · adaptation',
-      heading: 'How specific is it to the organization?',
-      scale: { from: 'Standard', to: 'Company-specific' },
+      heading: 'Vertical axis defines how organization specific it is.',
       description: [
         'Standard products arrive with common capabilities. Internal systems add company knowledge, tools, conventions, and processes.',
       ],
     },
   ] as readonly ChartDimension[],
   legend: { catalog: 'Catalog entry', reference: 'Reference example' },
-  verticalAxis: 'Standard → Company-specific capabilities',
-  horizontalAxis: { from: 'One workflow', to: 'Many workflows →' },
+  verticalAxis: { from: 'Standard capabilities', to: 'Company-specific capabilities' },
+  horizontalAxis: { from: 'One workflow', to: 'Many workflows' },
   cells: {
     specialized: { scope: 'Company-specific · focused', title: 'Specialized internal agents' },
     shared: {
       scope: 'Company-specific · broad',
-      title: 'General internal agents & shared platforms',
+      title: 'General internal agents',
     },
-    ready: { scope: 'Standard · focused', title: 'Ready-made task agents' },
+    ready: { scope: 'Standard · focused', title: 'Ready-made focused agents' },
     assistants: { scope: 'Standard · broad', title: 'General-purpose assistants' },
   } as Record<string, ChartCell>,
   emptyCell: 'No selected example currently fits.',
   caption: [
-    'Illustrative placements based on public descriptions. Blue markers are catalog entries; hollow markers are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
+    'Illustrative placements based on public descriptions. Blue circles are agents; infrastructure is excluded from this comparison; green triangles are reference products or categories in their default setup. Positions show broad relationships, not measured scores. Spacing within a region is for readability.',
   ] as TextBlock,
   body: [
     [
@@ -585,8 +642,8 @@ export const DEFINITIONS_TERMS = {
         { strong: 'Autonomy' },
         ' describes the decisions and actions an agent can take without human approval.',
       ],
-      ['Describe that authority concretely:'],
     ] as readonly TextBlock[],
+    lead: ['Describe that authority concretely:'] as TextBlock,
     quote:
       'A Minion can write code and run checks on its own. Production pull requests require human review.',
     closing: [
@@ -615,7 +672,7 @@ export const DEFINITIONS_QUESTIONS = {
     {
       question: 'Is a shared agent platform itself an agent?',
       answer: [
-        'A platform can provide the context, tools, execution environments, and controls used by multiple agents. The map includes platforms because they help explain how organizations make agents available across teams.',
+        'A platform can provide the context, tools, execution environments, and controls used by multiple agents. The Infrastructure collection preserves this architecture research without counting platforms as agents. The default Agents collection covers the systems that perform identifiable work.',
       ],
     },
     {

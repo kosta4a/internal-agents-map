@@ -2,8 +2,14 @@
 // ABOUTME: It keeps the wording of the published catalog stable across pages.
 
 const TERM_LABELS: Record<string, string> = {
+  'agent-system': 'Agent family',
+  'supporting-pattern': 'Component',
+  'orchestration-system': 'Orchestration',
   'ci-triage': 'CI triage',
   'on-call': 'On-call',
+  'event-driven': 'Event-driven',
+  'work-product-review': 'Work-product review',
+  'exception-only': 'Exception-only',
 };
 
 /** Make a readable label from an identifier such as `work-product-review`. */
@@ -30,4 +36,24 @@ export function fieldLabel(field: string): string {
 /** Name a supervision level, which can be unknown for a supporting system. */
 export function levelLabel(level: number | null): string {
   return level === null ? 'Level unknown' : `Level ${level}`;
+}
+
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+/**
+ * Write a recorded date the way it reads aloud: `2025-10` as October 2025.
+ * The catalog records a year, a month, or a day, and an unrecognised shape is
+ * returned unchanged rather than guessed at.
+ */
+export function observedDate(value: string): string {
+  const match = /^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$/.exec(value.trim());
+  if (!match) return value;
+  const [, year, month, day] = match;
+  if (!month) return year!;
+  const name = MONTHS[Number(month) - 1];
+  if (!name) return value;
+  return day ? `${Number(day)} ${name} ${year}` : `${name} ${year}`;
 }

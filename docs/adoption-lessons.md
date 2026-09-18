@@ -6,9 +6,9 @@ This page summarizes reported operating practices in the catalog. These reports 
 
 ## Catalog snapshot
 
-These observations draw on 40 cataloged approaches. The evidence is uneven, and most sources are company reports.
+These observations draw on 56 catalog entries. The entry is the counting unit; platforms and components can both appear. The evidence is uneven, and most sources are company reports.
 
-20 approaches list Slack as an interface. The autonomy distribution is 23 `drafts-reviewed`, 8 `human-in-loop`, 4 `autonomous`, 2 `assistive`, and 3 `unknown`.
+27 entries list Slack as an interface. Agent autonomy, excluding infrastructure, is 20 `drafts-reviewed`, 5 `human-in-loop`, 6 `autonomous`, 1 `assistive`, and 11 `unknown`.
 
 <!-- END ADOPTION SNAPSHOT -->
 
@@ -40,7 +40,7 @@ The catalog also contains limits. Existing permissions can be too broad for an a
 
 ## Centralize shared controls when the system grows
 
-Cloudflare reports a central gateway and MCP portal. Browserbase, Sentry, WorkOS, and Sierra report proxies or gateways for authorization, logging, or credential injection.
+Cloudflare reports a central gateway and MCP portal. Sentry, WorkOS, and Sierra report proxies or gateways for authorization, logging, or credential injection.
 
 Shared controls can reduce repeated integration work. They can also become a shared failure point. Compare this choice with the deployment stage and number of connected systems.
 
@@ -50,15 +50,16 @@ The catalog contains activity metrics, adoption metrics, and outcome metrics. Th
 
 - Sessions and tool calls show use.
 - Created pull requests show output.
-- Accepted changes and action rates show that a person used the output.
+- Accepted changes show that output entered a workflow, sometimes through automatic merging.
+- Comment action rates describe how authors responded to published findings.
 - Cycle time and incident results can show an operational effect.
 - Review time and escaped defects can show hidden cost.
 
-Sierra distinguishes use from value in its report. DoorDash reports action rates for review findings. Replit reports output with review, revert, and incident measures. These examples support a broader metric set. They do not make the reported measurements independent.
+Sierra reports session activity alongside examples of changed work. DoorDash reports action rates for review findings. Replit reports output with review, revert, and incident measures. These examples support a broader metric set. They do not make the reported measurements independent.
 
 ## Expect work to move
 
-Spotify reports that increased coding output added review pressure. Harvey reports more emphasis on review, prioritization, and coordination as implementation becomes faster.
+Spotify reports that increased coding output added review pressure. Harvey identifies coordination, retained context, and ownership as challenges when people and agents share work; its report does not quantify a shift in review effort.
 
 When one step speeds up, inspect the next step. Track waiting time, review effort, rework, and operational failures. A higher output count alone does not show a better process.
 

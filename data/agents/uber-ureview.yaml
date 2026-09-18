@@ -4,13 +4,13 @@ agent_name: uReview
 relationships:
 - type: related-to
   approach_id: uber-coding-agent
-approach_type: background-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2025
 first_public_evidence:
   date: '2025-08-12'
   source_id: uber-ureview-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - code-review
@@ -49,6 +49,10 @@ primitives:
   desc: Confidence grading, semantic deduplication, and historically low-value category suppression reduce noise
 - name: Production feedback loop
   desc: Developer ratings, addressed-comment detection, and a curated benchmark tune prompts, thresholds, and models
+- {name: Ingest an eligible diff, desc: 'When a developer submits a change, uReview filters out low-signal files such
+    as configuration and generated code, then builds a structured prompt with surrounding code context'}
+- {name: Post validated comments, desc: 'The system posts validated comments in line with the code on the review
+    platform, where developers rate each one Useful or Not Useful'}
 key_metrics:
 - Introduction reports reviews of over 90% of approximately 65,000 weekly diffs; cost discussion instead says 65,000
   diffs per month
@@ -58,9 +62,11 @@ key_metrics:
 - Approximately 1,500 developer hours reportedly saved per week, based on an assumed 10-minute second review per
   processed commit
 lessons_learned:
-- Prefer fewer high-confidence findings over high comment volume
-- Combine prompts with deterministic filtering, deduplication, evaluation, and feedback instrumentation
-- Roll out gradually by team and assistant while tracking precision, recall, usefulness, and false positives
+- Uber favors fewer useful review comments and suppresses categories that engineers consistently rate poorly.
+- uReview uses separate stages to generate, grade, filter, and consolidate comments, then records developer
+  feedback.
+- Uber introduced uReview by team or assistant, tracking benchmark precision and recall alongside addressed
+  comments and reported false positives.
 sources:
 - id: uber-ureview-source-1
   title: 'uReview: Scalable, Trustworthy GenAI for Code Review at Uber'
@@ -125,6 +131,10 @@ evidence:
   - source_id: uber-ureview-source-1
     relation: supports
     locator: Evaluation and Continuous Improvement
+  primitives.3:
+  - {source_id: uber-ureview-source-1, relation: supports, locator: 'Preserved content.md, lines 50–54'}
+  primitives.4:
+  - {source_id: uber-ureview-source-1, relation: supports, locator: 'Preserved content.md, lines 74–76'}
   key_metrics.0:
   - source_id: uber-ureview-source-1
     relation: supports
@@ -151,15 +161,15 @@ evidence:
   lessons_learned.0:
   - source_id: uber-ureview-source-1
     relation: supports
-    locator: Precision Is More Valuable than Volume
+    locator: Preserved content.md, lines 128-140
   lessons_learned.1:
   - source_id: uber-ureview-source-1
     relation: supports
-    locator: Guardrails Are Just as Important as Prompts
+    locator: Preserved content.md, lines 132-138
   lessons_learned.2:
   - source_id: uber-ureview-source-1
     relation: supports
-    locator: Trust Grows with Gradual Rollout
+    locator: Preserved content.md, lines 146-148
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -231,17 +241,66 @@ claim_metadata:
     denominator: Over 10,000 commits per week
     measurement_method: Processed commits multiplied by an assumed 10 minutes for a second human review
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: high
-    confidence_reason: The article states this lesson directly and documents the associated mechanisms.
+    confidence_reason: The precision section describes confidence ratings, category pruning, and duplicate removal.
+      The preference is specific to uReview's reported feedback.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The article states this lesson directly and documents the pipeline.
+    confidence_reason: The guardrail and feedback sections name those stages and the rating and addressed-comment
+      signals; they do not claim every stage is deterministic.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: high
-    confidence_reason: The article states this lesson directly and describes the rollout telemetry.
+    confidence_reason: The rollout section names the release units, measures, and threshold adjustments used
+      for go/hold decisions.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [uber-ureview-source-1]
+  workflow_scope: 'Submitted diff on Uber''s review platform to posted, rated review comments'
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.3, primitives.0, primitives.1, primitives.4], note: 'The
+      capture''s pipeline order: ingestion and context, generation by specialized assistants, quality filtering,
+      then in-line posting for developer ratings.'}
+    human_involvement: {state: reported, claim_paths: [operating_models.0], note: 'Engineers remain in control of
+      the reviewed change; usefulness ratings are optional feedback, not a required checkpoint.'}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.tool_access,
+      architecture.knowledge, architecture.context_mgmt, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.2], note: 'Addressed-comment detection re-runs uReview
+      five times per final commit; a curated benchmark measures precision, recall, and F1 before release.'}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2,
+      key_metrics.3, key_metrics.4]}
+    lessons: {state: reported, claim_paths: [lessons_learned.0, lessons_learned.1, lessons_learned.2]}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: 'The capture documents no execution or isolation boundary.'}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access], note: 'Code-only access at publication;
+      other internal artifacts are named as not yet connected.'}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt], note: 'The Kafka-to-Hive stream is
+      feedback and operations context, not run-time context management.'}
+    credentials: {state: unreported, claim_paths: [], note: 'Credential handling is not documented in the capture.'}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces], note: 'Uber''s Phabricator-based internal
+      review platform and the CI process; GitHub is explicitly not the host.'}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow, primitives.2: validation, primitives.3: workflow,
+    primitives.4: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: 'uReview coverage of Uber
+      weekly diffs, usefulness-rated comments, and addressed comments, with the conflicting monthly figure unresolved'}
+    key_metrics.0: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same over-90%
+      coverage of approximately 65,000 weekly diffs, with the same unresolved monthly conflict.'}
+    key_metrics.1: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same over-75%
+      usefulness figure over the same rated comments.'}
+    key_metrics.2: {duplicate_of: headline_metric, reason: 'Component of the compound headline: the same over-65%
+      addressed rate over posted comments.'}
+    key_metrics.3: {category: cost-latency, basis: reported-measurement, subject: 'Median uReview review latency
+      across Uber''s six monorepos'}
+    key_metrics.4: {category: effectiveness, basis: estimate, subject: 'Modeled weekly developer hours saved by a
+      second automated review, at an assumed 10 minutes per processed commit'}

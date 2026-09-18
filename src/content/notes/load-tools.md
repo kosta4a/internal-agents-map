@@ -1,16 +1,16 @@
 ---
-title: Load tools when the task needs them
-description: An agent can find a tool before it loads the details.
+title: Two ways to discover tools
+description: Cloudflare searches tool schemas; Sentry connects to providers on demand. Each design adds a dependency during the task.
 eyebrow: 05 / Tools and context
-lede: An agent can find a tool before it loads the details.
-summary: An agent can find a tool before it loads the details.
+lede: Cloudflare searches tool schemas; Sentry connects to providers on demand.
+summary: Cloudflare and Sentry defer different parts of tool setup until a task needs them.
 readingTime: 2 min read
 order: 5
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - cloudflare-ai-stack
   - sentry-junior
-  - browserbase-bb
 sources:
   - id: '1'
     title: 'Cloudflare: Our internal AI engineering stack'
@@ -20,51 +20,31 @@ sources:
     title: 'Sentry: Building an intern'
     url: https://cra.mr/building-an-intern/
     note: Progressive discovery and provider connections.
-  - id: '3'
-    title: 'Browserbase: Internal agents'
-    url: https://browserbase.com/blog/internal-agents
-    note: Task-specific skills and a small core tool set.
 ---
 
-<section aria-labelledby="what-the-teams-report">
+<section aria-labelledby="two-discovery-paths">
 
-## What the teams report
+## Two discovery paths
 
-Cloudflare found that tool definitions used context space before any task started. Its portal now exposes search and execution tools instead of every definition. [[1]](#source-1)
+Cloudflare measured roughly 15,000 tokens for 34 GitLab tool schemas before the model started a task. Its portal now exposes search and execution functions in place of every upstream definition. The agent searches for a capability, then uses the selected tool. [[1]](#source-1)
 
-Sentry’s Junior starts without a connection to an MCP provider. Model Context Protocol (MCP) connects agents to tools. Junior connects after the agent requests a tool lookup. [[2]](#source-2)
+Sentry's Junior initially connects to no Model Context Protocol (MCP) provider. MCP gives the agent access to tools. Junior requests a lookup for a named provider, connects to it, and discovers its tools when needed. [[2]](#source-2)
 
-Browserbase loads skills for each task. These skills contain instructions for specific work. They are separate from the tools that perform actions. [[3]](#source-3)
+| Design | What is available initially | What discovery adds |
+| --- | --- | --- |
+| Cloudflare portal | Search and execution functions | The tool schema needed for a particular operation |
+| Sentry Junior | A way to request a provider's tools | A provider connection and its available tools |
 
-<blockquote cite="https://cra.mr/building-an-intern/"><p>“keep the always-on surface small”</p></blockquote>
-
-<p class="quote-credit">Sentry, on progressive tool discovery. <a href="#source-2">[2]</a></p>
-
-<figure class="note-diagram">
-  <div class="note-flow">
-    <div class="note-node"><span>01</span><strong>Start small</strong><small>Core tools and instructions</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node"><span>02</span><strong>Find a tool</strong><small>Search for the capability</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node note-node-accent"><span>03</span><strong>Use the tool</strong><small>Load the required details</small></div>
-  </div>
-  <figcaption>Our simplified illustration of tool discovery. Skills supply instructions and may load separately.</figcaption>
-</figure>
+The two designs defer different work. Cloudflare searches across a catalog of schemas; Junior first needs to reach the relevant provider. This puts connection failures and search failures at different points in the task.
 
 </section>
 
-<section class="note-observation" aria-labelledby="more-tools-need-not-mean-more-initial-context">
+<section aria-labelledby="discovery-can-fail-before-execution">
 
-<p class="eyebrow">Our observation</p>
+## Discovery can fail before execution
 
-## More tools need not mean more initial context
+Our interpretation is that these designs exchange upfront context for a dependency during the task. A search can return the wrong capability. A provider can be unavailable or fail authorization. A useful tool can also have a description that prevents the agent from finding it.
 
-Tool discovery can separate available capabilities from the context supplied at the start of a task.
-
-This adds a dependency: the agent must find the correct tool. A missing or unclear tool description can prevent that step.
-
-A small tool set may not need discovery. The reports do not establish that fewer tool definitions always improve accuracy.
-
-<p class="note-question"><strong>A question for your build</strong>Can the agent find the right tool without first reading every tool definition?</p>
+Those failures need to be distinguished from a tool that was found but returned an error. Cloudflare's context measurement supports the overhead concern; it does not establish an accuracy improvement. For a small, stable set of tools, discovery would add another operation whose benefit still needs measurement.
 
 </section>

@@ -1,0 +1,1381 @@
+{
+  "format_version": 1,
+  "entries": [
+    {
+      "id": "airbnb-airchat",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "atlassian-rovo-dev",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "block-builderbot",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "block-builderbot-source-1",
+        "block-builderbot-source-2",
+        "block-builderbot-source-3",
+        "block-builderbot-source-4",
+        "block-builderbot-source-5"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.2",
+            "primitives.1"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": "Colleagues steer runs in the Slack thread; the engineering post adds that humans grant the final stamp of approval on pull requests (lines 46, 50).",
+          "claim_paths": [
+            "lessons_learned.1",
+            "lessons_learned.2"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.tool_access",
+            "architecture.knowledge",
+            "architecture.context_mgmt",
+            "architecture.interfaces"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": "The launch post documents CI watch and feedback iteration; the pre-push just checks in the engineering post cover local agents generally and are not tied to Builderbot's runs.",
+          "claim_paths": [
+            "primitives.3"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.2"
+          ]
+        },
+        "lessons": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "lessons_learned.0",
+            "lessons_learned.1",
+            "lessons_learned.2"
+          ]
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "unreported",
+          "note": "The captures name the goose orchestration framework but no underlying model; the public repository README names apps and crates only.",
+          "claim_paths": []
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "No capture documents an execution or isolation boundary; the legacy unknown claim stays in research details.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": "The launch post also limits operation to source code and system configuration, with no customer data or PII.",
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "unreported",
+          "note": "Credential handling is not documented; the source-code-only boundary is a data restriction, not a credential mechanism.",
+          "claim_paths": []
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": "Slack, Linear, and Jira are named in the launch post; the pull-request host is not named in the captures.",
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 4,
+      "canonical_observation_count": 3
+    },
+    {
+      "id": "brex-agent-platform",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "cloudflare-ai-stack",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "cloudflare-ai-stack-source-1",
+        "cloudflare-ai-stack-source-2"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.3"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": "The owning team reviews and refines each generated AGENTS.md merge request; the merge-request review flow posts advisory comments with no documented required checkpoint.",
+          "claim_paths": [
+            "operating_models.1"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.model",
+            "architecture.sandbox",
+            "architecture.tool_access",
+            "architecture.knowledge",
+            "architecture.context_mgmt",
+            "architecture.credentials",
+            "architecture.interfaces"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.4"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1",
+            "key_metrics.2",
+            "key_metrics.3"
+          ]
+        },
+        "lessons": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "lessons_learned.0",
+            "lessons_learned.1",
+            "lessons_learned.2",
+            "lessons_learned.3"
+          ]
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.model"
+          ]
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.sandbox"
+          ]
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.credentials"
+          ]
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": "The capture documents CLI clients and the CI review component; it does not name a web interface for the internal stack.",
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 5,
+      "canonical_observation_count": 5
+    },
+    {
+      "id": "coinbase-forge-mux",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "databricks-costar",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "domu-clementino",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "doordash-code-review",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "doordash-code-review-source-1"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.1",
+            "primitives.2",
+            "primitives.3",
+            "primitives.5"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "operating_models.0",
+            "primitives.5"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.model",
+            "architecture.tool_access",
+            "architecture.knowledge",
+            "architecture.interfaces"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.4",
+            "primitives.6"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1",
+            "key_metrics.2",
+            "key_metrics.3"
+          ]
+        },
+        "lessons": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "lessons_learned.0",
+            "lessons_learned.1"
+          ]
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "unreported",
+          "note": "The legacy placeholder is retained in research details; the source says the design is model-agnostic but names no current model.",
+          "claim_paths": []
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "The remote VM is documented, but its isolation guarantees are not.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "unreported",
+          "note": "Context-window management is not documented as a separate mechanism.",
+          "claim_paths": []
+        },
+        "credentials": {
+          "state": "unreported",
+          "note": "Credential handling is not documented.",
+          "claim_paths": []
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 5,
+      "canonical_observation_count": 4
+    },
+    {
+      "id": "doordash-flux",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "dropbox-nova",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "flex-investigation-agent",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "github-qubot",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "github-qubot-source-1"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0",
+            "primitives.1",
+            "primitives.2",
+            "primitives.3"
+          ]
+        },
+        "human_involvement": {
+          "state": "unreported",
+          "note": "The reviewed source shows threaded refinement but does not define a required human checkpoint.",
+          "claim_paths": []
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.model",
+            "architecture.tool_access",
+            "architecture.knowledge",
+            "architecture.context_mgmt",
+            "architecture.interfaces"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.4"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1"
+          ]
+        },
+        "lessons": {
+          "state": "unreported",
+          "note": "The reviewed source does not present a distinct transferable lesson in this record.",
+          "claim_paths": []
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.model"
+          ]
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "The source names the cloud-agent host but not its isolation boundary.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "unreported",
+          "note": "Credential handling is not documented in the reviewed capture.",
+          "claim_paths": []
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 3,
+      "canonical_observation_count": 3
+    },
+    {
+      "id": "harvey-spectre",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "hubspot-sidekick",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "linear-agent",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "microsoft-prassistant",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "microsoft-prassistant-source-1"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0",
+            "primitives.1",
+            "primitives.2",
+            "primitives.3",
+            "primitives.4"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "operating_models.0",
+            "primitives.3"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.3"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1",
+            "key_metrics.2",
+            "key_metrics.3"
+          ]
+        },
+        "lessons": {
+          "state": "unreported",
+          "note": "The reviewed article reports practices and outcomes but this record contains no separate lessons claim.",
+          "claim_paths": []
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "unreported",
+          "note": "The reviewed source does not name the underlying model.",
+          "claim_paths": []
+        },
+        "harness": {
+          "state": "unreported",
+          "note": "The reviewed source does not describe the orchestration harness.",
+          "claim_paths": []
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "Execution isolation is not documented.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "unreported",
+          "note": "Tool permissions are not documented.",
+          "claim_paths": []
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "unreported",
+          "note": "Context-window management is not documented.",
+          "claim_paths": []
+        },
+        "credentials": {
+          "state": "unreported",
+          "note": "Credential handling is not documented.",
+          "claim_paths": []
+        },
+        "interfaces": {
+          "state": "unreported",
+          "note": "The source says the existing PR workflow but does not establish a specific hosting interface.",
+          "claim_paths": []
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 5,
+      "canonical_observation_count": 5
+    },
+    {
+      "id": "monday-sphera-atlas-morphex",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "notion-custom-agents",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "notion-custom-agents-source-1",
+        "notion-custom-agents-source-2"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.2"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.tool_access",
+            "architecture.interfaces",
+            "architecture.knowledge",
+            "architecture.credentials",
+            "architecture.context_mgmt"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.2"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1",
+            "key_metrics.2"
+          ]
+        },
+        "lessons": {
+          "state": "unreported",
+          "note": "The record contains no separate lessons claim after review of both captures.",
+          "claim_paths": []
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "unreported",
+          "note": "The captures do not identify one model for this representative workflow.",
+          "claim_paths": []
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "Execution isolation for the representative workflow is not documented.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.credentials"
+          ]
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 4,
+      "canonical_observation_count": 3
+    },
+    {
+      "id": "openai-sevbot",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "openai-software-factory",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "plaid-ai-annotator",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "plaid-fix-my-connection",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "plaid-internal-mcp-server",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "plaid-internal-mcp-server-source-1"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0",
+            "primitives.1",
+            "primitives.2",
+            "primitives.4"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": "Tool calls run under the engineer's authenticated employee identity; the capture documents no separate output-review checkpoint.",
+          "claim_paths": [
+            "primitives.1",
+            "primitives.2"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.tool_access",
+            "architecture.credentials"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.3"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1"
+          ]
+        },
+        "lessons": {
+          "state": "unreported",
+          "note": "The capture offers design rationale, such as the view that existing access-control frameworks can be naturally replicated, but states no evaluated transferable lesson.",
+          "claim_paths": []
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "not-applicable",
+          "note": "The server connects AI clients to internal data and runs no model itself; the capture describes no model component.",
+          "claim_paths": []
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "The capture describes the identity-aware proxy and managed-device checks as access control, not an execution isolation boundary.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "unreported",
+          "note": "Documentation and internal data are integrated as tools; the capture describes no separate knowledge or context store.",
+          "claim_paths": []
+        },
+        "context_mgmt": {
+          "state": "unreported",
+          "note": "The capture describes delivering context to AI clients, not how context is maintained or organized over time.",
+          "claim_paths": []
+        },
+        "credentials": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.credentials"
+          ]
+        },
+        "interfaces": {
+          "state": "unreported",
+          "note": "The capture names AI clients such as Claude Code and Cursor that connect as MCP clients, not a human-facing surface of the server.",
+          "claim_paths": []
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 3,
+      "canonical_observation_count": 3
+    },
+    {
+      "id": "posthog-stamphog",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "posthog-stamphog-source-1",
+        "posthog-stamphog-source-2",
+        "posthog-stamphog-source-3"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.3",
+            "primitives.4",
+            "primitives.5",
+            "primitives.1",
+            "primitives.6"
+          ]
+        },
+        "human_involvement": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.1",
+            "operating_models.0"
+          ]
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.model",
+            "architecture.tool_access",
+            "architecture.knowledge",
+            "architecture.credentials",
+            "architecture.context_mgmt",
+            "architecture.interfaces"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0",
+            "lessons_learned.2"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1",
+            "key_metrics.2"
+          ]
+        },
+        "lessons": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "lessons_learned.0",
+            "lessons_learned.1",
+            "lessons_learned.2"
+          ]
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.model"
+          ]
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "The pinned README documents the GitHub Action host and the reviewer's Read, Grep, and Glob tools but no isolation boundary for a run.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.credentials"
+          ]
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 4,
+      "canonical_observation_count": 2
+    },
+    {
+      "id": "ramp-inspect",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "replit-manager-agent",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "salesforce-slackbot",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "sentry-junior",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "shopify-internal-agents",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "sierra-pinecone",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "slack-context-system",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "spotify-honk-xirp",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "spotify-honk-xirp-source-1",
+        "spotify-honk-xirp-source-2",
+        "spotify-honk-xirp-source-3"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.3",
+            "primitives.4",
+            "primitives.5"
+          ]
+        },
+        "human_involvement": {
+          "state": "unreported",
+          "note": "The captures keep reviews and merges on the pre-agent pull-request workflow (Honk Part 1 lines 26 and 58) without stating a required human checkpoint for Honk pull requests; the no-human auto-merge statement covers deterministic Fleetshift pull requests only (Code with Claude line 36).",
+          "claim_paths": []
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.model",
+            "architecture.harness",
+            "architecture.tool_access",
+            "architecture.knowledge",
+            "architecture.context_mgmt",
+            "architecture.interfaces"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0"
+          ]
+        },
+        "observations": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "headline_metric",
+            "key_metrics.0",
+            "key_metrics.1",
+            "key_metrics.2"
+          ]
+        },
+        "lessons": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "lessons_learned.0",
+            "lessons_learned.1",
+            "lessons_learned.2",
+            "lessons_learned.3"
+          ]
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.model"
+          ]
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "Kubernetes pods and containerized jobs are documented as the execution environment (Honk Part 1 line 26; Code with Claude line 56) but the isolation boundary is not stated; sandboxing is named as an open challenge (Honk Part 1 line 101).",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "unreported",
+          "note": "Credential handling for Honk sessions and their trusted tools is not documented in the reviewed captures.",
+          "claim_paths": []
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 4,
+      "canonical_observation_count": 3
+    },
+    {
+      "id": "stripe-minions",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "strongdm-software-factory",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "uber-coding-agent",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "uber-ureview",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "workos-project-horizon",
+      "format_status": "legacy-unassessed"
+    },
+    {
+      "id": "ycombinator-agent-infra",
+      "format_status": "page-content-v1",
+      "reviewed_at": "2026-09-17",
+      "reviewed_source_ids": [
+        "ycombinator-agent-infra-source-1"
+      ],
+      "unreviewed_source_ids": [],
+      "questions": {
+        "purpose": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "summary"
+          ]
+        },
+        "workflow": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.0",
+            "primitives.1",
+            "primitives.2"
+          ]
+        },
+        "human_involvement": {
+          "state": "unreported",
+          "note": "Employees initiate and observe runs, but the capture does not define a required runtime approval checkpoint for this finance workflow.",
+          "claim_paths": []
+        },
+        "implementation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness",
+            "architecture.tool_access",
+            "architecture.interfaces",
+            "architecture.knowledge",
+            "architecture.context_mgmt"
+          ]
+        },
+        "validation": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "primitives.3"
+          ]
+        },
+        "observations": {
+          "state": "unreported",
+          "note": "The reviewed capture reports capabilities and examples but no measured outcome for the named finance workflow.",
+          "claim_paths": []
+        },
+        "lessons": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "lessons_learned.0",
+            "lessons_learned.1"
+          ]
+        }
+      },
+      "implementation_fields": {
+        "model": {
+          "state": "unreported",
+          "note": "A model router is mentioned, but no model is identified for the representative workflow.",
+          "claim_paths": []
+        },
+        "harness": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.harness"
+          ]
+        },
+        "sandbox": {
+          "state": "unreported",
+          "note": "The legacy unknown placeholder is retained in research details; isolation is not documented.",
+          "claim_paths": []
+        },
+        "tool_access": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.tool_access"
+          ]
+        },
+        "knowledge": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.knowledge"
+          ]
+        },
+        "context_mgmt": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.context_mgmt"
+          ]
+        },
+        "credentials": {
+          "state": "unreported",
+          "note": "The capture describes read-only SQL access but not credential handling.",
+          "claim_paths": []
+        },
+        "interfaces": {
+          "state": "reported",
+          "note": null,
+          "claim_paths": [
+            "architecture.interfaces"
+          ]
+        }
+      },
+      "next_actions": [],
+      "raw_observation_count": 0,
+      "canonical_observation_count": 0
+    },
+    {
+      "id": "zup-codegen",
+      "format_status": "legacy-unassessed"
+    }
+  ]
+}

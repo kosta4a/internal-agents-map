@@ -80,35 +80,10 @@ export const PLACEMENT_CANDIDATES: readonly PlacementCandidate[] = [
     requirements: DEFAULT_REQUIREMENTS,
   },
   {
-    id: 'retool-retoolgpt',
-    cell: 'ready',
-    reason:
-      'One internal question-and-answer workflow built on ChatGPT, adapted with Retool’s Confluence documents, product documentation, and Linear tickets. Placed above the default product reference because it uses company knowledge.',
-    requirements: [
-      { field: 'summary', label: 'Scope' },
-      { field: 'architecture.model', label: 'Base product' },
-      { field: 'architecture.knowledge', label: 'Context' },
-    ],
-  },
-  {
-    id: 'brex-agent-platform',
-    cell: 'shared',
-    reason:
-      'A Retool-based platform for multiple operations workflows, with company procedures, account data, and product tools. Described in a First Round case study.',
-    requirements: DEFAULT_REQUIREMENTS,
-  },
-  {
     id: 'sentry-junior',
     cell: 'shared',
     reason:
       'A general internal agent that takes varied tasks across company systems, with persistent context and tools discovered through MCP.',
-    requirements: DEFAULT_REQUIREMENTS,
-  },
-  {
-    id: 'shopify-internal-agents',
-    cell: 'shared',
-    reason:
-      'A shared platform that powers coding, research, migration, and application-security agents using Shopify’s monorepo context and internal tools.',
     requirements: DEFAULT_REQUIREMENTS,
   },
 ];
@@ -128,7 +103,7 @@ export function placements(catalog: Catalog): PlacementView[] {
   const byId = new Map(PLACEMENT_CANDIDATES.map((candidate) => [candidate.id, candidate]));
   const claims = new Map(catalog.claims.map((claim) => [claim.id, claim]));
   const views: PlacementView[] = [];
-  for (const approach of catalog.approaches) {
+  for (const approach of catalog.approaches.filter((item) => item.catalog_section === 'agents')) {
     const candidate = byId.get(approach.id);
     if (!candidate) continue;
     const evidence = new Map<string, Claim>();

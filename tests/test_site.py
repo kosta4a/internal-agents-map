@@ -46,6 +46,14 @@ class ArtifactTests(unittest.TestCase):
     def test_the_built_artifact_passes_every_publication_rule(self):
         self.assertEqual(checker.validate(DIST), [])
 
+    def test_company_pages_contain_only_their_records(self):
+        for company_id in {a["company_id"] for a in self.catalog["approaches"]}:
+            page = read_page(f"organizations/{company_id}.html")
+            expected = Counter(
+                a["id"] for a in self.catalog["approaches"] if a["company_id"] == company_id
+            )
+            self.assertEqual(Counter(page.coverage["approach"]), expected)
+
     def test_every_claim_and_source_reaches_its_own_entry_page(self):
         for kind, field in (("claim", "claim_ids"), ("source", "source_ids")):
             published = Counter(
@@ -107,7 +115,10 @@ class ArtifactTests(unittest.TestCase):
     def test_catalog_prose_reaches_the_page_as_text(self):
         # These claims hold characters that would open a tag or an attribute if
         # they were written to the page unescaped.
-        for claim_id in ("doordash-flux--architecture-sandbox", "browserbase-bb--key-metrics-1"):
+        for claim_id in (
+            "doordash-flux--architecture-sandbox",
+            "cloudflare-ai-stack--key-metrics-0",
+        ):
             claim = self.claims[claim_id]
             self.assertRegex(str(claim["text"]), r"[<>&\"]")
             text = checker.visible_text(self.entries[claim["approach_id"]])
@@ -130,14 +141,15 @@ class ArtifactTests(unittest.TestCase):
 
     def test_the_guides_send_the_reader_to_the_entry_pages(self):
         definitions = (DIST / "definitions.html").read_text(encoding="utf-8")
-        self.assertEqual(definitions.count("data-chart-approach-id="), 8)
         self.assertEqual(definitions.count("data-chart-reference="), 3)
+        chart = definitions.split('class="quadrant-plot"', 1)[1].split("</figure>", 1)[0]
         placed = {
-            url.split("#")[0]
-            for url in read_page("definitions.html").urls
-            if url.startswith("/agents/")
+            fragment.split('"', 1)[0].split("#")[0]
+            for fragment in chart.split('href="/agents/')[1:]
         }
+        placed = {f"/agents/{path}" for path in placed}
         self.assertTrue(placed)
+        self.assertEqual(definitions.count("data-chart-approach-id="), len(placed))
         known = {f"/agents/{a['id']}" for a in self.catalog["approaches"]}
         self.assertEqual(placed - known, set())
 

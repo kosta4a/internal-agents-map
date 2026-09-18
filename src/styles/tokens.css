@@ -1,24 +1,46 @@
-/* ABOUTME: Design tokens, the Geist face, and the base element styles. */
+/* ABOUTME: Design tokens, the Areal face, and the base element styles. */
 /* ABOUTME: Ported from templates/site.css so the pages keep one visual identity. */
 @font-face {
-  font-family: Geist;
-  src: url('/fonts/Geist.woff2') format('woff2');
+  font-family: Areal;
+  src: url('/fonts/Areal.woff2') format('woff2');
   font-style: normal;
-  font-weight: 100 900;
+  /* The ABC Areal variable face carries a 400-700 weight axis. */
+  font-weight: 400 700;
   font-display: swap;
+}
+html {
+  /* Hold the scrollbar's space so filtering to fewer cards never shifts the page. */
+  scrollbar-gutter: stable;
+  /* Anchors glide instead of jumping. The reduced-motion block below turns it off. */
+  scroll-behavior: smooth;
 }
 :root {
   color-scheme: light;
-  --ink: #2c2b31;
-  --muted: #666;
-  --rule: #ededee;
-  --surface: #f3f3f3;
-  --blue: #00C6C5;
-  --link: #007b7a;
-  font-family: Geist, Arial, Helvetica, sans-serif;
+  --ink: var(--sand-12);
+  --muted: var(--sand-10);
+  --rule: var(--sand-4);
+  --surface: var(--sand-3);
+  /* The accents sit on the same neutral scale as everything else: one step
+     apart, so a mark reads lighter than the text it accompanies. */
+  --accent: var(--sand-9);
+  --link: var(--sand-11);
+  /* A firm ease-out: quick to answer a pointer, unhurried on the way back. */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --hover-in: 120ms;
+  --hover-out: 220ms;
+  /* The type scale. A phone is held further from the eye than it is wide,
+     so every step above the smallest grows by two there. */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 32px;
+  /* A triangle, for the markers that are not catalog entries. */
+  --triangle: polygon(50% 0%, 100% 100%, 0% 100%);
+  font-family: Areal, Arial, Helvetica, sans-serif;
   color: var(--ink);
   background: #fff;
-  font-size: 15px;
+  font-size: var(--text-sm);
   line-height: 1.6;
 }
 * {
@@ -45,28 +67,30 @@ button, select {
   display: none !important;
 }
 :focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 4px;
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
 }
 h1, h2, h3, h4 {
   margin: 0;
-  font-weight: 550;
+  font-weight: 500;
   line-height: 1.2;
   letter-spacing: -.035em;
 }
 p {
   margin: 0;
 }
-h1 { font-size: 34px; }
-h2 { font-size: 25px; }
-h3 { font-size: 23px; }
-h4 { font-size: 17px; }
+h1 { font-size: var(--text-lg); margin-bottom: 16px; }
+h2 { font-size: var(--text-md); }
+h3 { font-size: var(--text-md); }
+h4 { font-size: var(--text-md); }
+/* Inline emphasis uses tone while preserving the surrounding text weight. */
+strong, b { font-weight: inherit; color: var(--ink); }
 p + p { margin-top: 16px; }
-ul { padding-left: 20px; }
+ul { padding-left: 24px; }
 li + li { margin-top: 8px; }
 dd { margin: 0; }
 main { min-width: 0; }
-section, [id] { scroll-margin-top: 24px; }
+section, [id] { scroll-margin-top: 128px; }
 summary { list-style: none; }
 summary::-webkit-details-marker { display: none; }
 summary::before {
@@ -76,32 +100,74 @@ summary::before {
   color: inherit;
 }
 details[open] > summary::before { transform: rotate(90deg); }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .eyebrow {
-  font-size: 12px;
+  font-size: var(--text-sm);
   color: var(--muted);
-  letter-spacing: .055em;
-  text-transform: uppercase;
+
 }
 .lede {
-  font-size: 22px;
+  font-size: var(--text-sm);
   line-height: 1.45;
   letter-spacing: -.02em;
   margin-top: 24px;
   max-width: 630px;
 }
 @media (max-width: 800px) {
-  .lede { font-size: 18px; margin-top: 16px; }
+  /* A phone's scrollbar floats over the page, so no column is held for it. */
+  html { scrollbar-gutter: auto; }
+  :root {
+    --text-xs: 14px;
+    --text-sm: 16px;
+    --text-md: 18px;
+    --text-lg: 22px;
+  }
+  .lede { margin-top: 16px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes page-leave { to { opacity: 0; filter: blur(6px); } }
+  @keyframes page-arrive { from { opacity: 0; filter: blur(6px); } }
+  /* The navigation is the one thing that does not change between pages, so it
+     is captured apart from the rest and crosses the change untouched. */
+  /* A name has to be its own: two elements sharing one aborts the transition. */
+  .sidebar { view-transition-name: sidebar; }
+  .topbar { view-transition-name: topbar; }
+  ::view-transition-group(sidebar), ::view-transition-group(topbar) { animation: none; }
+  ::view-transition-old(sidebar), ::view-transition-new(sidebar),
+  ::view-transition-old(topbar), ::view-transition-new(topbar) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-old(root) { animation: page-leave 180ms var(--ease-out) both; }
+  ::view-transition-new(root) { animation: page-arrive 260ms var(--ease-out) 120ms both; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  a, button, select, input { transition: color .15s, background-color .15s, border-color .15s; }
-  :focus-visible { transition: outline-offset .15s ease-out; }
-  .brand-mark { transition: transform .4s cubic-bezier(.2,.8,.2,1); }
-  .brand:hover .brand-mark { transform: rotate(90deg); }
-  .link-arrow { transition: transform .15s ease-out; }
+  a, button, select, input, summary, .entry-summary, .tag, .related-card, .doc-card {
+    transition:
+      color var(--hover-out) var(--ease-out),
+      background-color var(--hover-out) var(--ease-out),
+      border-color var(--hover-out) var(--ease-out);
+  }
+  /* Arriving reads as a response, so it lands sooner than the settle back. */
+  a:hover, button:hover, summary:hover,
+  .entry-box:hover h3 a, .entry-box:hover .entry-summary, .entry-box:hover .tag,
+  .related-card:hover, .related-card:hover a,
+  .doc-card:hover, .doc-card:hover a {
+    transition-duration: var(--hover-in);
+  }
+  /* A press answers at once, so the control stays attached to the pointer. */
+  .button, .page-back { transition-property: color, background-color, transform; }
+  .button:active, .page-back:active { transform: scale(.97); transition-duration: 60ms; }
+  :focus-visible { transition: outline-offset var(--hover-in) var(--ease-out); }
+  .link-arrow { transition: transform var(--hover-in) var(--ease-out); }
   a:hover .link-arrow { transform: translate(1px,-1px); }
-  summary::before { transition: transform .2s ease-out; }
+  summary::before { transition: transform var(--hover-out) var(--ease-out); }
 }
 .link-arrow { display: inline-block; }

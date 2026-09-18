@@ -7,6 +7,7 @@ summary: A failed run can still produce useful work. Stripe, Dropbox, and DoorDa
 readingTime: 2 min read
 order: 1
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - stripe-minions
   - dropbox-nova
@@ -26,46 +27,38 @@ sources:
     note: Repeated requests and per-agent deadlines.
 ---
 
-<section aria-labelledby="what-the-teams-report">
+<section aria-labelledby="two-kinds-of-limit">
 
-## What the teams report
+## Two kinds of limit
 
-Stripe limits Minions to two rounds of continuous integration (CI) checks. It then returns the branch to a person. More attempts cost time and compute. [[1]](#source-stripe)
+Stripe lets Minions run continuous integration (CI) checks twice. After the second run, the branch returns to its human operator for scrutiny. Dropbox's Deflaker instead allows up to five attempts, carrying test logs and notes from the previous attempt into the next. These limits count repair attempts. [[1]](#source-stripe) [[2]](#source-dropbox)
 
-Dropbox uses a different limit for Deflaker, its tool to repair unstable tests. It carries notes and test logs between attempts. It stops after a successful fix or five attempts. [[2]](#source-dropbox)
+DoorDash encountered a different failure: a repeated model request consumed time without advancing the turn counter.
 
 <blockquote cite="https://careersatdoordash.com/blog/doordash-built-an-ai-code-reviewer-engineers-actually-listen-to/"><p>“A turn counter is not a progress detector.”</p></blockquote>
 
-<p class="quote-credit">DoorDash, on a repeated request that did not advance the turn counter. <a href="#source-doordash">[3]</a></p>
+<p class="quote-credit">DoorDash's account of the stalled review. <a href="#source-doordash">[3]</a></p>
 
-DoorDash added deadlines for each agent. A soft deadline requests verified findings. A hard deadline stops the agent. [[3]](#source-doordash)
-
-<figure class="note-diagram">
-  <div class="note-flow">
-    <div class="note-node"><span>01</span><strong>Attempt</strong><small>Make a change</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node"><span>02</span><strong>Check</strong><small>Inspect the result</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node note-node-accent"><span>03</span><strong>Stop or retry</strong><small>Apply the run limit</small></div>
-  </div>
-  <p class="note-diagram-tail">At the limit → Save the work and explain the failure.</p>
-  <figcaption>Our illustration of a possible control flow. Each source uses different checks and limits.</figcaption>
-</figure>
+DoorDash added per-agent deadlines. The soft deadline asks the reviewer to return findings it has already verified and discard speculation. The hard deadline stops it. An elapsed-time limit can catch a stalled attempt that never reaches a retry counter. [[3]](#source-doordash)
 
 </section>
 
-<section class="note-observation" aria-labelledby="the-limit-needs-a-useful-exit">
+<section aria-labelledby="returning-useful-work">
 
-<p class="eyebrow">Our observation</p>
+## Returning useful work
 
-## The limit needs a useful exit
+Stopping and handing off are separate decisions. Stripe returns a branch; DoorDash's soft deadline requests verified findings. Dropbox preserves logs and notes for another attempt. The sources describe different outputs and recipients.
 
-An attempt limit and a time limit address different failures. Neither limit explains what the next person needs.
+The diagram is our proposed repair loop. It makes the retry branch and the remaining work explicit; it does not describe one implementation shared by these companies.
 
-A useful exit can include the current work, failed checks, and a reason to stop. This is a design proposal, not a shared implementation.
-
-The cases do not establish one correct retry count.
-
-<p class="note-question"><strong>A question for your build</strong>What will a person receive if the next attempt fails?</p>
+<figure class="note-diagram">
+  <div class="note-node"><strong>Inspect the result of an attempt</strong><small>Check the output and the remaining attempt or time budget.</small></div>
+  <ul class="note-branches">
+    <li><strong>Checks pass</strong><span>Return the result to the workflow's next review or publication step.</span></li>
+    <li><strong>Checks fail; budget remains</strong><span>Carry the failure evidence into a repair, then check again.</span></li>
+    <li><strong>Budget exhausted</strong><span>Stop and return the current work, failed checks, and reason for stopping.</span></li>
+  </ul>
+  <figcaption>Our proposed control flow. A passing check still leaves any required human approval in place.</figcaption>
+</figure>
 
 </section>

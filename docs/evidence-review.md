@@ -4,6 +4,10 @@ This editorial pass reviewed all **115 original metric claims** in the 39-approa
 
 Existing archive artifacts and manifests were not changed. Reading a local capture did not advance a source's `last_verified_at`. The approach review date records this editorial work; it does not claim a new live-source verification. The later DoorDash research lead below is explicitly unpreserved.
 
+On 2026-09-16, Browserbase's bb entry was removed from the catalog at the maintainer's request.
+Its rows below describe this historical review and link to the preserved source; they do not
+indicate current catalog membership.
+
 ## Coverage before and after
 
 Counts are computed from the baseline and regenerated `data/agents.json`, counting every evidence link, including repeated source links across claims. “Has metadata” measures documentation coverage, not completeness or independent validity.
@@ -52,7 +56,7 @@ A further consistency correction separates HubSpot's historical Crucible Kuberne
 | [atlassian-rovo-dev](../data/agents/atlassian-rovo-dev.yaml) | 3/3 reviewed. Repository evaluation and ModernBERT training-comment dataset are separate scopes. Over-a-year duration is reported; exact interval, repository cohort definition, and dataset export remain unavailable. |
 | [block-builderbot](../data/agents/block-builderbot.yaml) | 4/4 reviewed. Weekly PR share and daily operations have locators; operations are undefined. Months-to-days is a qualitative company opinion, reclassified from metric. Sandbox remains unknown after source review. |
 | [brex-agent-platform](../data/agents/brex-agent-platform.yaml) | 5/5 reviewed. Dispute figure covers preparing submissions, not settlement. QA covers support interactions; the source does not substantiate the previous sample-based wording. Exact samples, accuracy test protocol, and measurement periods remain missing. |
-| [browserbase-bb](../data/agents/browserbase-bb.yaml) | 4/4 reviewed. Feature scanning covers closed tickets and meeting transcripts. The awkward 99% first-response wording lacks raw times. A Slack request replaces manual log-diving; automated end-to-end investigation latency is not measured. |
+| [browserbase-bb (removed)](../archive/sources/browserbase-bb-source-1/content.md) | 4/4 reviewed. Feature scanning covers closed tickets and meeting transcripts. The awkward 99% first-response wording lacks raw times. A Slack request replaces manual log-diving; automated end-to-end investigation latency is not measured. |
 | [cloudflare-ai-stack](../data/agents/cloudflare-ai-stack.yaml) | 5/5 reviewed. Traffic and adoption refer to the preceding 30 days; 10,952 is the week of March 23, distinct from the rolling average. Employee denominator and Gateway counts are documented. No causal isolation of AI impact. |
 | [coinbase-forge-mux](../data/agents/coinbase-forge-mux.yaml) | 2/2 reviewed. 600+ includes engineers, PMs, and designers, with 335 active and 197 power users. Removed unsupported April label. Active/power-user definitions and measurement window are missing; source warns about selection bias. |
 | [databricks-costar](../data/agents/databricks-costar.yaml) | No original metric claims. Nonmetric evidence was not part of this metric traceability pass. |
@@ -74,7 +78,7 @@ A further consistency correction separates HubSpot's historical Crucible Kuberne
 | [posthog-stamphog](../data/agents/posthog-stamphog.yaml) | 4/4 reviewed. Kept the quarterly main-repository share, previous-month count in the July 9 report, and July 28 PR share/token cost separate. July 9 is an observation date, not an invented rolling interval. Exact period/cohort comparability unresolved. |
 | [ramp-inspect](../data/agents/ramp-inspect.yaml) | 12/12 reviewed. Corrected 60% from April to January 2026; kept 75% by May and million sessions in July. Older 30% is frontend/backend repositories; 90% is the Inspect repository. Removed unsupported August labels; agent examples and startup target reclassified as fact/opinion. Code-volume method and several observation cutoffs missing. |
 | [replit-manager-agent](../data/agents/replit-manager-agent.yaml) | 3/3 reviewed. 2.9x is a consistent author cohort; whole-company lines of code rose 5.8x. Early January–late June is stated without a year in the body. Quality trends do not independently establish causation. Source-backed microVM environment added. |
-| [retool-retoolgpt](../data/agents/retool-retoolgpt.yaml) | No original metric claims. Nonmetric evidence was not part of this metric traceability pass. |
+| [retool-retoolgpt (removed)](../archive/sources/retool-retoolgpt-source-1/content.md) | No original metric claims. Nonmetric evidence was not part of this metric traceability pass. The preserved source remains available after the entry's eligibility review. |
 | [salesforce-slackbot](../data/agents/salesforce-slackbot.yaml) | No original metric claims. Nonmetric evidence was not part of this metric traceability pass. |
 | [sentry-junior](../data/agents/sentry-junior.yaml) | 3/3 reviewed. Lines of code exclude tests, evals, docs, and lockfiles. Four months is author-reported effort before the writeup; no dated code revision or reproducible LOC command. Apache license linked separately. |
 | [shopify-internal-agents](../data/agents/shopify-internal-agents.yaml) | 4/4 reviewed. Session/channel/PR counts refer to a recent 30-day window and the river_sessions table. Median duration/tool calls and company-wide merged-PR share stay scoped separately. Exact date boundaries and full PR denominator unavailable. |

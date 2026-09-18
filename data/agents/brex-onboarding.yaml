@@ -1,0 +1,178 @@
+id: brex-onboarding
+company: Brex
+agent_name: Onboarding decision system
+approach_type: agent
+deployment_stage: deployed
+year: 2026
+first_public_evidence:
+  date: '2026-01-20'
+  source_id: brex-onboarding-source-1
+last_reviewed_at: '2026-09-17'
+status: internal
+domains:
+- finance-ops
+autonomy: autonomous
+operating_models:
+- scope: customer application → onboarding decision or analyst escalation
+  attention_boundary: exception-only
+rubric:
+  invocation:
+  - event-driven
+  state: unknown
+  identity: unknown
+  evidence_strength: detailed-primary
+summary: Brex’s onboarding system verifies applicants and synthesizes KYC and underwriting evidence into decisions
+  for its operations team.
+architecture:
+  harness: Specialists exchange structured claims, evidence and confidence.
+  knowledge: Documented analyst judgment and Brex onboarding policies.
+primitives:
+- name: Gather evidence
+  desc: Specialists segment businesses, verify documents and identity, and reconstruct financial profiles.
+- name: Decide or escalate
+  desc: A decision agent combines policy, evidence and confidence; uncertain cases go to analysts.
+- name: Evaluate decisions
+  desc: Brex benchmarks agents against re-reviewed, labeled historical applications.
+sources:
+- id: brex-onboarding-source-1
+  title: 'The end of the trade-off: How AI agents broke the onboarding trilemma'
+  url: https://www.brex.com/journal/rebuilding-onboarding-ai-native
+  canonical_url: https://www.brex.com/journal/rebuilding-onboarding-ai-native
+  kind: engineering-blog
+  provenance_class: first-party
+  accessed_at: '2026-09-17'
+  last_verified_at: '2026-09-17'
+  published_at: '2026-01-20'
+  duplicate_of: brex-onboarding-source
+evidence:
+  summary:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: Encoding human judgment at scale; How the onboarding agents work together
+  operating_models.0:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: 'How the onboarding agents work together: Decision agent makes high-confidence decisions and escalates
+      below-threshold cases'
+  architecture.harness:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: Encoding human judgment at scale; How the onboarding agents work together
+  architecture.knowledge:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: Encoding human judgment at scale; How the onboarding agents work together
+  primitives.0:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: Encoding human judgment at scale; How the onboarding agents work together
+  primitives.1:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: Encoding human judgment at scale; How the onboarding agents work together
+  primitives.2:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: 'Encoding human judgment at scale: historical cases re-reviewed and labeled as the benchmark'
+  key_metrics.0:
+  - source_id: brex-onboarding-source-1
+    relation: supports
+    locator: 'What we learned: SME and builder partnership raised card-application auto-approval from 0% to 40%
+      in weeks'
+claim_metadata:
+  operating_models.0:
+    kind: inference
+    provenance: catalog-judgment
+    confidence: medium
+    confidence_reason: Brex explicitly distinguishes instant high-confidence decisions from uncertain cases escalated
+      to analysts.
+    valid_at: '2026-01-20'
+  key_metrics.0:
+    metric_scope: 'Onboarding decision system: Brex reports card-application auto-approval rose from 0% to 40% in
+      weeks.'
+    confidence: medium
+    confidence_reason: Self-reported by the source; no independent verification.
+relationships:
+- type: related-to
+  approach_id: brex-agent-platform
+key_metrics:
+- Brex reports card-application auto-approval rose from 0% to 40% in weeks.
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids:
+  - brex-onboarding-source-1
+  workflow_scope: customer application → onboarding decision or analyst escalation
+  questions:
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.0
+      - primitives.1
+    human_involvement:
+      state: reported
+      claim_paths:
+      - operating_models.0
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.knowledge
+    validation:
+      state: reported
+      claim_paths:
+      - primitives.2
+    observations:
+      state: reported
+      claim_paths:
+      - key_metrics.0
+    lessons:
+      state: unreported
+      claim_paths: []
+      note: The reviewed source does not document this for the named subject.
+  implementation_fields:
+    model:
+      state: unreported
+      claim_paths: []
+      note: Not documented for this subject in the reviewed source.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+    sandbox:
+      state: unreported
+      claim_paths: []
+      note: Not documented for this subject in the reviewed source.
+    tool_access:
+      state: unreported
+      claim_paths: []
+      note: Not documented for this subject in the reviewed source.
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: unreported
+      claim_paths: []
+      note: Not documented for this subject in the reviewed source.
+    credentials:
+      state: unreported
+      claim_paths: []
+      note: Not documented for this subject in the reviewed source.
+    interfaces:
+      state: unreported
+      claim_paths: []
+      note: Not documented for this subject in the reviewed source.
+  primitive_roles:
+    primitives.0: workflow
+    primitives.1: workflow
+    primitives.2: validation
+  observations:
+    key_metrics.0:
+      category: adoption-output
+      basis: reported-measurement
+      subject: 'Onboarding decision system: Brex reports card-application auto-approval rose from 0% to 40% in weeks.'

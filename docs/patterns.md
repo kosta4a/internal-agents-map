@@ -8,25 +8,24 @@ Most evidence comes from organizations that describe their own systems. Architec
 
 ## Catalog snapshot
 
-The catalog currently contains 40 approaches:
+The catalog currently contains 56 entries. These are catalog classifications, not independent deployments or industry shares:
 
 | Type | Count |
 | --- | ---: |
-| Task agent | 15 |
-| Platform | 10 |
-| Background agent | 6 |
-| Agent system | 5 |
-| Orchestration system | 2 |
+| Agent | 40 |
+| Platform | 11 |
+| Agent family | 3 |
+| Orchestration system | 0 |
 | Supporting pattern | 2 |
 
-- 16 approaches document a concrete execution environment.
-- 20 approaches list Slack as an interface.
-- State duration is unknown for 34, durable-session for 4, cross-session-memory for 1, mixed for 0, and run-only for 1 approaches.
-- Autonomy is classified as drafts-reviewed for 23, human-in-loop for 8, autonomous for 4, assistive for 2, and unknown for 3 approaches.
+- 17 entries document a concrete execution environment.
+- 27 entries list Slack as an interface.
+- State duration is unknown for 36, durable-session for 10, cross-session-memory for 5, mixed for 4, and run-only for 1 approaches.
+- Agent autonomy (43 records; infrastructure excluded) is classified as drafts-reviewed for 20, human-in-loop for 5, autonomous for 6, assistive for 1, and unknown for 11 approaches.
 
 <!-- END PATTERNS SNAPSHOT -->
 
-Compare approaches of the same type and deployment stage before you draw a conclusion. A platform and a task agent have different responsibilities.
+Compare entries of the same type and deployment stage before you draw a conclusion. A platform and a narrow agent have different responsibilities.
 
 ## A common set of components
 
@@ -50,7 +49,7 @@ verification and review
 system of record
 ```
 
-No catalog rule requires this exact design. Some entries implement only part of it. The [Slack context system](landscape.md#slack-context-system), for example, documents context management rather than a complete execution platform.
+No catalog rule requires this exact design. Some entries implement only part of it. The [Slack security investigation service](landscape.md#slack-context-system), for example, uses context management within a task-performing investigation agent. Context-management detail does not make the whole system supporting infrastructure.
 
 ## Execution environments
 
@@ -58,7 +57,7 @@ Some entries document a concrete execution environment. Reported examples includ
 
 The remaining entries either omit the detail or describe no separate execution environment. This absence is an evidence gap. It is not proof that no isolation exists.
 
-Several reported designs separate durable work state from temporary compute. Sierra keeps conversation state and checkpoints outside its runners. WorkOS separates its orchestrator from its containers. Spotify runs work in constrained Kubernetes containers. These examples support a useful comparison question: what survives when a worker stops?
+Several reported designs separate durable work state from temporary compute. Shopify stores session identity and an event log in Postgres while replacing idle workers. Sierra restores runner state from checkpoints and ordered events. Sentry pauses near a serverless deadline and queues a continuation. The saved record determines what can resume: a conversation, workspace files, and completed actions in external systems require different recovery mechanisms.
 
 ## Harnesses and model choice
 
@@ -126,7 +125,7 @@ The catalog adapts [Dan Shapiro's five levels of AI-assisted software developmen
 
 The workflow is always the unit of assessment. For example, an autonomous pull-request approval step can use exception-only supervision without making the organization's complete software process a dark factory. Broad platforms remain unclassified when their sources do not identify one consistent attention boundary.
 
-The current sample is strongly Level 3-shaped: most documented workflows return work products, diffs, or pull requests to people for review. WorkOS Project Horizon and monday.com's Atlas/Morphex workflow are the clearest Level 4 candidates in the current evidence. PostHog StampHog reaches an exception-only boundary only within its narrowly scoped eligible-pull-request approval workflow.
+Work-product review is the most common documented boundary in this sample. WorkOS Project Horizon returns changes to people for review. monday.com's Morphex has an exception-only boundary for its automatic merge workflow; Atlas remains unknown because the source mixes a human-review workflow with plans for confidence-based automatic merging. PostHog StampHog also has an exception-only boundary, scoped to eligible-pull-request approval. These examples describe separate workflows, even when they share a company or platform.
 
 ## Metrics
 
@@ -146,7 +145,7 @@ The current evidence leaves several useful questions open:
 - Which controls stop a documented failure rather than a hypothetical one?
 - How much review time does generated work require?
 - Which metrics remain useful after adoption grows?
-- When does a shared platform outperform a narrow task agent?
+- When does a shared platform outperform a narrow agent?
 - Which systems were reduced or removed after deployment?
 
 Add conflicting evidence and reported failures when you find them. A complete map needs negative results as much as successful launches.

@@ -2,13 +2,15 @@
 // ABOUTME: The page of one catalog implementation, in the order the contract sets.
 // ABOUTME: Every section is built from normalized claims, never from stored HTML.
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import EntrySection from '../../components/EntrySection.astro';
 import Claim from '../../components/Claim.astro';
+import Icon from '../../components/Icon.astro';
 import CompanyLogo from '../../components/CompanyLogo.astro';
 import ResearchDetails from '../../components/ResearchDetails.astro';
 import SourceList from '../../components/SourceList.astro';
 import { loadCatalog } from '../../lib/catalog';
-import { entryView } from '../../lib/entry-view';
-import { assertPublishableId, canonicalUrl } from '../../lib/routes';
+import { entryView, showQuestion } from '../../lib/entry-view';
+import { assertPublishableId, canonicalUrl, organizationPath } from '../../lib/routes';
 import {
   SITE_NAME,
   breadcrumbNode,
@@ -33,69 +35,51 @@ const url = canonicalUrl(entry.path);
 const graph = structuredData([
   webPageNode({ url, name: title, description, dateModified: entry.reviewedAt }),
   breadcrumbNode(url, [
-    { name: 'Catalog', path: '/' },
+    { name: entry.profile.label, path: entry.profile.path },
     { name: `${entry.company} — ${entry.agentName}`, path: entry.path },
   ]),
 ]);
 
 // Invocation and interfaces are classifications, so they sit with the other facts.
-// Without a reported workflow the entry has no "How it works" material to show.
-const hasHowItWorks = entry.workflowClaims.length > 0;
+// Reviewed entries explain a missing workflow even when there are no claims.
 const invocation = entry.invocation.filter((item) => item.id !== 'unknown');
-const hasImplementation = entry.architectureClaims.length > 0 || entry.otherClaims.length > 0;
 const hasResults =
   entry.metricClaims.length > 0 ||
   entry.resultStatementClaims.length > 0 ||
-  entry.lessonClaims.length > 0;
+  entry.isPilot ||
+  (!entry.isPilot && entry.lessonClaims.length > 0);
 const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length > 0;
 ---
-<SiteLayout title={title} description={description} path={entry.path} current="catalog" structuredData={graph}>
+<SiteLayout title={title} description={description} path={entry.path} structuredData={graph}>
   <article class="entry-page" data-approach-id={entry.id}>
-    <a class="page-back" href="/">← All implementations</a>
     <header class="entry-header">
       <CompanyLogo company={entry.companyView} size={40} eager />
-      <p class="eyebrow">{entry.company} · {entry.approachTypeLabel}</p>
       <h1>{entry.agentName}</h1>
-      {entry.summary ? (
+      {entry.summary && !entry.isPilot ? (
         <>
           <p class="lede" id={entry.summary.anchor} data-claim-id={entry.summary.id}>{entry.summary.text}</p>
-          {entry.summary.citations.length > 0 && (
-            <p class="citations">
-              {entry.summary.citations.map((citation) => (
-                <a
-                  class:list={['citation', citation.relation === 'contradicts' && 'citation-contradicts']}
-                  href={`#${citation.anchor}`}
-                >
-                  <strong>{citation.number}</strong>
-                  {entry.summary!.showCitationRoles && <span> {citation.relationLabel}</span>}
-                </a>
-              ))}
-            </p>
-          )}
         </>
-      ) : (
+      ) : !entry.summary ? (
         <p class="lede">This entry has no summary claim yet.</p>
-      )}
-      {entry.supportingSystemNote && (
-        <div class="notice">
-          <strong>Supporting infrastructure</strong>
-          <p>{entry.supportingSystemNote}</p>
-        </div>
-      )}
+      ) : null}
       <dl class="entry-facts">
+        <div>
+          <dt>Company</dt>
+          <dd><a href={organizationPath(entry.companyView.id)}>{entry.company}</a></dd>
+        </div>
         <div>
           <dt>Approach type</dt>
           <dd>{entry.approachTypeLabel}</dd>
         </div>
         <div>
-          <dt>Work</dt>
+          <dt>{entry.isSupportingSystem ? 'Work supported' : 'Work'}</dt>
           <dd>{entry.domains.map((domain) => domain.label).join(', ')}</dd>
         </div>
-        <div>
+        {!entry.isSupportingSystem && <div>
           <dt>Human involvement</dt>
           <dd>{entry.autonomyLabel}</dd>
-        </div>
-        {invocation.length > 0 && (
+        </div>}
+        {!entry.isSupportingSystem && invocation.length > 0 && (
           <div>
             <dt>Invocation</dt>
             <dd>{invocation.map((item) => item.label).join(', ')}</dd>
@@ -122,73 +106,72 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
       </dl>
     </header>
 
-    {hasHowItWorks && (
-      <section class="entry-section" id="how-it-works" aria-labelledby="how-it-works-title">
-        <h2 id="how-it-works-title">How it works</h2>
-        <p class="section-note">The workflow the sources report for this implementation.</p>
-        {entry.workflowClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+    {entry.isPilot && (
+      <section class="entry-section" id="purpose" aria-labelledby="purpose-title">
+        <h2 id="purpose-title">Purpose</h2>
+        {entry.summary && <Claim claim={entry.summary} showLabel={false} />}
+        <p class="section-note"><a href="#sources">Check the reviewed sources and claim details</a>.</p>
       </section>
     )}
 
-    <section class="entry-section" id="human-involvement" aria-labelledby="human-involvement-title">
-      <h2 id="human-involvement-title">Where people stay involved</h2>
-      {entry.isSupportingSystem && !hasHowItWorks && (
-        <p class="section-note">
-          The catalog records no execution workflow for this entry, so the scopes below describe
-          access to the system rather than work it completes on its own.
-        </p>
-      )}
-      {entry.operatingModels.length > 0 && (
-        <ul class="scope-list">
-          {entry.operatingModels.map((model) => (
-            <li>
-              <strong>{model.scope}</strong>
-              <span>{model.boundaryLabel} · {model.levelLabel}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {entry.supervisionClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
-    </section>
+    {entry.profile.sectionOrder.map((section) => <EntrySection entry={entry} section={section} />)}
 
-    {hasImplementation && (
-      <section class="entry-section" id="implementation" aria-labelledby="implementation-title">
-        <h2 id="implementation-title">Implementation details</h2>
-        {entry.architectureClaims.map((claim) => <Claim claim={claim} />)}
-        {entry.otherClaims.length > 0 && (
-          <>
-            <h3>Other reported details</h3>
-            {entry.otherClaims.map((claim) => <Claim claim={claim} />)}
-          </>
-        )}
+    {entry.isPilot && showQuestion(entry, 'validation') &&
+      (entry.validationClaims.length > 0 || (entry.coverageQuestions.validation?.claimAnchors.length ?? 0) > 0) && (
+      <section class="entry-section" id="validation" aria-labelledby="validation-title">
+        <h2 id="validation-title">{entry.profile.validation}</h2>
+        {entry.validationClaims.length > 0 ? (
+          <div class="step-panel">{entry.validationClaims.map((claim) => <Claim claim={claim} />)}</div>
+        ) : entry.coverageQuestions.validation?.claimAnchors.length ? (
+          <p class="review-state" data-state={entry.coverageQuestions.validation.state}>
+            <strong>{entry.coverageQuestions.validation.stateLabel}:</strong>{' '}
+            {entry.coverageQuestions.validation.claimAnchors.map((claim, index) => (
+              <>{index > 0 && ', '}<a href={`#${claim.anchor}`}>{claim.label}</a></>
+            ))}
+          </p>
+        ) : null}
       </section>
     )}
 
-    {hasResults && (
+    {hasResults && showQuestion(entry, 'observations') && (
       <section class="entry-section" id="results" aria-labelledby="results-title">
-        <h2 id="results-title">Reported results and limitations</h2>
+        <h2 id="results-title">{entry.isPilot ? entry.profile.observations : 'Reported results and limitations'}</h2>
         <p class="section-note">
           The catalog records what the sources report, with the scope and the denominator of every
           figure. A qualification below limits the figure it sits under.
         </p>
-        {entry.metricClaims.length > 0 && (
-          <>
-            <h3>Reported metrics</h3>
-            {entry.metricClaims.map((claim) => <Claim claim={claim} />)}
-          </>
-        )}
-        {entry.resultStatementClaims.length > 0 && (
+        {entry.isPilot ? entry.observationItems.map((item) => (
+          <div class="observation-item">
+            <p class="section-note"><strong>{item.categoryLabel}</strong> · {item.basisLabel} · {item.subject}</p>
+            <Claim claim={item.claim} />
+          </div>
+        )) : entry.metricClaims.map((claim) => <Claim claim={claim} />)}
+        {!entry.isPilot && entry.resultStatementClaims.length > 0 && (
           <>
             <h3>Reported outcomes and statements</h3>
             {entry.resultStatementClaims.map((claim) => <Claim claim={claim} showKind={true} />)}
           </>
         )}
-        {entry.lessonClaims.length > 0 && (
+        {entry.isPilot && entry.observationItems.length === 0 && (
+          <p class="review-state" data-state={entry.coverageQuestions.observations?.state}><strong>{entry.coverageQuestions.observations?.stateLabel}:</strong> {entry.coverageQuestions.observations?.note}</p>
+        )}
+        {!entry.isPilot && entry.lessonClaims.length > 0 && (
           <>
             <h3>Lessons and interpretation</h3>
-            {entry.lessonClaims.map((claim) => <Claim claim={claim} showLabel={false} />)}
+            <div class="step-panel">
+              {entry.lessonClaims.map((claim) => (
+                <Claim claim={claim} showLabel={false} mark="circle-check" />
+              ))}
+            </div>
           </>
         )}
+      </section>
+    )}
+
+    {entry.isPilot && showQuestion(entry, 'lessons') && entry.lessonClaims.length > 0 && (
+      <section class="entry-section" id="lessons" aria-labelledby="lessons-title">
+        <h2 id="lessons-title">Lessons</h2>
+        <div class="step-panel">{entry.lessonClaims.map((claim) => <Claim claim={claim} showLabel={false} mark="circle-check" />)}</div>
       </section>
     )}
 
@@ -199,32 +182,37 @@ const hasRelated = entry.relatedEntries.length > 0 || entry.relatedNotes.length 
         repository, so a changed or removed page stays checkable.
       </p>
       <SourceList sources={entry.sources} />
-      <ResearchDetails claims={entry.claims} />
+      <details class="claim-details"><summary>Question coverage and scope</summary>
+        <dl class="architecture">{Object.entries(entry.coverageQuestions).map(([key, answer]) => <><dt>{key.replaceAll('_', ' ')}</dt><dd>{answer.stateLabel}{answer.note ? `: ${answer.note}` : ''}</dd></>)}</dl>
+      </details>
+      <ResearchDetails claims={entry.claims} researchOnlyClaims={entry.researchOnlyClaims} aliasRelations={entry.aliasObservationRelations} />
     </section>
 
-    <section class="entry-section" id="related" aria-labelledby="related-title">
-      <h2 id="related-title">Related reading</h2>
-      {hasRelated ? (
+    {hasRelated && (
+      <section class="entry-section" id="related" aria-labelledby="related-title">
+        <h2 id="related-title">Related reading</h2>
         <ul class="related-list">
-          {entry.relatedEntries.map((related) => (
-            <li>
-              <span>{related.relationLabel}</span>
+          {(['used-by', 'uses', 'related'] as const).map((group) => <>
+          {entry.relatedEntries.some((item) => item.group === group) && <li><h3>{group === 'used-by' ? 'Agents using this' : group === 'uses' ? 'Infrastructure used' : 'Related implementations'}</h3></li>}
+          {entry.relatedEntries.filter((item) => item.group === group).map((related) => (
+            <li class="related-card">
+              <span class="related-kind"><Icon name="layers-two" />{related.relationLabel}</span>
               <a href={related.path}>{related.company} — {related.agentName}</a>
             </li>
           ))}
+          </>)}
           {entry.relatedNotes.map((note) => (
-            <li>
-              <span>Note</span>
+            <li class="related-card">
+              <span class="related-kind"><Icon name="note-text" />Note</span>
               <a href={note.path}>{note.title}</a>
             </li>
           ))}
         </ul>
-      ) : (
-        <p class="section-note">The catalog records no related implementation for this entry yet.</p>
-      )}
-      <div class="resource-links">
-        <a href="/">Back to the directory →</a>
-      </div>
-    </section>
+      </section>
+    )}
+    <a class="page-back page-back-end" href={entry.profile.path}>
+      <span>Back to {entry.profile.label.toLowerCase()}</span>
+      <Icon name="layers-two" />
+    </a>
   </article>
 </SiteLayout>

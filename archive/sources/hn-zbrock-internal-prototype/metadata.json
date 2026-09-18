@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "hn-zbrock-internal-prototype",
+  "original_url": "https://news.ycombinator.com/item?id=48435137",
+  "final_url": "https://news.ycombinator.com/item?id=48435137",
+  "captured_at": "2026-09-16T15:10:39Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/hn-zbrock-internal-prototype/content.md",
+      "sha256": "sha256:b14eb8324358af70ad6795c7e2ec21292596a5742879a09917dc2c5d60e6603d",
+      "bytes": 1117
+    }
+  }
+}

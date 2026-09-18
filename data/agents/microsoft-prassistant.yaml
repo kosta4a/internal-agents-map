@@ -1,13 +1,13 @@
 id: microsoft-prassistant
 company: Microsoft
-agent_name: PRAssistant
-approach_type: background-agent
+agent_name: AI-powered code review assistant
+approach_type: agent
 deployment_stage: scaled
 year: 2025
 first_public_evidence:
   date: 2025-07
   source_id: microsoft-prassistant-source-1
-last_reviewed_at: '2026-09-15'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - code-review
@@ -21,17 +21,24 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: PRAssistant is Microsoft's internal AI code reviewer, built by its Developer Division Data and AI team. It
-  joins each pull request as a reviewer, summarizes the change, and comments on specific lines with suggested
-  edits the author applies. Microsoft says it shaped GitHub's Copilot code review.
+summary: Microsoft's internal AI-powered code review assistant, built in close collaboration with its Developer
+  Division's Data & AI team. It joins each pull request as a reviewer, summarizes the change, and comments on
+  specific lines with suggested edits the author applies. Microsoft says it shaped GitHub's Copilot code review.
 headline_metric: Supports more than 90% of Microsoft PRs, impacting over 600,000 pull requests per month
 architecture:
-  interfaces:
-  - github
+  interfaces: []
+  knowledge: Repository-specific guidelines and custom review prompts can guide specialized reviews
+primitives:
+- {name: Automatic first review, desc: Creating a pull request can automatically start the assistant as a reviewer}
+- {name: Review and summarize, desc: "The assistant reviews the diff, writes a pull-request summary, and posts categorized findings on specific lines"}
+- {name: Suggest changes, desc: For a bug or suboptimal pattern, the assistant proposes a code snippet or alternative implementation}
+- {name: Author decision, desc: "The author reviews, edits, and explicitly applies a suggestion; the assistant does not commit it directly"}
+- {name: Pull-request Q&A, desc: Reviewers can ask the assistant questions in the pull-request discussion and receive answers about the code}
 key_metrics:
 - More than 90% of pull requests across the company
 - More than 600,000 pull requests impacted per month
 - About 5,000 repositories in early onboarding
+- 10–20% median pull-request completion-time improvement in an early 5,000-repository cohort
 sources:
 - id: microsoft-prassistant-source-1
   title: Enhancing code quality at scale with AI-powered code reviews
@@ -56,9 +63,18 @@ evidence:
   - source_id: microsoft-prassistant-source-1
     relation: supports
     locator: Preserved content.md, lines 10
-  architecture.interfaces:
-  - source_id: microsoft-prassistant-source-1
-    relation: supports
+  architecture.knowledge:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, line 41'}
+  primitives.0:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, lines 16, 29'}
+  primitives.1:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, lines 18, 23'}
+  primitives.2:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, line 19'}
+  primitives.3:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, line 19'}
+  primitives.4:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, line 27'}
   key_metrics.0:
   - source_id: microsoft-prassistant-source-1
     relation: supports
@@ -71,6 +87,8 @@ evidence:
   - source_id: microsoft-prassistant-source-1
     relation: supports
     locator: Preserved content.md, lines 35
+  key_metrics.3:
+  - {source_id: microsoft-prassistant-source-1, relation: supports, locator: 'Preserved content.md, line 35'}
 claim_metadata:
   operating_models.0:
     kind: inference
@@ -109,3 +127,42 @@ claim_metadata:
     confidence_reason: Microsoft reported the figures in its own engineering blog.
     metric_scope: Repositories onboarded in early AI code-review experiments
     measurement_method: Early experiments and data science studies across onboarded repositories
+  key_metrics.3:
+    kind: metric
+    provenance: reported
+    confidence: medium
+    confidence_reason: Microsoft reports an early observational result without an independent study or causal design.
+    valid_at: 2025-07
+    reported_by: Microsoft
+    metric_scope: Median pull-request completion time in an early cohort of 5,000 onboarded repositories
+    denominator: 5,000 repositories in early experiments and data science studies
+    measurement_method: Early experiments and data science studies; comparison design is not specified
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [microsoft-prassistant-source-1]
+  workflow_scope: Pull request creation → AI review → author-applied suggestion
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.0, primitives.1, primitives.2, primitives.3, primitives.4]}
+    human_involvement: {state: reported, claim_paths: [operating_models.0, primitives.3]}
+    implementation: {state: reported, claim_paths: [architecture.knowledge]}
+    validation: {state: reported, claim_paths: [primitives.3]}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1, key_metrics.2, key_metrics.3]}
+    lessons: {state: unreported, claim_paths: [], note: The reviewed article reports practices and outcomes but this record contains no separate lessons claim.}
+  implementation_fields:
+    model: {state: unreported, claim_paths: [], note: The reviewed source does not name the underlying model.}
+    harness: {state: unreported, claim_paths: [], note: The reviewed source does not describe the orchestration harness.}
+    sandbox: {state: unreported, claim_paths: [], note: Execution isolation is not documented.}
+    tool_access: {state: unreported, claim_paths: [], note: Tool permissions are not documented.}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: unreported, claim_paths: [], note: Context-window management is not documented.}
+    credentials: {state: unreported, claim_paths: [], note: Credential handling is not documented.}
+    interfaces: {state: unreported, claim_paths: [], note: The source says the existing PR workflow but does not establish a specific hosting interface.}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow, primitives.2: workflow, primitives.3: workflow, primitives.4: workflow}
+  observations:
+    headline_metric: {category: adoption-output, basis: reported-measurement, subject: Pull requests supported across Microsoft per month}
+    key_metrics.0: {category: adoption-output, basis: reported-measurement, subject: Share of Microsoft pull requests supported}
+    key_metrics.1: {category: adoption-output, basis: reported-measurement, subject: Microsoft pull requests impacted per month}
+    key_metrics.2: {category: implementation-scale, basis: estimate, subject: Repositories in the early onboarding cohort}
+    key_metrics.3: {category: effectiveness, basis: reported-measurement, subject: "Median pull-request completion time in the early 5,000-repository cohort"}

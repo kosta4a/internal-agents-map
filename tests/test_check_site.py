@@ -27,7 +27,7 @@ STYLESHEET = "_astro/site.abcd1234.css"
 GUIDE_ROUTES = ("/", "/definitions", "/notes", "/notes/a-note")
 
 CATALOG = {
-    "schema_version": 5,
+    "schema_version": 7,
     "approaches": [
         {
             "id": "first-agent",
@@ -164,6 +164,9 @@ def routing_manifest():
     for approach in CATALOG["approaches"]:
         path = "/agents/" + approach["id"]
         routes[path] = {"html": path + ".html", "markdown": path + ".md"}
+    for company in CATALOG["companies"]:
+        path = "/organizations/" + company["id"]
+        routes[path] = {"html": path + ".html", "markdown": path + ".md"}
     return {"schema_version": 1, "routes": routes}
 
 
@@ -174,9 +177,8 @@ def build_artifact(root):
     files = {
         "favicon.ico": "icon",
         "og.png": "image",
-        STYLESHEET: '@font-face { src: url("/fonts/Geist.woff2"); }',
-        "fonts/Geist.woff2": "font",
-        "fonts/OFL.txt": "licence",
+        STYLESHEET: '@font-face { src: url("/fonts/Areal.woff2"); }',
+        "fonts/Areal.woff2": "font",
         "agents.json": json.dumps(CATALOG),
         "agents/index.json": "[]",
         "logos/first.svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 40"/>',
@@ -197,6 +199,11 @@ def build_artifact(root):
         )
         files[f"agents/{approach['id']}.json"] = "{}"
         files[f"agents/{approach['id']}.md"] = "# " + approach["agent_name"]
+    for company in CATALOG["companies"]:
+        members = [a for a in CATALOG["approaches"] if a["company_id"] == company["id"]]
+        company_cards = "".join(card(a, claims[a["claim_ids"][0]]) for a in members)
+        files[f"organizations/{company['id']}.html"] = document(company["name"], company_cards)
+        files[f"organizations/{company['id']}.md"] = "# " + company["name"]
     files["404.html"] = document("Not found", "<p>No such page.</p>")
     for path in GUIDE_ROUTES[1:]:
         name = path.lstrip("/")
@@ -372,7 +379,7 @@ class AstroArtifactTests(unittest.TestCase):
         self.assertTrue(any("Missing local target: /" + STYLESHEET in e for e in errors), errors)
 
     def test_css_asset_reference_is_checked(self):
-        self.rewrite(STYLESHEET, "/fonts/Geist.woff2", "/fonts/missing.woff2")
+        self.rewrite(STYLESHEET, "/fonts/Areal.woff2", "/fonts/missing.woff2")
         self.assertTrue(any("Missing local target" in e for e in self.validate()), self.validate())
 
     def test_srcset_candidate_is_checked(self):
@@ -400,6 +407,20 @@ class AstroArtifactTests(unittest.TestCase):
         errors = self.validate()
         self.assertTrue(any("omits /agents/second-agent" in e for e in errors), errors)
         self.assertTrue(any("/agents/third-agent" in e for e in errors), errors)
+
+    def test_missing_organization_route_fails(self):
+        manifest = json.loads(self.routes.read_text(encoding="utf-8"))
+        del manifest["routes"]["/organizations/first"]
+        self.routes.write_text(json.dumps(manifest), encoding="utf-8")
+        self.assertIn("Organization route membership differs from the catalog.", self.validate())
+
+    def test_unrelated_record_on_organization_page_fails(self):
+        path = self.root / "organizations/first.html"
+        text = path.read_text(encoding="utf-8").replace(
+            'data-approach-id="first-agent"', 'data-approach-id="second-agent"'
+        )
+        path.write_text(text, encoding="utf-8")
+        self.assertIn("Incorrect organization membership: first.", self.validate())
 
     def test_unsupported_manifest_version_fails(self):
         manifest = json.loads(self.routes.read_text(encoding="utf-8"))

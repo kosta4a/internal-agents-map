@@ -1,13 +1,13 @@
 id: doordash-flux
 company: DoorDash
-agent_name: Flux / Agentic AI Platform
+agent_name: Flux
 approach_type: platform
 deployment_stage: scaled
-year: 2025
+year: 2026
 first_public_evidence:
-  date: '2025-11-11'
-  source_id: doordash-flux-source-2
-last_reviewed_at: '2026-09-09'
+  date: '2026'
+  source_id: doordash-flux-source-3
+last_reviewed_at: '2026-09-17'
 status: internal
 domains:
 - code-review
@@ -15,7 +15,6 @@ domains:
 - ci-triage
 - on-call
 - maintenance
-- data
 autonomy: drafts-reviewed
 operating_models:
 - scope: engineering task → reviewed agent output
@@ -28,28 +27,28 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: DoorDash's internal agentic AI platform; a unified cognitive layer over company data and operations, with
-  an AI Marketplace of specialized agents and the Flux cloud-agent runtime for engineering tasks.
+summary: Flux is DoorDash’s cloud platform for engineering agents. It supplies isolated sandboxes, a governed MCP
+  gateway, reusable playbooks and invocation surfaces. DoorDash’s analytics AI Marketplace is a separate documented
+  platform.
 headline_metric: 130,000 engineering tasks automated in one month
 architecture:
   sandbox: Firecracker microVMs; <5s p95 end-to-end setup (boot, clone repos, install tools, configure harness)
-  harness: 'Maturity model: deterministic workflows -> ReAct agents -> hierarchical deep agents -> experimental
-    swarms'
-  model: Model-agnostic platform primitives support third-party or in-house agent components
+  harness: 'Separate analytics AI Marketplace context (not a Flux capability): Maturity model: deterministic workflows
+    → ReAct agents → hierarchical deep agents → experimental swarms'
+  model: Sources name no model or provider; the documented primitives are modular, allowing the best third-party
+    tool for each job or in-house builds, with multiple supported coding agent harnesses
   interfaces:
   - slack
   - github
   - scheduled
   - cli
   - skill
-  - cursor
-  tool_access: In-house MCP gateway ('Agent Gateway'); LangGraph orchestration; prospective A2A; tools declared
-    per playbook with scoped, logged permissions
-  knowledge: AI Marketplace of specialized agents; DataExplorer for grounded analytics; DoorDash-specific context
-    in playbooks
+  tool_access: Flux Agent Gateway brokers playbook-declared tools with scoped, logged permissions. The separately
+    documented analytics AI Marketplace uses LangGraph and explores A2A.
+  knowledge: Flux playbooks package DoorDash-specific context. The separate analytics AI Marketplace hosts DataExplorer.
   credentials: Scoped per playbook; brokered through the gateway, never on the laptop; provenance on every action
-  context_mgmt: 'Hybrid retrieval: BM25 + dense semantic + reciprocal-rank fusion -> RAG; schema-aware SQL with
-    EXPLAIN validation'
+  context_mgmt: 'Separate analytics AI Marketplace context (not a Flux capability): Hybrid retrieval: BM25 + dense
+    semantic + reciprocal-rank fusion → RAG; schema-aware SQL with EXPLAIN validation'
 primitives:
 - name: Sandbox
   desc: Isolated Firecracker microVM with repos, tools, secrets, runtime deps
@@ -58,23 +57,28 @@ primitives:
 - name: Playbook
   desc: 'YAML unit of agentic work: task, inputs, skills, tools, permissions, validation, outputs'
 - name: DataExplorer
-  desc: Identifies schemas, generates grounded SQL, validates via EXPLAIN before execution
+  desc: 'Separate analytics AI Marketplace context (not a Flux capability): Identifies schemas, generates grounded
+    SQL, validates via EXPLAIN before execution'
 - name: Maturity model
-  desc: Workflows -> agents -> deep-agent hierarchies -> swarms; governance hardens as control decentralizes
+  desc: 'Separate analytics AI Marketplace context (not a Flux capability): Deterministic workflows and single agents
+    are in use; deep agents are being developed and tested; swarms remain research'
+- name: Answer a grounded data question
+  desc: 'Separate analytics AI Marketplace context (not a Flux capability): From a business question, DataExplorer
+    identifies candidate tables through DescribeTable with cached column examples, generates starter SQL grounded
+    in the schema, and EXPLAIN validation with autocorrection precedes execution'
 key_metrics:
 - 130,000 engineering tasks automated in one month
 - 25,000+ automated code reviews per week
 - 300+ playbooks; 10,000+ invocations per week
 lessons_learned:
-- Start narrow to earn trust; began with automated code review before CI triage, on-call, maintenance, ticket-driven
-  dev
-- Make the work visible; public Slack threads drove adoption; private per-run channels did not build team habits
-- Playbooks need enablement; workshops and hackathons turn repeated operational work into reusable playbooks
-- Earn complexity by exhausting simpler primitives first; keep swarms at the research frontier until governance
-  catches up
-- Deterministic verification before probabilistic judgment; SQL linting and EXPLAIN before deeper validation; LLM-as-judge
-  + DeepEval
-- Log provenance so any answer traces back to source queries, documents, and inter-agent activity
+- DoorDash first used Flux for code review, then expanded into CI triage, on-call work, maintenance, and ticket-driven
+  development.
+- DoorDash credits a move from private run channels to public Slack threads with helping teams learn to use Flux.
+- DoorDash ran workshops and hackathons to help teams turn recurring operational tasks into Flux playbooks.
+- DoorDash reports deterministic workflows and single agents in use, deep agents under development, and swarms as
+  research on its analytical platform.
+- DoorDash's analytical platform uses SQL linting and EXPLAIN checks, with separate model judges for response quality.
+- DoorDash describes recording the queries, documents, and agent interactions behind an analytical answer.
 sources:
 - id: doordash-flux-source-1
   title: Delegating Engineering Work To Cloud-Based Agents (Flux)
@@ -113,12 +117,9 @@ evidence:
   - source_id: doordash-flux-source-3
     relation: supports
   summary:
-  - source_id: doordash-flux-source-1
-    relation: supports
-  - source_id: doordash-flux-source-2
-    relation: supports
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Introduction; Primitives, not workflows
   headline_metric:
   - source_id: doordash-flux-source-1
     relation: supports
@@ -163,6 +164,11 @@ evidence:
   primitives.4:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 66
+  primitives.5:
+  - source_id: doordash-flux-source-2
+    relation: supports
+    locator: Preserved content.md, lines 42, 78–80
   key_metrics.0:
   - source_id: doordash-flux-source-1
     relation: supports
@@ -178,21 +184,27 @@ evidence:
   lessons_learned.0:
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Preserved content.md, lines 85
   lessons_learned.1:
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Preserved content.md, lines 86
   lessons_learned.2:
   - source_id: doordash-flux-source-3
     relation: supports
+    locator: Preserved content.md, lines 87
   lessons_learned.3:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 58-66
   lessons_learned.4:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 80-82
   lessons_learned.5:
   - source_id: doordash-flux-source-2
     relation: supports
+    locator: Preserved content.md, lines 94
   architecture.interfaces:
   - source_id: doordash-flux-source-3
     relation: supports
@@ -205,35 +217,41 @@ claim_metadata:
       of agent output.
     valid_at: '2025-11-11'
   lessons_learned.0:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The Flux retrospective lists the initial workflow and later uses; the sequence alone does
+      not prove that this rollout order caused adoption.
   lessons_learned.1:
-    kind: inference
-    provenance: catalog-judgment
+    kind: opinion
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The authors describe the visibility change and its observed adoption pattern, without a controlled
+      comparison of channel choices.
   lessons_learned.2:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The retrospective names these activities and the work they supported, rather than reporting
+      that a playbook library appeared automatically.
   lessons_learned.3:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The architecture article distinguishes these deployment stages. Its swarm discussion identifies
+      governance and explainability as unresolved work.
   lessons_learned.4:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The validation sections distinguish query checks from LLM-as-judge and DeepEval assessments;
+      a valid query is not proof of a correct business answer.
   lessons_learned.5:
-    kind: inference
-    provenance: catalog-judgment
+    kind: fact
+    provenance: reported
     confidence: medium
-    confidence_reason: The catalog derives this observation from the linked sources.
+    confidence_reason: The provenance discussion names these records as the audit trail; recording them does not
+      itself establish that the answer is correct.
   headline_metric:
     metric_scope: Engineering tasks automated in one reported month; calendar measurement month unspecified
     valid_at: '2026-08-11'
@@ -250,3 +268,130 @@ claim_metadata:
     confidence_reason: Dated August 11, 2026 report; weekly measurement boundaries are not supplied.
   key_metrics.2:
     metric_scope: Unique playbooks and weekly invocations on Flux
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids:
+  - doordash-flux-source-1
+  - doordash-flux-source-2
+  - doordash-flux-source-3
+  workflow_scope: Business question to grounded, validated answer on the analytics platform
+  questions:
+    purpose:
+      state: reported
+      claim_paths:
+      - summary
+    workflow:
+      state: reported
+      claim_paths:
+      - primitives.5
+      note: Historical analytics example retained for anchor compatibility; it belongs to DataExplorer on the separate
+        AI Marketplace, not Flux.
+    human_involvement:
+      state: not-applicable
+      claim_paths: []
+      note: There is no single platform-wide agent review boundary. Scoped downstream operating-model claims remain
+        in research details; access controls are described separately.
+    implementation:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      - architecture.sandbox
+      - architecture.tool_access
+      - architecture.knowledge
+      - architecture.credentials
+      - architecture.context_mgmt
+      - architecture.interfaces
+    validation:
+      state: reported
+      claim_paths:
+      - primitives.5
+      - lessons_learned.4
+      note: The analytics platform validates generated SQL with linting, EXPLAIN checks, and statistical-metadata
+        checks with autocorrection, plus a separate LLM-as-judge and DeepEval framework. Flux playbooks package
+        validation per playbook.
+    observations:
+      state: reported
+      claim_paths:
+      - headline_metric
+      - key_metrics.0
+      - key_metrics.1
+      - key_metrics.2
+    lessons:
+      state: reported
+      claim_paths:
+      - lessons_learned.0
+      - lessons_learned.1
+      - lessons_learned.2
+      - lessons_learned.3
+      - lessons_learned.4
+      - lessons_learned.5
+  implementation_fields:
+    model:
+      state: unreported
+      claim_paths: []
+      note: No model or provider is named for either platform. The modular-primitives design claim stays in research
+        details.
+    harness:
+      state: reported
+      claim_paths:
+      - architecture.harness
+      note: The maturity model is the analytics platform's progression. Flux supports multiple coding agent harnesses
+        inside its sandboxes.
+    sandbox:
+      state: reported
+      claim_paths:
+      - architecture.sandbox
+      note: Firecracker microVMs with a sub-five-second p95 end-to-end setup objective; a Flux capability.
+    tool_access:
+      state: reported
+      claim_paths:
+      - architecture.tool_access
+      note: Flux Agent Gateway with playbook-scoped logged permissions; LangGraph orchestration and prospective
+        A2A on the analytics platform.
+    knowledge:
+      state: reported
+      claim_paths:
+      - architecture.knowledge
+    context_mgmt:
+      state: reported
+      claim_paths:
+      - architecture.context_mgmt
+      note: Hybrid retrieval and schema-aware SQL generation; an analytics-platform capability.
+    credentials:
+      state: reported
+      claim_paths:
+      - architecture.credentials
+      note: Scoped per playbook and brokered through the gateway rather than the laptop; a Flux capability with
+        provenance on every action.
+    interfaces:
+      state: reported
+      claim_paths:
+      - architecture.interfaces
+      note: Flux invocation surfaces are Slack, GitHub, cron, CLI, and skill; the analytics platform adds Cursor.
+        The analytics conversational web UI is not claimed.
+  primitive_roles:
+    primitives.0: mechanism
+    primitives.1: mechanism
+    primitives.2: mechanism
+    primitives.3: mechanism
+    primitives.4: mechanism
+    primitives.5: workflow
+  observations:
+    headline_metric:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Engineering tasks automated on Flux in one reported month; the calendar month is unspecified
+    key_metrics.0:
+      duplicate_of: headline_metric
+      reason: 'Identical statement, scope, period, and locators as the headline: the same 130,000-task one-month
+        count.'
+    key_metrics.1:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Weekly automated code reviews powered by Flux; the reviewer agent itself is the separate doordash-code-review
+        record
+    key_metrics.2:
+      category: adoption-output
+      basis: reported-measurement
+      subject: Unique Flux playbooks and weekly playbook invocations

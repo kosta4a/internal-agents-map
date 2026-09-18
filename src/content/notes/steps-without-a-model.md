@@ -7,6 +7,7 @@ summary: Code can control a step that must follow a fixed rule.
 readingTime: 2 min read
 order: 6
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - stripe-minions
   - dropbox-nova
@@ -26,45 +27,24 @@ sources:
     note: Pinned implementation with authoritative safety gates.
 ---
 
-<section aria-labelledby="what-the-teams-report">
+<section aria-labelledby="who-controls-the-next-step">
 
-## What the teams report
+## Who controls the next step?
 
-Stripe’s blueprints combine model-directed work with ordinary code. A model can implement a task, while code runs configured checks and pushes changes. [[1]](#source-1)
+Stripe's blueprints interleave agent work with ordinary code. The agent can decide how to implement a task or repair a failure. Configured linters and the push step run as deterministic nodes. Their execution does not depend on the model remembering to request them. [[1]](#source-1)
 
-Dropbox keeps code publication outside the agent. Its workflows start continuous integration (CI) checks and return failures to the agent for repair. [[2]](#source-2)
-
-PostHog checks whether a pull request is eligible for agent approval. Its fixed gates remain authoritative. The model can make approval stricter but cannot relax a gate. [[3]](#source-3)
-
-<blockquote cite="https://dropbox.tech/machine-learning/introducing-nova-our-internal-platform-for-coding-agents"><p>“not every step belongs inside the agent loop.”</p></blockquote>
-
-<p class="quote-credit">Dropbox, on control of the workflow. <a href="#source-2">[2]</a></p>
-
-<figure class="note-diagram">
-  <div class="note-flow">
-    <div class="note-node"><span>01</span><strong>Model task</strong><small>Propose a result</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node"><span>02</span><strong>Fixed check</strong><small>Apply a known rule</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node note-node-accent"><span>03</span><strong>Next step</strong><small>Proceed or return a failure</small></div>
-  </div>
-  <figcaption>Our illustration of a model task followed by code-controlled steps. The cases use different checks and actions.</figcaption>
-</figure>
+Dropbox draws another boundary around Nova: the agent changes one branch, while surrounding workflows retain publication control. Those workflows trigger continuous integration (CI) and call the agent back when failures need repair. Dropbox reports that letting agents manage this themselves caused long waits or validation against the wrong tests. [[2]](#source-2)
 
 </section>
 
-<section class="note-observation" aria-labelledby="the-rule-and-the-judgment-can-stay-separate">
+<section aria-labelledby="an-approval-rule-the-model-cannot-relax">
 
-<p class="eyebrow">Our observation</p>
+## An approval rule the model cannot relax
 
-## The rule and the judgment can stay separate
+PostHog's StampHog checks pull-request eligibility with fixed gates. If a gate rejects the request, the model cannot override it. If the request is eligible, the model can still impose a stricter decision. A backend error or pending reviewer-bot work withholds approval and preserves the trigger for a later retry. [[3]](#source-3)
 
-A known rule can have a predictable check. The model can handle the parts that require interpretation.
+The cases assign different responsibilities to code: running a required step, owning publication, or limiting an approval decision. An eligible StampHog request can still be refused by the model; a Nova validation result returns control to its surrounding workflow.
 
-This separation can also make failures easier to inspect. The record can show which rule blocked the next step.
-
-A passing check proves only what that check covers. It does not establish that the complete result is correct.
-
-<p class="note-question"><strong>A question for your build</strong>Which step must happen the same way on every run?</p>
+Our interpretation is that a passed check needs a named scope. A formatter can establish formatting; a test can exercise the behavior it covers; an eligibility rule can permit further review. None of those results alone grants permission to publish. That permission belongs to the workflow's separate approval and publication controls.
 
 </section>

@@ -42,6 +42,12 @@ Run `npm run verify` before a pull request. It checks the committed data and arc
 runs the type, unit, build, artifact, Python test, lint, format, privacy, local-link, browser,
 and whitespace gates in one sequence.
 
+The browser tests use Playwright's managed `webServer` to start the built Astro site,
+wait up to 30 seconds for readiness, and stop it after the run. The server uses Astro's
+JavaScript API so it stays in the foreground in both agent environments and CI.
+The suite has a five-minute limit, and the complete validation job has a fifteen-minute
+limit. Tests require a free port: set `PREVIEW_PORT` to use a port other than 4180.
+
 ## Routes and formats
 
 Astro uses `output: 'static'`, `build.format: 'file'`, and `trailingSlash: 'never'`. Each page
@@ -80,47 +86,21 @@ middleware, and an unknown route reaches the real 404 page.
 
 The visual direction comes from the local `steel-web-minimal/templates/starter.html`
 reference: a quiet sidebar, bounded content column, fine dividers, white background,
-dark ink, and restrained accents. The user requested Geist in place of serif
-headings. All text uses self-hosted Geist Sans, with system sans-serif fallbacks and
-`font-display: swap`. No runtime font CDN or build-time network access is required.
+dark ink, and restrained accents. All text uses self-hosted ABC Areal, with system
+sans-serif fallbacks and `font-display: swap`. No runtime font CDN or build-time
+network access is required.
 
-The variable font is the official [Geist 1.5.1](https://github.com/vercel/geist-font/releases/tag/1.5.1)
-asset from commit `3c80bfcc1ba4988ece0eda46a282e15d29e61bbf`, path
-`fonts/Geist/webfonts/Geist[wght].woff2`, copied without modification to
-[public/fonts/Geist.woff2](../public/fonts/Geist.woff2). The accompanying
-[SIL Open Font License](../public/fonts/OFL.txt) stays with the font and is published beside it.
-The font's license applies to that asset; repository licenses continue to govern other content.
+The variable font is `ABCArealVariable.woff2` from the licensed ABC Areal package by
+[Dinamo](https://abcdinamo.com), copied without modification to
+[public/fonts/Areal.woff2](../public/fonts/Areal.woff2). Its weight axis runs 400-700,
+so the `font-weight: 550` rules in the stylesheets resolve to a real intermediate
+weight rather than a synthesized one. The face also carries `slnt` and `DRKM` axes,
+which the site does not currently use.
 
-### Company logos
-
-Every organization mark renders through one component, `CompanyLogo.astro`, which reads
-the `companies` collection of the catalog. The directory card shows the mark at 20 px and
-loads it lazily; the entry page shows it at 40 px and loads it eagerly. A vendored logo
-renders in gray scale so that marks of many colors stay quiet inside the restrained
-palette. Without a logo, the component shows a monogram: the first letters of up to the
-first two words of the company name that start with a letter or a digit, on a quiet
-surface tile.
-
-The mark is decorative. The image carries an empty `alt`, and the monogram is
-`aria-hidden`. The company name stays beside the mark as text. No page requests an
-external image. Logo assets are vendored into `public/logos/` the same way as the Geist
-font, with `source_url` and `accessed_at` provenance in the registry. A byte change to a
-logo changes the derived catalog, so `scripts/build.py --check` fails until the output is
-regenerated and committed.
-
-The artifact gates treat logos as published files. `scripts/check_site.py` derives the
-expected logo files from the catalog companies, and `scripts/check_delivery.py` checks
-their content types on the host. The Methodology guide carries the trademark and removal
-statement for the marks.
-
-When you collect an asset, take it from the brand, press, or media page of the
-organization. Do not take it from a logo aggregator, a search result, or a screen
-capture. Choose the dark or full-color version for the white background, never a white
-version, because gray scale keeps the original lightness. Prefer SVG; use PNG only when
-the organization publishes no vector asset. Remove metadata, comments, and unused
-definitions from the file, and record the exact page that published the asset in
-`source_url`. When the brand rules do not permit use, keep `logo: none` and write the
-reason in `logo_note`.
+ABC Areal is a commercially licensed typeface. Unlike the openly licensed face it
+replaced, no font license file is published beside the asset; the foundry's terms
+govern its use, including self-hosting on this domain. Repository licenses continue
+to govern other content.
 
 ## Reading and sharing
 
@@ -253,3 +233,7 @@ HTML with CDN cache hits. `www` returns 308 and preserves path/query. Both Verce
 nameservers are verified. Local DNS still held the previous delegation, so custom
 domain HTTPS checks used `--resolve-ip` with a public DNS answer; no TLS checks
 were bypassed. Browser acceptance used the public production Vercel alias.
+
+## Company pages
+
+Each referenced company has a generated `/organizations/<company.id>` page and matching `.md` representation. Record Company fields link to it. Membership and connections derive from existing catalog records; registry-only companies have no page. Agents and Infrastructure remain separate nonempty groups, and connections retain authored direction and relation type. There is no Organizations menu item or index. Shared page furniture, catalog cards, and floating search remain unchanged. Routes are included in the publication inventory, sitemap, and llms.txt; no catalog schema or JSON export changes are required.

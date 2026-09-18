@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "openai-sevbot-article",
+  "original_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+  "final_url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+  "captured_at": "2026-09-16T12:21:53Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/openai-sevbot-article/content.md",
+      "sha256": "sha256:6ebe65592f53faee2febcde3bbebc3a027c0d6a30b56810bca30ce2d528b1ddd",
+      "bytes": 22663
+    }
+  }
+}

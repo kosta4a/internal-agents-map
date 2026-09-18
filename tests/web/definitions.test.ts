@@ -56,7 +56,7 @@ describe('the chart placements', () => {
     const cells = placementsByCell(catalog);
     expect(cells.specialized.map((item) => item.id)).toContain(SAMPLE);
     expect(cells.shared.map((item) => item.id)).toContain('sentry-junior');
-    expect(cells.ready.map((item) => item.id)).toContain('retool-retoolgpt');
+    expect(cells.ready.map((item) => item.id)).not.toContain('retool-retoolgpt');
   });
 
   it('drops a placement when a required claim is removed', () => {

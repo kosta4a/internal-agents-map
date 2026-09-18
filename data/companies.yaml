@@ -28,13 +28,6 @@
     file: brex.svg
     source_url: https://www.brex.com/about
     accessed_at: '2026-09-15'
-- id: browserbase
-  name: Browserbase
-  homepage: https://www.browserbase.com/
-  logo:
-    file: browserbase.svg
-    source_url: https://www.browserbase.com/
-    accessed_at: '2026-09-15'
 - id: cloudflare
   name: Cloudflare
   homepage: https://www.cloudflare.com/
@@ -101,9 +94,10 @@
 - id: hubspot
   name: HubSpot
   homepage: https://www.hubspot.com/
-  logo: none
-  logo_note: The trademark guidelines do not permit use of the logo on another website without
-    written permission. The monogram shows instead.
+  logo:
+    file: hubspot.svg
+    source_url: https://www.hubspot.com/hubfs/HubSpot_Logos/HSLogo_color.svg
+    accessed_at: '2026-09-16'
 - id: linear
   name: Linear
   homepage: https://linear.app/
@@ -114,9 +108,10 @@
 - id: microsoft
   name: Microsoft
   homepage: https://www.microsoft.com/
-  logo: none
-  logo_note: The trademark guidelines do not permit use of the logos without an express license.
-    The monogram shows instead.
+  logo:
+    file: microsoft.png
+    source_url: https://github.com/microsoft
+    accessed_at: '2026-09-16'
 - id: monday-com
   name: monday.com
   homepage: https://monday.com/
@@ -131,6 +126,13 @@
     file: notion.svg
     source_url: https://www.notion.com/newsroom
     accessed_at: '2026-09-15'
+- id: openai
+  name: OpenAI
+  homepage: https://openai.com/
+  logo:
+    file: openai.png
+    source_url: https://github.com/openai
+    accessed_at: '2026-09-16'
 - id: plaid
   name: Plaid
   homepage: https://plaid.com/
@@ -159,13 +161,6 @@
     file: replit.svg
     source_url: https://replit.com/brand
     accessed_at: '2026-09-15'
-- id: retool
-  name: Retool
-  homepage: https://retool.com/
-  logo:
-    file: retool.svg
-    source_url: https://retool.com/newsroom
-    accessed_at: '2026-09-15'
 - id: salesforce
   name: Salesforce
   homepage: https://www.salesforce.com/
@@ -190,9 +185,10 @@
 - id: sierra
   name: Sierra
   homepage: https://sierra.ai/
-  logo: none
-  logo_note: The brand page requires written authorization for any use of its brand assets.
-    The monogram shows instead.
+  logo:
+    file: sierra.svg
+    source_url: https://sierra.ai/icon.svg
+    accessed_at: '2026-09-16'
 - id: slack
   name: Slack
   homepage: https://slack.com/

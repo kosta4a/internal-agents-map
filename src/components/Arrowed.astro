@@ -1,0 +1,12 @@
+---
+// ABOUTME: Renders text whose arrows are set apart from the words around them.
+// ABOUTME: It only splits the string; every character reaches the page unchanged.
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+/** Keep the arrows as their own pieces, so each can be marked. */
+const parts = text.split(/(→)/);
+---
+{parts.map((part) => (part === '→' ? <span class="arrow">{part}</span> : part))}

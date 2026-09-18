@@ -265,9 +265,20 @@ export function noteMarkdown(catalog: Catalog, note: NoteView): string {
     noteBodyMarkdown(note),
     `## ${note.sources.length === 1 ? 'Source' : 'Sources'}`,
     sources.join('\n'),
+    '### Related items',
     catalogLinks.join(' '),
     `[All notes](${notesUrl}) [${next.isFirst ? 'Read' : 'Next'}: ${next.note.title} →](${canonicalUrl(next.note.path)})`,
   ].join('\n\n');
+}
+
+/** A note's subject without its place in the sequence: "01 / Run limits" reads "Run limits". */
+export function noteTopic(note: NoteView): string {
+  return note.eyebrow.replace(/^\d+\s*\/\s*/, '');
+}
+
+/** The heading a note wears in a list: its subject, then the question it asks. */
+export function notePreviewTitle(note: NoteView): string {
+  return `${noteTopic(note)}: ${note.title}`;
 }
 
 /** The companies a note reads, in the order the note lists them. */
@@ -278,8 +289,7 @@ export function noteCompanies(catalog: Catalog, note: NoteView): string[] {
 /** The Markdown blocks that describe every note on the index. */
 export function notePreviewsMarkdown(catalog: Catalog): string[] {
   return noteViews().flatMap((note) => [
-    note.eyebrow,
-    `## [${note.title}](${canonicalUrl(note.path)})`,
+    `## [${notePreviewTitle(note)}](${canonicalUrl(note.path)})`,
     note.summary,
     `${noteCompanies(catalog, note).join(' · ')} ${note.readingTime}`,
   ]);

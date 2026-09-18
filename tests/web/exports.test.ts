@@ -69,7 +69,7 @@ describe('compact index', () => {
   };
 
   it('describes every implementation of the catalog, in catalog order', () => {
-    expect(current.schema_version).toBe(1);
+    expect(current.schema_version).toBe(3);
     expect(current.approaches.map((entry) => entry.id)).toEqual(
       catalog.approaches.map((approach) => approach.id),
     );
@@ -132,17 +132,37 @@ describe('record Markdown', () => {
     expect(markdown.startsWith(`Source: ${canonicalUrl('/agents/plaid-internal-mcp-server')}\n`)).toBe(
       true,
     );
-    expect(markdown).toContain('> This entry describes supporting infrastructure');
+    expect(markdown).toContain('- Collection: Infrastructure');
+    expect(markdown).not.toContain('This entry describes supporting infrastructure');
     for (const relation of entryView(catalog, 'plaid-internal-mcp-server').claims.flatMap(
       (claim) => claim.citations,
     )) {
       expect(markdown).toContain(`${relation.relationLabel} · [${relation.number}]`);
     }
   });
+
+  it('exports pilot states and duplicate representations explicitly', () => {
+    const notion = recordMarkdown(catalog, 'notion-custom-agents');
+    expect(notion).toContain('## Duplicate observation representations');
+    expect(notion).toContain('Duplicate of `notion-custom-agents--headline-metric`');
+    const yc = recordMarkdown(catalog, 'ycombinator-agent-infra');
+    expect(yc).toContain('## Adoption and operating evidence');
+    expect(yc).toContain('**observations:** Unreported');
+    expect(yc.indexOf('## Lessons')).toBeGreaterThan(yc.indexOf('## Adoption and operating evidence'));
+  });
+});
+
+describe('lesson attribution in Markdown', () => {
+  it('keeps reported opinion and catalog judgment provenance beside lesson text', () => {
+    const reported = recordMarkdown(catalog, 'strongdm-software-factory');
+    expect(reported).toContain('Opinion · Reported');
+    const interpreted = recordMarkdown(catalog, 'sentry-junior');
+    expect(interpreted).toContain('Inference · Catalog judgment');
+  });
 });
 
 describe('catalog Markdown', () => {
-  const markdown = catalogMarkdown(catalog);
+  const markdown = catalogMarkdown(catalog) + catalogMarkdown(catalog, 'infrastructure');
 
   it('holds the text of every claim in the catalog', () => {
     for (const claim of catalog.claims) {
@@ -157,12 +177,14 @@ describe('catalog Markdown', () => {
     }
   });
 
-  it('counts the catalog from the data, not from a fixed number', () => {
-    const organizations = new Set(catalog.approaches.map((a) => a.company)).size;
-    expect(markdown).toContain(`- Implementations: ${catalog.approaches.length}`);
-    expect(markdown).toContain(`- Organizations: ${organizations}`);
-    expect(markdown).toContain(`- Sources: ${catalog.sources.length}`);
-    expect(markdown).toContain(`- Claims: ${catalog.claims.length}`);
+  it('counts each collection and never combines platforms into agent totals', () => {
+    for (const section of ['agents', 'infrastructure'] as const) {
+      const items = catalog.approaches.filter((item) => item.catalog_section === section);
+      const text = catalogMarkdown(catalog, section);
+      expect(text).toContain(`- ${section === 'agents' ? 'Agents' : 'Infrastructure records'}: ${items.length}`);
+      expect(text).toContain(`- Organizations: ${new Set(items.map((item) => item.company_id)).size}`);
+      expect(text).toContain(`- Claims: ${items.reduce((sum, item) => sum + item.claim_ids.length, 0)}`);
+    }
   });
 });
 
@@ -225,22 +247,10 @@ describe('the qualification of a figure', () => {
 });
 
 describe('the results of an entry in Markdown', () => {
-  it('separates the metrics from the statements of the other kinds', () => {
-    const markdown = recordMarkdown(catalog, 'block-builderbot');
-    const entry = entryView(catalog, 'block-builderbot');
-    expect(markdown).toContain('## Reported metrics');
-    expect(markdown).toContain('## Reported outcomes and statements');
-    const opinion = entry.resultStatementClaims.find((item) =>
-      item.text.includes('now takes days'),
-    )!;
-    expect(markdown.indexOf(opinion.text.trim())).toBeGreaterThan(
-      markdown.indexOf('## Reported outcomes and statements'),
-    );
-    for (const claim of entry.metricClaims) {
-      expect(markdown.indexOf(claim.text.trim()), claim.id).toBeLessThan(
-        markdown.indexOf('## Reported outcomes and statements'),
-      );
-    }
+  it('renders reviewed observations with the statements of other kinds', () => {
+    const markdown = recordMarkdown(catalog, 'ramp-inspect');
+    expect(markdown).toContain('## Reported observations');
+    expect(markdown).toContain('limited only by model-provider');
   });
 
   it('names the kind of every statement it groups outside the metrics', () => {
@@ -248,7 +258,9 @@ describe('the results of an entry in Markdown', () => {
       const entry = entryView(catalog, approach.id);
       if (entry.resultStatementClaims.length === 0) continue;
       const markdown = recordMarkdown(catalog, approach.id);
-      expect(markdown, approach.id).toContain('## Reported outcomes and statements');
+      expect(markdown, approach.id).toContain(
+        entry.isPilot ? `## ${entry.profile.observations}` : '## Reported outcomes and statements',
+      );
       for (const claim of entry.resultStatementClaims) {
         const position = markdown.indexOf(claim.text.trim());
         const block = markdown.slice(position, markdown.indexOf('\n### ', position + 1));

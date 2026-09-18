@@ -5,6 +5,7 @@ import { claimsById, requireApproach, sortedApproaches, sourcesById, type Catalo
 import { requireCompany } from './companies';
 import {
   entryView,
+  showQuestion,
   type ClaimView,
   type EntryView,
   type SourceView,
@@ -12,6 +13,7 @@ import {
 } from './entry-view';
 import { SITE_DESCRIPTION, SITE_NAME } from './metadata';
 import {
+  organizationPath,
   ORIGIN,
   canonicalUrl,
   entryJsonPath,
@@ -21,7 +23,7 @@ import {
 } from './routes';
 
 /** The schema version of the compact index. It is separate from the catalog version. */
-export const COMPACT_INDEX_SCHEMA_VERSION = 1;
+export const COMPACT_INDEX_SCHEMA_VERSION = 3;
 
 /** Serialize an export the way the published JSON files are written. */
 export function jsonDocument(value: unknown): string {
@@ -55,6 +57,7 @@ export function compactIndexJson(catalog: Catalog): string {
       company: approach.company,
       agent_name: approach.agent_name,
       approach_type: approach.approach_type,
+      catalog_section: approach.catalog_section,
       domains: approach.domains,
       last_reviewed_at: approach.last_reviewed_at,
       url: canonicalUrl(entryPath(approach.id)),
@@ -174,15 +177,17 @@ function sourceBlock(source: SourceView): string[] {
 /** The identification lines that open an entry. */
 function factLines(entry: EntryView): string[] {
   const facts: ReadonlyArray<readonly [string, string | null]> = [
+    ['Company', markdownLink(entry.company, canonicalUrl(organizationPath(entry.companyView.id)))],
+    ['Collection', entry.profile.label],
     ['Approach type', entry.approachTypeLabel],
     ['Deployment stage', entry.deploymentStageLabel],
-    ['Autonomy', entry.autonomyLabel],
+    ['Autonomy', entry.isSupportingSystem ? null : entry.autonomyLabel],
     ['Evidence strength', entry.evidenceStrengthLabel],
     ['Status', entry.statusLabel],
     ['First reported year', entry.year === null ? 'Unknown' : String(entry.year)],
     ['Work', termList(entry.domains)],
     ['Interfaces', termList(entry.interfaces)],
-    ['Invocation', termList(entry.invocation)],
+    ['Invocation', entry.isSupportingSystem ? null : termList(entry.invocation)],
     ['Entry reviewed', entry.reviewedAt],
   ];
   return facts
@@ -198,35 +203,137 @@ export function entryMarkdown(entry: EntryView, level = 1): string[] {
   const sources: SourceIndex = new Map(entry.sources.map((source) => [source.id, source]));
   const lines = [heading(level, entry.title), ''];
   if (entry.summaryText) lines.push(entry.summaryText.trim(), '');
-  if (entry.supportingSystemNote) lines.push(`> ${entry.supportingSystemNote}`, '');
   lines.push(...factLines(entry), '');
   // The catalog file needs the address of each entry; the record file states it above.
   if (level > 1) lines.push(`Page: ${canonicalUrl(entry.path)}`, '');
 
-  if (entry.operatingModels.length > 0) {
-    lines.push(heading(level + 1, 'Where people stay involved'), '');
-    for (const model of entry.operatingModels) {
-      lines.push(`- **${model.scope}** — ${model.boundaryLabel} · ${model.levelLabel}`);
+  if (entry.isSupportingSystem) {
+    lines.push(...claimSection('Purpose', entry.summary ? [entry.summary] : [], sources, level + 1));
+    for (const section of entry.profile.sectionOrder) {
+      if (section === 'implementation') {
+        lines.push(heading(level + 1, entry.profile.implementation), '');
+        lines.push(...[...entry.architectureClaims, ...entry.mechanismClaims].flatMap((claim) => claimBlock(claim, sources, level + 2)));
+        for (const row of entry.architectureRows.filter((row) => !row.claim)) lines.push(`- **${row.label}:** ${row.state ?? 'Unreported'}${row.note ? ` — ${row.note}` : ''}`);
+        lines.push('');
+      } else if (section === 'workflow' && showQuestion(entry, 'workflow')) {
+        lines.push(heading(level + 1, entry.profile.workflow), '');
+        if (entry.workflowScope) lines.push(`Documented use example: ${entry.workflowScope}.`, '');
+        lines.push(...entry.workflowClaims.flatMap((claim) => claimBlock(claim, sources, level + 2)));
+        if (!entry.workflowClaims.length) lines.push(entry.coverageQuestions.workflow?.note ?? 'No documented use example is reported.', '');
+      } else if (section === 'people') {
+        lines.push(heading(level + 1, entry.profile.people), '');
+        const credentials = entry.architectureClaims.find((claim) => claim.field === 'architecture.credentials');
+        lines.push(credentials ? `See the credential and access boundaries in architecture (\`${credentials.id}\`). Scoped human-review assessments for individual uses remain in research details.` : 'No separate access-control assessment is recorded.', '');
+      }
     }
-    lines.push('');
-  }
+    if (showQuestion(entry, 'validation')) {
+      lines.push(heading(level + 1, entry.profile.validation), '');
+      lines.push(...entry.validationClaims.flatMap((claim) => claimBlock(claim, sources, level + 2)));
+      if (!entry.validationClaims.length) lines.push(entry.coverageQuestions.validation?.note ?? 'Not reported.', '');
+    }
+    if (showQuestion(entry, 'observations')) {
+      lines.push(heading(level + 1, entry.profile.observations), '');
+      for (const item of entry.observationItems) {
+        lines.push(`Observation: ${item.categoryLabel} · ${item.basisLabel} · ${item.subject}`, '');
+        lines.push(...claimBlock(item.claim, sources, level + 2));
+      }
+      if (!entry.observationItems.length) lines.push(entry.coverageQuestions.observations?.note ?? 'Not reported.', '');
+    }
+    if (showQuestion(entry, 'lessons')) {
+      lines.push(...claimSection('Lessons', entry.lessonClaims, sources, level + 1));
+      if (!entry.lessonClaims.length) lines.push(entry.coverageQuestions.lessons?.note ?? 'Not reported.', '');
+    }
+    if (entry.aliasObservationRelations.length) {
+      lines.push(heading(level + 1, 'Duplicate observation representations'), '');
+      for (const relation of entry.aliasObservationRelations) {
+        lines.push(`Duplicate of \`${relation.target.id}\`: ${relation.reason}`, '');
+        lines.push(...claimBlock(relation.claim, sources, level + 2));
+      }
+    }
+    const aliases = new Set(entry.aliasObservationClaims.map((claim) => claim.id));
+    lines.push(...claimSection('Research details and scoped use assessments', entry.researchOnlyClaims.filter((claim) => !aliases.has(claim.id)), sources, level + 1));
+  } else {
+    if (entry.isPilot) {
+      lines.push(...claimSection('Purpose', entry.summary ? [entry.summary] : [], sources, level + 1));
+      if (entry.workflowScope) lines.push(`Representative workflow: ${entry.workflowScope}.`, '');
+      lines.push(...claimSection(entry.profile.workflow, entry.workflowClaims, sources, level + 1));
+      if (entry.workflowClaims.length === 0 && showQuestion(entry, 'workflow') && entry.coverageQuestions.workflow) {
+        const workflow = entry.coverageQuestions.workflow;
+        lines.push(heading(level + 1, entry.profile.workflow), '', `**${workflow.stateLabel}:**${workflow.note ? ` ${workflow.note}` : ''}`, '');
+      }
+      lines.push(heading(level + 1, entry.profile.people), '');
+      for (const model of entry.isSupportingSystem ? [] : entry.operatingModels) {
+        lines.push(`- **${model.scope}** — ${model.boundaryLabel} · ${model.levelLabel}`);
+      }
+      const people = entry.coverageQuestions.human_involvement;
+      if (people?.note) lines.push('', `**${people.stateLabel}:** ${people.note}`);
+      lines.push('');
+      lines.push(...claimSection('Supervision evidence', entry.supervisionClaims, sources, level + 2));
+      lines.push(...claimSection(entry.profile.implementation, [...entry.architectureClaims, ...entry.mechanismClaims], sources, level + 1));
+      lines.push(heading(level + 2, 'Implementation coverage'), '');
+      for (const row of entry.architectureRows) {
+        lines.push(`- **${row.label}:** ${row.state ?? 'Unassessed'}${row.note ? ` — ${row.note}` : ''}`);
+      }
+      lines.push('');
+      lines.push(...claimSection(entry.profile.validation, entry.validationClaims, sources, level + 1));
+      if (entry.validationClaims.length === 0 && entry.coverageQuestions.validation?.note) {
+        lines.push(`**${entry.coverageQuestions.validation.stateLabel}:** ${entry.coverageQuestions.validation.note}`, '');
+      }
+      if (entry.observationItems.length > 0) {
+        lines.push(heading(level + 1, entry.profile.observations), '');
+        for (const item of entry.observationItems) {
+          lines.push(`Observation: ${item.categoryLabel} · ${item.basisLabel} · ${item.subject}`, '');
+          lines.push(...claimBlock(item.claim, sources, level + 2));
+        }
+      }
+      if (entry.canonicalObservationClaims.length === 0 && entry.coverageQuestions.observations?.note) {
+        lines.push(heading(level + 1, entry.profile.observations), '', `**${entry.coverageQuestions.observations.stateLabel}:** ${entry.coverageQuestions.observations.note}`, '');
+      }
+      lines.push(...claimSection('Lessons', entry.lessonClaims, sources, level + 1));
+      if (entry.lessonClaims.length === 0 && entry.coverageQuestions.lessons?.note) {
+        lines.push(heading(level + 1, 'Lessons'), '', `**${entry.coverageQuestions.lessons.stateLabel}:** ${entry.coverageQuestions.lessons.note}`, '');
+      }
+      if (entry.aliasObservationRelations.length > 0) {
+        lines.push(heading(level + 1, 'Duplicate observation representations'), '');
+        for (const relation of entry.aliasObservationRelations) {
+          lines.push(`Duplicate of \`${relation.target.id}\`: ${relation.reason}`, '');
+          lines.push(...claimBlock(relation.claim, sources, level + 2));
+        }
+      }
+      const aliasIds = new Set(entry.aliasObservationClaims.map((claim) => claim.id));
+      lines.push(...claimSection('Reviewed legacy details', entry.researchOnlyClaims.filter((claim) => !aliasIds.has(claim.id)), sources, level + 1));
+    } else if (entry.operatingModels.length > 0) {
+      lines.push(heading(level + 1, entry.profile.people), '');
+      lines.push(
+        `Each scope pairs its normal attention boundary with supporting evidence. See the [supervision definitions](${canonicalUrl('/definitions#supervision')}) for the level mapping and limits.`,
+        '',
+      );
+      for (const model of entry.isSupportingSystem ? [] : entry.operatingModels) {
+        lines.push(`- **${model.scope}** — ${model.boundaryLabel} · ${model.levelLabel}`);
+      }
+      lines.push('');
+    }
 
-  const sections: ReadonlyArray<readonly [string, readonly ClaimView[]]> = [
-    ['Overview', entry.summary ? [entry.summary] : []],
-    ['How it works', entry.workflowClaims],
-    ['Supervision evidence', entry.supervisionClaims],
-    ['Implementation details', entry.architectureClaims],
-    ['Reported metrics', entry.metricClaims],
-    ['Reported outcomes and statements', entry.resultStatementClaims],
-    ['Lessons and interpretation', entry.lessonClaims],
-    ['Other reported details', entry.otherClaims],
-  ];
-  for (const [title, claims] of sections) {
-    lines.push(...claimSection(title, claims, sources, level + 1));
+    const sections: ReadonlyArray<readonly [string, readonly ClaimView[]]> = entry.isPilot ? [] : [
+      ['Overview', entry.summary ? [entry.summary] : []],
+      ['How it works', entry.workflowClaims],
+      ['Supervision evidence', entry.supervisionClaims],
+      ['Implementation details', entry.architectureClaims],
+      ['Reported metrics', entry.metricClaims],
+      ['Reported outcomes and statements', entry.resultStatementClaims],
+      ['Lessons and interpretation', entry.lessonClaims],
+      ['Other reported details', entry.otherClaims],
+    ];
+    for (const [title, claims] of sections) {
+      lines.push(...claimSection(title, claims, sources, level + 1));
+    }
   }
+  lines.push(heading(level + 1, 'Question coverage and scope'), '');
+  for (const [key, answer] of Object.entries(entry.coverageQuestions)) lines.push(`- **${key.replaceAll('_', ' ')}:** ${answer.stateLabel}${answer.note ? ` — ${answer.note}` : ''}`);
+  lines.push('');
 
   if (entry.relatedEntries.length > 0) {
-    lines.push(heading(level + 1, 'Related implementations'), '');
+    lines.push(heading(level + 1, 'Related reading'), '');
     for (const related of entry.relatedEntries) {
       const name = `${related.company} — ${related.agentName}`;
       lines.push(`- ${related.relationLabel}: ${markdownLink(name, canonicalUrl(related.path))}`);
@@ -258,27 +365,29 @@ export function recordMarkdown(catalog: Catalog, id: string): string {
  * The complete Markdown catalog.
  * It holds every entry in full, not the short text of the directory cards.
  */
-export function catalogMarkdown(catalog: Catalog): string {
-  const approaches = sortedApproaches(catalog);
+export function catalogMarkdown(catalog: Catalog, section: 'agents' | 'infrastructure' = 'agents'): string {
+  const approaches = sortedApproaches(catalog).filter((item) => item.catalog_section === section);
   const organizations = new Set(approaches.map((approach) => approach.company)).size;
   const reviewed = approaches
     .map((approach) => approach.last_reviewed_at)
     .sort()
     .at(-1);
   const lines = [
-    heading(1, SITE_NAME),
+    heading(1, `${SITE_NAME} — ${section === 'agents' ? 'Agents' : 'Infrastructure'}`),
     '',
     SITE_DESCRIPTION,
     '',
-    `- Implementations: ${approaches.length}`,
+    `- ${section === 'agents' ? 'Agents' : 'Infrastructure records'}: ${approaches.length}`,
     `- Organizations: ${organizations}`,
-    `- Sources: ${catalog.sources.length}`,
-    `- Claims: ${catalog.claims.length}`,
+    `- Sources: ${new Set(approaches.flatMap((item) => item.source_ids).map((id) => { const source = catalog.sources.find((item) => item.id === id); return source?.canonical_url ?? source?.url; })).size}`,
+    `- Claims: ${approaches.reduce((sum, item) => sum + item.claim_ids.length, 0)}`,
     `- Latest entry review: ${reviewed ?? 'Unknown'}. Individual source dates vary.`,
     '',
-    'This file holds every implementation with all of its claims, qualifications, and',
+    `This file holds the ${section} collection with all of its claims, qualifications, and`,
     'sources. The compact index is at ' + `${ORIGIN}/agents/index.json`,
     `and the complete dataset is at ${ORIGIN}/agents.json.`,
+    '',
+    `[Agents](${ORIGIN}/index.md) · [Infrastructure](${ORIGIN}/infrastructure.md). Historical JSON endpoints contain both collections.`,
     '',
     'Company-reported metrics and catalog judgments are not independent verification.',
     'Keep the qualifications and the dates with the statements that they belong to.',
@@ -287,5 +396,5 @@ export function catalogMarkdown(catalog: Catalog): string {
   for (const approach of approaches) {
     lines.push(...entryMarkdown(entryView(catalog, approach.id), 2));
   }
-  return document(canonicalUrl(homePath()), lines);
+  return document(canonicalUrl(section === 'agents' ? homePath() : '/infrastructure'), lines);
 }

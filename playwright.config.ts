@@ -10,8 +10,14 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   reporter: process.env.CI ? 'line' : 'list',
-  globalSetup: './tests/e2e/global-setup.ts',
-  globalTeardown: './tests/e2e/global-teardown.ts',
+  globalTimeout: 5 * 60_000,
+  webServer: {
+    command: 'node tests/e2e/serve.ts',
+    url: PREVIEW_URL,
+    reuseExistingServer: false,
+    timeout: 30_000,
+    gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
+  },
   use: { baseURL: PREVIEW_URL },
   projects: [
     {

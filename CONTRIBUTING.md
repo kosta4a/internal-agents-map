@@ -73,8 +73,12 @@ the repository documents. Node builds the website.
 
 1. Copy `templates/agent.yaml` to `data/agents/<id>.yaml`.
 2. Give the record a kebab-case ID that matches its file name.
-3. Add the shared rubric fields. Use `unknown` when the sources do not document a value.
-4. Add a scoped `operating_models` assessment. Record where human attention normally returns, not a company-wide maturity estimate.
+3. Classify structural type and invocation separately. Structural type describes the system;
+   invocation describes how work starts or proceeds. Use `unknown` when the sources do not
+   document an invocation mode.
+4. Add a scoped `operating_models` assessment. Record where human attention normally returns,
+   not a company-wide maturity estimate. Keep attention separate from tool authority,
+   publication permission, and how long the run can proceed unattended.
 5. Add structured source records before you summarize them.
 6. Preserve each accepted source while it is still live:
    `uv run python scripts/archive_sources.py --source-id <source-id>`. Review the captured
@@ -144,6 +148,17 @@ retention, and takedown rules.
 - Preserve conflicting reports when they refer to different dates or methods.
 - Do not treat an undocumented field as evidence that a feature is absent.
 - Never assign an operating level without naming the workflow scope. Treat it as a dated catalog judgment, not a reported company fact.
+- Review each lesson against a specific source passage. Describe a reported practice as
+  `fact`/`reported`, attribute a team's preference as `opinion`/`reported`, and reserve
+  `inference`/`catalog-judgment` for an actual catalog inference.
+- Explain what supports that particular claim in `confidence_reason`, including the
+  unresolved step when there is one. Rewording a shared disclaimer is not a review.
+  Add a locator to the supporting passage and keep advice bounded to its reported case.
+- When adopting `page_content`, read every listed source and answer all seven reader
+  questions plus all eight architecture fields. Use `reported`, `unreported`,
+  `not-applicable`, or `not-reviewed` as defined in `data/schema.md`; keep a next action
+  for unfinished review. Classify primitives by workflow role and observations by
+  category, basis, and subject. Confirm duplicate observations manually.
 
 When you edit `docs/patterns.md` or `docs/adoption-lessons.md`, compare similar approach types and deployment stages. State the sample size. Include counterexamples before you call a pattern common.
 
@@ -191,3 +206,19 @@ The build writes the website to `dist/`, which Git ignores. Do not commit websit
 Vercel builds and checks the same artifact for every push, and a merge to `main` deploys it to
 `https://internal-agents.com/`. See [website maintenance and delivery](docs/site.md) for the
 hosting rules, preview deployments, delivery checks, and rollback.
+
+## Agents and infrastructure
+
+The map maintains two collections. Agents perform identifiable work for internal
+teams; Infrastructure supplies reusable execution, orchestration, or tool access.
+Both retain structured, source-backed records. Notes compare lessons across cases.
+Choose the subject before assigning workflow claims or metrics: a task-performing
+system remains an agent even when it orchestrates subagents. A family requires
+independently useful constituent agents. Sandbox detail alone does not establish a
+platform. Attribute downstream agent results to their actual subject and author
+`built-on` only when a source establishes the dependency.
+
+The homepage counts agents; the Infrastructure index keeps supporting implementations
+discoverable. Full JSON exports include both collections, identified by derived
+`catalog_section`. Existing detail URLs and anchors remain stable. See the
+[schema migration](data/schema.md#collection-migration-catalog-7-compact-index-3).

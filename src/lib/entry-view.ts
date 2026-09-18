@@ -6,6 +6,7 @@ import {
   sortedApproaches,
   sourcesById,
   type Approach,
+  type CatalogSection,
   type Catalog,
   type Claim,
   type ClaimKind,
@@ -21,8 +22,37 @@ import { shorten } from './text';
 /** Where the repository keeps the preserved copy of a source. */
 const REPOSITORY_BLOB = 'https://github.com/steel-experiments/internal-agents-map/blob/main/';
 
-/** Approach types that describe shared infrastructure, not an execution workflow. */
-const SUPPORTING_TYPES: ReadonlySet<string> = new Set(['supporting-pattern', 'platform']);
+export interface PageProfile {
+  readonly section: CatalogSection;
+  readonly sectionOrder: readonly ('workflow' | 'people' | 'implementation')[];
+  readonly label: string;
+  readonly path: string;
+  readonly workflow: string;
+  readonly people: string;
+  readonly implementation: string;
+  readonly validation: string;
+  readonly observations: string;
+  readonly related: string;
+}
+
+/** One profile is shared by HTML and Markdown, with research keys unchanged. */
+export function pageProfile(section: CatalogSection): PageProfile {
+  return section === 'infrastructure' ? {
+    section, sectionOrder: ['implementation', 'workflow', 'people'], label: 'Infrastructure', path: '/infrastructure',
+    workflow: 'Documented uses', people: 'Access and controls',
+    implementation: 'Capabilities and architecture', validation: 'Reliability and validation',
+    observations: 'Adoption and operating evidence', related: 'Agents using this and related reading',
+  } : {
+    section, sectionOrder: ['workflow', 'people', 'implementation'], label: 'Agents', path: '/', workflow: 'How it works',
+    people: 'Where people stay involved', implementation: 'Implementation details',
+    validation: 'Validation and failure handling', observations: 'Reported observations',
+    related: 'Infrastructure used and related reading',
+  };
+}
+
+export function showQuestion(entry: EntryView, key: string): boolean {
+  return !entry.isSupportingSystem || entry.coverageQuestions[key]?.state !== 'not-applicable';
+}
 
 export interface CaveatView {
   readonly label: string;
@@ -40,12 +70,45 @@ export interface CitationView {
   readonly title: string;
 }
 
+/**
+ * Every architecture field an entry can report, in the order the table shows
+ * them. The list is fixed so the table reads the same on every entry, and a
+ * field the sources do not report still gets a row.
+ */
+export const ARCHITECTURE_FIELDS = [
+  'model',
+  'harness',
+  'sandbox',
+  'tool_access',
+  'knowledge',
+  'context_mgmt',
+  'credentials',
+  'interfaces',
+] as const;
+
+/** One row of the architecture table: its label, and the claim if there is one. */
+export interface ArchitectureRowView {
+  readonly field: string;
+  readonly label: string;
+  readonly claim: ClaimView | null;
+  readonly state?: string;
+  readonly note?: string | null;
+}
+
+export interface CoverageAnswerView {
+  readonly state: string;
+  readonly stateLabel: string;
+  readonly note: string | null;
+  readonly claimAnchors: readonly { readonly anchor: string; readonly label: string }[];
+}
+
 export interface ClaimView {
   readonly id: string;
   readonly anchor: string;
   readonly field: string;
   readonly label: string;
   readonly text: string;
+  readonly displayName: string | null;
   readonly kind: ClaimKind;
   readonly kindLabel: string;
   readonly provenanceLabel: string;
@@ -103,6 +166,7 @@ export interface RelatedEntryView {
   readonly company: string;
   readonly agentName: string;
   readonly relationLabel: string;
+  readonly group: 'uses' | 'used-by' | 'related';
 }
 
 export interface RelatedNoteView {
@@ -125,11 +189,12 @@ export interface EntryView {
   readonly companyView: CompanyView;
   readonly agentName: string;
   readonly title: string;
+  readonly catalogSection: CatalogSection;
   readonly approachType: string;
   readonly approachTypeLabel: string;
   /** True when the entry describes infrastructure other systems build on. */
   readonly isSupportingSystem: boolean;
-  readonly supportingSystemNote: string | null;
+  readonly profile: PageProfile;
   readonly summary: ClaimView | null;
   readonly summaryText: string;
   readonly reviewedAt: string;
@@ -142,14 +207,26 @@ export interface EntryView {
   readonly interfaces: readonly TermView[];
   readonly invocation: readonly TermView[];
   readonly operatingModels: readonly OperatingModelView[];
+  readonly isPilot: boolean;
+  readonly workflowScope: string | null;
+  readonly coverageQuestions: Readonly<Record<string, CoverageAnswerView>>;
   readonly workflowClaims: readonly ClaimView[];
+  readonly mechanismClaims: readonly ClaimView[];
+  readonly validationClaims: readonly ClaimView[];
   readonly supervisionClaims: readonly ClaimView[];
   readonly architectureClaims: readonly ClaimView[];
+  /** The architecture table: one row per field, reported or not. */
+  readonly architectureRows: readonly ArchitectureRowView[];
   /** Claims of a metric field whose kind is a metric. */
   readonly metricClaims: readonly ClaimView[];
   /** Claims of a metric field that state a fact, an inference, or an opinion. */
   readonly resultStatementClaims: readonly ClaimView[];
   readonly lessonClaims: readonly ClaimView[];
+  readonly canonicalObservationClaims: readonly ClaimView[];
+  readonly observationItems: readonly { readonly claim: ClaimView; readonly categoryLabel: string; readonly basisLabel: string; readonly subject: string }[];
+  readonly aliasObservationClaims: readonly ClaimView[];
+  readonly aliasObservationRelations: readonly { readonly claim: ClaimView; readonly target: ClaimView; readonly reason: string }[];
+  readonly researchOnlyClaims: readonly ClaimView[];
   /** Claims that no section above classifies. They keep every claim reachable. */
   readonly otherClaims: readonly ClaimView[];
   readonly claims: readonly ClaimView[];
@@ -270,8 +347,9 @@ function claimView(claim: Claim, numbers: ReadonlyMap<string, number>, sources: 
     id: claim.id,
     anchor: `claim-${claim.id}`,
     field: claim.field,
-    label: fieldLabel(claim.field),
+    label: claim.display_name ?? fieldLabel(claim.field),
     text: claim.text,
+    displayName: claim.display_name ?? null,
     kind: claim.kind,
     kindLabel: termLabel(claim.kind),
     provenanceLabel: termLabel(claim.provenance),
@@ -291,26 +369,10 @@ function claimView(claim: Claim, numbers: ReadonlyMap<string, number>, sources: 
   };
 }
 
-/**
- * Say what the catalog classifies this entry as.
- * The record, not the classification, says whether a workflow is reported.
- */
-function supportingSystemNote(approach: Approach, workflowClaims: number): string | null {
-  if (!SUPPORTING_TYPES.has(approach.approach_type)) return null;
-  const classification =
-    `This entry describes supporting infrastructure that other work builds on. ` +
-    `The catalog classifies it as a ${termLabel(approach.approach_type).toLowerCase()}.`;
-  const workflow =
-    workflowClaims > 0
-      ? `The record also reports a workflow.`
-      : `The record reports no execution workflow.`;
-  return `${classification} ${workflow}`;
-}
-
 function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[] {
   const byId = new Map(catalog.approaches.map((item) => [item.id, item]));
   const related: RelatedEntryView[] = [];
-  const add = (id: string, relationLabel: string) => {
+  const add = (id: string, relationLabel: string, group: RelatedEntryView['group']) => {
     const target = byId.get(id);
     if (!target || target.id === approach.id) return;
     if (related.some((item) => item.id === target.id)) return;
@@ -320,12 +382,14 @@ function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[
       company: target.company,
       agentName: target.agent_name,
       relationLabel,
+      group,
     });
   };
   for (const relationship of approach.relationships ?? []) {
     add(
       relationship.approach_id,
-      relationship.type === 'component-of' ? 'This entry is a component of' : 'Related implementation',
+      relationship.type === 'built-on' ? 'Built on' : relationship.type === 'component-of' ? 'Component of' : 'Related implementation',
+      relationship.type === 'built-on' ? 'uses' : 'related',
     );
   }
   for (const other of catalog.approaches) {
@@ -333,7 +397,8 @@ function relatedEntries(catalog: Catalog, approach: Approach): RelatedEntryView[
       if (relationship.approach_id !== approach.id) continue;
       add(
         other.id,
-        relationship.type === 'component-of' ? 'Names this entry as its context' : 'Related implementation',
+        relationship.type === 'built-on' ? 'Uses this infrastructure' : relationship.type === 'component-of' ? 'Includes component' : 'Related implementation',
+        relationship.type === 'built-on' && other.catalog_section === 'agents' ? 'used-by' : 'related',
       );
     }
   }
@@ -362,19 +427,77 @@ export function entryView(catalog: Catalog, id: string): EntryView {
 
   const of = (test: (claim: ClaimView) => boolean) => claims.filter(test);
   const summary = claims.find((claim) => claim.field === 'summary') ?? null;
-  const workflowClaims = of((claim) => claim.field.startsWith('primitives.'));
-  const supervisionClaims = of((claim) => claim.field.startsWith('operating_models.'));
-  const architectureClaims = of((claim) => claim.field.startsWith('architecture.'));
+  const page = approach.page_content;
+  const byField = new Map(claims.map((claim) => [claim.field, claim]));
+  const fromPaths = (paths: readonly string[]) =>
+    paths
+      .map((path) => byField.get(path))
+      .filter((claim): claim is ClaimView => Boolean(claim));
+  const legacyWorkflowClaims = of((claim) => claim.field.startsWith('primitives.'));
+  const workflowClaims = page ? fromPaths(page.questions.workflow.claim_paths) : legacyWorkflowClaims;
+  const mechanismClaims = page
+    ? of((claim) => page.primitive_roles[claim.field] === 'mechanism')
+    : [];
+  const validationClaims = page
+    ? of((claim) => page.primitive_roles[claim.field] === 'validation')
+    : [];
+  const supervisionClaims = approach.catalog_section === 'agents' ? of((claim) => claim.field.startsWith('operating_models.')) : [];
+  const allArchitectureClaims = of((claim) => claim.field.startsWith('architecture.'));
+  const architectureClaims = page
+    ? allArchitectureClaims.filter((claim) => {
+        const key = claim.field.slice('architecture.'.length) as keyof typeof page.implementation_fields;
+        return page.implementation_fields[key]?.state === 'reported';
+      })
+    : allArchitectureClaims;
   const resultClaims = of(
     (claim) => claim.field === 'headline_metric' || claim.field.startsWith('key_metrics.'),
   );
-  const metricClaims = resultClaims.filter((claim) => claim.isMetric);
-  const resultStatementClaims = resultClaims.filter((claim) => !claim.isMetric);
   const lessonClaims = of((claim) => claim.field.startsWith('lessons_learned.'));
+  const canonicalObservationClaims = page
+    ? resultClaims.filter((claim) => !page.observations[claim.field]?.duplicate_of)
+    : resultClaims;
+  const aliasObservationClaims = page
+    ? resultClaims.filter((claim) => Boolean(page.observations[claim.field]?.duplicate_of))
+    : [];
+  const aliasObservationRelations = page
+    ? aliasObservationClaims.map((claim) => ({
+        claim,
+        target: byField.get(page.observations[claim.field]!.duplicate_of!)!,
+        reason: page.observations[claim.field]!.reason ?? 'Duplicate representation.',
+      }))
+    : [];
+  const observationItems = page
+    ? canonicalObservationClaims.map((claim) => {
+        const observation = page.observations[claim.field]!;
+        return {
+          claim,
+          categoryLabel: termLabel(observation.category!),
+          basisLabel: termLabel(observation.basis!),
+          subject: observation.subject!,
+        };
+      })
+    : [];
+  const metricClaims = canonicalObservationClaims.filter((claim) => claim.isMetric);
+  const resultStatementClaims = canonicalObservationClaims.filter((claim) => !claim.isMetric);
   const placed = new Set(
-    [summary, ...workflowClaims, ...supervisionClaims, ...architectureClaims, ...resultClaims, ...lessonClaims]
+    [summary, ...workflowClaims, ...mechanismClaims, ...validationClaims, ...supervisionClaims, ...architectureClaims, ...canonicalObservationClaims, ...lessonClaims]
       .filter((claim): claim is ClaimView => claim !== null)
       .map((claim) => claim.id),
+  );
+  const researchOnlyClaims = page ? claims.filter((claim) => !placed.has(claim.id)) : [];
+  const coverageQuestions = Object.fromEntries(
+    Object.entries(page?.questions ?? {}).map(([key, disposition]) => [
+      key,
+      {
+        state: disposition.state,
+        stateLabel: termLabel(disposition.state),
+        note: disposition.note ?? null,
+        claimAnchors: disposition.claim_paths
+          .map((path) => byField.get(path))
+          .filter((claim): claim is ClaimView => Boolean(claim))
+          .map((claim) => ({ anchor: claim.anchor, label: claim.displayName ?? claim.label })),
+      },
+    ]),
   );
 
   return {
@@ -385,10 +508,11 @@ export function entryView(catalog: Catalog, id: string): EntryView {
     companyView: companyView(catalog, approach.company_id),
     agentName: approach.agent_name,
     title: `${approach.company} — ${approach.agent_name}`,
+    catalogSection: approach.catalog_section,
     approachType: approach.approach_type,
     approachTypeLabel: termLabel(approach.approach_type),
-    isSupportingSystem: SUPPORTING_TYPES.has(approach.approach_type),
-    supportingSystemNote: supportingSystemNote(approach, workflowClaims.length),
+    isSupportingSystem: approach.catalog_section === 'infrastructure',
+    profile: pageProfile(approach.catalog_section),
     summary,
     summaryText: summary?.text ?? '',
     reviewedAt: approach.last_reviewed_at,
@@ -407,13 +531,33 @@ export function entryView(catalog: Catalog, id: string): EntryView {
       level: model.level,
       levelLabel: levelLabel(model.level),
     })),
+    isPilot: Boolean(page),
+    workflowScope: page?.workflow_scope ?? null,
+    coverageQuestions,
     workflowClaims,
+    mechanismClaims,
+    validationClaims,
     supervisionClaims,
     architectureClaims,
+    architectureRows: ARCHITECTURE_FIELDS.map((key) => {
+      const field = `architecture.${key}`;
+      return {
+        field,
+        label: fieldLabel(field),
+        claim: architectureClaims.find((claim) => claim.field === field) ?? null,
+        state: page?.implementation_fields[key].state,
+        note: page?.implementation_fields[key].note ?? null,
+      };
+    }),
     metricClaims,
     resultStatementClaims,
     lessonClaims,
-    otherClaims: claims.filter((claim) => !placed.has(claim.id)),
+    canonicalObservationClaims,
+    observationItems,
+    aliasObservationClaims,
+    aliasObservationRelations,
+    researchOnlyClaims,
+    otherClaims: page ? [] : claims.filter((claim) => !placed.has(claim.id)),
     claims,
     sources,
     relatedEntries: relatedEntries(catalog, approach),
@@ -433,9 +577,11 @@ export interface DirectoryCard {
   readonly excerpt: string;
   /** The text the directory search reads, normalized to lower case. */
   readonly search: string;
+  readonly catalogSection: CatalogSection;
   readonly approachType: string;
   readonly approachTypeLabel: string;
   readonly domains: readonly TermView[];
+  readonly invocation: readonly TermView[];
   /** The attention boundaries of the scoped operating models, with their derived levels. */
   readonly boundaries: readonly BoundaryView[];
   readonly reviewedAt: string;
@@ -471,6 +617,7 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
       .sort()
       .map((id) => ({ ...termView(id), level: levels.get(id) ?? null }));
     const domains = approach.domains.map(termView);
+    const invocation = approach.rubric.invocation.map(termView);
     return {
       id: approach.id,
       path: entryPath(approach.id),
@@ -486,15 +633,20 @@ export function directoryCards(catalog: Catalog): DirectoryCard[] {
         approach.approach_type,
         termLabel(approach.approach_type),
         ...domains.flatMap((domain) => [domain.id, domain.label]),
-        ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
-        approach.autonomy,
-        termLabel(approach.autonomy),
+        ...(approach.catalog_section === 'agents' ? [
+          ...invocation.flatMap((mode) => [mode.id, mode.label, mode.id === 'interactive' ? 'foreground' : '']),
+          ...boundaries.flatMap((boundary) => [boundary.id, boundary.label, levelLabel(boundary.level)]),
+          approach.autonomy,
+          termLabel(approach.autonomy),
+        ] : []),
       ]),
+      catalogSection: approach.catalog_section,
       approachType: approach.approach_type,
       approachTypeLabel: termLabel(approach.approach_type),
       sourceIds: approach.source_ids,
       domains,
-      boundaries,
+      invocation: approach.catalog_section === 'agents' ? invocation : [],
+      boundaries: approach.catalog_section === 'agents' ? boundaries : [],
       reviewedAt: approach.last_reviewed_at,
     };
   });

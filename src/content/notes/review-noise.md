@@ -7,6 +7,7 @@ summary: Uber and HubSpot check review comments before engineers see them.
 readingTime: 2 min read
 order: 2
 publishedAt: '2026-09-11'
+updatedAt: '2026-09-16'
 relatedAgentIds:
   - uber-ureview
   - hubspot-sidekick
@@ -21,43 +22,26 @@ sources:
     note: The change to Aviator and the judge agent.
 ---
 
-<section aria-labelledby="what-the-teams-report">
+<section aria-labelledby="what-gets-published">
 
-## What the teams report
+## What gets published
 
-Uber found that a single prompt produced false alarms and valid comments with little value. Its uReview system checks confidence and removes duplicate comments. It also suppresses categories that engineers rarely use. [[1]](#source-uber)
+Uber found that a single prompt produced false alarms and correct comments with little practical value. uReview now grades confidence, removes duplicates, and suppresses categories that engineers rarely use. Those decisions reduce the set of findings an engineer sees. [[1]](#source-uber)
 
-<blockquote cite="https://www.uber.com/us/en/blog/ureview/"><p>“Precision Is More Valuable than Volume”</p></blockquote>
+HubSpot also found that a faster reviewer could still produce poor comments. It added a judge agent before publication. That supplies another assessment, with its own potential errors, rather than independent confirmation that a finding is correct. [[2]](#source-hubspot)
 
-<p class="quote-credit">A section title in Uber’s uReview report. <a href="#source-uber">[1]</a></p>
-
-HubSpot made its reviewer faster, but review quality remained a problem. It added a judge agent to check comments before publication. [[2]](#source-hubspot)
-
-<figure class="note-diagram">
-  <div class="note-flow">
-    <div class="note-node"><span>01</span><strong>Find</strong><small>Possible issues</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node note-node-accent"><span>02</span><strong>Filter</strong><small>Check the evidence</small></div>
-    <span class="note-arrow" aria-hidden="true">→</span>
-    <div class="note-node"><span>03</span><strong>Review</strong><small>Human attention</small></div>
-  </div>
-  <figcaption>Our simplified illustration. Both teams check comments before publication; their checks differ.</figcaption>
-</figure>
+Both teams filter comments, but their reports describe different checks. Neither comment volume nor an added judge establishes how much review work the system saves.
 
 </section>
 
-<section class="note-observation" aria-labelledby="measure-the-work-after-the-output">
+<section aria-labelledby="the-cost-of-a-stricter-filter">
 
-<p class="eyebrow">Our observation</p>
+## The cost of a stricter filter
 
-## Measure the work after the output
+A published comment asks an engineer to inspect evidence, decide whether to act, and resolve or dismiss the finding. A useful comment can save later debugging; a weak one can consume more time than it saves.
 
-Comment count shows how much an agent writes. It does not show how much useful work the team completes.
+Suppressing a comment also has a cost when it hides a real defect. Uber evaluates precision and recall against annotated commits, then tracks feedback and whether comments were addressed. Those measures answer different questions: benchmark recall concerns known issues, while addressed comments describe use of the published output. [[1]](#source-uber)
 
-A useful evaluation can track accepted findings, review time, and missed defects. A filter can reduce noise and still remove a real issue.
-
-A model judge can also make mistakes. The reports do not establish that an extra agent always improves a review.
-
-<p class="note-question"><strong>A question for your build</strong>Does each additional comment save more work than it creates?</p>
+Our reading is that a filter needs evidence from both sides of the publication decision. Reviewing a sample of discarded candidates could reveal missed defects; timing human follow-up could expose expensive comments. These are evaluation proposals. The reports do not supply a complete measurement of downstream reviewer time or the defects that escaped both automated and human review.
 
 </section>

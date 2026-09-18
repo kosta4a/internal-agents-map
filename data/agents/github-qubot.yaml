@@ -1,13 +1,13 @@
 id: github-qubot
 company: GitHub
 agent_name: Qubot
-approach_type: task-agent
+approach_type: agent
 deployment_stage: scaled
 year: 2026
 first_public_evidence:
   date: 2026-06
   source_id: github-qubot-source-1
-last_reviewed_at: '2026-09-09'
+last_reviewed_at: '2026-09-16'
 status: internal
 domains:
 - data
@@ -21,13 +21,22 @@ rubric:
   state: unknown
   identity: unknown
   evidence_strength: detailed-primary
-summary: GitHub's internal data-analytics agent, powered by GitHub Copilot. Any GitHub employee can ask a question
-  about the company data warehouse in plain language and get an answer within seconds.
+summary: GitHub's internal data-analytics agent, powered by GitHub Copilot. Employees ask questions about the
+  company data warehouse in plain language.
 headline_metric: Hundreds of users run thousands of queries; data questions in internal Slack channels dropped
 architecture:
   model: Powered by GitHub Copilot
+  harness: Copilot Cloud Agent running on github.com
   tool_access: Queries GitHub's data warehouse
-  interfaces: []
+  interfaces: [slack, cli]
+  knowledge: Federated context contributed by teams and normalized into a structured context layer
+  context_mgmt: A context agent ingests, organizes, and normalizes contributed context
+primitives:
+- {name: Start a Qubot run, desc: A question in the Qubot Slack channel spawns a Copilot Cloud Agent instance on github.com}
+- {name: Select context and query engine, desc: "The run uses the federated context layer and routes work to Kusto for recent exploratory data or Trino for complex historical analysis"}
+- {name: Query the warehouse, desc: Qubot connects to Kusto and Trino through MCP servers and executes the data query}
+- {name: Return answer and report, desc: The answer appears in Slack for threaded refinement and the results are stored as a Markdown report in a pull request}
+- {name: Offline evaluation gate, desc: "Context and agent-configuration changes run against curated prompts, ground-truth SQL, accuracy, latency, and regression checks before shipping"}
 key_metrics:
 - Hundreds of users run thousands of queries
 - Volume of data questions in internal data and analytics Slack channels dropped
@@ -58,9 +67,27 @@ evidence:
   architecture.model:
   - source_id: github-qubot-source-1
     relation: supports
+  architecture.harness:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
   architecture.tool_access:
   - source_id: github-qubot-source-1
     relation: supports
+  architecture.interfaces:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, lines 30–32'}
+  architecture.knowledge:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, lines 36–48'}
+  architecture.context_mgmt:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, line 48'}
+  primitives.0:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
+  primitives.1:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, lines 36–48, 64'}
+  primitives.2:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, line 64'}
+  primitives.3:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, line 30'}
+  primitives.4:
+  - {source_id: github-qubot-source-1, relation: supports, locator: 'Preserved content.md, lines 52–60'}
   key_metrics.0:
   - source_id: github-qubot-source-1
     relation: supports
@@ -97,3 +124,30 @@ claim_metadata:
     confidence: medium
     confidence_reason: Company reports a qualitative decrease without before-and-after counts.
     metric_scope: Questions in GitHub internal data and analytics Slack channels
+page_content:
+  version: 1
+  reviewed_at: '2026-09-17'
+  source_ids: [github-qubot-source-1]
+  workflow_scope: Slack data question → warehouse answer and report
+  questions:
+    purpose: {state: reported, claim_paths: [summary]}
+    workflow: {state: reported, claim_paths: [primitives.0, primitives.1, primitives.2, primitives.3]}
+    human_involvement: {state: unreported, claim_paths: [], note: The reviewed source shows threaded refinement but does not define a required human checkpoint.}
+    implementation: {state: reported, claim_paths: [architecture.harness, architecture.model, architecture.tool_access, architecture.knowledge, architecture.context_mgmt, architecture.interfaces]}
+    validation: {state: reported, claim_paths: [primitives.4]}
+    observations: {state: reported, claim_paths: [headline_metric, key_metrics.0, key_metrics.1]}
+    lessons: {state: unreported, claim_paths: [], note: The reviewed source does not present a distinct transferable lesson in this record.}
+  implementation_fields:
+    model: {state: reported, claim_paths: [architecture.model]}
+    harness: {state: reported, claim_paths: [architecture.harness]}
+    sandbox: {state: unreported, claim_paths: [], note: The source names the cloud-agent host but not its isolation boundary.}
+    tool_access: {state: reported, claim_paths: [architecture.tool_access]}
+    knowledge: {state: reported, claim_paths: [architecture.knowledge]}
+    context_mgmt: {state: reported, claim_paths: [architecture.context_mgmt]}
+    credentials: {state: unreported, claim_paths: [], note: Credential handling is not documented in the reviewed capture.}
+    interfaces: {state: reported, claim_paths: [architecture.interfaces]}
+  primitive_roles: {primitives.0: workflow, primitives.1: workflow, primitives.2: workflow, primitives.3: workflow, primitives.4: validation}
+  observations:
+    headline_metric: {category: adoption-output, basis: qualitative, subject: Qubot adoption and data-channel question volume}
+    key_metrics.0: {category: adoption-output, basis: estimate, subject: Internal Qubot users and queries}
+    key_metrics.1: {category: adoption-output, basis: qualitative, subject: Questions in internal data and analytics Slack channels}

@@ -77,7 +77,7 @@ describe('the publication inventory', () => {
 
   it('holds the directory and one route for every approach', () => {
     const paths = Object.keys(inventory.routes);
-    expect(paths.length).toBe(catalog.approaches.length + 1);
+    expect(paths.length).toBe(catalog.approaches.length + new Set(catalog.approaches.map((entry) => entry.company_id)).size + 1);
     for (const approach of catalog.approaches) {
       expect(paths).toContain(entryPath(approach.id));
     }
@@ -85,7 +85,7 @@ describe('the publication inventory', () => {
 
   it('adds the pages that later steps publish', () => {
     const extended = routeInventory(catalog, [guidePath('definitions'), notePath('stop-a-run')]);
-    expect(Object.keys(extended.routes).length).toBe(catalog.approaches.length + 3);
+    expect(Object.keys(extended.routes).length).toBe(catalog.approaches.length + new Set(catalog.approaches.map((entry) => entry.company_id)).size + 3);
     expect(extended.routes['/notes/stop-a-run']).toEqual({
       html: '/notes/stop-a-run.html',
       markdown: '/notes/stop-a-run.md',

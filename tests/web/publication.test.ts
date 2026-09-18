@@ -42,7 +42,7 @@ describe('sitemap', () => {
 
   it('lists the canonical HTML pages of the build and nothing else', () => {
     expect(locations).toEqual(routes.map((path) => canonicalUrl(path)));
-    expect(locations).toHaveLength(1 + catalog.approaches.length + paths.length);
+    expect(locations).toHaveLength(1 + catalog.approaches.length + new Set(catalog.approaches.map((entry) => entry.company_id)).size + paths.length);
   });
 
   it('holds no export, no 404, and no filtered directory URL', () => {

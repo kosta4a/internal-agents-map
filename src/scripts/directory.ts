@@ -1,6 +1,8 @@
 // ABOUTME: Filters the directory in the browser and resolves the old fragment links.
 // ABOUTME: Every card and every entry link is already in the HTML; this only hides cards.
 
+import { animate } from 'motion';
+
 import { entryPath } from '../lib/routes';
 import {
   FACET_KEYS,
@@ -14,8 +16,116 @@ import {
   toSelection,
 } from '../lib/search';
 
+/** The directory of the page on show, rebuilt whenever the router swaps one in. */
+let live: { fromUrl: () => void; legacy: () => void } | null = null;
+let claimed = false;
+
 /** The query parameters the directory reads and writes. They are part of the URL contract. */
 const CONTROL_KEYS = ['q', ...FACET_KEYS] as const;
+
+/** How long a card takes to collapse out of the list, or expand back into it. */
+const COLLAPSE_SECONDS = 0.24;
+const COLLAPSE_EASE = [0.77, 0, 0.175, 1] as const;
+/** How long the item tally takes to count to a new total. */
+const COUNT_SECONDS = 0.3;
+
+/** Readers who ask for less motion get the instant result instead. */
+function reducedMotion(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+/** What each card is animating toward, so a repeated pass does not restart it. */
+const desired = new WeakMap<HTMLElement, boolean>();
+/**
+ * The first pass only states where the cards already are. Animating it would
+ * measure across the font swap and walk every card to its own height, which
+ * reads as the list settling into place after the page has drawn.
+ */
+let settled = false;
+
+/**
+ * Show or hide one card, collapsing its height so the list closes smoothly.
+ * The `hidden` attribute stays the source of truth: it is set once the card has
+ * finished collapsing, and cleared before it starts to expand.
+ */
+function reveal(card: HTMLElement, visible: boolean): void {
+  if (desired.get(card) === visible) return;
+  desired.set(card, visible);
+
+  if (!settled || reducedMotion()) {
+    card.hidden = !visible;
+    return;
+  }
+
+  // Measure where the card is now, so an interrupted animation carries on from there.
+  const from = card.hidden ? 0 : card.getBoundingClientRect().height;
+  const fromMargin = card.hidden ? '0px' : getComputedStyle(card).marginBottom;
+  card.style.overflow = 'hidden';
+
+  const clear = (): void => {
+    for (const property of ['height', 'overflow', 'opacity', 'margin-bottom']) {
+      card.style.removeProperty(property);
+    }
+  };
+
+  /**
+   * Settle on the end state once the animation is done, or once its time is up.
+   * Motion pauses while the document is hidden, so waiting only on the animation
+   * would leave a filtered-out card on screen.
+   */
+  const settle = (animation: { finished: Promise<unknown> }, done: () => void): void => {
+    let ran = false;
+    const once = (): void => {
+      if (ran) return;
+      ran = true;
+      done();
+    };
+    animation.finished.then(once, once);
+    setTimeout(once, COLLAPSE_SECONDS * 1000 + 60);
+  };
+
+  if (visible) {
+    // Let the card lay out at its natural size to read the height to expand into.
+    card.hidden = false;
+    for (const property of ['height', 'margin-bottom']) {
+      card.style.removeProperty(property);
+    }
+    const margin = getComputedStyle(card).marginBottom;
+    const to = card.getBoundingClientRect().height;
+    settle(
+      animate(
+        card,
+        {
+          height: [`${from}px`, `${to}px`],
+          marginBottom: [fromMargin, margin],
+          opacity: [from === 0 ? 0 : 1, 1],
+        },
+        { duration: COLLAPSE_SECONDS, ease: COLLAPSE_EASE },
+      ),
+      // A later pass may have reversed this one; leave that animation alone.
+      () => {
+        if (desired.get(card) === true) clear();
+      },
+    );
+    return;
+  }
+
+  settle(
+    animate(
+      card,
+      {
+        height: [`${from}px`, '0px'],
+        marginBottom: [fromMargin, '0px'],
+        opacity: [1, 0],
+      },
+      { duration: COLLAPSE_SECONDS, ease: COLLAPSE_EASE },
+    ),
+    () => {
+      if (desired.get(card) !== false) return;
+      card.hidden = true;
+      clear();
+    },
+  );
+}
 
 /** A claim anchor: `claim-<approach-id>--<field-path>`. */
 const CLAIM_FRAGMENT = /^claim-([a-z0-9-]+)--([a-z0-9-]+)$/;
@@ -98,11 +208,10 @@ export function startDirectory(): void {
     location.replace(target);
     return;
   }
-  // An old link can also arrive as a fragment change inside this page.
-  window.addEventListener('hashchange', () => {
+  const legacy = (): void => {
     const next = legacyTarget(location.hash, ids, sources);
     if (next) location.replace(next);
-  });
+  };
 
   const form = document.getElementById('filters');
   const results = document.getElementById('results');
@@ -112,7 +221,12 @@ export function startDirectory(): void {
   const input = element('q', HTMLInputElement);
   const chips = element('chips', HTMLUListElement);
   const listbox = element('suggestions', HTMLUListElement);
-  const vocabulary = readVocabulary();
+  const allVocabulary = readVocabulary();
+  let vocabulary = allVocabulary;
+  const defaultCollection = document.getElementById('catalog')?.dataset.defaultCollection ?? 'agents';
+  let collection = defaultCollection;
+  const groups = [...document.querySelectorAll<HTMLElement>('[data-collection-group]')];
+  const legacyNotice = document.getElementById('legacy-filter-notice');
 
   /** The selected facet terms, in the order they were chosen. */
   let selected: FacetTerm[] = [];
@@ -124,21 +238,73 @@ export function startDirectory(): void {
   const cardFacets = (card: HTMLElement) => ({
     work: (card.dataset.work ?? '').split(' '),
     type: (card.dataset.type ?? '').split(' '),
+    invocation: (card.dataset.invocation ?? '').split(' '),
     supervision: (card.dataset.supervision ?? '').split(' '),
   });
 
   const matches = (card: HTMLElement): boolean =>
+    (collection === 'all' || card.dataset.collection === collection) &&
     matchesText(card.dataset.search ?? '', input.value) &&
     matchesFacets(cardFacets(card), toSelection(selected));
 
+  const display = document.getElementById('results-count');
+  let shownCount = cards.length;
+  let counting: { stop: () => void } | undefined;
+  let countTimer: ReturnType<typeof setTimeout> | undefined;
+
+  /** Move the visible tally to `next`, counting through the numbers between. */
+  const showCount = (next: number): void => {
+    const text = `${next} items`;
+    // The live region carries the settled wording, never the frames between.
+    if (results.textContent !== text) results.textContent = text;
+    if (!display || shownCount === next) return;
+    const from = shownCount;
+    shownCount = next;
+    if (reducedMotion()) {
+      display.textContent = text;
+      return;
+    }
+    counting?.stop();
+    clearTimeout(countTimer);
+    counting = animate(from, next, {
+      duration: COUNT_SECONDS,
+      ease: COLLAPSE_EASE,
+      onUpdate: (value: number) => {
+        display.textContent = `${Math.round(value)} items`;
+      },
+    });
+    // Motion pauses while the document is hidden, so land the final value anyway.
+    countTimer = setTimeout(() => {
+      if (shownCount === next) display.textContent = text;
+    }, COUNT_SECONDS * 1000 + 60);
+  };
+
   const apply = (): void => {
+    const heading = document.getElementById('directory-heading');
+    if (heading) heading.textContent = collection === 'all' ? 'Agents and the infrastructure they run on.' : collection === 'infrastructure' ? 'Infrastructure companies build to support their agents.' : 'AI agents organizations build or adapt to do work for their own teams.';
+    if (collection === 'all') document.querySelector('.sidebar a[href="/"]')?.removeAttribute('aria-current');
+    const stats = document.getElementById('collection-stats');
+    const counts = JSON.parse(document.getElementById('collection-counts')?.textContent ?? '{}') as Record<string, { entries: number; organizations: number; sources: number }>;
+    if (stats && counts[defaultCollection]) {
+      const pairs: [number, string][] = collection === 'all'
+        ? [[counts.agents!.entries, 'agents'], [counts.infrastructure!.entries, 'infrastructure records']]
+        : [[counts[collection]!.entries, collection === 'infrastructure' ? 'infrastructure records' : 'agents'], [counts[collection]!.organizations, 'organizations'], [counts[collection]!.sources, 'sources']];
+      stats.replaceChildren(...pairs.map(([count, label]) => {
+        const item = document.createElement('div'); item.className = 'stat';
+        const number = document.createElement('strong'); number.textContent = String(count);
+        const caption = document.createElement('span'); caption.textContent = label;
+        item.append(number, caption); return item;
+      }));
+    }
+    for (const group of groups) group.hidden = collection !== 'all' && group.dataset.collectionGroup !== collection;
+    document.querySelectorAll<HTMLElement>('.collection-heading').forEach((heading) => { heading.hidden = collection !== 'all'; });
     let count = 0;
     for (const card of cards) {
-      card.hidden = !matches(card);
-      if (!card.hidden) count += 1;
+      const visible = matches(card);
+      reveal(card, visible);
+      if (visible) count += 1;
     }
-    const text = `${count} of ${cards.length} approaches`;
-    if (results.textContent !== text) results.textContent = text;
+    showCount(count);
     empty.hidden = count !== 0;
   };
 
@@ -222,22 +388,34 @@ export function startDirectory(): void {
   const writeUrl = (): void => {
     const url = new URL(location.href);
     for (const key of CONTROL_KEYS) url.searchParams.delete(key);
+    if (collection === 'all') url.searchParams.set('collection', 'all'); else url.searchParams.delete('collection');
     if (input.value) url.searchParams.set('q', input.value);
     for (const term of selected) url.searchParams.append(term.key, term.id);
     if (url.href !== location.href) history.pushState(null, '', url);
+    if (legacyNotice) legacyNotice.hidden = true;
   };
 
   /** Read the state a shared or restored URL carries. Unknown values are dropped. */
   const readUrl = (): void => {
     const params = new URLSearchParams(location.search);
+    const infrastructureTypes = ['platform', 'supporting-pattern', 'orchestration-system'];
+    collection = params.get('collection') === 'all' || (defaultCollection === 'agents' && params.getAll('type').some((type) => infrastructureTypes.includes(type))) ? 'all' : defaultCollection;
+    vocabulary = allVocabulary.filter((term) => (collection !== 'infrastructure' || !['invocation', 'supervision'].includes(term.key)) && (term.key !== 'type' || collection === 'all' || infrastructureTypes.includes(term.id) === (collection === 'infrastructure')));
     input.value = params.get('q') ?? '';
     selected = [];
+    let legacyBackground = false;
     for (const key of FACET_KEYS) {
       for (const id of params.getAll(key)) {
-        const term = findTerm(key, id, vocabulary);
+        const migrated = key === 'type' && id === 'task-agent' ? 'agent' : id;
+        if (key === 'type' && id === 'background-agent') {
+          legacyBackground = true;
+          continue;
+        }
+        const term = findTerm(key, migrated, vocabulary);
         if (term && !selected.some((item) => sameTerm(item, term))) selected.push(term);
       }
     }
+    if (legacyNotice) legacyNotice.hidden = !legacyBackground;
   };
 
   /** Record the current state in the address and on the page. */
@@ -293,16 +471,25 @@ export function startDirectory(): void {
     selected = [];
     commit();
   });
-  window.addEventListener('popstate', () => {
+  const fromUrl = (): void => {
     clearTimeout(searchTimer);
     closeSuggestions();
     readUrl();
     renderChips();
     apply();
-  });
+  };
+  live = { fromUrl, legacy };
+  if (!claimed) {
+    claimed = true;
+    // An old link can also arrive as a fragment change inside this page.
+    window.addEventListener('hashchange', () => live?.legacy());
+    window.addEventListener('popstate', () => live?.fromUrl());
+  }
 
   form.hidden = false;
   readUrl();
   renderChips();
   apply();
+  // Everything after this first pass is a change the reader made.
+  settled = true;
 }

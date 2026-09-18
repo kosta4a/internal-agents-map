@@ -46,195 +46,528 @@ const {
 
 <style is:global>
 /* The guides and the notes read as documents: fine rules, wide measure, quiet labels. */
-.guide-header { position: relative; isolation: isolate; padding-bottom: 48px; }
-.guide-header h1 { max-width: 700px; margin-top: 10px; }
+.guide-header { padding-bottom: 32px; }
+.guide-header h1 { max-width: 700px; margin-top: 0; }
 .guide-header > p { max-width: 680px; }
-.guide-header .lede { font-size: 20px; line-height: 1.5; margin-top: 20px; }
+.guide-header .lede { font-size: var(--text-sm); line-height: 1.5; margin-top: 24px; }
 .guide p { line-height: 1.65; }
 .guide section > p { max-width: 680px; }
-.guide section > .eyebrow { margin-bottom: 10px; }
-.guide section > h2 { margin-bottom: 16px; }
-.guide section > h3 + p { margin-top: 10px; }
-.guide section > p + p { margin-top: 14px; }
-.guide section { border-top: 1px solid var(--rule); padding: 40px 0; }
-.guide section > h3 { margin-top: 28px; max-width: 680px; }
-.guide h3 { font-size: 18px; font-weight: 550; }
+.guide section > .eyebrow { margin-bottom: 12px; }
+.guide section > h2 { margin-bottom: 8px; }
+.guide section > h3 + p { margin-top: 12px; }
+.guide section > p + p { margin-top: 16px; }
+.guide section { padding: 32px 0; }
+.guide section > h3 { margin-top: 32px; max-width: 680px; }
+.guide h3 { font-size: var(--text-md); font-weight: 500; }
 .guide figure { margin: 32px 0; }
-.guide figcaption { color: var(--muted); font-size: 12px; line-height: 1.65; margin-top: 20px; }
-.guide blockquote { border-left: 2px solid var(--blue); margin: 24px 0; padding: 8px 24px; font-size: 19px; }
-.diagram-number { display: block; color: var(--link); font-size: 12px; }
+.guide figcaption { color: var(--muted); font-size: var(--text-xs); line-height: 1.65; margin-top: 24px; }
+.guide blockquote { margin: 24px 0; padding: 8px 0; font-size: var(--text-sm); }
+.diagram-number { display: block; color: var(--link); font-size: var(--text-xs); }
 
 /* The chart shows two questions about an implementation, not a score. */
-.quadrant-chart { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
-.quadrant-y-axis { writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-size: 12px; color: var(--muted); letter-spacing: .02em; }
-.quadrant-plot { aspect-ratio: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); border: 1px solid #9b9ba5; }
+/* The scale row's height is stated, so the vertical scale can span the plot exactly. */
+.quadrant-chart { --scale-row: 20px; --scale-gap: 16px; --cell-inset: 20px; position: relative; display: grid; gap: var(--scale-gap); }
+/* Standard sits at the foot of the scale, company-specific at its head. */
+.quadrant-y-axis {
+  position: absolute;
+  top: 0;
+  bottom: calc(var(--scale-row) + var(--scale-gap));
+  right: calc(100% + var(--scale-gap));
+  width: 1.2em;
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+.quadrant-y-axis span {
+  position: absolute;
+  left: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+.quadrant-y-axis span:first-child { bottom: var(--cell-inset); }
+.quadrant-y-axis span:last-child { top: var(--cell-inset); }
+.quadrant-plot {
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+  /* The fill is the plot's own, so nothing needs clipping and a name near an
+     edge can run past it rather than being cut. */
+  background: var(--sand-3);
+}
 .quadrant-cell { position: relative; min-width: 0; }
-.quadrant-cell:nth-child(odd) { border-right: 1px solid #c9c9cf; }
-.quadrant-cell:nth-child(-n+2) { border-bottom: 1px solid #c9c9cf; background: #f1fbfa; }
-.quadrant-cell:nth-child(n+3) { background: #fafafa; }
-.quadrant-cell h3 { position: absolute; top: 12px; left: 14px; right: 14px; margin: 0; font-size: 12px; line-height: 1.35; font-weight: 600; color: var(--ink); letter-spacing: -.015em; }
-.quadrant-cell h3 span { display: block; margin-bottom: 4px; color: var(--link); font-size: 9px; line-height: 1.3; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; }
-.quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: 12px; }
+/* The two axes carry the same hairline as the square they divide. */
+.quadrant-cell:nth-child(odd) { border-right: .5px solid var(--sand-6); }
+.quadrant-cell:nth-child(-n+2) { border-bottom: .5px solid var(--sand-6); }
+.quadrant-cell h3 { position: absolute; top: var(--cell-inset); left: var(--cell-inset); right: var(--cell-inset); margin: 0; font-size: 14px; line-height: 1.35; font-weight: 500; color: var(--ink); letter-spacing: -.015em; }
+.quadrant-cell h3 span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 14px; line-height: 1.35; font-weight: 400; }
+.quadrant-cell:nth-child(n+3) h3 { top: auto; bottom: var(--cell-inset); }
+/* The two right-hand cells read from the edge they sit against. */
+.quadrant-cell:nth-child(2) h3, .quadrant-cell:nth-child(4) h3 { text-align: right; }
 .quadrant-cell ul { margin: 0; padding: 0; list-style: none; }
-.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 17px; }
+.quadrant-cell li { position: absolute; left: 15%; top: 34%; max-width: 78%; font-size: 14px; padding-left: 20px; }
 .quadrant-cell li:nth-child(2) { left: 33%; top: 65%; }
-.quadrant-cell:nth-child(4) li { left: 12%; top: 15%; }
-.quadrant-cell:nth-child(4) li:nth-child(2) { left: 33%; top: 37%; }
-.quadrant-cell:nth-child(4) li:nth-child(3) { left: 20%; top: 60%; }
-.quadrant-cell li::before { content: ""; position: absolute; width: 8px; height: 8px; background: var(--blue); border: 2px solid #fff; border-radius: 50%; left: 0; top: 5px; }
+.quadrant-assistants li { left: 12%; top: 15%; }
+.quadrant-assistants li:nth-child(2) { left: 33%; top: 37%; }
+.quadrant-assistants li:nth-child(3) { left: 20%; top: 60%; }
+.quadrant-cell li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc((1.35em - 12.5px) / 2);
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 50%;
+  background: var(--blue-9);
+}
 .quadrant-cell a { display: block; line-height: 1.35; text-decoration: none; }
-.quadrant-cell a:hover { text-decoration: underline; }
-.quadrant-cell a strong { font-weight: 550; }
-.quadrant-cell a span { display: block; font-size: 11px; margin-top: 3px; }
-.quadrant-cell li > strong { display: block; font-weight: 550; line-height: 1.35; }
-.quadrant-cell li > span { display: block; font-size: 11px; line-height: 1.35; margin-top: 3px; }
-.quadrant-cell .reference-marker { color: #73737d; }
-.quadrant-cell .reference-marker::before { background: #fff; border-color: #8c8c96; }
+.quadrant-cell a:hover { color: var(--sand-10); }
+.quadrant-cell li strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.35; }
+.quadrant-cell li span { display: block; font-size: 14px; line-height: 1.35; margin-top: 4px; }
+.quadrant-cell .reference-marker { color: var(--sand-10); }
+.quadrant-cell .reference-marker strong { color: var(--sand-12); }
+/* A reference names a class of product: breaking it reads as two of them. */
+.quadrant-cell .reference-marker { max-width: none; white-space: nowrap; }
+.quadrant-cell .reference-marker::before {
+  top: calc((1.35em - 12px) / 2);
+  border-radius: 0;
+  width: 12px;
+  height: 12px;
+  background: var(--green-9);
+  clip-path: var(--triangle);
+}
 .quadrant-cell li[data-chart-reference="deep-research"] { left: 5%; top: 42%; max-width: 40%; }
 .quadrant-cell li[data-chart-reference="ready-made-task"] { left: 49%; top: 42%; max-width: 48%; }
 .quadrant-cell li[data-chart-reference="general-assistant"] { left: 28%; top: 34%; max-width: 66%; }
 .quadrant-cell li[data-chart-approach-id="doordash-code-review"] { left: 10%; top: 30%; max-width: 56%; }
 .quadrant-cell li[data-chart-approach-id="posthog-stamphog"] { left: 15%; top: 72%; max-width: 46%; }
 .quadrant-cell li[data-chart-approach-id="ramp-inspect"] { left: 60%; top: 76%; max-width: 35%; }
-.quadrant-cell li[data-chart-approach-id="retool-retoolgpt"] { left: 48%; top: 10%; max-width: 48%; }
 .quadrant-cell li[data-chart-approach-id="stripe-minions"] { left: 56%; top: 48%; max-width: 40%; }
 .quadrant-cell li[data-chart-approach-id="brex-agent-platform"] { left: 10%; top: 30%; max-width: 58%; }
 .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: 56%; top: 50%; max-width: 38%; }
 .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 17%; top: 72%; max-width: 52%; }
-.quadrant-x-axis { grid-column: 2; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
-.quadrant-legend { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 24px 0 12px 40px; color: var(--muted); font-size: 12px; }
+.quadrant-x-axis { display: flex; justify-content: space-between; gap: 12px; padding: 0 var(--cell-inset); font-size: var(--text-xs); line-height: var(--scale-row); color: var(--muted); }
+.quadrant-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0 12px; color: var(--muted); font-size: var(--text-sm); }
 .quadrant-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.quadrant-legend i { width: 10px; height: 10px; border-radius: 50%; }
-.quadrant-legend .catalog-marker { background: var(--blue); border: 2px solid var(--blue); }
-.quadrant-legend .reference-marker-key { background: #fff; border: 2px solid #8c8c96; }
-.guide .quadrant-figure { max-width: 680px; }
-.guide-faq details { border-bottom: 1px solid var(--rule); padding: 18px 0; }
-.guide-faq summary { cursor: pointer; font-weight: 500; line-height: 1.5; }
-.guide-faq details p { margin: 12px 0 0; max-width: 680px; color: var(--muted); }
-.dimension-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; max-width: 680px; }
-.dimension-intro > div { border: 1px solid #d8d8dc; padding: 20px; background: #fff; }
-.dimension-axis-label { display: block; margin-bottom: 10px; color: var(--link); font-size: 10px; line-height: 1.4; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; }
-.dimension-intro h3 { font-size: 18px; line-height: 1.3; margin-bottom: 16px; }
-.dimension-intro p { font-size: 13px; color: var(--muted); }
-.dimension-scale { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: center; border-block: 1px solid var(--rule); padding: 11px 0; margin-bottom: 16px; font-size: 11px; line-height: 1.3; }
-.dimension-scale span:nth-child(2) { color: var(--link); font-size: 16px; }
-.dimension-scale span:last-child { text-align: right; }
+.quadrant-legend i { width: 12.5px; height: 12.5px; }
+.quadrant-legend .catalog-marker { border-radius: 50%; background: var(--blue-9); }
+.quadrant-legend .reference-marker-key { width: 12px; height: 12px; background: var(--green-9); clip-path: var(--triangle); }
+/* The plot is the body's own width, so its scale label has room outside it. */
+.guide .quadrant-figure { max-width: none; }
+.guide-faq details {
+  background: var(--sand-3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.guide-faq details + details { margin-top: 12px; }
+.guide-faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 40px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 1.5;
+}
+@media (hover: hover) {
+.guide-faq details:hover { background: var(--sand-4); }
+}
+.guide-faq summary::before { content: none; }
+.guide-faq summary .icon { flex: none; color: var(--sand-10); }
+.guide-faq details[open] > summary .icon { transform: rotate(180deg); }
+.guide-faq details p { margin: 0; padding: 0 12px 12px; max-width: 680px; color: var(--muted); }
+.dimension-intro { display: grid; gap: 24px; margin-top: 24px; }
+.dimension-intro h3 { font-size: var(--text-md); line-height: 1.3; margin-bottom: 8px; }
+.dimension-intro p { font-size: var(--text-sm); color: var(--muted); }
 
 /* A company workflow supplies the context around model-directed work. */
-.workflow-node { border: 1px solid #c9c9cf; padding: 22px; text-align: center; max-width: 570px; margin: auto; }
-.workflow-node strong { display: block; font-weight: 500; margin-top: 10px; }
-.workflow-context { background: #fafafa; }
-.workflow-connector { text-align: center; color: #9b9ba5; font-size: 24px; line-height: 38px; }
-.placement-notes { border-block: 1px solid var(--rule); padding: 20px 0; margin-top: 24px; }
-.placement-notes summary { cursor: pointer; }
+.workflow-stack {
+  display: grid;
+  justify-items: center;
+  padding: 24px;
+  background: #fff;
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+}
+.workflow-node {
+  width: fit-content;
+  max-width: 100%;
+  background: var(--sand-3);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+.workflow-node .eyebrow { font-size: var(--text-xs); }
+.workflow-node strong { display: block; font-weight: 400; margin-top: 2px; }
+.workflow-context { background: var(--sand-3); }
+/* A drawn arrow, clear of the panel above it and the one below. */
+.workflow-connector { display: flex; justify-content: center; padding: 4px 0; }
+.workflow-connector svg { display: block; width: 12px; height: 32px; fill: none; stroke: var(--sand-9); stroke-width: .5; }
+.placement-notes { padding: 24px 0; margin-top: 24px; }
+.placement-notes summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+}
+.placement-notes summary::before { content: none; }
+.placement-notes summary .icon { flex: none; width: 20px; height: 20px; color: var(--sand-10); }
+.placement-notes[open] > summary .icon { transform: rotate(180deg); }
 .placement-notes ul { list-style: none; padding: 0; }
-.placement-notes li { margin-top: 24px; font-size: 13px; }
-.placement-notes li strong { font-weight: 550; }
+.placement-notes li { margin-top: 24px; font-size: var(--text-sm); }
+.placement-notes li strong { font-weight: 400; }
 .placement-notes li p { margin: 8px 0; }
 .placement-notes .reference-placement { color: var(--muted); }
 
 /* Definition illustrations share one visual vocabulary: a teal dot is the agent. */
-.core-definition { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 28px; padding: 28px 0; margin: 24px 0; border-block: 1px solid #c9c9cf; max-width: 680px; }
-.definition-label { display: block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--link); margin-bottom: 14px; font-weight: 600; }
-.guide .core-definition p { font-size: 25px; line-height: 1.4; letter-spacing: -.03em; margin: 0; }
-.core-definition svg, .concept-pair svg { display: block; width: 100%; fill: none; stroke: #929299; stroke-width: 1.2; }
-.core-definition svg text, .concept-pair svg text { fill: var(--muted); stroke: none; font: 11px Geist, sans-serif; }
-.core-definition svg .agent-dot, .concept-pair svg .agent-dot { fill: var(--blue); stroke: var(--blue); }
-.guide .concept-definition { font-size: 21px; line-height: 1.45; max-width: 610px; }
-.concept-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 680px; margin: 24px 0; border-block: 1px solid #d8d8dc; }
-.guide .concept-pair figure { margin: 0; padding: 22px 16px; min-width: 0; }
-.concept-pair figure + figure { border-left: 1px solid #d8d8dc; }
-.guide .concept-pair figcaption { margin: 18px 0 0; line-height: 1.5; }
-.concept-pair figcaption strong { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
-.concept-pair figcaption span { display: block; font-size: 13px; }
-.concept-combination { max-width: 680px; padding: 24px; margin: 28px 0; background: #f1fbfa; border: 1px solid #d8e8e7; }
-.guide .concept-combination > p { font-size: 21px; line-height: 1.45; margin: 0; }
-.concept-combination dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin: 24px 0; }
-.concept-combination dt { font-size: 12px; color: var(--muted); }
-.concept-combination dd { margin: 6px 0 0; font-weight: 550; }
-.guide .concept-combination .combination-note { font-size: 13px; color: var(--muted); }
+.core-definition { padding: 64px 24px; margin: 24px 0; background: var(--sand-3); border-radius: 14px; text-align: center; }
+.combination-title { font-size: var(--text-sm); line-height: 1.5; }
+.combination-title strong { font-weight: 400; }
+.guide .core-definition p { font-size: var(--text-md); font-weight: 500; line-height: 1.4; margin: 0 auto; max-width: 440px; color: var(--blue-9); }
+.guide .core-definition strong { font-weight: 500; color: var(--blue-9); }
+/* A call to action stands clear of the paragraph that leads into it. */
+.guide section > .button { margin-top: 16px; }
+/* The illustration stands on the page's own ground, as tall as it needs. */
+.scope-figure {
+  width: 100%;
+  margin: 24px 0 0;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.scope-figure svg { display: block; width: 100%; height: auto; }
+.scope-figure .scope-portrait { display: none; }
+.scope-frame { fill: none; stroke: var(--sand-6); stroke-width: .5; }
+/* The viewBox is the body's own width, so a label reads at its stated size. */
+.scope-label { fill: var(--muted); font-size: 14px; letter-spacing: -.01em; }
+.scope-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
+/* The agent, what it reaches, and what passes between them share one colour. */
+.scope-node { fill: var(--blue-9); stroke: var(--blue-9); stroke-width: 1.2; }
+.scope-agent { fill: var(--blue-9); stroke: var(--blue-9); }
+.scope-signal { fill: var(--blue-9); }
+.concept-pair svg { display: block; width: 100%; fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
+.concept-pair svg text { fill: var(--muted); stroke: none; font: 12px Areal, sans-serif; }
+.concept-pair svg .agent-dot { fill: var(--accent); stroke: var(--accent); }
+.guide .concept-definition { font-size: var(--text-sm); line-height: 1.5; max-width: 610px; }
+/* Where an agent runs: one panel per answer, each a field of its own. */
+.place-panels { display: grid; gap: 16px; margin: 24px 0; }
+.guide .place-panel { margin: 0; }
+.place-panel {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 16px;
+  margin: 0;
+  background: #fff;
+  border: .5px solid var(--sand-6);
+  border-radius: 16px;
+}
+.guide .place-panel figcaption { margin: 0; font-size: var(--text-sm); line-height: 1.4; }
+.place-panel figcaption strong { display: block; color: var(--ink); font-weight: 500; }
+.place-panel figcaption span { display: block; margin-top: 8px; color: var(--muted); }
+.place-scene { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.place-scene-wide { display: block; }
+.exchange-scene, .cycle-scene { height: auto; }
+/* Every column carries a title row, so the boxes line up whether or not it is filled. */
+.place-machine, .place-link {
+  --title-row: 20px;
+  --title-gap: 8px;
+  --box-width: 240px;
+  --box-height: calc(var(--box-width) * 9 / 16);
+  --dot-size: 18px;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: var(--title-gap);
+}
+.place-machine { flex: 0 0 var(--box-width); min-width: 0; }
+.place-machine-title { display: block; min-height: var(--title-row); font-size: var(--text-sm); line-height: 20px; text-align: center; color: var(--sand-12); }
+.place-box { position: relative; aspect-ratio: 16 / 9; background: var(--sand-3); border-radius: 12px; }
+/* The mark holds the centre of the machine. */
+.place-agent-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-8);
+}
+/*
+ * The label stands outside the machine and points back in at the mark.
+ * The arrow starts six below the mark and the label six below the arrow,
+ * which carries it past the box's own edge.
+ */
+.place-callout {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(var(--title-row) + var(--title-gap) + var(--box-height) + 6px);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  color: var(--blue-9);
+}
+.place-callout svg { display: block; width: 12px; height: 28px; fill: none; stroke: var(--blue-9); stroke-width: 1; }
+/* A running agent is not a still one, so its mark breathes. */
+@keyframes place-pulse {
+  from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: .65; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .place-agent-dot { animation: place-pulse 2.4s ease-in-out infinite; }
+}
+.place-link { flex: none; }
+.exchange-scene { display: block; width: 100%; height: 100%; }
+.exchange-scene, .exchange-strand { fill: none; stroke: var(--sand-10); stroke-width: 1.2; }
+.exchange-you { fill: #fff; stroke: var(--sand-10); stroke-width: 1.2; }
+.exchange-agent { fill: var(--blue-9); stroke: var(--blue-9); }
+.exchange-scene text { fill: var(--muted); stroke: none; }
+.exchange-signal { fill: var(--blue-9); stroke: none; }
+/* A trigger arrives, the agent works, a result lands, and it begins again. */
+.cycle-scene { display: block; width: calc(100% + 16px); height: 100%; margin-left: -16px; }
+.cycle-scene text { fill: var(--muted); stroke: none; }
+.cycle-link { fill: none; stroke: var(--sand-6); stroke-width: 1.2; }
+.cycle-trigger { fill: #fff; stroke: var(--sand-6); stroke-width: 1.2; }
+/* The lit state is its own circle, so it can rise and fall on top of the first. */
+.cycle-trigger-on { fill: var(--blue-9); stroke: var(--blue-9); stroke-width: 1.2; }
+.cycle-agent { fill: var(--blue-9); }
+.cycle-spinner { fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; }
+.cycle-result { fill: #fff; stroke: var(--sand-6); stroke-width: 1.2; }
+.cycle-result-dot { fill: var(--blue-9); }
+.cycle-signal { fill: var(--blue-9); }
+.place-arrow { align-self: center; width: 64px; fill: none; stroke: var(--sand-9); stroke-width: 1.2; }
+.concept-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 680px; margin: 24px 0; }
+.guide .concept-pair figure { margin: 0; padding: 24px 16px; min-width: 0; }
+.concept-pair figure + figure { border-left: 1px solid var(--sand-6); }
+.guide .concept-pair figcaption { margin: 16px 0 0; line-height: 1.5; }
+.concept-pair figcaption strong { display: block; color: var(--ink); font-size: var(--text-md); margin-bottom: 8px; }
+.concept-pair figcaption span { display: block; font-size: var(--text-sm); }
+.concept-combination { max-width: 680px; margin: 32px 0; }
+.guide .concept-combination > p { font-size: var(--text-sm); line-height: 1.5; margin: 0; }
+/* The three questions read as the table a catalog entry states its caveats in. */
+.concept-combination dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0;
+  margin: 16px 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
+  border: .5px solid var(--sand-6);
+  border-radius: 14px;
+  /* The header fill is square and would paint over the rounded corners. */
+  overflow: hidden;
+}
+.concept-combination dl > div { display: contents; }
+.concept-combination dt, .concept-combination dd {
+  margin: 0;
+  padding: 10px 12px;
+  line-height: 20px;
+  border-bottom: .5px solid var(--sand-6);
+}
+.concept-combination dt {
+  background: var(--sand-3);
+  color: var(--ink);
+  border-right: .5px solid var(--sand-6);
+}
+/* Each row is its own element, so the last row is what drops the rule. */
+.concept-combination dl > div:last-child dt,
+.concept-combination dl > div:last-child dd { border-bottom: 0; }
+.guide .concept-combination .combination-note { font-size: var(--text-sm); color: var(--muted); }
 
 /* Notes use the same fine rules, type, and restrained diagram accents. */
-.notes { font-size: 16px; }
+.notes { font-size: var(--text-sm); }
+.notes .note-meta { font-size: var(--text-xs); color: var(--sand-10); }
 .notes .guide-header { padding-bottom: 32px; }
-.notes .guide-header > :not(.topography) { max-width: 680px; }
+.notes .guide-header > * { max-width: 680px; }
 .notes .note-list, .note-detail > article { max-width: 680px; }
-.note-preview { padding: 28px 0; border-top: 1px solid var(--rule); }
-.note-preview h2 { margin: 10px 0 12px; font-size: 25px; }
+.note-preview { position: relative; margin-bottom: 40px; cursor: pointer; }
+.note-preview h2 a::after { content: ""; position: absolute; inset: 0; }
+.note-preview h2 { margin: 0 0 8px; }
 .note-preview h2 a { color: var(--ink); text-decoration: none; }
-.note-preview h2 a:hover { color: var(--link); text-decoration: underline; }
-.note-preview > p:not(.eyebrow) { max-width: 580px; }
-.notes .note-meta { color: var(--muted); font-size: 14px; margin-top: 18px; }
-.note-meta span { margin-left: 16px; white-space: nowrap; }
-.notes-editorial { max-width: 620px; border-top: 1px solid var(--rule); padding: 24px 0 40px; color: var(--muted); font-size: 14px; }
-.note-back { display: inline-block; margin-bottom: 28px; font-size: 14px; }
+.note-summary { font-size: var(--text-sm); color: var(--sand-10); max-width: 580px; }
+.note-preview:hover h2 a { color: var(--sand-11); }
+.note-preview:hover .note-summary { color: var(--sand-9); }
+.note-preview:hover .tag { color: var(--sand-11); }
+.notes-editorial { max-width: 620px; padding: 24px 0 32px; color: var(--muted); font-size: var(--text-sm); }
+.note-back { display: inline-block; margin-bottom: 32px; font-size: var(--text-sm); }
 .note-detail h1 { max-width: 640px; }
-.notes section { padding: 28px 0; }
-.notes section > h2 { font-size: 22px; }
-.notes blockquote { margin: 28px 0 12px; padding: 4px 20px; font-size: 21px; }
-.notes .quote-credit { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
-.notes .note-diagram { margin: 28px 0 0; border: 1px solid #dcdce0; padding: 24px; }
-.note-flow { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); gap: 12px; align-items: center; }
-.note-node { min-width: 0; }
-.note-node > span { display: block; color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-.note-node strong { display: block; font-size: 16px; font-weight: 550; line-height: 1.4; }
-.note-node small { display: block; color: var(--muted); font-size: 14px; line-height: 1.5; margin-top: 8px; }
-.note-node-accent strong { color: var(--link); }
-.note-arrow { color: #888; }
-.note-diagram-tail { border-top: 1px solid var(--rule); margin-top: 24px; padding-top: 16px; font-size: 14px; }
-.notes figcaption { font-size: 14px; margin-top: 18px; }
-.note-question { border-left: 2px solid var(--blue); padding-left: 18px; margin-top: 24px; }
-.note-question strong { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 550; color: var(--link); }
-.note-sources ol { padding-left: 22px; margin: 0; font-size: 14px; }
-.note-sources li + li { margin-top: 16px; }
-.note-sources li span { display: block; color: var(--muted); margin-top: 4px; }
-.note-sources .resource-links { font-size: 14px; }
-.note-next { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 24px; border-top: 1px solid var(--rule); padding: 24px 0 40px; font-size: 14px; }
-.note-versions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.note-versions > div { border-top: 1px solid #c9c9cf; padding-top: 14px; }
-.note-versions .diagram-number { font-size: 14px; margin-bottom: 12px; }
-.note-versions strong { display: block; font-size: 16px; line-height: 1.4; font-weight: 550; }
-.note-versions p { font-size: 14px; color: var(--muted); margin-top: 8px; }
-.note-versions .note-version-current { border-top: 2px solid var(--blue); }
+.notes section { padding: 32px 0; }
+.notes blockquote { margin: 32px 0 8px; padding: 8px 0 0; font-size: var(--text-md); }
+.notes .quote-credit { color: var(--muted); font-size: var(--text-sm); margin: 0 0 24px; }
+.notes table { width: 100%; table-layout: fixed; border-spacing: 0; margin: 24px 0; border: .5px solid var(--sand-6); border-radius: 14px; overflow: hidden; }
+.notes th, .notes td { padding: 12px; text-align: left; vertical-align: top; line-height: 1.5; overflow-wrap: anywhere; }
+.notes th { background: var(--sand-3); font-weight: 500; }
+.notes th:first-child { width: 30%; }
+.notes tbody td { border-top: .5px solid var(--sand-6); }
+.notes .note-diagram { margin: 32px 0 0; }
+.note-node {
+  min-width: 0;
+  background: var(--sand-3);
+  border-radius: 14px;
+  padding: 16px;
+}
+.note-node strong { display: block; font-size: var(--text-md); font-weight: 400; line-height: 1.4; }
+/* A node standing on its own is a caption, not a step: both its lines read at 14px. */
+.note-diagram > .note-node strong { font-size: var(--text-sm); line-height: 1.5; }
+.note-node small { display: block; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; margin-top: 6px; }
+.note-diagram-tail { margin-top: 16px; font-size: var(--text-sm); }
+.note-reviewers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+/* Branch labels carry the conditions in both the page and the text export. */
+.notes .note-branches { list-style: none; margin: 0 0 0 16px; padding: 16px 0 0 20px; border-left: 1px solid var(--sand-6); }
+.note-branches li { position: relative; padding: 12px 16px; background: var(--sand-3); border-radius: 14px; }
+.note-branches li + li { margin-top: 12px; }
+/* A branch meets its container at the middle of its side, whatever its height. */
+.note-branches li::before { content: ""; position: absolute; top: 50%; left: -20px; width: 20px; border-top: 1px solid var(--sand-6); }
+/* The junction sits astride that edge: half on the line, half on the container. */
+.note-branches li::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: var(--sand-6);
+}
+.note-branches strong, .note-shared-state strong { display: block; font-weight: 500; }
+.note-branches span, .note-shared-state span { display: block; margin-top: 6px; color: var(--sand-10); }
+.note-shared-state { position: relative; margin-top: 16px; padding: 16px; border: 1px solid var(--sand-6); border-radius: 14px; text-align: center; }
+.note-shared-state::before, .note-shared-state::after { content: ""; position: absolute; top: -17px; height: 16px; border-left: 1px solid var(--sand-6); }
+.note-shared-state::before { left: 25%; }
+.note-shared-state::after { left: 75%; }
+.notes .note-diagram figcaption {
+  margin-top: 16px;
+  font-size: var(--text-xs);
+  color: var(--sand-10);
+}
+.notes figcaption { font-size: var(--text-sm); margin-top: 16px; }
+.guide .note-sources > h2 { margin-bottom: 16px; }
+.note-related-title { margin-top: 32px; font-size: var(--text-md); }
+.note-sources ol { padding-left: 24px; margin: 0; font-size: var(--text-sm); }
+.note-sources ol li + li { margin-top: 16px; }
+.note-sources li span { display: block; color: var(--muted); margin-top: 8px; }
+.note-sources .resource-links { font-size: var(--text-sm); }
+.note-next { display: grid; gap: 12px; padding: 24px 0 32px; font-size: var(--text-sm); }
 
+@media (max-width: 800px) {
+  /*
+   * A drawn label lives in a viewBox that halves on a narrow screen, so its
+   * number doubles to land back at the size the rest of the page reads at.
+   */
+  .scope-figure .scope-wide { display: none; }
+  .scope-figure .scope-portrait { display: block; }
+  /* A label is 14px on the screen: the number is the viewBox's own scale away. */
+  .scope-portrait .scope-label { font-size: 14px; }
+  /*
+   * Everything written inside a figure reads at 14px, whatever the page around
+   * it does: a drawing is read as a whole, not as body text.
+   */
+  .place-panel figcaption strong,
+  .place-panel figcaption span,
+  .place-machine-title,
+  .place-callout,
+  .workflow-stack .workflow-node .eyebrow,
+  .workflow-stack .workflow-node strong,
+  .note-diagram .note-node > span,
+  .note-diagram .note-node strong,
+  .note-diagram .note-node small,
+  .note-diagram .note-versions .diagram-number,
+  .note-diagram .note-versions strong,
+  .note-diagram .note-versions p,
+  .note-diagram .note-branches strong,
+  .note-diagram .note-branches span,
+  .notes .note-diagram figcaption,
+  .note-diagram .note-diagram-tail { font-size: 14px; }
+  .notes table, .note-branches, .note-shared-state { font-size: 14px; }
+  .guide-faq details, .concept-combination dl, .guide .classification-table { font-size: 14px; }
+  .cycle-scene text { font-size: 30px; }
+  .exchange-scene text { font-size: 29px; }
+  /* The machines stand one above the other, and the link between them turns. */
+  .place-scene { flex-direction: column; align-items: center; gap: 6px; }
+  /* Turning the arrow does not turn the space it holds, so the difference
+     between its length and its thickness is reserved above and below. */
+  .place-link { grid-template-rows: auto; gap: 0; width: 64px; height: 12px; margin: 26px 0; transform: rotate(90deg); }
+  .place-link .place-machine-title { display: none; }
+  .place-machine { flex: none; width: var(--box-width); max-width: 100%; }
+  .place-callout { top: calc(var(--title-row) + var(--title-gap) + var(--box-height) / 2 + var(--dot-size) / 2 + 6px); }
+  .place-callout svg { display: none; }
+  .place-callout { gap: 10px; }
+
+  /* The three questions stack as label-over-value pairs, like the catalog tables. */
+  .concept-combination dl { display: block; border: 0; border-radius: 0; overflow: visible; }
+  .concept-combination dl > div { display: block; }
+  .concept-combination dl > div + div { margin-top: 12px; }
+  .concept-combination dl > div dt, .concept-combination dl > div dd { border: .5px solid var(--sand-6); }
+  .concept-combination dl > div dt { border-radius: 12px 12px 0 0; }
+  .concept-combination dl > div dd { background: #fff; border-top: 0; border-radius: 0 0 12px 12px; }
+  .concept-combination dl > div:last-child dt { border-bottom: .5px solid var(--sand-6); }
+  .concept-combination dl > div:last-child dd { border-bottom: .5px solid var(--sand-6); border-top: 0; }
+}
 @media (max-width: 600px) {
-  .guide-header h1 { font-size: 30px; }
+  .guide-header h1 { font-size: var(--text-xl); }
   .guide-header { padding-bottom: 32px; }
-  .guide-header .lede { font-size: 18px; }
   .guide section { padding: 32px 0; }
-  .dimension-intro { grid-template-columns: 1fr; gap: 20px; }
-  .dimension-intro > div { padding: 18px; }
-  .quadrant-chart { grid-template-columns: 18px minmax(0, 1fr); gap: 7px; }
+  .quadrant-chart { gap: 8px; }
+  /* A narrow screen has no margin to hang the scale label in, so it leads the plot. */
+  .quadrant-y-axis {
+    position: static;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 var(--cell-inset);
+  }
+  .quadrant-y-axis span { position: static; writing-mode: horizontal-tb; transform: none; }
   .quadrant-plot { aspect-ratio: .82; }
-  .quadrant-cell h3 { font-size: 9px; left: 6px; right: 6px; top: 6px; }
+  .quadrant-cell h3 { left: 12px; right: 12px; top: 12px; }
   .quadrant-cell h3 span { display: none; }
-  .quadrant-cell:nth-child(n+3) h3 { bottom: 6px; }
-  .quadrant-cell li { font-size: 11px; padding-left: 12px; }
-  .quadrant-cell a span, .quadrant-cell li > span { font-size: 9px; }
-  .quadrant-cell li::before { width: 6px; height: 6px; border-width: 1px; top: 4px; }
-  .quadrant-cell li:nth-child(2) { left: 22%; }
-  .quadrant-cell:nth-child(4) li:nth-child(2) { left: 28%; }
-  .quadrant-cell:nth-child(3) li > span { display: none; }
-  .quadrant-x-axis, .quadrant-y-axis { font-size: 9px; }
-  .quadrant-legend { margin-left: 25px; gap: 8px 18px; }
-  .core-definition { grid-template-columns: 1fr; gap: 20px; }
-  .guide .core-definition p { font-size: 24px; }
-  .core-definition svg { max-width: 300px; margin: auto; }
+  .quadrant-cell:nth-child(n+3) h3 { bottom: 12px; }
+  .quadrant-cell li { padding-left: 20px; }
+  .quadrant-x-axis, .quadrant-y-axis { display: none; }
+
+  .quadrant-cell li::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
+  .quadrant-cell .reference-marker::before { width: 10px; height: 10px; top: calc((1.35em - 10px) / 2); }
+  /* Each name holds one line here, so the narrow plot is placed name by name:
+     clear of the region titles, clear of each other, and clear of every edge.
+     A name in a right-hand region hangs off the right so it cannot run out. */
+  .quadrant-cell li[data-chart-approach-id="doordash-code-review"] { left: 10%; top: 34%; }
+  .quadrant-cell li[data-chart-approach-id="stripe-minions"] { left: 56%; top: 54%; }
+  .quadrant-cell li[data-chart-approach-id="posthog-stamphog"] { left: 10%; top: 72%; }
+  .quadrant-cell li[data-chart-approach-id="ramp-inspect"] { left: 64%; top: 86%; }
+  .quadrant-cell li[data-chart-approach-id="brex-agent-platform"] { left: 10%; top: 34%; }
+  .quadrant-cell li[data-chart-approach-id="sentry-junior"] { left: auto; right: 12px; top: 54%; }
+  .quadrant-cell li[data-chart-approach-id="shopify-internal-agents"] { left: 10%; top: 72%; }
+  .quadrant-cell li[data-chart-reference="deep-research"] { left: 7%; top: 8%; }
+  .quadrant-cell li[data-chart-reference="ready-made-task"] { left: 7%; top: 50%; }
+  .quadrant-cell li[data-chart-reference="general-assistant"] { left: auto; right: 12px; top: 32%; }
+  .quadrant-cell li span { display: none; }
+  .quadrant-cell li strong { font-weight: 400; }
+  .quadrant-cell li,
+  .quadrant-cell li[data-chart-approach-id],
+  .quadrant-cell li[data-chart-reference] { max-width: none; white-space: nowrap; }
+  .quadrant-legend { gap: 8px 16px; }
+  .core-definition { padding: 40px 20px; }
   .concept-pair { grid-template-columns: 1fr; }
-  .concept-pair figure + figure { border-left: 0; border-top: 1px solid #d8d8dc; }
+  .concept-pair figure + figure { border-left: 0; border-top: 1px solid var(--sand-6); }
   .concept-pair svg { max-width: 320px; margin: auto; }
-  .concept-combination { padding: 20px; }
-  .concept-combination dl { grid-template-columns: 1fr; gap: 14px; }
-  .workflow-node { padding: 18px 12px; }
-  .workflow-node .eyebrow { font-size: 10px; }
-  .workflow-node strong { font-size: 14px; }
-  .notes .note-diagram { padding: 20px; }
-  .note-flow { grid-template-columns: 1fr; gap: 14px; }
-  .note-node > span { margin-bottom: 4px; }
-  .note-arrow { transform: rotate(90deg); width: fit-content; }
-  .note-versions { grid-template-columns: 1fr; gap: 24px; }
-  .note-versions .diagram-number { margin-bottom: 6px; }
-  .note-preview h2 { font-size: 23px; }
-  .note-meta span { display: block; margin: 4px 0 0; }
+  .workflow-node { padding: 16px 12px; }
+  .workflow-node .eyebrow { font-size: var(--text-xs); }
+  .workflow-node strong { font-size: var(--text-sm); }
+  .notes .note-diagram { padding: 0; }
+  .note-reviewers { gap: 8px; }
+  .note-reviewers .note-node { padding: 12px; }
+  .note-meta span { display: block; margin: 8px 0 0; }
 }
 </style>

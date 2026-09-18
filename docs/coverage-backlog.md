@@ -13,6 +13,19 @@ cataloged.
 The original audit used agreement between reviewing agents. Its vote counts describe that
 review process; they do not independently verify the sources or company results.
 
+## Classification follow-up: 2026-09-17
+
+The [classification ledger](classification-review-2026-09.md) supersedes the historical dispositions below for reviewed candidates. River, Cloudflare AI Code Reviewer, Deflaker, Scruff, Brex onboarding, DataExplorer, Datako, Pascal, Harvey SOC, Notion bug triage, Brex disputes/collections/quality assurance, and YC operations now have dedicated records. DoorDash analytics AI Marketplace and Coinbase Mux have distinct infrastructure records. Existing platform research remains maintained.
+
+| Remaining candidate | Disposition | Missing evidence |
+| --- | --- | --- |
+| YC nightly improvement agent | Needs evidence; keep the transcript example in infrastructure | Clear separate subject and artifact/update boundary; nightly conversation review does not establish automatic skill deployment. |
+| YC company-description skill | Keep as capability, not standalone record | Evidence of a separate deployed task-performing system beyond a reusable prompt/skill. |
+| Spotify Xirp | Needs evidence; keep contextual research | Internal adaptation and its relationship, if any, to Honk. Commercial availability alone establishes neither. |
+| Shopify requested research, migration and compliance agents | Needs evidence; keep requests as platform context | A documented deployed workflow, not merely a request for a future profile. |
+
+**Scruff correction:** The prior exclusion below is overturned by Notion's readable [January 12, 2026 case study](https://www.notion.com/blog/meet-scruff-securitys-new-ai-teammate). It explicitly names Scruff, its internal Custom Agents/MCP implementation, alert investigation workflow and self-reported results. The six-hours-per-week result is attributed to Notion, not independently verified. Old audit votes are not evidence against this source.
+
 ## Policy review: 2026-09-11
 
 Current decisions follow the [inclusion rules](../CONTRIBUTING.md#inclusion-rules).
@@ -42,7 +55,6 @@ DOT returned to the backlog on 2026-08-31 after Atlassian removed its only sourc
 legitimate snapshot had been saved.
 
 - GitHub — Qubot → [landscape](landscape.md#github-qubot)
-- Retool — RetoolGPT → [landscape](landscape.md#retool-retoolgpt)
 - Atlassian — Rovo Dev → [landscape](landscape.md#atlassian-rovo-dev)
 - Notion — Custom Agents → [landscape](landscape.md#notion-custom-agents)
 - Microsoft — PRAssistant → [landscape](landscape.md#microsoft-prassistant)
@@ -51,7 +63,7 @@ legitimate snapshot had been saved.
 - Plaid — Fix My Connection → [landscape](landscape.md#plaid-fix-my-connection)
 - Plaid — Internal MCP server → [landscape](landscape.md#plaid-internal-mcp-server)
 - HubSpot — Sidekick → [landscape](landscape.md#hubspot-sidekick)
-- Databricks — coSTAR (Omnigent excluded) → [landscape](landscape.md#databricks-costar)
+- Databricks — coSTAR (historical Omnigent exclusion reopened for evidence review) → [landscape](landscape.md#databricks-costar)
 
 ## Reading the historical audit
 
@@ -82,14 +94,22 @@ or repos that describe an agent they built for their own teams.
 - **Sources**:
   - [How we built an internal data analytics agent](https://github.blog/ai-and-ml/github-copilot/how-we-built-an-internal-data-analytics-agent/) — GitHub engineering blog, 2026-06-19. First-party.
 
-### Retool — RetoolGPT
+### Retool — RetoolGPT / Retool Agents
 
-- **Status**: Verified, ready.
-- **Confidence**: high.
-- **What it does**: RetoolGPT is an internal assistant built on ChatGPT. It reads Retool's
-  internal Confluence documents, Retool documentation, and Linear tickets.
-- **Reported stage**: deployed across the team. Retool deployed it into a read-only environment so
-  the whole team could use it.
+- **Status**: Needs version-specific evidence. Removed from active catalog membership on
+  2026-09-16.
+- **Confidence**: unverified for agent eligibility.
+- **What the preserved article establishes**: The deployed RetoolGPT version is an internal
+  retrieval assistant. A user explicitly selects Confluence or another source; the article says
+  model-selected tool calls are a future capability. Its references to building RetoolGPT "as an
+  agent" and to Retool Agents describe a later product/version without enough evidence to show
+  the model-directed version operating internally.
+- **Eligibility gap**: Find readable, version-specific evidence that Retool used a RetoolGPT or
+  Retool Agents version internally where the model selected and invoked tools at runtime. The
+  read-only deployment passage concerns who may edit the app and does not establish a tool
+  permission boundary.
+- **Implementation correction**: RetoolGPT can use any model provider available in Retool,
+  including OpenAI, Anthropic, or a custom provider. It was not documented as built on ChatGPT.
 - **Sources**:
   - [How we built RetoolGPT](https://retool.com/blog/how-we-built-retoolgpt) — Retool engineering blog, 2025-08-05. First-party.
   - [AI Build Week, Day 3 talk](https://www.youtube.com/watch?v=8VTdYUBAZsY) — YouTube.
@@ -141,8 +161,9 @@ or repos that describe an agent they built for their own teams.
     [YouTube version](https://www.youtube.com/watch?v=ATt7QJgt-2k) — interview with cofounder
     Simon Last and head of AI engineering Sarah Sachs, 2026-04-14.
   - [How we built security into Custom Agents](https://www.notion.com/en-gb/blog/how-we-built-security-into-custom-agents) — Notion engineering blog. First-party.
-- **Caveat**: a "Scruff" named security agent did **not** pass verification. See
-  [Refuted or excluded](#refuted-or-excluded).
+- **Historical caveat, superseded September 17, 2026**: the earlier audit did not verify Scruff.
+  The January 12 primary case study now supports the dedicated [Scruff record](../data/agents/notion-scruff.yaml),
+  including its qualified, self-reported results; see the [current correction](#classification-follow-up-2026-09-17).
 
 ### Microsoft — PRAssistant
 
@@ -208,14 +229,16 @@ or repos that describe an agent they built for their own teams.
 
 ### Databricks — internal engineering agents and the coSTAR framework
 
-- **Status**: Promoted to the catalog on 2026-08-13 (scoped: Omnigent excluded).
+- **Status**: Promoted on 2026-08-13; reclassified as the coSTAR supporting method on 2026-09-17.
+  Internal engineering agents remain examples of its use, not a verified agent family. Omnigent needs a separate evidence review.
 - **Confidence**: high.
 - **Verification note**: the claim survived 0 to 3. Two of three voters called the internal build
   genuine, and one called it partial. All three confirmed a real deployment. Scope caveat: Omnigent
   is a shipping open-source product under the `omnigent-ai` org and is co-attributed to Neon. It is
-  not a distinct Databricks internal build. Record only the internal engineering agents (code review
-  and on-call) and the coSTAR testing framework on Databricks' private codebase benchmark. Treat
-  Omnigent as an excluded shipping product under the editorial rule.
+  not treated as a distinct internal build in that audit. The earlier rule therefore limited coverage to
+  internal engineering examples and coSTAR, and excluded Omnigent on product-status grounds. That exclusion
+  was reopened on September 11: shipping or open-source status alone is not grounds for exclusion.
+  The September 17 review classifies coSTAR itself as supporting infrastructure; Omnigent remains a separate lead.
 - **What it does**: Databricks built internal agents for its own engineering work, including
   code-reviewer and on-call support agents. Omnigent is a meta-harness that composes and governs
   several coding tools (Claude Code, Codex, and others) for internal multi-agent use. Databricks
@@ -223,8 +246,10 @@ or repos that describe an agent they built for their own teams.
   line codebase.
 - **Reported stage**: deployed as daily coding drivers on the Databricks codebase. Omnigent was
   open-sourced under Apache 2.0 after internal use.
-- **Why it qualifies**: the coSTAR post names internal engineering workflow agents. Omnigent is a
-  distinct Databricks build. Genie Code and Agent Bricks are shipping products and are excluded.
+- **Current scope**: the coSTAR post documents an implemented method for testing and refining internal agents.
+  It supports an infrastructure record. The earlier audit contained conflicting descriptions of Omnigent's
+  internal identity; its separate eligibility remains unresolved. Earlier exclusions of Genie Code and Agent
+  Bricks relied on product status and are historical, not the current inclusion rule.
 - **Sources**:
   - [coSTAR: how we ship AI agents at Databricks fast](https://www.databricks.com/blog/costar-how-we-ship-ai-agents-databricks-fast-without-breaking-things) — Databricks blog. First-party.
   - [Introducing Omnigent](https://www.databricks.com/blog/introducing-omnigent-meta-harness-combine-control-and-share-your-agents) — Databricks blog. First-party.
@@ -332,7 +357,7 @@ A product the company sells is not enough on its own.
   it touched, and engineers accepted 73% of its recommendations for production deployment.
 - **Reported stage**: scaled internally.
 - **Why it is a border case**: the paper frames TestGen-LLM as a system or tool rather than an
-  autonomous agent. The internal build and deployment are clear. Whether it fits the `task-agent`
+  autonomous agent. The internal build and deployment are clear. Whether it fits the `agent`
   definition is a catalog judgment.
 - **Sources**:
   - [Automated unit test improvement using LLMs at Meta (arXiv 2402.09171)](https://arxiv.org/abs/2402.09171) — paper.
@@ -374,9 +399,11 @@ These are historical decisions. Product-status exclusions are reopened in the po
 The audit refuted these claims or excluded these leads. Do not add them without a new, stronger
 source.
 
-- **Notion "Scruff" security agent**: the claim that Notion built a named agent called Scruff that
-  triaged alerts and saved six hours per week failed verification 0 to 3. Record only that
-  Notion's security team is an active Custom Agents user. Do not cite the Scruff metrics.
+- **Notion "Scruff" security agent — superseded September 17, 2026**: the earlier audit failed to verify
+  the named agent and six-hours-per-week claim, and therefore limited coverage to the security team's
+  Custom Agents use. Notion's [January 12 primary case study](https://www.notion.com/blog/meet-scruff-securitys-new-ai-teammate)
+  supersedes that decision. The [Scruff record](../data/agents/notion-scruff.yaml) now documents the implementation
+  and may cite the reviewed time-saving metric as Notion's self-report, without implying independent verification.
 - **Atlassian DOT scale metrics**: the claim that DOT handles roughly 70% of help-channel threads
   and reduced the unanswered-question rate to zero failed verification 0 to 3. Record only that
   DOT launched and is in use.
@@ -424,8 +451,9 @@ Most have only shipping products, vendor-tool usage, or aspirational job posting
   use and to capture the real figures.
 - Airbnb: find a first-party engineering blog or repository to firm up the "64% of PRs" figure,
   which currently comes from a third-party newsletter.
-- Plaid, HubSpot, and Databricks are now recorded (2026-08-13). Databricks is scoped to the internal
-  engineering agents and coSTAR; Omnigent is excluded as a shipping open-source product.
+- Plaid, HubSpot, and Databricks were recorded on 2026-08-13. Databricks was then scoped to internal
+  engineering examples and coSTAR. The product-status exclusion of Omnigent was reopened on September 11;
+  coSTAR became a supporting-method record on September 17.
 - Roblox: the engineering blog domain did not resolve in the audit environment. A direct check may
   surface an internal build that the sweep missed.
 

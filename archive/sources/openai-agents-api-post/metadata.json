@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "openai-agents-api-post",
+  "original_url": "https://openai.com/index/introducing-the-agents-api/",
+  "final_url": "https://openai.com/index/introducing-the-agents-api/",
+  "captured_at": "2026-09-16T15:10:51Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/openai-agents-api-post/content.md",
+      "sha256": "sha256:f211a11e1d2b43bbc39daecb338280aff511387795ef42881f46d7e2e1471db5",
+      "bytes": 8304
+    }
+  }
+}

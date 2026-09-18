@@ -9,6 +9,19 @@ import Methodology from '../../src/pages/methodology.astro';
 import { GET as definitionsMarkdown } from '../../src/pages/definitions.md';
 import { GET as methodologyMarkdown } from '../../src/pages/methodology.md';
 import { canonicalUrl, guidePath } from '../../src/lib/routes';
+import { SUPERVISION_DEFINITIONS } from '../../src/lib/guide-content';
+
+describe('the supervision definitions', () => {
+  it('maps each attention boundary to one scoped level', () => {
+    expect(SUPERVISION_DEFINITIONS.rows.map(({ id, level }) => [id, level])).toEqual([
+      ['continuous-steering', '2'],
+      ['work-product-review', '3'],
+      ['outcome-review', '4'],
+      ['exception-only', '5'],
+      ['unknown', '—'],
+    ]);
+  });
+});
 
 /** The part of the page the export represents. The layout is not in the export. */
 function article(html: string): string {

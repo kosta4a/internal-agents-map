@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "brex-onboarding-source",
+  "original_url": "https://www.brex.com/journal/rebuilding-onboarding-ai-native",
+  "final_url": "https://www.brex.com/journal/rebuilding-onboarding-ai-native",
+  "captured_at": "2026-09-17T18:23:35Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.6"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/brex-onboarding-source/content.md",
+      "sha256": "sha256:08a5b92f6cee9bd95b14075918c34d465e3167bb83a371494e2c2acad3067d04",
+      "bytes": 10416
+    }
+  }
+}

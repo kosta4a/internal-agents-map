@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_id": "openai-chatgpt-work-post",
+  "original_url": "https://openai.com/index/chatgpt-for-your-most-ambitious-work/",
+  "final_url": "https://openai.com/index/chatgpt-for-your-most-ambitious-work/",
+  "captured_at": "2026-09-16T15:10:56Z",
+  "http_status": 200,
+  "tool": {
+    "name": "steel",
+    "version": "0.5.0-preview.5"
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "archive/sources/openai-chatgpt-work-post/content.md",
+      "sha256": "sha256:cd2ab1a5e0e47b4d90e088fe95dad74f40024c0d90eef39ce0f2ebea697169a3",
+      "bytes": 13331
+    }
+  }
+}

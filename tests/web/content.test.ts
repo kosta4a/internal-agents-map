@@ -112,9 +112,11 @@ describe('the Markdown export of a note', () => {
   it('keeps the citations, the diagram text, and the sources', () => {
     expect(markdown).toContain('Source: https://internal-agents.com/notes/stop-a-run');
     expect(markdown).toContain('[[1]](https://internal-agents.com/notes/stop-a-run#source-stripe)');
-    expect(markdown).toContain('At the limit → Save the work and explain the failure.');
     expect(markdown).toContain(
-      'Our illustration of a possible control flow. Each source uses different checks and limits.',
+      '**Budget exhausted** Stop and return the current work, failed checks, and reason for stopping.',
+    );
+    expect(markdown).toContain(
+      'Our proposed control flow. A passing check still leaves any required human approval in place.',
     );
     for (const source of note.sources) expect(markdown).toContain(source.url);
   });
@@ -145,12 +147,13 @@ describe('the content routes', () => {
   it('lists the guides, the notes index, and every note', async () => {
     const paths = await contentPaths();
     expect(paths).toEqual([
+      '/infrastructure',
       guidePath('definitions'),
       guidePath('methodology'),
       notesIndexPath(),
       ...SLUGS.map((slug) => notePath(slug)),
     ]);
-    expect(paths).toHaveLength(10);
+    expect(paths).toHaveLength(11);
     expect(new Set(paths).size).toBe(paths.length);
   });
 });
